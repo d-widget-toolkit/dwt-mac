@@ -61,7 +61,7 @@ public abstract class AccessibleTextAdapter : AccessibleTextListener {
      */
     public void getCaretOffset (AccessibleTextEvent e) {
     }
-    
+
     /**
      * Sent when an accessibility client requests the range of the current
      * text selection.
