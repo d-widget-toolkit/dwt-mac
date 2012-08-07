@@ -41,7 +41,7 @@ import dwt.internal.DWTEventListener;
  * @since 2.0
  */
 public interface AccessibleListener : DWTEventListener {
-    
+
     /**
      * Sent when an accessibility client requests the name
      * of the control, or the name of a child of the control.
@@ -58,8 +58,8 @@ public interface AccessibleListener : DWTEventListener {
      *    <li>result [OUT] - the requested name string, or null</li>
      * </ul>
      */
-    public void getName (AccessibleEvent e);
-    
+    public void getName(AccessibleEvent e);
+
     /**
      * Sent when an accessibility client requests the help string
      * of the control, or the help string of a child of the control.
@@ -81,8 +81,8 @@ public interface AccessibleListener : DWTEventListener {
      *    <li>result [OUT] - the requested help string, or null</li>
      * </ul>
      */
-    public void getHelp (AccessibleEvent e);
-    
+    public void getHelp(AccessibleEvent e);
+
     /**
      * Sent when an accessibility client requests the keyboard shortcut
      * of the control, or the keyboard shortcut of a child of the control.
@@ -104,8 +104,8 @@ public interface AccessibleListener : DWTEventListener {
      *    <li>result [OUT] - the requested keyboard shortcut string (example: "ALT+N"), or null</li>
      * </ul>
      */
-    public void getKeyboardShortcut (AccessibleEvent e);
-    
+    public void getKeyboardShortcut(AccessibleEvent e);
+
     /**
      * Sent when an accessibility client requests a description
      * of the control, or a description of a child of the control.
@@ -126,5 +126,5 @@ public interface AccessibleListener : DWTEventListener {
      *    <li>result [OUT] - the requested description string, or null</li>
      * </ul>
      */
-    public void getDescription (AccessibleEvent e);
+    public void getDescription(AccessibleEvent e);
 }
