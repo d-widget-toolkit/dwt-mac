@@ -43,22 +43,22 @@ public class AccessibleEvent : DWTEventObject {
      */
     public int childID;
     
-/**
- * The value of this field must be set in the accessible listener
- * method before returning.
- * What to set it to depends on the listener method called, and
- * the childID specified by the client.
- */
-public String result;
+    /**
+     * The value of this field must be set in the accessible listener
+     * method before returning.
+     * What to set it to depends on the listener method called, and
+     * the childID specified by the client.
+     */
+    public String result;
 
-static const long serialVersionUID = 3257567304224026934L;
+    static const long serialVersionUID = 3257567304224026934L;
 
 /**
  * Constructs a new instance of this class.
  *
  * @param source the object that fired the event
  */
-public this (Object source) {
+public this(Object source) {
     super(source);
 }
 
