@@ -15,8 +15,6 @@ module dwt.accessibility.SWTAccessibleDelegate;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.internal.*;
 import dwt.internal.cocoa.NSPoint;
 import cocoa = dwt.internal.cocoa.id;
 
@@ -31,9 +29,8 @@ class SWTAccessibleDelegate : NSObject {
      * is created for a control, it is stored as a property in the control 
      * using <code>setData(String, Object)</code>.
      */
-    static const String ACCESSIBLE_KEY = "Accessible"; //$NON-NLS-1$    
+    static const String ACCESSIBLE_KEY = "Accessible"; //$NON-NLS-1$ 
     static const String SWT_OBJECT = "SWT_OBJECT";
-    //static final byte[] SWT_OBJECT = ['S', 'W', 'T', '_', 'O', 'B', 'J', 'E', 'C', 'T', '\0'];
     
     static objc.IMP proc2Args, proc3Args, proc4Args;
     
@@ -58,36 +55,36 @@ class SWTAccessibleDelegate : NSObject {
         // we dynamically add the methods to the control's class that are required 
         // by NSAccessibility. Then, when external assistive technology services are used, 
         // those methods get called to provide the needed information.
-        
+
         String className = "SWTAccessibleDelegate";
-        
+
         // TODO: These should either move out of Display or be accessible to this class.
         byte[] types = ['*','\0'];
         size_t size = C.PTR_SIZEOF, align_ = C.PTR_SIZEOF is 4 ? 2 : 3;
-        
+
         objc.Class cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSObject, className, 0);
         OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, cast(char[])types);
-        
+
         // Add the NSAccessibility overrides
         OS.class_addMethod(cls, OS.sel_accessibilityActionNames, proc2Args, "@:");
         OS.class_addMethod(cls, OS.sel_accessibilityAttributeNames, proc2Args, "@:");
         OS.class_addMethod(cls, OS.sel_accessibilityParameterizedAttributeNames, proc2Args, "@:");
         OS.class_addMethod(cls, OS.sel_accessibilityIsIgnored, proc2Args, "@:");
         OS.class_addMethod(cls, OS.sel_accessibilityFocusedUIElement, proc2Args, "@:");
-        
+
         OS.class_addMethod(cls, OS.sel_accessibilityAttributeValue_, proc3Args, "@:@");
         OS.class_addMethod(cls, OS.sel_accessibilityHitTest_, proc3Args, "@:{NSPoint}");
         OS.class_addMethod(cls, OS.sel_accessibilityIsAttributeSettable_, proc3Args, "@:@");
         OS.class_addMethod(cls, OS.sel_accessibilityActionDescription_, proc3Args, "@:@");
         OS.class_addMethod(cls, OS.sel_accessibilityPerformAction_, proc3Args, "@:@");
-        
+
         OS.class_addMethod(cls, OS.sel_accessibilityAttributeValue_forParameter_, proc4Args, "@:@@");
         OS.class_addMethod(cls, OS.sel_accessibilitySetValue_forAttribute_, proc4Args, "@:@@");
-        
+
         OS.objc_registerClassPair(cls);
     }
-    
-    
+
+
     public this(Accessible accessible, int childID) {
         super(cast(objc.id) null);
         this.accessibleParent = accessible;
@@ -97,7 +94,7 @@ class SWTAccessibleDelegate : NSObject {
         if (delegateJniRef is null) DWT.error(DWT.ERROR_NO_HANDLES);
         OS.object_setInstanceVariable(this.id, SWT_OBJECT, delegateJniRef);
     }
-    
+
     NSArray accessibilityActionNames() {
         
         if (actionNames !is null)
@@ -107,7 +104,7 @@ class SWTAccessibleDelegate : NSObject {
         actionNames.retain();
         return retainedAutoreleased(actionNames);
     }
-    
+
     NSArray accessibilityAttributeNames() {
         
         if (attributeNames !is null)
@@ -117,11 +114,11 @@ class SWTAccessibleDelegate : NSObject {
         attributeNames.retain();
         return retainedAutoreleased(attributeNames);
     }
-    
+
     cocoa.id accessibilityAttributeValue(NSString attribute) {
         return accessibleParent.internal_accessibilityAttributeValue(attribute, childID);
     }
-    
+
     // parameterized attribute methods
     NSArray accessibilityParameterizedAttributeNames() {
         
@@ -132,30 +129,30 @@ class SWTAccessibleDelegate : NSObject {
         parameterizedAttributeNames.retain();
         return retainedAutoreleased(parameterizedAttributeNames);
     }
-    
+
     cocoa.id accessibilityAttributeValue_forParameter(NSString attribute, cocoa.id parameter) {
         return accessibleParent.internal_accessibilityAttributeValue_forParameter(attribute, parameter, childID);
     }
-    
+
     // Return YES if the UIElement doesn't show up to the outside world - i.e. its parent should return the UIElement's children as its own - cutting the UIElement out. E.g. NSControls are ignored when they are single-celled.
     bool accessibilityIsIgnored() {
         return accessibleParent.internal_accessibilityIsIgnored(childID);
     }
-    
+
     bool accessibilityIsAttributeSettable(NSString attribute) {
         return false;
     }
-    
+
     // Returns the deepest descendant of the UIElement hierarchy that contains the point. You can assume the point has already been determined to lie within the receiver. Override this method to do deeper hit testing within a UIElement - e.g. a NSMatrix would test its cells. The point is bottom-left relative screen coordinates.
     cocoa.id accessibilityHitTest(NSPoint point) {
         return accessibleParent.internal_accessibilityHitTest(point, childID);
     }
-    
+
     // Returns the UI Element that has the focus. You can assume that the search for the focus has already been narrowed down to the reciever. Override this method to do a deeper search with a UIElement - e.g. a NSMatrix would determine if one of its cells has the focus.
     cocoa.id accessibilityFocusedUIElement() {
         return accessibleParent.internal_accessibilityFocusedUIElement(childID);
     }
-    
+
     void accessibilityPerformAction(NSString action) {
         accessibleParent.internal_accessibilityPerformAction(action, childID);
     }
@@ -173,7 +170,7 @@ class SWTAccessibleDelegate : NSObject {
         cocoa.id temp2 = (new NSObject(temp.id)).autorelease();
         return new NSArray(temp2.id);
     }
-    extern (C){    
+    extern (C){
     static objc.id accessibleProc2(objc.id id, objc.SEL sel) {
         SWTAccessibleDelegate swtAcc = getAccessibleDelegate(id);
         if (swtAcc is null) return null;
@@ -194,10 +191,10 @@ class SWTAccessibleDelegate : NSObject {
             cocoa.id retObject = swtAcc.accessibilityFocusedUIElement();
             return (retObject is null ? null : retObject.id);
         }
-        
+
         return null;
     }
-    
+
     static objc.id accessibleProc3(objc.id id, objc.SEL sel, objc.id arg0) {
         SWTAccessibleDelegate swtAcc = getAccessibleDelegate(id);
         if (swtAcc is null) return null;
@@ -222,10 +219,10 @@ class SWTAccessibleDelegate : NSObject {
             NSString action = new NSString(arg0);
             swtAcc.accessibilityPerformAction(action);
         }
-        
+
         return null;
     }
-    
+
     static objc.id accessibleProc4(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
         SWTAccessibleDelegate swtAcc = getAccessibleDelegate(id);
         if (swtAcc is null) return null;
@@ -240,7 +237,7 @@ class SWTAccessibleDelegate : NSObject {
             NSString attribute = new NSString(arg1);
             swtAcc.accessibilitySetValue_forAttribute(value, attribute);
         }
-        
+
         return null;
     }
     }
@@ -264,5 +261,5 @@ class SWTAccessibleDelegate : NSObject {
         delegateJniRef = null;
         OS.object_setInstanceVariable(this.id, SWT_OBJECT, null);
     }
-    
+
 }
