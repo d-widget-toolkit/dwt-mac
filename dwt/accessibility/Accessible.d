@@ -14,11 +14,6 @@
 module dwt.accessibility.Accessible;
 
 import dwt.dwthelper.utils;
-
-import dwt.*;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
-import dwt.widgets.*;
 import cocoa = dwt.internal.cocoa.id;
 
 import tango.core.Thread;
@@ -60,9 +55,9 @@ import dwt.dwthelper.associativearray;
 public class Accessible {
     
     static NSString[] baseAttributes;
-    
+
     static NSString[] baseTextAttributes;
-    
+
     static NSString[] baseParameterizedAttributes;
     
     
@@ -74,7 +69,7 @@ public class Accessible {
     AccessibleControlListener[] accessibleControlListeners;
     AccessibleTextListener[] accessibleTextListeners;
     Control control;
-    
+
     SWTAccessibleDelegate[int] children;
     
     /**
@@ -82,61 +77,55 @@ public class Accessible {
      */
     protected this() {
         baseAttributes = [ 
-                          OS.NSAccessibilityRoleAttribute,
-                          OS.NSAccessibilityRoleDescriptionAttribute,
-                          OS.NSAccessibilityHelpAttribute,
-                          OS.NSAccessibilityFocusedAttribute,
-                          OS.NSAccessibilityParentAttribute,
-                          OS.NSAccessibilityChildrenAttribute,
-                          OS.NSAccessibilityPositionAttribute,
-                          OS.NSAccessibilitySizeAttribute,
-                          OS.NSAccessibilityWindowAttribute,
-                          OS.NSAccessibilityTopLevelUIElementAttribute
-                          ];
+            OS.NSAccessibilityRoleAttribute,
+            OS.NSAccessibilityRoleDescriptionAttribute,
+            OS.NSAccessibilityHelpAttribute,
+            OS.NSAccessibilityFocusedAttribute,
+            OS.NSAccessibilityParentAttribute,
+            OS.NSAccessibilityChildrenAttribute,
+            OS.NSAccessibilityPositionAttribute,
+            OS.NSAccessibilitySizeAttribute,
+            OS.NSAccessibilityWindowAttribute,
+            OS.NSAccessibilityTopLevelUIElementAttribute
+        ];
         
         baseTextAttributes = [
-                              OS.NSAccessibilityNumberOfCharactersAttribute,
-                              OS.NSAccessibilitySelectedTextAttribute,
-                              OS.NSAccessibilitySelectedTextRangeAttribute,
-                              OS.NSAccessibilityInsertionPointLineNumberAttribute,
-                              OS.NSAccessibilitySelectedTextRangesAttribute,
-                              OS.NSAccessibilityVisibleCharacterRangeAttribute,
-                              OS.NSAccessibilityValueAttribute
-                              ];
+            OS.NSAccessibilityNumberOfCharactersAttribute,
+            OS.NSAccessibilitySelectedTextAttribute,
+            OS.NSAccessibilitySelectedTextRangeAttribute,
+            OS.NSAccessibilityInsertionPointLineNumberAttribute,
+            OS.NSAccessibilitySelectedTextRangesAttribute,
+            OS.NSAccessibilityVisibleCharacterRangeAttribute,
+            OS.NSAccessibilityValueAttribute
+        ];
         
         baseParameterizedAttributes = [
-                                       OS.NSAccessibilityStringForRangeParameterizedAttribute,
-                                       OS.NSAccessibilityRangeForLineParameterizedAttribute
-                                       ];
+            OS.NSAccessibilityStringForRangeParameterizedAttribute,
+            OS.NSAccessibilityRangeForLineParameterizedAttribute
+        ];
     }
     
     this (Control control) {
-    /**
-     * @since 3.5
-     */
-    protected Accessible() {
-    }
-
         this.control = control;
         this();
     }
     
     /**
-	 * Invokes platform specific functionality to allocate a new accessible object.
-	 * <p>
-	 * <b>IMPORTANT:</b> This method is <em>not</em> part of the public
-	 * API for <code>Accessible</code>. It is marked public only so that it
-	 * can be shared within the packages provided by SWT. It is not
-	 * available on all platforms, and should never be called from
-	 * application code.
-	 * </p>
-	 *
-	 * @param control the control to get the accessible object for
-	 * @return the platform specific accessible object
-	 */
-	public static Accessible internal_new_Accessible(Control control) {
-		return new Accessible(control);
-	}
+     * Invokes platform specific functionality to allocate a new accessible object.
+     * <p>
+     * <b>IMPORTANT:</b> This method is <em>not</em> part of the public
+     * API for <code>Accessible</code>. It is marked public only so that it
+     * can be shared within the packages provided by SWT. It is not
+     * available on all platforms, and should never be called from
+     * application code.
+     * </p>
+     *
+     * @param control the control to get the accessible object for
+     * @return the platform specific accessible object
+     */
+    public static Accessible internal_new_Accessible(Control control) {
+        return new Accessible(control);
+    }
     
     /**
      * Adds the listener to the collection of listeners who will
@@ -159,7 +148,7 @@ public class Accessible {
      * @see AccessibleListener
      * @see #removeAccessibleListener
      */
-    public void addAccessibleListener (AccessibleListener listener) {
+    public void addAccessibleListener(AccessibleListener listener) {
         checkWidget();
         if (listener is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
         accessibleListeners.addElement(listener);
@@ -191,7 +180,7 @@ public class Accessible {
         if (listener is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
         accessibleControlListeners.addElement(listener);
     }
-    
+
     /**
      * Adds the listener to the collection of listeners who will
      * be notified when an accessible client asks for custom text control
@@ -225,17 +214,17 @@ public class Accessible {
         // TODO No action support for now.
         return NSString.stringWith("");
     }
-    
+
     public NSArray internal_accessibilityActionNames(int childID) {
         // The supported action list depends on the role played by the control.
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.childID = childID;
         event.detail = -1;
         for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = elementAt(accessibleControlListeners, i);
+            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
             listener.getRole(event);
         }
-        
+
         // No accessible listener is overriding the role of the control, so let Cocoa return the default set for the control.
         if (event.detail is -1) {
             return null;
@@ -248,23 +237,23 @@ public class Accessible {
         NSMutableArray returnValue = NSMutableArray.arrayWithCapacity(5);
         
         switch (event.detail) {
-            case ACC.ROLE_PUSHBUTTON:
-            case ACC.ROLE_RADIOBUTTON:
-            case ACC.ROLE_CHECKBUTTON:
-            case ACC.ROLE_TABITEM:
-                returnValue.addObject(OS.NSAccessibilityPressAction);
-                break;
+        case ACC.ROLE_PUSHBUTTON:
+        case ACC.ROLE_RADIOBUTTON:
+        case ACC.ROLE_CHECKBUTTON:
+        case ACC.ROLE_TABITEM:
+            returnValue.addObject(OS.NSAccessibilityPressAction);
+            break;
             default:
         }
         
         switch (event.detail) {
-            case ACC.ROLE_COMBOBOX:
-                returnValue.addObject(OS.NSAccessibilityConfirmAction);
-                break;
+        case ACC.ROLE_COMBOBOX:
+            returnValue.addObject(OS.NSAccessibilityConfirmAction);
+            break;
             default:
         }
-        
-        
+
+
         if (childID is ACC.CHILDID_SELF) {
             actionNames = returnValue;
             actionNames.retain();
@@ -274,7 +263,7 @@ public class Accessible {
             return returnValue;
         }
     }
-    
+
     public NSArray internal_accessibilityAttributeNames(int childID) {
         // The supported attribute set depends on the role played by the control.
         // We may need to add or remove from the base set as needed.
@@ -285,7 +274,7 @@ public class Accessible {
             AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
             listener.getRole(event);
         }
-        
+
         // No accessible listener is overriding the role of the control, so let Cocoa
         // return the default set for the control.
         if (event.detail is -1)
@@ -296,7 +285,7 @@ public class Accessible {
         }
         
         NSMutableArray returnValue = NSMutableArray.arrayWithCapacity(baseAttributes.length);
-        
+
         /* Add our list of supported attributes to the array.
          * Make sure each attribute name is not already in the array before appending.
          */
@@ -316,38 +305,38 @@ public class Accessible {
         
         // The following are expected to have a value (AXValue)
         switch (event.detail) {
-            case ACC.ROLE_CHECKBUTTON:
-            case ACC.ROLE_RADIOBUTTON:
-            case ACC.ROLE_LABEL:
-            case ACC.ROLE_TABITEM:
-            case ACC.ROLE_TABFOLDER:
-                returnValue.addObject(OS.NSAccessibilityValueAttribute);
-                break;
-            default:
+        case ACC.ROLE_CHECKBUTTON:
+        case ACC.ROLE_RADIOBUTTON:
+        case ACC.ROLE_LABEL:
+        case ACC.ROLE_TABITEM:
+        case ACC.ROLE_TABFOLDER:
+            returnValue.addObject(OS.NSAccessibilityValueAttribute);
+            break;
+        default:
         }
         
         // The following are expected to report their enabled status (AXEnabled)
         switch (event.detail) {
-            case ACC.ROLE_CHECKBUTTON:
-            case ACC.ROLE_RADIOBUTTON:
-            case ACC.ROLE_LABEL:
-            case ACC.ROLE_TABITEM:
-            case ACC.ROLE_PUSHBUTTON:
-            case ACC.ROLE_COMBOBOX:
-                returnValue.addObject(OS.NSAccessibilityEnabledAttribute);
-                break;
-            default:
+        case ACC.ROLE_CHECKBUTTON:
+        case ACC.ROLE_RADIOBUTTON:
+        case ACC.ROLE_LABEL:
+        case ACC.ROLE_TABITEM:
+        case ACC.ROLE_PUSHBUTTON:
+        case ACC.ROLE_COMBOBOX:
+            returnValue.addObject(OS.NSAccessibilityEnabledAttribute);
+            break;
+        default:
         }
         
         // The following are expected to report a title (AXTitle)
         switch (event.detail) {
-            case ACC.ROLE_CHECKBUTTON:
-            case ACC.ROLE_RADIOBUTTON:
-            case ACC.ROLE_PUSHBUTTON:
-            case ACC.ROLE_TABITEM:
-                returnValue.addObject(OS.NSAccessibilityTitleAttribute);
-                break;
-            default:
+        case ACC.ROLE_CHECKBUTTON:
+        case ACC.ROLE_RADIOBUTTON:
+        case ACC.ROLE_PUSHBUTTON:
+        case ACC.ROLE_TABITEM:
+            returnValue.addObject(OS.NSAccessibilityTitleAttribute);
+            break;
+        default:
         }
         
         // Accessibility verifier says these attributes must be reported for combo boxes.
@@ -360,17 +349,17 @@ public class Accessible {
             returnValue.addObject(OS.NSAccessibilityContentsAttribute);
             returnValue.addObject(OS.NSAccessibilityTabsAttribute);
         }
-        
+
         /*
          * Only report back sub-roles when the DWT role maps to a sub-role.
          */
         if (event.detail !is -1) {
             String osRole = roleToOs(event.detail);
             
-            if (dwt.dwthelper.utils.indexOf(osRole, ':') is -1)
+            if (osRole.indexOf(':') is -1)
                 returnValue.removeObject(OS.NSAccessibilitySubroleAttribute);
         }
-        
+
         /*
          * Children never return their own children, so remove that attribute.
          */
@@ -387,7 +376,7 @@ public class Accessible {
             return returnValue;
         }
     }
-    
+
     public cocoa.id internal_accessibilityAttributeValue(NSString attribute, int childID) {
         if (attribute.isEqualToString(OS.NSAccessibilityRoleAttribute)) return getRoleAttribute(childID);
         if (attribute.isEqualToString(OS.NSAccessibilitySubroleAttribute)) return getSubroleAttribute(childID);
@@ -424,7 +413,7 @@ public class Accessible {
         if (attribute.isEqualToString(OS.NSAccessibilityRangeForLineParameterizedAttribute)) return getRangeForLineParameterizedAttribute(parameter, childID);      
         return null;
     }
-    
+
     // Returns the UI Element that has the focus. You can assume that the search for the focus has already been narrowed down to the receiver.
     // Override this method to do a deeper search with a UIElement - e.g. a NSMatrix would determine if one of its cells has the focus.
     public cocoa.id internal_accessibilityFocusedUIElement(int childID) {
@@ -449,10 +438,10 @@ public class Accessible {
         if (event.childID is ACC.CHILDID_SELF || event.childID is ACC.CHILDID_NONE) {
             return new cocoa.id(OS.NSAccessibilityUnignoredAncestor(control.view.id));
         }   
-        
+
         return new cocoa.id(OS.NSAccessibilityUnignoredAncestor(childIDToOs(event.childID).id));
     }
-    
+
     // Returns the deepest descendant of the UIElement hierarchy that contains the point. 
     // You can assume the point has already been determined to lie within the receiver.
     // Override this method to do deeper hit testing within a UIElement - e.g. a NSMatrix would test its cells. The point is bottom-left relative screen coordinates.
@@ -461,7 +450,7 @@ public class Accessible {
         event.x = cast(int) point.x;
         dwt.widgets.Monitor.Monitor primaryMonitor = Display.getCurrent().getPrimaryMonitor();
         event.y = cast(int) (primaryMonitor.getBounds().height - point.y);
-        
+    
         // Set an impossible value to determine if anything responded to the event.
         event.childID = ACC.CHILDID_MULTIPLE;
         for (int i = 0; i < accessibleControlListeners.size(); i++) {
@@ -476,14 +465,14 @@ public class Accessible {
         if (event.accessible !is null) {
             return new cocoa.id(OS.NSAccessibilityUnignoredAncestor(event.accessible.control.view.id));
         }
-        
+    
         if (event.childID is ACC.CHILDID_SELF || event.childID is ACC.CHILDID_NONE) {
             return new cocoa.id(OS.NSAccessibilityUnignoredAncestor(control.view.id));
         }
         
         return new cocoa.id(OS.NSAccessibilityUnignoredAncestor(childIDToOs(event.childID).id));
     }
-    
+
     // Return YES if the UIElement doesn't show up to the outside world - i.e. its parent should return the UIElement's children as its own - cutting the UIElement out. E.g. NSControls are ignored when they are single-celled.
     public bool internal_accessibilityIsIgnored(int childID) {
         return false;
@@ -491,22 +480,22 @@ public class Accessible {
     
     // parameterized attribute methods
     public NSArray internal_accessibilityParameterizedAttributeNames(int childID) {
-        
+
         if ((childID is ACC.CHILDID_SELF) && (parameterizedAttributeNames !is null)) {
             return retainedAutoreleased(parameterizedAttributeNames);
         }
-        
+
         NSMutableArray returnValue = NSMutableArray.arrayWithCapacity(4);
-        
+
         if (accessibleTextListeners.size() > 0) {
             for (int i = 0; i < baseParameterizedAttributes.length; i++) {
                 if (!returnValue.containsObject(baseParameterizedAttributes[i])) {
                     returnValue.addObject(baseParameterizedAttributes[i]);
                 }
             }
-            
+
         }
-        
+
         if (childID is ACC.CHILDID_SELF) {
             parameterizedAttributeNames = returnValue;
             parameterizedAttributeNames.retain();
@@ -516,12 +505,12 @@ public class Accessible {
             return returnValue;
         }
     }
-    
+
     public void internal_accessibilityPerformAction(NSString action, int childID) {
         // TODO Auto-generated method stub
         // No action support for now.
     }
-    
+
     /**
      * Returns the control for this Accessible object. 
      *
@@ -531,7 +520,7 @@ public class Accessible {
     public Control getControl() {
         return control;
     }
-    
+
     /**
      * Invokes platform specific functionality to dispose an accessible object.
      * <p>
@@ -548,7 +537,7 @@ public class Accessible {
         if (attributeNames !is null) attributeNames.release();
         attributeNames = null;
         if (parameterizedAttributeNames !is null) parameterizedAttributeNames.release();
-        parameterizedAttributeNames = null;        
+        parameterizedAttributeNames = null;
         
         foreach (childDelegate ; children)
             childDelegate.internal_dispose_SWTAccessibleDelegate();
@@ -560,7 +549,7 @@ public class Accessible {
         // TODO: May need to expand the API so the combo box state can be reported.
         return NSNumber.numberWithBool(false);
     }
-    
+
     cocoa.id getHelpAttribute (int childID) {
         cocoa.id returnValue = null;
         AccessibleEvent event = new AccessibleEvent(this);
@@ -588,11 +577,11 @@ public class Accessible {
         }
         if (event.detail !is -1) {
             String appRole = roleToOs (event.detail);
-            int index = dwt.dwthelper.utils.indexOf(appRole, ':');
+            int index = appRole.indexOf(':');
             if (index !is -1) appRole = appRole.substring(0, index);
             returnValue = NSString.stringWith(appRole);
         }
-        
+
         return returnValue;
     }
     
@@ -607,7 +596,7 @@ public class Accessible {
         }
         if (event.detail !is -1) {
             String appRole = roleToOs (event.detail);
-            int index = dwt.dwthelper.utils.indexOf(appRole, ':');
+            int index = appRole.indexOf(':');
             if (index !is -1) {
                 appRole = appRole.substring(index + 1);
                 returnValue = NSString.stringWith(appRole);
@@ -628,7 +617,7 @@ public class Accessible {
         if (event.detail !is -1) {
             String appRole = roleToOs (event.detail);
             String appSubrole = null;
-            int index = dwt.dwthelper.utils.indexOf(appRole, ':');
+            int index = appRole.indexOf(':');
             if (index !is -1) {
                 appSubrole = appRole.substring(index + 1);
                 appRole = appRole.substring(0, index);
@@ -647,9 +636,9 @@ public class Accessible {
         cocoa.id returnValue = null;//NSString.stringWith("");
         
         /*
-         * Feature of the Macintosh.  The text of a Label is returned in its value,
-         * not its title, so ensure that the role is not Label before asking for the title.
-         */
+        * Feature of the Macintosh.  The text of a Label is returned in its value,
+        * not its title, so ensure that the role is not Label before asking for the title.
+        */
         AccessibleControlEvent roleEvent = new AccessibleControlEvent(this);
         roleEvent.childID = childID;
         roleEvent.detail = -1;
@@ -687,64 +676,64 @@ public class Accessible {
         String value = event.result;
         
         switch (role) {
-            case ACC.ROLE_RADIOBUTTON: // 1 = on, 0 = off
-            case ACC.ROLE_CHECKBUTTON: // 1 = checked, 0 = unchecked, 2 = mixed
-            case ACC.ROLE_SCROLLBAR: // numeric value representing the position of the scroller
-            case ACC.ROLE_SLIDER: // the value associated with the position of the slider thumb
-            case ACC.ROLE_PROGRESSBAR: // the value associated with the fill level of the progress bar
-                if (value !is null) {
-                    try {
-                        int number = Integer.parseInt(value);
-                        returnValue = NSNumber.numberWithInt(number);
-                    } catch (NumberFormatException ex) {
-                        if (value.equalsIgnoreCase("true")) {
-                            returnValue = NSNumber.numberWithBool(true);
-                        } else if (value.equalsIgnoreCase("false")) {
-                            returnValue = NSNumber.numberWithBool(false);
-                        }
+        case ACC.ROLE_RADIOBUTTON: // 1 = on, 0 = off
+        case ACC.ROLE_CHECKBUTTON: // 1 = checked, 0 = unchecked, 2 = mixed
+        case ACC.ROLE_SCROLLBAR: // numeric value representing the position of the scroller
+        case ACC.ROLE_SLIDER: // the value associated with the position of the slider thumb
+        case ACC.ROLE_PROGRESSBAR: // the value associated with the fill level of the progress bar
+            if (value !is null) {
+                try {
+                    int number = Integer.parseInt(value);
+                    returnValue = NSNumber.numberWithInt(number);
+                } catch (NumberFormatException ex) {
+                    if (value.equalsIgnoreCase("true")) {
+                        returnValue = NSNumber.numberWithBool(true);
+                    } else if (value.equalsIgnoreCase("false")) {
+                        returnValue = NSNumber.numberWithBool(false);
                     }
+                }
+            } else {
+                returnValue = NSNumber.numberWithBool(false);
+            }
+            break;
+        case ACC.ROLE_TABFOLDER: // the accessibility object representing the currently selected tab item
+        case ACC.ROLE_TABITEM:  // 1 = selected, 0 = not selected
+            AccessibleControlEvent ace = new AccessibleControlEvent(this);
+            ace.childID = -4;
+            for (int i = 0; i < accessibleControlListeners.size(); i++) {
+                AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+                listener.getSelection(ace);
+            }
+            if (ace.childID >= ACC.CHILDID_SELF) {
+                if (role is ACC.ROLE_TABITEM) {
+                    returnValue = NSNumber.numberWithBool(ace.childID is childID);
                 } else {
-                    returnValue = NSNumber.numberWithBool(false);
+                    returnValue = new cocoa.id(OS.NSAccessibilityUnignoredAncestor(childIDToOs(ace.childID).id));
                 }
-                break;
-            case ACC.ROLE_TABFOLDER: // the accessibility object representing the currently selected tab item
-            case ACC.ROLE_TABITEM:  // 1 = selected, 0 = not selected
-                AccessibleControlEvent ace = new AccessibleControlEvent(this);
-                ace.childID = -4;
-                for (int i = 0; i < accessibleControlListeners.size(); i++) {
-                    AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
-                    listener.getSelection(ace);
-                }
-                if (ace.childID >= ACC.CHILDID_SELF) {
-                    if (role is ACC.ROLE_TABITEM) {
-                        returnValue = NSNumber.numberWithBool(ace.childID is childID);
-                    } else {
-                        returnValue = new cocoa.id(OS.NSAccessibilityUnignoredAncestor(childIDToOs(ace.childID).id));
-                    }
-                } else {
-                    returnValue = NSNumber.numberWithBool(false);               
-                }
-                break;
-            case ACC.ROLE_COMBOBOX: // text of the currently selected item
-            case ACC.ROLE_TEXT: // text in the text field
+            } else {
+                returnValue = NSNumber.numberWithBool(false);
+            }
+            break;
+        case ACC.ROLE_COMBOBOX: // text of the currently selected item
+        case ACC.ROLE_TEXT: // text in the text field
+            if (value !is null) returnValue = NSString.stringWith(value);
+            break;
+        case ACC.ROLE_LABEL: // text in the label
+            /* On a Mac, the 'value' of a label is the same as the 'name' of the label. */
+            AccessibleEvent e = new AccessibleEvent(this);
+            e.childID = childID;
+            e.result = null;
+            for (int i = 0; i < accessibleListeners.size(); i++) {
+                AccessibleListener listener = accessibleListeners.elementAt(i);
+                listener.getName(e);
+            }
+            if (e.result !is null) {
+                returnValue = NSString.stringWith(e.result);
+            } else {
                 if (value !is null) returnValue = NSString.stringWith(value);
-                break;
-            case ACC.ROLE_LABEL: // text in the label
-                /* On a Mac, the 'value' of a label is the same as the 'name' of the label. */
-                AccessibleEvent e = new AccessibleEvent(this);
-                e.childID = childID;
-                e.result = null;
-                for (int i = 0; i < accessibleListeners.size(); i++) {
-                    AccessibleListener listener = accessibleListeners.elementAt(i);
-                    listener.getName(e);
-                }
-                if (e.result !is null) {
-                    returnValue = NSString.stringWith(e.result);
-                } else {
-                    if (value !is null) returnValue = NSString.stringWith(value);
-                }
-                break;
-            default:
+            }
+            break;
+        default:
         }
         
         return returnValue;
@@ -757,7 +746,7 @@ public class Accessible {
             AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
             listener.getState(event);
         }
-        
+
         return NSNumber.numberWithBool(control.isEnabled());
     }
     
@@ -772,10 +761,10 @@ public class Accessible {
         
         /* The application can optionally answer an accessible. */
         // FIXME:
-        //      if (event.accessible !is null) {
-        //          bool hasFocus = (event.accessible.childID is childID) && (event.accessible.control is this.control);
-        //          return NSNumber.numberWithBool(hasFocus);
-        //      }
+//      if (event.accessible !is null) {
+//          bool hasFocus = (event.accessible.childID is childID) && (event.accessible.control is this.control);
+//          return NSNumber.numberWithBool(hasFocus);
+//      }
         
         /* Or the application can answer a valid child ID, including CHILDID_SELF and CHILDID_NONE. */
         if (event.childID is ACC.CHILDID_SELF) {
@@ -789,7 +778,7 @@ public class Accessible {
             /* Other valid childID. */
             return NSNumber.numberWithBool(event.childID is childID);
         }
-        
+
         // Invalid childID at this point means the application did not implement getFocus, so 
         // let the default handler return the native focus.
         bool hasFocus = (this.control.view.window().firstResponder() is control.view);
@@ -823,17 +812,17 @@ public class Accessible {
                 if (appChildren !is null && appChildren.length > 0) {
                     /* return an NSArray of NSAccessible objects. */
                     NSMutableArray childArray = NSMutableArray.arrayWithCapacity(appChildren.length);
-                    
+
                     for (int i = 0; i < appChildren.length; i++) {
                         Object child = appChildren[i];
-                        if (cast(Integer) child) {
-                            cocoa.id accChild = childIDToOs((cast(Integer)child).intValue());                         
+                        if (auto c = cast(Integer) child) {
+                            cocoa.id accChild = childIDToOs(c).intValue());                         
                             childArray.addObject(accChild);
                         } else {
                             childArray.addObject((cast(Accessible)child).control.view);
                         }
                     }
-                    
+
                     returnValue = new cocoa.id(OS.NSAccessibilityUnignoredChildren(childArray.id));
                 }
             }
@@ -842,7 +831,7 @@ public class Accessible {
             // Don't return null if there are no children -- always return an empty array.
             returnValue = NSArray.array();
         }
-        
+
         // Returning null here means we want the control itself to determine its children. If the accessible listener
         // implemented getChildCount/getChildren, references to those objects would have been returned above.
         return returnValue;
@@ -867,11 +856,11 @@ public class Accessible {
                 if (appChildren !is null && appChildren.length > 0) {
                     /* return an NSArray of NSAccessible objects. */
                     NSMutableArray childArray = NSMutableArray.arrayWithCapacity(appChildren.length);
-                    
+
                     for (int i = 0; i < appChildren.length; i++) {
                         Object child = appChildren[i];
-                        if (cast(Integer)child) {
-                            int subChildID = (cast(Integer)child).intValue();
+                        if (auto c = cast(Integer)child) {
+                            int subChildID = c.intValue();
                             event.childID = subChildID;
                             event.detail = -1;
                             for (int j = 0; j < accessibleControlListeners.size(); j++) {
@@ -887,7 +876,7 @@ public class Accessible {
                             childArray.addObject((cast(Accessible)child).control.view);
                         }
                     }
-                    
+
                     returnValue = new cocoa.id(OS.NSAccessibilityUnignoredChildren(childArray.id));
                 }
             }
@@ -896,7 +885,7 @@ public class Accessible {
             // Don't return null if there are no children -- always return an empty array.
             returnValue = NSArray.array();
         }
-        
+
         // Returning null here means we want the control itself to determine its children. If the accessible listener
         // implemented getChildCount/getChildren, references to those objects would have been returned above.
         return returnValue;
@@ -921,7 +910,7 @@ public class Accessible {
             listener.getLocation(event);
         }
         
-        dwt.widgets.Monitor.Monitor primaryMonitor = Display.getCurrent().getPrimaryMonitor();
+        auto primaryMonitor = Display.getCurrent().getPrimaryMonitor();
         
         NSPoint osPositionAttribute = NSPoint ();
         if (event.width !is -1) {
@@ -933,12 +922,12 @@ public class Accessible {
             if (childID !is ACC.CHILDID_SELF) {
                 Point pt = null;
                 Rectangle location = control.getBounds();
-                
+
                 if (control.getParent() !is null)
                     pt = control.getParent().toDisplay(location.x, location.y);
                 else 
                     pt = (cast(Shell)control).toDisplay(location.x, location.y);
-                
+
                 osPositionAttribute.x = pt.x;
                 osPositionAttribute.y = pt.y;
                 returnValue = NSValue.valueWithPoint(osPositionAttribute);
@@ -953,12 +942,12 @@ public class Accessible {
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.childID = childID;
         event.width = -1;
-        
+
         for (int i = 0; i < accessibleControlListeners.size(); i++) {
             AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
             listener.getLocation(event);
         }
-        
+
         NSSize controlSize = NSSize ();
         if (event.width !is -1) {
             controlSize.width = event.width;
@@ -983,15 +972,15 @@ public class Accessible {
             AccessibleListener listener = accessibleListeners.elementAt(i);
             listener.getDescription(event);
         }
-        
+
         returnValue = (event.result !is null ? NSString.stringWith(event.result) : null);
-        
+
         // If no description was provided, and this is a composite or canvas, return a blank string
         // -- otherwise, let the Cocoa control handle it.
         if (returnValue is null) {
             if (cast(Composite) control) returnValue = NSString.stringWith("");
         }
-        
+
         return returnValue;
     }
     
@@ -1036,7 +1025,7 @@ public class Accessible {
     
     cocoa.id getRangeForLineParameterizedAttribute (cocoa.id parameter, int childID) {
         cocoa.id returnValue = null;
-        
+
         // The parameter is an NSNumber with the line number.
         NSNumber lineNumberObj = new NSNumber(parameter.id);        
         int lineNumber = lineNumberObj.intValue();
@@ -1117,11 +1106,11 @@ public class Accessible {
             listener.getValue(event);
         }
         String appValue = event.result;
-        
+
         if (appValue !is null) {
             returnValue = NSString.stringWith(appValue.substring((int)/*64*/range.location, (int)/*64*/(range.location + range.length)));
         }
-        
+
         return returnValue;
     }
     
@@ -1158,18 +1147,18 @@ public class Accessible {
         }
         
         NSRange range = NSRange();
-        
+
         if (event.result !is null) {
             range.location = 0;
             range.length = event.result.length();
         } else {
             return null;
-            //          range.location = range.length = 0;
+//          range.location = range.length = 0;
         }
-        
+
         return NSValue.valueWithRange(range);
     }
-    
+
     int lineNumberForOffset (String text, int offset) {
         int lineNumber = 1;
         int length = text.length();
@@ -1187,7 +1176,7 @@ public class Accessible {
         }
         return lineNumber;
     }
-    
+
     NSRange rangeForLineNumber (int lineNumber, String text) {
         NSRange range = NSRange();
         range.location = -1;
@@ -1214,7 +1203,7 @@ public class Accessible {
         range.length = count;
         return range;
     }
-    
+
     /**
      * Removes the listener from the collection of listeners who will
      * be notified when an accessible client asks for certain strings,
@@ -1239,7 +1228,7 @@ public class Accessible {
         if (listener is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
         accessibleListeners.removeElement(listener);
     }
-    
+
     /**
      * Removes the listener from the collection of listeners who will
      * be notified when an accessible client asks for custom control
@@ -1264,7 +1253,7 @@ public class Accessible {
         if (listener is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
         accessibleControlListeners.removeElement(listener);
     }
-    
+
     /**
      * Removes the listener from the collection of listeners who will
      * be notified when an accessible client asks for custom text control
@@ -1291,13 +1280,13 @@ public class Accessible {
         if (listener is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
         accessibleTextListeners.removeElement (listener);
     }
-    
+
     static NSArray retainedAutoreleased(NSArray inObject) {
         cocoa.id temp = inObject.retain();
         cocoa.id temp2 = (new NSObject(temp.id)).autorelease();
         return new NSArray(temp2.id);
     }
-    
+
     /**
      * Sends a message to accessible clients that the child selection
      * within a custom container control has changed.
@@ -1313,7 +1302,7 @@ public class Accessible {
         checkWidget();
         OS.NSAccessibilityPostNotification(control.view.id, OS.NSAccessibilitySelectedChildrenChangedNotification.id);
     }
-    
+
     /**
      * Sends a message to accessible clients indicating that the focus
      * has changed within a custom control.
@@ -1329,7 +1318,7 @@ public class Accessible {
         checkWidget();
         OS.NSAccessibilityPostNotification(control.view.id, OS.NSAccessibilityFocusedUIElementChangedNotification.id);
     }
-    
+
     /**
      * Sends a message to accessible clients that the text
      * caret has moved within a custom control.
@@ -1392,7 +1381,7 @@ public class Accessible {
         if (childID is ACC.CHILDID_SELF) {
             return control.view;
         }
-        
+
         /* Check cache for childID, if found, return corresponding osChildID. */
         SWTAccessibleDelegate childRef = children[childID];
         
@@ -1403,7 +1392,7 @@ public class Accessible {
         
         return childRef;
     }
-    
+
     NSString concatStringsAsRole(NSString str1, NSString str2) {
         NSString returnValue = str1;
         returnValue = returnValue.stringByAppendingString(NSString.stringWith(":"));
@@ -1457,10 +1446,10 @@ public class Accessible {
             case ACC.ROLE_LINK: nsReturnValue = OS.NSAccessibilityLinkRole; break;
             default:
         }
-        
+
         return nsReturnValue.getString();
     }
-    
+
     int osToRole(NSString osRole) {
         if (osRole is null) return 0;
         if (osRole.isEqualToString(OS.NSAccessibilityWindowRole)) return ACC.ROLE_WINDOW;
@@ -1501,10 +1490,10 @@ public class Accessible {
         if (!isValidThread ()) DWT.error (DWT.ERROR_THREAD_INVALID_ACCESS);
         if (control.isDisposed ()) DWT.error (DWT.ERROR_WIDGET_DISPOSED);
     }
-    
+
     /* isValidThread was copied from Widget, and rewritten to work in this package */
     bool isValidThread () {
         return control.getDisplay ().getThread () is Thread.getThis ();
     }
-    
+
 }
