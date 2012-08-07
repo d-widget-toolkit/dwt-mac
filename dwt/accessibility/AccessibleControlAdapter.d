@@ -44,7 +44,7 @@ import dwt.accessibility.AccessibleControlEvent;
  * @since 2.0
  */
 public abstract class AccessibleControlAdapter : AccessibleControlListener {
-    
+
     /**
      * Sent when an accessibility client requests the identifier
      * of the control child at the specified display coordinates.
@@ -63,7 +63,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      *    <li>accessible [Optional OUT] - the accessible object for the control or child may be returned instead of the childID</li>
      * </ul>
      */
-    public void getChildAtPoint (AccessibleControlEvent e) {
+    public void getChildAtPoint(AccessibleControlEvent e) {
     }
     
     /**
@@ -81,7 +81,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      *    <li>x, y, width, height [OUT] - the control or child location in display coordinates</li>
      * </ul>
      */
-    public void getLocation (AccessibleControlEvent e) {
+    public void getLocation(AccessibleControlEvent e) {
     }
     
     /**
@@ -100,7 +100,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      *    <li>accessible [OUT] - an Accessible for the specified childID, or null if one does not exist</li>
      * </ul>
      */
-    public void getChild (AccessibleControlEvent e) {
+    public void getChild(AccessibleControlEvent e) {
     }
     
     /**
@@ -116,7 +116,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      *    <li>detail [OUT] - the number of child items in this control</li>
      * </ul>
      */
-    public void getChildCount (AccessibleControlEvent e) {
+    public void getChildCount(AccessibleControlEvent e) {
     }
     
     /**
@@ -124,21 +124,21 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      * of the control, or the default action of a child of the control.
      * The default behavior is to do nothing.
      * <p>
-     * This String is typically a verb describing what the user does to it.
+     * This string is typically a verb describing what the user does to it.
      * For example, a Push Button's default action is "Press", a Check Button's
      * is "Check" or "UnCheck", and List items have the default action "Double Click".
      * </p><p>
-     * Return a String describing the default action of the specified
+     * Return a string describing the default action of the specified
      * control or child in the <code>result</code> field of the event object.
-     * Returning null tells the client to use the platform default action String.
+     * Returning null tells the client to use the platform default action string.
      * </p>
      *
      * @param e an event object containing the following fields:<ul>
      *    <li>childID [IN] - an identifier specifying the control or one of its children</li>
-     *    <li>result [OUT] - the requested default action String, or null</li>
+     *    <li>result [OUT] - the requested default action string, or null</li>
      * </ul>
      */
-    public void getDefaultAction (AccessibleControlEvent e) {
+    public void getDefaultAction(AccessibleControlEvent e) {
     }
     
     /**
@@ -157,7 +157,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      *    <li>accessible [Optional OUT] - the accessible object for a child may be returned instead of its childID</li>
      * </ul>
      */
-    public void getFocus (AccessibleControlEvent e) {
+    public void getFocus(AccessibleControlEvent e) {
     }
     
     /**
@@ -175,7 +175,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      *    <li>detail [OUT] - a role constant describing the role of the control or child</li>
      * </ul>
      */
-    public void getRole (AccessibleControlEvent e) {
+    public void getRole(AccessibleControlEvent e) {
     }
     
     /**
@@ -195,7 +195,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      *    <li>accessible [Optional OUT] - the accessible object for the control or child may be returned instead of the childID</li>
      * </ul>
      */
-    public void getSelection (AccessibleControlEvent e) {
+    public void getSelection(AccessibleControlEvent e) {
     }
     
     /**
@@ -213,7 +213,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      *    <li>detail [OUT] - a state mask describing the current state of the control or child</li>
      * </ul>
      */
-    public void getState (AccessibleControlEvent e) {
+    public void getState(AccessibleControlEvent e) {
     }
     
     /**
@@ -222,22 +222,22 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      * The default behavior is to do nothing.
      * <p>
      * Many controls do not return a value. Examples of controls
-     * that do are: Combo returns the text String, Text returns
-     * its contents, ProgressBar returns a String representing a
-     * percentage, and Tree items return a String representing
+     * that do are: Combo returns the text string, Text returns
+     * its contents, ProgressBar returns a string representing a
+     * percentage, and Tree items return a string representing
      * their level in the tree.
      * </p><p>
-     * Return a String describing the value of the specified control
+     * Return a string describing the value of the specified control
      * or child in the <code>result</code> field of the event object.
-     * Returning null tells the client to use the platform value String.
+     * Returning null tells the client to use the platform value string.
      * </p>
      *
      * @param e an event object containing the following fields:<ul>
      *    <li>childID [IN] - an identifier specifying the control or one of its children</li>
-     *    <li>result [OUT] - the requested value String, or null</li>
+     *    <li>result [OUT] - the requested value string, or null</li>
      * </ul>
      */
-    public void getValue (AccessibleControlEvent e) {
+    public void getValue(AccessibleControlEvent e) {
     }
     
     /**
@@ -253,6 +253,6 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      *    <li>accessible [Optional OUT] - an array of accessible objects for the children may be returned instead of the childIDs</li>
      * </ul>
      */
-    public void getChildren (AccessibleControlEvent e) {
+    public void getChildren(AccessibleControlEvent e) {
     }
 }
