@@ -38,7 +38,7 @@ import dwt.accessibility.AccessibleEvent;
  * @since 2.0
  */
 public abstract class AccessibleAdapter : AccessibleListener {
-    
+
     /**
      * Sent when an accessibility client requests the name
      * of the control, or the name of a child of the control.
@@ -46,22 +46,22 @@ public abstract class AccessibleAdapter : AccessibleListener {
      * <p>
      * Return the name of the control or specified child in the
      * <code>result</code> field of the event object. Returning
-     * an empty String tells the client that the control or child
+     * an empty string tells the client that the control or child
      * does not have a name, and returning null tells the client
      * to use the platform name.
      * </p>
      *
      * @param e an event object containing the following fields:<ul>
      *    <li>childID [IN] - an identifier specifying the control or one of its children</li>
-     *    <li>result [OUT] - the requested name String, or null</li>
+     *    <li>result [OUT] - the requested name string, or null</li>
      * </ul>
      */
-    public void getName (AccessibleEvent e) {
+    public void getName(AccessibleEvent e) {
     }
-    
+        
     /**
-     * Sent when an accessibility client requests the help String
-     * of the control, or the help String of a child of the control.
+     * Sent when an accessibility client requests the help string
+     * of the control, or the help string of a child of the control.
      * The default behavior is to do nothing.
      * <p>
      * The information in this property should be similar to the help
@@ -69,21 +69,21 @@ public abstract class AccessibleAdapter : AccessibleListener {
      * does or how to use it, as opposed to getDescription, which
      * describes appearance.
      * </p><p>
-     * Return the help String of the control or specified child in
+     * Return the help string of the control or specified child in
      * the <code>result</code> field of the event object. Returning
-     * an empty String tells the client that the control or child
-     * does not have a help String, and returning null tells the
-     * client to use the platform help String.
+     * an empty string tells the client that the control or child
+     * does not have a help string, and returning null tells the
+     * client to use the platform help string.
      * </p>
      *
      * @param e an event object containing the following fields:<ul>
      *    <li>childID [IN] - an identifier specifying the control or one of its children</li>
-     *    <li>result [OUT] - the requested help String, or null</li>
+     *    <li>result [OUT] - the requested help string, or null</li>
      * </ul>
      */
     public void getHelp (AccessibleEvent e) {
     }
-    
+        
     /**
      * Sent when an accessibility client requests the keyboard shortcut
      * of the control, or the keyboard shortcut of a child of the control.
@@ -94,21 +94,21 @@ public abstract class AccessibleAdapter : AccessibleListener {
      * then you should expose its mnemonic, and if it cannot receive keyboard
      * focus, then you should expose its accelerator.
      * </p><p>
-     * Return the keyboard shortcut String of the control or specified child
+     * Return the keyboard shortcut string of the control or specified child
      * in the <code>result</code> field of the event object. Returning an
-     * empty String tells the client that the control or child does not
-     * have a keyboard shortcut String, and returning null tells the client
-     * to use the platform keyboard shortcut String.
+     * empty string tells the client that the control or child does not
+     * have a keyboard shortcut string, and returning null tells the client
+     * to use the platform keyboard shortcut string.
      * </p>
      *
      * @param e an event object containing the following fields:<ul>
      *    <li>childID [IN] - an identifier specifying the control or one of its children</li>
-     *    <li>result [OUT] - the requested keyboard shortcut String (example: "ALT+N"), or null</li>
+     *    <li>result [OUT] - the requested keyboard shortcut string (example: "ALT+N"), or null</li>
      * </ul>
      */
     public void getKeyboardShortcut (AccessibleEvent e) {
     }
-    
+        
     /**
      * Sent when an accessibility client requests a description
      * of the control, or a description of a child of the control.
@@ -120,14 +120,14 @@ public abstract class AccessibleAdapter : AccessibleListener {
      * </p><p>
      * Return the description of the control or specified child in
      * the <code>result</code> field of the event object. Returning
-     * an empty String tells the client that the control or child
+     * an empty string tells the client that the control or child
      * does not have a description, and returning null tells the
      * client to use the platform description.
      * </p>
      *
      * @param e an event object containing the following fields:<ul>
      *    <li>childID [IN] - an identifier specifying the control or one of its children</li>
-     *    <li>result [OUT] - the requested description String, or null</li>
+     *    <li>result [OUT] - the requested description string, or null</li>
      * </ul>
      */
     public void getDescription (AccessibleEvent e) {
