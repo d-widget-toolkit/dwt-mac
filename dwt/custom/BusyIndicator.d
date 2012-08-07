@@ -15,10 +15,6 @@ module dwt.custom.BusyIndicator;
 import dwt.dwthelper.utils;
 
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
-
 /**
  * Support for showing a Busy Cursor during a long running process.
  *
@@ -34,14 +30,14 @@ public class BusyIndicator {
 /**
  * Runs the given <code>Runnable</code> while providing
  * busy feedback using this busy indicator.
- *
+ * 
  * @param display the display on which the busy feedback should be
  *        displayed.  If the display is null, the Display for the current
  *        thread will be used.  If there is no Display for the current thread,
  *        the runnable code will be executed and no busy feedback will be displayed.
  * @param runnable the runnable for which busy feedback is to be shown.
  *        Must not be null.
- *
+ * 
 * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the runnable is null</li>
  * </ul>
@@ -57,7 +53,7 @@ public static void showWhile(Display display, Runnable runnable) {
             return;
         }
     }
-
+    
     Integer busyId = new Integer(nextBusyId);
     nextBusyId++;
     Cursor cursor = display.getSystemCursor(DWT.CURSOR_WAIT);
@@ -69,14 +65,14 @@ public static void showWhile(Display display, Runnable runnable) {
             shells[i].setData(BUSYID_NAME, busyId);
         }
     }
-
+        
     try {
         runnable.run();
     } finally {
         shells = display.getShells();
         for (int i = 0; i < shells.length; i++) {
             Integer id = cast(Integer)shells[i].getData(BUSYID_NAME);
-            if ( id !is null && id == busyId) {
+            if (id is busyId) {
                 shells[i].setCursor(null);
                 shells[i].setData(BUSYID_NAME, null);
             }
