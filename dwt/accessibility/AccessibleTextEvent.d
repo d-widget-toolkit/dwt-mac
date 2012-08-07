@@ -38,8 +38,8 @@ import dwt.internal.DWTEventObject;
  * @since 3.0
  */
 public class AccessibleTextEvent : DWTEventObject {
-    public int childID; // IN
-    public int offset, length; // OUT
+    public int childID;             // IN
+    public int offset, length;      // OUT
     
     static const long serialVersionUID = 3977019530868308275L;
     
@@ -49,7 +49,7 @@ public class AccessibleTextEvent : DWTEventObject {
  * @param source the object that fired the event
  */
 public this (Object source) {
-    super(source);
+    super (source);
 }
 
 /**
@@ -60,8 +60,8 @@ public this (Object source) {
  */
 public String toString () {
     return Format("AccessibleTextEvent {childID={}{}{}{}{}{}" , childID , //$NON-NLS-1$
-                  " offset=" , offset , //$NON-NLS-1$
-                  " length=" , length , //$NON-NLS-1$
-                  "}"); //$NON-NLS-1$
+        " offset=" , offset , //$NON-NLS-1$
+        " length=" , length , //$NON-NLS-1$
+        "}"); //$NON-NLS-1$
 }
 }
