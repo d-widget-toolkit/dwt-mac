@@ -60,7 +60,7 @@ public interface AccessibleTextListener : DWTEventListener {
      * </ul>
      */
     public void getCaretOffset (AccessibleTextEvent e);
-    
+
     /**
      * Sent when an accessibility client requests the range of the current
      * text selection.
