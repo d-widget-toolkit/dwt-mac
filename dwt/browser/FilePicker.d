@@ -50,7 +50,7 @@ nsrefcnt AddRef () {
 extern(System)
 nsresult QueryInterface (nsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
-    
+
     if (*riid == nsISupports.IID) {
         *ppvObject = cast(void*)cast(nsISupports) this;
         AddRef ();
@@ -60,16 +60,16 @@ nsresult QueryInterface (nsID* riid, void** ppvObject) {
         *ppvObject = cast(void*)cast(nsIFilePicker) this;
         AddRef ();
         return XPCOM.NS_OK;
-    }   
+    }
     if (*riid == nsIFilePicker_1_8.IID) {
         *ppvObject = cast(void*)cast(nsIFilePicker_1_8) this;
         AddRef ();
         return XPCOM.NS_OK;
     }
-    *ppvObject = null; 
+    *ppvObject = null;
     return XPCOM.NS_ERROR_NO_INTERFACE;
 }
-    
+
 extern(System)
 nsrefcnt Release () {
     refCount--;
@@ -124,7 +124,7 @@ nsresult Show (PRInt16* _retval) {
     directory = dialog.getFilterPath ();
     title = defaultFilename = null;
     masks = null;
-    int result = filename is null ? nsIFilePicker.returnCancel : nsIFilePicker.returnOK; 
+    int result = filename is null ? nsIFilePicker.returnCancel : nsIFilePicker.returnOK;
     *_retval = cast(int)cast(short)result;; /* PRInt16 */
     return XPCOM.NS_OK;
 }

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -26,11 +26,11 @@ import dwt.internal.c.Carbon;
  * resources managed by each instance when those instances are no longer
  * required, and thus no <code>dispose()</code> method is provided.
  * </p>
- * 
+ *
  * @see GC#getLineAttributes()
  * @see GC#setLineAttributes(LineAttributes)
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- *  
+ *
  * @since 3.3
  */
 public class LineAttributes {
@@ -42,7 +42,7 @@ public class LineAttributes {
 
     /**
      * The line style.
-     * 
+     *
      * @see dwt.DWT#LINE_CUSTOM
      * @see dwt.DWT#LINE_DASH
      * @see dwt.DWT#LINE_DASHDOT
@@ -54,7 +54,7 @@ public class LineAttributes {
 
     /**
      * The line cap style.
-     * 
+     *
      * @see dwt.DWT#CAP_FLAT
      * @see dwt.DWT#CAP_ROUND
      * @see dwt.DWT#CAP_SQUARE
@@ -63,7 +63,7 @@ public class LineAttributes {
 
     /**
      * The line join style.
-     * 
+     *
      * @see dwt.DWT#JOIN_BEVEL
      * @see dwt.DWT#JOIN_MITER
      * @see dwt.DWT#JOIN_ROUND
@@ -85,7 +85,7 @@ public class LineAttributes {
      */
     public CGFloat miterLimit;
 
-/** 
+/**
  * Create a new line attributes with the specified line width.
  *
  * @param width the line width
@@ -93,8 +93,8 @@ public class LineAttributes {
 public this(CGFloat width) {
     this(width, DWT.CAP_FLAT, DWT.JOIN_MITER, DWT.LINE_SOLID, null, 0, 10);
 }
-    
-/** 
+
+/**
  * Create a new line attributes with the specified line cap, join and width.
  *
  * @param width the line width
@@ -105,7 +105,7 @@ public this(CGFloat width, int cap, int join) {
     this(width, cap, join, DWT.LINE_SOLID, null, 0, 10);
 }
 
-/** 
+/**
  * Create a new line attributes with the specified arguments.
  *
  * @param width the line width

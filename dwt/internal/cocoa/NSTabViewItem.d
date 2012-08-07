@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *    Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -22,7 +22,7 @@ import dwt.internal.cocoa.OS;
 import objc = dwt.internal.objc.runtime;
 
 public class NSTabViewItem : NSObject {
-    
+
 public this() {
     super();
 }
@@ -34,7 +34,7 @@ public this(objc.id id) {
 public this(cocoa.id id) {
     super(id);
 }
-    
+
 public cocoa.id initWithIdentifier(cocoa.id identifier) {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_initWithIdentifier_, identifier !is null ? identifier.id : null);
     return result !is null ? new cocoa.id(result) : null;

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
-*     
+*
 * Port to the D programming language:
 *     Jacob Carlborg <doob@me.com>
 *******************************************************************************/
@@ -31,7 +31,7 @@ import dwt.widgets.TypedListener;
 
 /**
  * Instances of this class represent a selectable user interface object
- * that issues notification when pressed and released. 
+ * that issues notification when pressed and released.
  * <dl>
  * <dt><b>Styles:</b></dt>
  * <dd>CHECK, CASCADE, PUSH, RADIO, SEPARATOR</dd>
@@ -61,7 +61,7 @@ public class MenuItem : Item {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -101,7 +101,7 @@ public this (Menu parent, int style) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -276,7 +276,7 @@ public int getAccelerator () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #isEnabled
  */
 public bool getEnabled () {
@@ -287,7 +287,7 @@ public bool getEnabled () {
 /**
  * Returns the receiver's cascade menu if it has one or null
  * if it does not. Only <code>CASCADE</code> menu items can have
- * a pull down menu. The sequence of key strokes, button presses 
+ * a pull down menu. The sequence of key strokes, button presses
  * and/or button releases that are used to request a pull down
  * menu is platform specific.
  *
@@ -355,7 +355,7 @@ public bool getSelection () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #getEnabled
  */
 public bool isEnabled () {
@@ -372,7 +372,7 @@ int keyChar (int key) {
         case DWT.LF: return OS.NSNewlineCharacter;
         case DWT.TAB: return OS.NSTabCharacter;
 //      case ' ': return OS.kMenuBlankGlyph;
-//      case ' ': return OS.kMenuSpaceGlyph;        
+//      case ' ': return OS.kMenuSpaceGlyph;
         case DWT.ALT: return 0x2325;
         case DWT.SHIFT: return 0x21E7;
         case DWT.CONTROL: return 0xF2303;
@@ -509,7 +509,7 @@ public void removeSelectionListener (SelectionListener listener) {
     if (listener is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (eventTable is null) return;
     eventTable.unhook (DWT.Selection, listener);
-    eventTable.unhook (DWT.DefaultSelection,listener);  
+    eventTable.unhook (DWT.DefaultSelection,listener);
 }
 
 void selectRadio () {
@@ -665,13 +665,13 @@ public void setMenu (Menu menu) {
         if (menu.parent !is parent.parent) {
             error (DWT.ERROR_INVALID_PARENT);
         }
-    } 
+    }
     /* Assign the new menu */
     Menu oldMenu = this.menu;
     if (oldMenu is menu) return;
     if (oldMenu !is null) oldMenu.cascade = null;
     this.menu = menu;
-    
+
     /* Update the menu in the OS */
     if (menu is null) {
         NSMenu emptyMenu = createEmptyMenu ();
@@ -683,7 +683,7 @@ public void setMenu (Menu menu) {
         menu.cascade = this;
         nsItem.setSubmenu (menu.nsMenu);
     }
-    
+
     if (menu !is null) {
         nsItem.setTarget(null);
         nsItem.setAction(0);
@@ -748,7 +748,7 @@ public void setSelection (bool selected) {
  * accelerator key sequence. The accelerator key sequence
  * is installed using #setAccelerator.
  * </p>
- * 
+ *
  * @param string the new text
  *
  * @exception IllegalArgumentException <ul>
@@ -758,7 +758,7 @@ public void setSelection (bool selected) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #setAccelerator
  */
 public void setText (String string) {
@@ -769,7 +769,7 @@ public void setText (String string) {
     super.setText (string);
     updateText ();
 }
-    
+
 void updateText () {
     char [] buffer = new char [text.length ()];
     text.getChars (0, buffer.length, buffer, 0);

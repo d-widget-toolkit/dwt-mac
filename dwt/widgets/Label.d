@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -58,25 +58,25 @@ import dwt.widgets.Control;
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  * @noextend This class is not intended to be subclassed by clients.
  */
-public class Label : Control {    
+public class Label : Control {
     alias Control.computeSize computeSize;
     alias Control.setBounds setBounds;
-    alias Control.setBackground setBackground;    
+    alias Control.setBackground setBackground;
     alias Control.setForeground setForeground;
-    
+
     String text;
     Image image;
     bool isImage;
     NSTextField textView;
     NSImageView imageView;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * and a style value describing its behavior and appearance.
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -112,7 +112,7 @@ public this (Composite parent, int style) {
 }
 
 objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
-    if (accessible !is null) {      
+    if (accessible !is null) {
         if ((textView !is null && (id is textView.id || id is textView.cell().id)) || (imageView !is null && (id is imageView.id || id is imageView.cell().id))) {
             // See if the accessible will override or augment the standard list.
             // Help, title, and description can be overridden.
@@ -120,51 +120,51 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
             extraAttributes.addObject(OS.NSAccessibilityHelpAttribute);
             extraAttributes.addObject(OS.NSAccessibilityDescriptionAttribute);
             extraAttributes.addObject(OS.NSAccessibilityTitleAttribute);
-            
+
             for (int i = (int)/*64*/extraAttributes.count() - 1; i >= 0; i--) {
                 NSString attribute = new NSString(extraAttributes.objectAtIndex(i).id);
                 if (accessible.internal_accessibilityAttributeValue(attribute, ACC.CHILDID_SELF) is null) {
                     extraAttributes.removeObjectAtIndex(i);
                 }
             }
-            
+
             if (extraAttributes.count() > 0) {
                 objc.id superResult = super.accessibilityAttributeNames(id, sel);
                 NSArray baseAttributes = new NSArray(superResult);
                 NSMutableArray mutableAttributes = NSMutableArray.arrayWithCapacity(baseAttributes.count() + 1);
                 mutableAttributes.addObjectsFromArray(baseAttributes);
-                
+
                 for (int i = 0; i < extraAttributes.count(); i++) {
                     cocoa.id currAttribute = extraAttributes.objectAtIndex(i);
                     if (!mutableAttributes.containsObject(currAttribute)) {
                         mutableAttributes.addObject(currAttribute);
                     }
                 }
-                
+
                 return mutableAttributes.id;
             }
         }
     }
-    
+
     return super.accessibilityAttributeNames(id, sel);
 }
 
 bool accessibilityIsIgnored(objc.id id, objc.SEL sel) {
     if (id is view.id) return true;
-    return super.accessibilityIsIgnored(id, sel);   
+    return super.accessibilityIsIgnored(id, sel);
 }
 
 void addRelation (Control control) {
     if (!control.isDescribedByLabel ()) return;
-    
+
     if (textView !is null) {
         NSObject accessibleElement = control.focusView();
-        
+
         if (accessibleElement instanceof NSControl) {
             NSControl viewAsControl = (NSControl)accessibleElement;
             if (viewAsControl.cell() !is null) accessibleElement = viewAsControl.cell();
         }
-        
+
         accessibleElement.accessibilitySetOverrideValue(textView.cell(), OS.NSAccessibilityTitleUIElementAttribute);
         NSArray controlArray = NSArray.arrayWithObject(accessibleElement);
         textView.cell().accessibilitySetOverrideValue(controlArray, OS.NSAccessibilityServesAsTitleForUIElementsAttribute);
@@ -176,7 +176,7 @@ static int checkStyle (int style) {
     if ((style & DWT.SEPARATOR) !is 0) {
         style = checkBits (style, DWT.VERTICAL, DWT.HORIZONTAL, 0, 0, 0, 0);
         return checkBits (style, DWT.SHADOW_OUT, DWT.SHADOW_IN, DWT.SHADOW_NONE, 0, 0, 0);
-    } 
+    }
     return checkBits (style, DWT.LEFT, DWT.CENTER, DWT.RIGHT, 0, 0, 0);
 }
 
@@ -239,11 +239,11 @@ void createHandle () {
         widget.setBoxType (OS.NSBoxCustom);
         NSSize offsetSize = NSSize ();
         widget.setContentViewMargins (offsetSize);
-        
+
         NSImageView imageWidget = cast(NSImageView) (new SWTImageView ()).alloc ();
         imageWidget.init();
         imageWidget.setImageScaling (OS.NSScaleNone);
-        
+
         NSTextField textWidget = cast(NSTextField)(new SWTTextField()).alloc();
         textWidget.init();
         textWidget.setBordered(false);
@@ -251,11 +251,11 @@ void createHandle () {
         textWidget.setDrawsBackground(false);
         NSTextFieldCell cell = new NSTextFieldCell(textWidget.cell());
         cell.setWraps ((style & DWT.WRAP) !is 0);
-        
+
         widget.addSubview(imageWidget);
         widget.addSubview(textWidget);
         widget.setContentView(textWidget);
-        
+
         imageView = imageWidget;
         textView = textWidget;
         _setAlignment();
@@ -267,7 +267,7 @@ void createWidget() {
     text = "";
     super.createWidget ();
 }
-    
+
 NSAttributedString createString() {
     NSAttributedString attribStr = createString(text, null, foreground, (style & DWT.WRAP) is 0 ? style : 0, true, true);
     attribStr.autorelease();
@@ -298,10 +298,10 @@ NSView eventView () {
  * Returns a value which describes the position of the
  * text or image in the receiver. The value will be one of
  * <code>LEFT</code>, <code>RIGHT</code> or <code>CENTER</code>
- * unless the receiver is a <code>SEPARATOR</code> label, in 
+ * unless the receiver is a <code>SEPARATOR</code> label, in
  * which case, <code>NONE</code> is returned.
  *
- * @return the alignment 
+ * @return the alignment
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -393,7 +393,7 @@ void removeRelation () {
  * or <code>CENTER</code>.  If the receiver is a <code>SEPARATOR</code>
  * label, the argument is ignored and the alignment is not changed.
  *
- * @param alignment the new alignment 
+ * @param alignment the new alignment
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -459,7 +459,7 @@ bool setTabItemFocus () {
  * @param image the image to display on the receiver (may be null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the image has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the image has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -509,7 +509,7 @@ public void setImage (Image image) {
  * '&amp;' can be escaped by doubling it in the string, causing
  * a single '&amp;' to be displayed.
  * </p>
- * 
+ *
  * @param string the new text
  *
  * @exception IllegalArgumentException <ul>

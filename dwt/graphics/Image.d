@@ -7,13 +7,13 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
 module dwt.graphics.Image;
 
- 
+
 import dwt.dwthelper.InputStream;
 import dwt.*;
 import java.io.*;
@@ -35,7 +35,7 @@ import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 
 import tango.io.Stdout;
- 
+
 /**
  * Instances of this class are graphics which have been prepared
  * for display on a specific device. That is, they are ready
@@ -47,7 +47,7 @@ import tango.io.Stdout;
  * pixels are specified as being transparent when drawn. Examples
  * of file formats that support transparency are GIF and PNG.
  * </p><p>
- * There are two primary ways to use <code>Images</code>. 
+ * There are two primary ways to use <code>Images</code>.
  * The first is to load a graphic file from disk and create an
  * <code>Image</code> from it. This is done using an <code>Image</code>
  * constructor, for example:
@@ -60,8 +60,8 @@ import tango.io.Stdout;
  * DWT. It is possible to get more control over the mapping of
  * colors as the image is being created, using code of the form:
  * <pre>
- *    ImageData data = new ImageData("C:\\graphic.bmp"); 
- *    RGB[] rgbs = data.getRGBs(); 
+ *    ImageData data = new ImageData("C:\\graphic.bmp");
+ *    RGB[] rgbs = data.getRGBs();
  *    // At this point, rgbs contains specifications of all
  *    // the colors contained within this image. You may
  *    // allocate as many of these colors as you wish by
@@ -74,7 +74,7 @@ import tango.io.Stdout;
  * loading process should use the support provided in class
  * <code>ImageLoader</code>.
  * </p><p>
- * Application code must explicitly invoke the <code>Image.dispose()</code> 
+ * Application code must explicitly invoke the <code>Image.dispose()</code>
  * method to release the operating system resources managed by each instance
  * when those instances are no longer required.
  * </p>
@@ -89,7 +89,7 @@ import tango.io.Stdout;
 public final class Image : Resource, Drawable {
 
     alias Resource.init_ init_;
-    
+
     /**
      * specifies whether the receiver is a bitmap or an icon
      * (one of <code>DWT.BITMAP</code>, <code>DWT.ICON</code>)
@@ -101,7 +101,7 @@ public final class Image : Resource, Drawable {
      * </p>
      */
     public int type;
-    
+
     /**
      * the handle to the OS image resource
      * (Warning: This field is platform dependent)
@@ -113,12 +113,12 @@ public final class Image : Resource, Drawable {
      * </p>
      */
     public NSImage handle;
-    
+
     /**
      * specifies the transparent pixel
      */
     int transparentPixel = -1;
-    
+
     /**
      * The GC the image is currently selected in.
      */
@@ -128,22 +128,22 @@ public final class Image : Resource, Drawable {
      * The alpha data of the image.
      */
     byte[] alphaData;
-    
+
     /**
      * The global alpha value to be used for every pixel.
      */
     int alpha = -1;
-    
+
     /**
      * The width of the image.
      */
     int width = -1;
-    
+
     /**
      * The height of the image.
      */
     int height = -1;
-    
+
     /**
      * Specifies the default scanline padding.
      */
@@ -309,7 +309,7 @@ public this(Device device, Image srcImage, int flag) {
                 }
                 break;
             }
-            case DWT.IMAGE_GRAY: {          
+            case DWT.IMAGE_GRAY: {
                 byte[] line = new byte[bpr];
                 for (int y=0; y<height; y++) {
                     OS.memmove(line.ptr, data + (y * bpr), bpr);
@@ -409,7 +409,7 @@ public this(Device device, ImageData data) {
 }
 
 /**
- * Constructs an instance of this class, whose type is 
+ * Constructs an instance of this class, whose type is
  * <code>DWT.ICON</code>, from the two given <code>ImageData</code>
  * objects. The two images must be the same size. Pixel transparency
  * in either image will be ignored.
@@ -462,7 +462,7 @@ public this(Device device, ImageData source, ImageData mask) {
  * <p>
  * This constructor is provided for convenience when loading a single
  * image only. If the stream contains multiple images, only the first
- * one will be loaded. To load multiple images, use 
+ * one will be loaded. To load multiple images, use
  * <code>ImageLoader.load()</code>.
  * </p><p>
  * This constructor may be used to load a resource as follows:
@@ -568,12 +568,12 @@ void createAlpha () {
         if (transparentPixel !is -1) {
             for (int i=0; i<dataSize; i+=4) {
                 int pixel = ((srcData[i+1] & 0xFF) << 16) | ((srcData[i+2] & 0xFF) << 8) | (srcData[i+3] & 0xFF);
-            srcData[i] = cast(byte)(pixel is transparentPixel ? 0 : 0xFF); 
+            srcData[i] = cast(byte)(pixel is transparentPixel ? 0 : 0xFF);
             }
         } else if (alpha !is -1) {
         byte a = cast(byte)this.alpha;
             for (int i=0; i<dataSize; i+=4) {
-                srcData[i] = a;             
+                srcData[i] = a;
             }
         } else {
             NSInteger width = imageRep.pixelsWide();
@@ -744,7 +744,7 @@ public ImageData getImageData() {
     }
 }
 
-/**  
+/**
  * Invokes platform specific functionality to allocate a new image.
  * <p>
  * <b>IMPORTANT:</b> This method is <em>not</em> part of the public
@@ -777,8 +777,8 @@ NSBitmapImageRep getRepresentation () {
 }
 
 /**
- * Returns an integer hash code for the receiver. Any two 
- * objects that return <code>true</code> when passed to 
+ * Returns an integer hash code for the receiver. Any two
+ * objects that return <code>true</code> when passed to
  * <code>equals</code> must return the same value for this
  * method.
  *
@@ -821,17 +821,17 @@ void init_(ImageData image) {
     if (!(((image.depth is 1 || image.depth is 2 || image.depth is 4 || image.depth is 8) && !palette.isDirect) ||
             ((image.depth is 8) || (image.depth is 16 || image.depth is 24 || image.depth is 32) && palette.isDirect)))
                 DWT.error(DWT.ERROR_UNSUPPORTED_DEPTH);
-    
+
     /* Create the image */
     size_t dataSize = width * height * 4;
-    
+
     /* Initialize data */
     int bpr = width * 4;
     byte[] buffer = new byte[dataSize];
     if (palette.isDirect) {
         ImageData.blit(ImageData.BLIT_SRC,
             image.data, image.depth, image.bytesPerLine, image.getByteOrder(), 0, 0, width, height, palette.redMask, palette.greenMask, palette.blueMask,
-            ImageData.ALPHA_OPAQUE, null, 0, 0, 0, 
+            ImageData.ALPHA_OPAQUE, null, 0, 0, 0,
             buffer, 32, bpr, ImageData.MSB_FIRST, 0, 0, width, height, 0xFF0000, 0xFF00, 0xFF,
             false, false);
     } else {
@@ -853,7 +853,7 @@ void init_(ImageData image) {
             buffer, 32, bpr, ImageData.MSB_FIRST, 0, 0, width, height, 0xFF0000, 0xFF00, 0xFF,
             false, false);
     }
-    
+
     /* Initialize transparency */
     int transparency = image.getTransparencyType();
     bool hasAlpha = transparency !is DWT.TRANSPARENCY_NONE;
@@ -872,7 +872,7 @@ void init_(ImageData image) {
                     RGB rgb = rgbs[image.transparentPixel];
                     transRed = rgb.red;
                     transGreen = rgb.green;
-                    transBlue = rgb.blue;               
+                    transBlue = rgb.blue;
                 }
             }
             transparentPixel = transRed << 16 | transGreen << 8 | transBlue;
@@ -895,7 +895,7 @@ void init_(ImageData image) {
             this.alpha = image.alpha;
             byte a = cast(byte)this.alpha;
             for (int dataIndex=0; dataIndex<buffer.length; dataIndex+=4) {
-                buffer[dataIndex] = a;              
+                buffer[dataIndex] = a;
             }
         } else if (image.alphaData !is null) {
             hasAlpha = true;
@@ -911,9 +911,9 @@ void init_(ImageData image) {
             }
         }
     }
-    
+
     if (handle !is null) handle.release();
-    
+
     handle = cast(NSImage)(new NSImage()).alloc();
     NSSize size = NSSize();
     size.width = width;
@@ -921,7 +921,7 @@ void init_(ImageData image) {
     handle = handle.initWithSize(size);
     NSBitmapImageRep rep = cast(NSBitmapImageRep)(new NSBitmapImageRep()).alloc();
     rep = rep.initWithBitmapDataPlanes(null, width, height, 8, hasAlpha ? 4 : 3, hasAlpha, false, OS.NSDeviceRGBColorSpace, OS.NSAlphaFirstBitmapFormat | OS.NSAlphaNonpremultipliedBitmapFormat, bpr, 32);
-    OS.memmove(rep.bitmapData(), buffer.ptr, dataSize); 
+    OS.memmove(rep.bitmapData(), buffer.ptr, dataSize);
     handle.addRepresentation(rep);
     rep.release();
     handle.setCacheMode(OS.NSImageCacheNever);
@@ -930,12 +930,12 @@ void init_(ImageData image) {
 void initNative(String filename) {
     NSAutoreleasePool pool = null;
     NSImage nativeImage = null;
-    
+
     if (!NSThread.isMainThread()) pool = (NSAutoreleasePool) new NSAutoreleasePool().alloc().init();
     try {
         nativeImage = new NSImage();
         nativeImage.alloc();
-        
+
         // initByReferencingFile returns null if the file can't be found or is
         // not an image.
         nativeImage = nativeImage.initWithContentsOfFile(NSString.stringWith(filename));
@@ -945,7 +945,7 @@ void initNative(String filename) {
             // that is not natively supported as well.
             return;
         }
-        
+
         NSImageRep nativeRep = nativeImage.bestRepresentationForDevice(null);
         if (!nativeRep.isKindOfClass(OS.class_NSBitmapImageRep)) {
             return;
@@ -953,7 +953,7 @@ void initNative(String filename) {
 
         width = (int)/*64*/nativeRep.pixelsWide();
         height = (int)/*64*/nativeRep.pixelsHigh();
-        
+
         bool hasAlpha = nativeRep.hasAlpha();
         int bpr = width * 4;
         handle = (NSImage)new NSImage().alloc();
@@ -981,7 +981,7 @@ void initNative(String filename) {
         if (hasAlpha) OS.objc_msgSend(nativeRep.id, OS.sel_setAlpha_, 1);
         NSGraphicsContext.static_restoreGraphicsState();
         OS.CGContextRelease(ctx);
-        
+
         if (hasAlpha) {
             /* Compute the alpha values */
             int /*long*/ bitmapBytesPerRow = width;
@@ -996,7 +996,7 @@ void initNative(String filename) {
             OS.memmove(alphaData, alphaBitmapData, bitmapByteCount);
             OS.free(alphaBitmapData);
             OS.CGContextRelease(alphaBitmapCtx);
-            
+
             /* Merge the alpha values with the pixels */
             byte[] srcData = new byte[height * bpr];
             OS.memmove(srcData, rep.bitmapData(), srcData.length);
@@ -1004,7 +1004,7 @@ void initNative(String filename) {
                 srcData[p] = alphaData[a];
             }
             OS.memmove(rep.bitmapData(), srcData, srcData.length);
-            
+
             // If the alpha has only 0 or 255 (-1) for alpha values, compute the transparent pixel color instead
             // of a continuous alpha range.
             int transparentOffset = -1, i = 0;
@@ -1024,7 +1024,7 @@ void initNative(String filename) {
                 this.alphaData = alphaData;
             }
         }
-        
+
         // For compatibility, images created from .ico files are treated as DWT.ICON format, even though
         // they are no different than other bitmaps in Cocoa.
         if (filename.toLowerCase().endsWith(".ico")) {
@@ -1037,7 +1037,7 @@ void initNative(String filename) {
         if (pool !is null) pool.release();
     }
 
-            
+
             /* Merge the alpha values with the pixels */
             byte[] srcData = new byte[height * bpr];
             OS.memmove(srcData, rep.bitmapData(), srcData.length);
@@ -1045,7 +1045,7 @@ void initNative(String filename) {
                 srcData[p] = alphaData[a];
             }
             OS.memmove(rep.bitmapData(), srcData, srcData.length);
-            
+
             // If the alpha has only 0 or 255 (-1) for alpha values, compute the transparent pixel color instead
             // of a continuous alpha range.
             int transparentOffset = -1, i = 0;
@@ -1065,7 +1065,7 @@ void initNative(String filename) {
                 this.alphaData = alphaData;
             }
         }
-        
+
         // For compatibility, images created from .ico files are treated as DWT.ICON format, even though
         // they are no different than other bitmaps in Cocoa.
         if (filename.toLowerCase().endsWith(".ico")) {
@@ -1080,7 +1080,7 @@ void initNative(String filename) {
 
 }
 
-/**  
+/**
  * Invokes platform specific functionality to allocate a new GC handle.
  * <p>
  * <b>IMPORTANT:</b> This method is <em>not</em> part of the public
@@ -1090,7 +1090,7 @@ void initNative(String filename) {
  * application code.
  * </p>
  *
- * @param data the platform specific GC data 
+ * @param data the platform specific GC data
  * @return the platform specific GC handle
  */
 public objc.id internal_new_GC (GCData data) {
@@ -1105,7 +1105,7 @@ public objc.id internal_new_GC (GCData data) {
 
         // Can't perform transforms on image reps with alpha.
         imageRep.setAlpha(false);
-        
+
         NSGraphicsContext context = NSGraphicsContext.graphicsContextWithBitmapImageRep(imageRep);
         NSGraphicsContext flippedContext = NSGraphicsContext.graphicsContextWithGraphicsPort(context.graphicsPort(), true);
         context = flippedContext;
@@ -1136,7 +1136,7 @@ public objc.id internal_new_GC (GCData data) {
     }
 }
 
-/**  
+/**
  * Invokes platform specific functionality to dispose a GC handle.
  * <p>
  * <b>IMPORTANT:</b> This method is <em>not</em> part of the public
@@ -1147,7 +1147,7 @@ public objc.id internal_new_GC (GCData data) {
  * </p>
  *
  * @param hDC the platform specific GC handle
- * @param data the platform specific GC data 
+ * @param data the platform specific GC data
  */
 public void internal_dispose_GC (objc.id context, GCData data) {
     NSAutoreleasePool pool = null;

@@ -3,7 +3,7 @@
  * Authors: Jacob Carlborg
  * Version: Initial created: Nov 18, 2008
  * License: $(LINK2 http://opensource.org/licenses/bsd-license.php, BSD Style)
- * 
+ *
  */
 module dwt.internal.objc.cocoa.bindings;
 
@@ -149,7 +149,7 @@ id NSFileTypeForHFSTypeCode (OSType hfsFileTypeCode);
 
 
 
-// NSPathUtilities.h 
+// NSPathUtilities.h
 id NSSearchPathForDirectoriesInDomains (NSSearchPathDirectory directory, NSSearchPathDomainMask domainMask,BOOL expandTilde);
 id NSTemporaryDirectory ();
 

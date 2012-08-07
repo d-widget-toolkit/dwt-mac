@@ -33,7 +33,7 @@ nsrefcnt AddRef () {
 extern(System)
 nsresult QueryInterface (nsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
-    
+
     if (*riid == nsISupports.IID) {
         *ppvObject = cast(void*)cast(nsISupports)this;
         AddRef ();
@@ -44,7 +44,7 @@ nsresult QueryInterface (nsID* riid, void** ppvObject) {
         AddRef ();
         return XPCOM.NS_OK;
     }
-    
+
     *ppvObject = null;
     return XPCOM.NS_ERROR_NO_INTERFACE;
 }
@@ -55,12 +55,12 @@ nsrefcnt Release () {
     //if (refCount is 0) disposeCOMInterfaces ();
     return refCount;
 }
-    
+
 /* nsIFactory */
 
 extern(System)
 nsresult CreateInstance (nsISupports aOuter, nsID* iid, void** result) {
-    if (result is null) 
+    if (result is null)
         return XPCOM.NS_ERROR_INVALID_ARG;
     auto download = new Download();
     nsresult rv = download.QueryInterface( iid, result );

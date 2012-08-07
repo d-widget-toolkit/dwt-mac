@@ -3,13 +3,13 @@ module dwt.internal.mozilla.nsIModule;
 import dwt.internal.mozilla.Common;
 import dwt.internal.mozilla.nsID;
 import dwt.internal.mozilla.nsISupports;
-import dwt.internal.mozilla.nsIFile; 
+import dwt.internal.mozilla.nsIFile;
 import dwt.internal.mozilla.nsIComponentManager;
 
 const char[] NS_IMODULE_IID_STR = "7392d032-5371-11d3-994e-00805fd26fee";
 
-const nsIID NS_IMODULE_IID= 
-  {0x7392d032, 0x5371, 0x11d3, 
+const nsIID NS_IMODULE_IID=
+  {0x7392d032, 0x5371, 0x11d3,
     [ 0x99, 0x4e, 0x00, 0x80, 0x5f, 0xd2, 0x6f, 0xee ]};
 
 interface nsIModule : nsISupports {

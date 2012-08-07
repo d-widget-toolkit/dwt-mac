@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -39,20 +39,20 @@ import dwt.widgets.Widget;
  * Instances of this class represent the "windows"
  * which the desktop or "window manager" is managing.
  * Instances that do not have a parent (that is, they
- * are built using the constructor, which takes a 
+ * are built using the constructor, which takes a
  * <code>Display</code> as the argument) are described
  * as <em>top level</em> shells. Instances that do have
  * a parent are described as <em>secondary</em> or
  * <em>dialog</em> shells.
  * <p>
- * Instances are always displayed in one of the maximized, 
+ * Instances are always displayed in one of the maximized,
  * minimized or normal states:
  * <ul>
  * <li>
  * When an instance is marked as <em>maximized</em>, the
  * window manager will typically resize it to fill the
  * entire visible area of the display, and the instance
- * is usually put in a state where it can not be resized 
+ * is usually put in a state where it can not be resized
  * (even if it has style <code>RESIZE</code>) until it is
  * no longer maximized.
  * </li><li>
@@ -110,19 +110,19 @@ import dwt.widgets.Widget;
  * <dt><code>SHELL_TRIM</code></dt>
  * <dd>
  * the result of combining the constants which are required
- * to produce a typical application top level shell: (that 
+ * to produce a typical application top level shell: (that
  * is, <code>CLOSE | TITLE | MIN | MAX | RESIZE</code>)
  * </dd>
  * <dt><code>DIALOG_TRIM</code></dt>
  * <dd>
  * the result of combining the constants which are required
- * to produce a typical application dialog shell: (that 
+ * to produce a typical application dialog shell: (that
  * is, <code>TITLE | CLOSE | BORDER</code>)
  * </dd>
  * </dl>
  * </p>
  * <p>
- * Note: Only one of the styles APPLICATION_MODAL, MODELESS, 
+ * Note: Only one of the styles APPLICATION_MODAL, MODELESS,
  * PRIMARY_MODAL and SYSTEM_MODAL may be specified.
  * </p><p>
  * IMPORTANT: This class is not intended to be subclassed.
@@ -151,7 +151,7 @@ public class Shell : Decorations {
     bool keyInputHappened;
     NSRect currentFrame;
     NSRect fullScreenFrame;
-    
+
     static int DEFAULT_CLIENT_WIDTH = -1;
     static int DEFAULT_CLIENT_HEIGHT = -1;
 
@@ -175,7 +175,7 @@ public this () {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -188,7 +188,7 @@ public this () {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the parent</li>
  *    <li>ERROR_INVALID_SUBCLASS - if this class is not an allowed subclass</li>
  * </ul>
- * 
+ *
  * @see DWT#BORDER
  * @see DWT#CLOSE
  * @see DWT#MIN
@@ -216,7 +216,7 @@ public this (int style) {
  * <p>
  * Note: Currently, null can be passed in for the display argument.
  * This has the effect of creating the shell on the currently active
- * display if there is one. If there is no current display, the 
+ * display if there is one. If there is no current display, the
  * shell is created on a "default" display. <b>Passing in null as
  * the display argument is not considered to be good coding style,
  * and may not be supported in a future release of DWT.</b>
@@ -240,7 +240,7 @@ public this (Display display) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -248,7 +248,7 @@ public this (Display display) {
  * </p><p>
  * Note: Currently, null can be passed in for the display argument.
  * This has the effect of creating the shell on the currently active
- * display if there is one. If there is no current display, the 
+ * display if there is one. If there is no current display, the
  * shell is created on a "default" display. <b>Passing in null as
  * the display argument is not considered to be good coding style,
  * and may not be supported in a future release of DWT.</b>
@@ -261,7 +261,7 @@ public this (Display display) {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the parent</li>
  *    <li>ERROR_INVALID_SUBCLASS - if this class is not an allowed subclass</li>
  * </ul>
- * 
+ *
  * @see DWT#BORDER
  * @see DWT#CLOSE
  * @see DWT#MIN
@@ -292,7 +292,7 @@ this (Display display, Shell parent, int style, objc.id handle, bool embedded) {
         error (DWT.ERROR_THREAD_INVALID_ACCESS);
     }
     if (parent !is null && parent.isDisposed ()) {
-        error (DWT.ERROR_INVALID_ARGUMENT); 
+        error (DWT.ERROR_INVALID_ARGUMENT);
     }
     if (!Display.getSheetEnabled ()) {
         this.center = parent !is null && (style & DWT.SHEET) !is 0;
@@ -317,7 +317,7 @@ this (Display display, Shell parent, int style, objc.id handle, bool embedded) {
  * <p>
  * Note: Currently, null can be passed in for the parent.
  * This has the effect of creating the shell on the currently active
- * display if there is one. If there is no current display, the 
+ * display if there is one. If there is no current display, the
  * shell is created on a "default" display. <b>Passing in null as
  * the parent is not considered to be good coding style,
  * and may not be supported in a future release of DWT.</b>
@@ -326,7 +326,7 @@ this (Display display, Shell parent, int style, objc.id handle, bool embedded) {
  * @param parent a shell which will be the parent of the new instance
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the parent is disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the parent is disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the parent</li>
@@ -343,7 +343,7 @@ public this (Shell parent) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -351,7 +351,7 @@ public this (Shell parent) {
  * </p><p>
  * Note: Currently, null can be passed in for the parent.
  * This has the effect of creating the shell on the currently active
- * display if there is one. If there is no current display, the 
+ * display if there is one. If there is no current display, the
  * shell is created on a "default" display. <b>Passing in null as
  * the parent is not considered to be good coding style,
  * and may not be supported in a future release of DWT.</b>
@@ -361,13 +361,13 @@ public this (Shell parent) {
  * @param style the style of control to construct
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the parent is disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the parent is disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the parent</li>
  *    <li>ERROR_INVALID_SUBCLASS - if this class is not an allowed subclass</li>
  * </ul>
- * 
+ *
  * @see DWT#BORDER
  * @see DWT#CLOSE
  * @see DWT#MIN
@@ -389,7 +389,7 @@ public this (Shell parent, int style) {
     this (parent !is null ? parent.display : null, parent, style, null, false);
 }
 
-/**  
+/**
  * Invokes platform specific functionality to allocate a new shell
  * that is not embedded.
  * <p>
@@ -403,14 +403,14 @@ public this (Shell parent, int style) {
  * @param display the display for the shell
  * @param handle the handle for the shell
  * @return a new shell object containing the specified display and handle
- * 
+ *
  * @since 3.3
  */
 public static Shell internal_new (Display display, objc.id handle) {
     return new Shell (display, null, DWT.NO_TRIM, handle, false);
 }
 
-/**  
+/**
  * Invokes platform specific functionality to allocate a new shell
  * that is 'embedded'.  In this case, the handle represents an NSView
  * that acts as an embedded DWT Shell in an AWT Canvas.
@@ -425,7 +425,7 @@ public static Shell internal_new (Display display, objc.id handle) {
  * @param display the display for the shell
  * @param handle the handle for the shell
  * @return a new shell object containing the specified display and handle
- * 
+ *
  * @since 3.5
  */
 public static Shell cocoa_new (Display display, objc.id handle) {
@@ -710,10 +710,10 @@ void fixShell (Shell newShell, Control control) {
 }
 
 /**
- * If the receiver is visible, moves it to the top of the 
- * drawing order for the display on which it was created 
- * (so that all other shells on that display, which are not 
- * the receiver's children will be drawn behind it) and forces 
+ * If the receiver is visible, moves it to the top of the
+ * drawing order for the display on which it was created
+ * (so that all other shells on that display, which are not
+ * the receiver's children will be drawn behind it) and forces
  * the window manager to make the shell active.
  *
  * @exception DWTException <ul>
@@ -749,7 +749,7 @@ public void forceActive () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.4
  */
 public int getAlpha () {
@@ -792,7 +792,7 @@ public Rectangle getClientArea () {
 
 /**
  * Returns <code>true</code> if the receiver is currently
- * in fullscreen state, and false otherwise. 
+ * in fullscreen state, and false otherwise.
  * <p>
  *
  * @return the fullscreen state
@@ -814,7 +814,7 @@ public bool getFullScreen () {
  * will be the result of bitwise OR'ing together one or
  * more of the following constants defined in class
  * <code>DWT</code>:
- * <code>NONE</code>, <code>ROMAN</code>, <code>DBCS</code>, 
+ * <code>NONE</code>, <code>ROMAN</code>, <code>DBCS</code>,
  * <code>PHONETIC</code>, <code>NATIVE</code>, <code>ALPHA</code>.
  *
  * @return the IME mode
@@ -881,7 +881,7 @@ Shell getModalShell () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public bool getModified () {
@@ -908,7 +908,7 @@ public bool getMinimized () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public Point getMinimumSize () {
@@ -918,12 +918,12 @@ public Point getMinimumSize () {
     return new Point((int)size.width, (int)size.height);
 }
 
-/** 
+/**
  * Returns the region that defines the shape of the shell,
  * or null if the shell has the default shape.
  *
  * @return the region that defines the shape of the shell (or null)
- *  
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
@@ -944,7 +944,7 @@ public Shell getShell () {
 }
 
 /**
- * Returns an array containing all shells which are 
+ * Returns an array containing all shells which are
  * descendants of the receiver.
  * <p>
  * @return the dialog shells
@@ -1042,7 +1042,7 @@ void makeKeyAndOrderFront() {
     * case the parent window does become active when its child is closed
     * and the user is forced to restore the window from the dock.
     * The fix is to be sure that the parent window is deminiaturized before
-    * making the child a key window. 
+    * making the child a key window.
     */
     if (parent !is null) {
         Shell shell = (Shell) parent;
@@ -1057,7 +1057,7 @@ void makeKeyAndOrderFront() {
     * case the parent window does become active when its child is closed
     * and the user is forced to restore the window from the dock.
     * The fix is to be sure that the parent window is deminiaturized before
-    * making the child a key window. 
+    * making the child a key window.
     */
     if (parent !is null) {
         Shell shell = (Shell) parent;
@@ -1069,7 +1069,7 @@ void noResponderFor(int /*long*/ id, int /*long*/ sel, int /*long*/ selector) {
      * Feature in Cocoa.  If the selector is keyDown and nothing has handled the event
      * a system beep is generated.  There's no need to beep, as many keystrokes in the DWT
      * are listened for and acted upon but not explicitly handled in a keyDown handler.  Fix is to
-     * not call the default implementation when a keyDown: is being handled. 
+     * not call the default implementation when a keyDown: is being handled.
      */
     if (selector !is OS.sel_keyDown_) super.noResponderFor(id, sel, selector);
      */
@@ -1215,11 +1215,11 @@ void sendToolTipEvent (bool enter) {
 }
 
 /**
- * If the receiver is visible, moves it to the top of the 
- * drawing order for the display on which it was created 
- * (so that all other shells on that display, which are not 
- * the receiver's children will be drawn behind it) and asks 
- * the window manager to make the shell active 
+ * If the receiver is visible, moves it to the top of the
+ * drawing order for the display on which it was created
+ * (so that all other shells on that display, which are not
+ * the receiver's children will be drawn behind it) and asks
+ * the window manager to make the shell active
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -1236,7 +1236,7 @@ void sendToolTipEvent (bool enter) {
  * @see Shell#setActive
  */
 public void setActive () {
-    if (window is null) return; 
+    if (window is null) return;
     checkWidget ();
     if (!isVisible()) return;
     makeKeyAndOrderFront ();
@@ -1246,7 +1246,7 @@ void setActiveControl (Control control) {
     if (control !is null && control.isDisposed ()) control = null;
     if (lastActive !is null && lastActive.isDisposed ()) lastActive = null;
     if (lastActive is control) return;
-    
+
     /*
     * Compute the list of controls to be activated and
     * deactivated by finding the first common parent
@@ -1260,7 +1260,7 @@ void setActiveControl (Control control) {
         if (activate [index] !is deactivate [index]) break;
         index++;
     }
-    
+
     /*
     * It is possible (but unlikely), that application
     * code could have destroyed some of the widgets. If
@@ -1293,11 +1293,11 @@ void setActiveControl (Control control) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.4
  */
 public void setAlpha (int alpha) {
-    if (window is null) return; 
+    if (window is null) return;
     checkWidget ();
     alpha &= 0xFF;
     window.setAlphaValue (alpha / 255f);
@@ -1365,12 +1365,12 @@ public void setEnabled (bool enabled) {
  * into full screen state, causes the receiver to switch back
  * to either the maximized or normal states.
  * <p>
- * Note: The result of intermixing calls to <code>setFullScreen(true)</code>, 
- * <code>setMaximized(true)</code> and <code>setMinimized(true)</code> will 
- * vary by platform. Typically, the behavior will match the platform user's 
+ * Note: The result of intermixing calls to <code>setFullScreen(true)</code>,
+ * <code>setMaximized(true)</code> and <code>setMinimized(true)</code> will
+ * vary by platform. Typically, the behavior will match the platform user's
  * expectations, but not always. This should be avoided if possible.
  * </p>
- * 
+ *
  * @param fullScreen the new fullscreen state
  *
  * @exception DWTException <ul>
@@ -1383,7 +1383,7 @@ public void setEnabled (bool enabled) {
 public void setFullScreen (bool fullScreen) {
     checkWidget ();
     if (this.fullScreen is fullScreen) return;
-    this.fullScreen = fullScreen; 
+    this.fullScreen = fullScreen;
 
     if (fullScreen) {
         currentFrame = window.frame();
@@ -1391,14 +1391,14 @@ public void setFullScreen (bool fullScreen) {
         if (window.respondsToSelector(OS.sel_setMovable_)) {
             OS.objc_msgSend(window.id, OS.sel_setMovable_, 0);
         }
-        
+
         fullScreenFrame = NSScreen.mainScreen().frame();
         if (getMonitor().equals(display.getPrimaryMonitor ())) {
             if (menuBar !is null) {
                 float /*double*/ menuBarHt = currentFrame.height - contentView().frame().height;
                 fullScreenFrame.height -= menuBarHt;
                 OS.SetSystemUIMode(OS.kUIModeContentHidden, 0);
-            } 
+            }
             else {
                 OS.SetSystemUIMode(OS.kUIModeAllHidden, 0);
             }
@@ -1424,10 +1424,10 @@ public void setMenuBar (Menu menu) {
 }
 
 /**
- * Sets the input method editor mode to the argument which 
+ * Sets the input method editor mode to the argument which
  * should be the result of bitwise OR'ing together one or more
  * of the following constants defined in class <code>DWT</code>:
- * <code>NONE</code>, <code>ROMAN</code>, <code>DBCS</code>, 
+ * <code>NONE</code>, <code>ROMAN</code>, <code>DBCS</code>,
  * <code>PHONETIC</code>, <code>NATIVE</code>, <code>ALPHA</code>.
  *
  * @param mode the new IME mode
@@ -1474,7 +1474,7 @@ public void setMinimized (bool minimized) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public void setMinimumSize (int width, int height) {
@@ -1506,7 +1506,7 @@ public void setMinimumSize (int width, int height) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public void setMinimumSize (Point size) {
@@ -1525,7 +1525,7 @@ public void setMinimumSize (Point size) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public void setModified (bool modified) {
@@ -1544,7 +1544,7 @@ public void setModified (bool modified) {
  *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_INVALID_ARGUMENT - if the region has been disposed</li>
- * </ul>  
+ * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
@@ -1614,7 +1614,7 @@ void setWindowVisible (bool visible, bool key) {
     if (visible) {
         display.clearPool ();
         if (center && !moved) {
-            if (isDisposed ()) return;          
+            if (isDisposed ()) return;
             center ();
         }
         sendEvent (DWT.Show);
@@ -1666,7 +1666,7 @@ void setWindowVisible (bool visible, bool key) {
         invalidateVisibleRegion();
         sendEvent (DWT.Hide);
     }
-    
+
     display.updateQuitMenu();
 }
 
@@ -1710,7 +1710,7 @@ void updateParent (bool visible) {
     if (visible) {
         if (parent !is null && parent.getVisible ()) {
             ((Shell)parent).window.addChildWindow (window, OS.NSWindowAbove);
-        }       
+        }
     } else {
         NSWindow parentWindow = window.parentWindow ();
         if (parentWindow !is null) parentWindow.removeChildWindow (window);
@@ -1820,7 +1820,7 @@ void windowDidResignKey(objc.id id, objc.SEL sel, objc.id notification) {
             display.tooltipControl = control;
             display.tooltipTarget = target;
             break;
-            
+
         case OS.NSKeyDown:
             /**
              * Feature in cocoa.  Control+Tab, Ctrl+Shift+Tab, Ctrl+PageDown and Ctrl+PageUp are
@@ -1829,7 +1829,7 @@ void windowDidResignKey(objc.id id, objc.SEL sel, objc.id notification) {
              */
             if ((nsEvent.modifierFlags() & OS.NSControlKeyMask) !is 0) {
                 NSString chars = nsEvent.characters();
-                
+
                 if (chars !is null && chars.length() is 1) {
                     int firstChar = (int)/*64*/chars.characterAtIndex(0);
 
@@ -1878,7 +1878,7 @@ void windowSendEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ event) {
             display.tooltipControl = control;
             display.tooltipTarget = target;
             break;
-            
+
         case OS.NSKeyDown:
             /**
              * Feature in cocoa.  Control+Tab, Ctrl+Shift+Tab, Ctrl+PageDown and Ctrl+PageUp are
@@ -1887,7 +1887,7 @@ void windowSendEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ event) {
              */
             if ((nsEvent.modifierFlags() & OS.NSControlKeyMask) !is 0) {
                 NSString chars = nsEvent.characters();
-                
+
                 if (chars !is null && chars.length() is 1) {
                     int firstChar = (int)/*64*/chars.characterAtIndex(0);
 

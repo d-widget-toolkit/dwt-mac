@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -55,7 +55,7 @@ public class TableItem : Item {
     Font font;
     Font[] cellFont;
     int width = -1;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * (which must be a <code>Table</code>) and a style value
@@ -64,7 +64,7 @@ public class TableItem : Item {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -98,7 +98,7 @@ public this (Table parent, int style) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -155,7 +155,7 @@ int calculateWidth (int index, GC gc) {
         cell.setFont (font.handle);
         cell.setTitle (NSString.stringWith(text !is null ? text : ""));
     }
-    
+
     /* This code is inlined for performance */
     objc_super super_struct = new objc_super();
     super_struct.receiver = cell.id;
@@ -165,7 +165,7 @@ int calculateWidth (int index, GC gc) {
     if (image !is null) size.width += parent.imageBounds.width + Table.IMAGE_GAP;
 //  cell.setImage (image !is null ? image.handle : null);
 //  NSSize size = cell.cellSize ();
-    
+
     int width = (int)Math.ceil (size.width);
     bool sendMeasure = true;
     if ((parent.style & DWT.VIRTUAL) !is 0) {
@@ -228,7 +228,7 @@ void destroyWidget () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 2.0
  */
 public Color getBackground () {
@@ -247,7 +247,7 @@ public Color getBackground () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public Color getBackground (int index) {
@@ -269,7 +269,7 @@ public Color getBackground (int index) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.2
  */
 public Rectangle getBounds () {
@@ -296,7 +296,7 @@ public Rectangle getBounds (int index) {
     checkWidget ();
     if (!parent.checkData (this)) error (DWT.ERROR_WIDGET_DISPOSED);
     if (!(0 <= index && index < Math.max (1, parent.columnCount))) return new Rectangle (0, 0, 0, 0);
-    
+
     NSTableView tableView = cast(NSTableView) parent.view;
     if (parent.columnCount is 0) {
         index = (parent.style & DWT.CHECK) !is 0 ? 1 : 0;
@@ -377,7 +377,7 @@ public Font getFont (int index) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 2.0
  */
 public Color getForeground () {
@@ -387,7 +387,7 @@ public Color getForeground () {
 }
 
 /**
- * 
+ *
  * Returns the foreground color at the given column index in the receiver.
  *
  * @param index the column index
@@ -397,7 +397,7 @@ public Color getForeground () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public Color getForeground (int index) {
@@ -474,7 +474,7 @@ public Rectangle getImageBounds (int index) {
     checkWidget ();
     if (!parent.checkData (this)) error (DWT.ERROR_WIDGET_DISPOSED);
     if (!(0 <= index && index < Math.max (1, parent.columnCount))) return new Rectangle (0, 0, 0, 0);
-    
+
     NSTableView tableView = cast(NSTableView) parent.view;
     Image image = index is 0 ? this.image : (images !is null) ? images [index] : null;
     if (parent.columnCount is 0) {
@@ -574,14 +574,14 @@ public String getText (int index) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.3
  */
 public Rectangle getTextBounds (int index) {
     checkWidget ();
     if (!parent.checkData (this)) error (DWT.ERROR_WIDGET_DISPOSED);
     if (!(0 <= index && index < Math.max (1, parent.columnCount))) return new Rectangle (0, 0, 0, 0);
-    
+
     NSTableView tableView = cast(NSTableView) parent.view;
     Image image = index is 0 ? this.image : (images !is null) ? images [index] : null;
     if (parent.columnCount is 0) {
@@ -621,7 +621,7 @@ void redraw (int columnIndex) {
         }
         rect = tableView.frameOfCellAtColumn (index, parent.indexOf (this));
     }
-    tableView.setNeedsDisplayInRect (rect); 
+    tableView.setNeedsDisplayInRect (rect);
 }
 
 void releaseHandle () {
@@ -652,13 +652,13 @@ void releaseWidget () {
  * @param color the new color (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 2.0
  */
 public void setBackground (Color color) {
@@ -675,7 +675,7 @@ public void setBackground (Color color) {
 }
 
 /**
- * Sets the background color at the given column index in the receiver 
+ * Sets the background color at the given column index in the receiver
  * to the color specified by the argument, or to the default system color for the item
  * if the argument is null.
  *
@@ -683,13 +683,13 @@ public void setBackground (Color color) {
  * @param color the new color (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void setBackground (int index, Color color) {
@@ -708,11 +708,11 @@ public void setBackground (int index, Color color) {
     cellBackground [index] = color;
     if (oldColor !is null && oldColor.equals (color)) return;
     cached = true;
-    redraw (index); 
+    redraw (index);
 }
 
 /**
- * Sets the checked state of the checkbox for this item.  This state change 
+ * Sets the checked state of the checkbox for this item.  This state change
  * only applies if the Table was created with the DWT.CHECK style.
  *
  * @param checked the new checked state of the checkbox
@@ -739,13 +739,13 @@ public void setChecked (bool checked) {
  * @param font the new font (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void setFont (Font font) {
@@ -764,21 +764,21 @@ public void setFont (Font font) {
 
 /**
  * Sets the font that the receiver will use to paint textual information
- * for the specified cell in this item to the font specified by the 
- * argument, or to the default font for that kind of control if the 
+ * for the specified cell in this item to the font specified by the
+ * argument, or to the default font for that kind of control if the
  * argument is null.
  *
  * @param index the column index
  * @param font the new font (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void setFont (int index, Font font) {
@@ -809,13 +809,13 @@ public void setFont (int index, Font font) {
  * @param color the new color (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 2.0
  */
 public void setForeground (Color color) {
@@ -832,7 +832,7 @@ public void setForeground (Color color) {
 }
 
 /**
- * Sets the foreground color at the given column index in the receiver 
+ * Sets the foreground color at the given column index in the receiver
  * to the color specified by the argument, or to the default system color for the item
  * if the argument is null.
  *
@@ -840,13 +840,13 @@ public void setForeground (Color color) {
  * @param color the new color (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void setForeground (int index, Color color) {
@@ -869,10 +869,10 @@ public void setForeground (int index, Color color) {
 }
 
 /**
- * Sets the grayed state of the checkbox for this item.  This state change 
+ * Sets the grayed state of the checkbox for this item.  This state change
  * only applies if the Table was created with the DWT.CHECK style.
  *
- * @param grayed the new grayed state of the checkbox; 
+ * @param grayed the new grayed state of the checkbox;
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -889,8 +889,8 @@ public void setGrayed (bool grayed) {
 }
 
 /**
- * Sets the image for multiple columns in the table. 
- * 
+ * Sets the image for multiple columns in the table.
+ *
  * @param images the array of new images
  *
  * @exception IllegalArgumentException <ul>
@@ -947,10 +947,10 @@ public void setImage (int index, Image image) {
         if (image !is null && image.type is DWT.ICON) {
             if (image.equals (images [index])) return;
         }
-        images [index] = image; 
+        images [index] = image;
     }
     cached = true;
-    if (index is 0) parent.setScrollWidth (this);   
+    if (index is 0) parent.setScrollWidth (this);
     redraw (index);
 }
 
@@ -969,7 +969,7 @@ public void setImage (Image image) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @deprecated this functionality is not supported on most platforms
  */
 public void setImageIndent (int indent) {
@@ -980,8 +980,8 @@ public void setImageIndent (int indent) {
 }
 
 /**
- * Sets the text for multiple columns in the table. 
- * 
+ * Sets the text for multiple columns in the table.
+ *
  * @param strings the array of new strings
  *
  * @exception IllegalArgumentException <ul>

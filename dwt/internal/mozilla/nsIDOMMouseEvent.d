@@ -10,8 +10,8 @@ import dwt.internal.mozilla.nsStringAPI;
 
 const char[] NS_IDOMMOUSEEVENT_IID_STR = "ff751edc-8b02-aae7-0010-8301838a3123";
 
-const nsIID NS_IDOMMOUSEEVENT_IID= 
-  {0xff751edc, 0x8b02, 0xaae7, 
+const nsIID NS_IDOMMOUSEEVENT_IID=
+  {0xff751edc, 0x8b02, 0xaae7,
     [ 0x00, 0x10, 0x83, 0x01, 0x83, 0x8a, 0x31, 0x23 ]};
 
 interface nsIDOMMouseEvent : nsIDOMUIEvent {

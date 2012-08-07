@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -34,7 +34,7 @@ import dwt.accessibility.AccessibleEvent;
  * @see AccessibleListener
  * @see AccessibleEvent
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 2.0
  */
 public abstract class AccessibleAdapter : AccessibleListener {
@@ -58,7 +58,7 @@ public abstract class AccessibleAdapter : AccessibleListener {
      */
     public void getName(AccessibleEvent e) {
     }
-        
+
     /**
      * Sent when an accessibility client requests the help string
      * of the control, or the help string of a child of the control.
@@ -83,7 +83,7 @@ public abstract class AccessibleAdapter : AccessibleListener {
      */
     public void getHelp (AccessibleEvent e) {
     }
-        
+
     /**
      * Sent when an accessibility client requests the keyboard shortcut
      * of the control, or the keyboard shortcut of a child of the control.
@@ -108,7 +108,7 @@ public abstract class AccessibleAdapter : AccessibleListener {
      */
     public void getKeyboardShortcut (AccessibleEvent e) {
     }
-        
+
     /**
      * Sent when an accessibility client requests a description
      * of the control, or a description of a child of the control.

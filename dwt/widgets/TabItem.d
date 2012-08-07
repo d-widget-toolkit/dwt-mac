@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -47,7 +47,7 @@ public class TabItem : Item {
     Control control;
     String toolTipText;
     NSTabViewItem nsItem;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * (which must be a <code>TabFolder</code>) and a style value
@@ -56,7 +56,7 @@ public class TabItem : Item {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -92,7 +92,7 @@ public this (TabFolder parent, int style) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -141,7 +141,7 @@ void destroyWidget () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.4
  */
 public Rectangle getBounds() {
@@ -149,7 +149,7 @@ public Rectangle getBounds() {
     Rectangle result = new Rectangle (0, 0, 0, 0);
     if (nsItem.respondsToSelector (OS.sel_accessibilityAttributeValue_)) {
         objc.id posValue = OS.objc_msgSend (nsItem.id, OS.sel_accessibilityAttributeValue_, OS.NSAccessibilityPositionAttribute_);
-        objc.id sizeValue = OS.objc_msgSend (nsItem.id, OS.sel_accessibilityAttributeValue_, OS.NSAccessibilitySizeAttribute_);      
+        objc.id sizeValue = OS.objc_msgSend (nsItem.id, OS.sel_accessibilityAttributeValue_, OS.NSAccessibilitySizeAttribute_);
         NSValue val = new NSValue (posValue);
         NSPoint pt = val.pointValue ();
         NSWindow window = parent.view.window ();
@@ -241,7 +241,7 @@ void releaseWidget () {
  * @param control the new control (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the control has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the control has been disposed</li>
  *    <li>ERROR_INVALID_PARENT - if the control is not in the same widget tree</li>
  * </ul>
  * @exception DWTException <ul>
@@ -267,7 +267,7 @@ public void setControl (Control control) {
             if (selectionIndex !is -1) {
                 Control selectedControl = parent.getItem(selectionIndex).getControl();
                 if (selectedControl is newControl) hideControl=false;
-            } 
+            }
             if (hideControl) newControl.setVisible(false);
         }
     } else {
@@ -319,7 +319,7 @@ public void setImage (Image image) {
  * escaped by doubling it in the string, causing a single
  * '&amp;' to be displayed.
  * </p>
- * 
+ *
  * @param string the new text
  *
  * @exception IllegalArgumentException <ul>
@@ -329,7 +329,7 @@ public void setImage (Image image) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  */
 public void setText (String string) {
     checkWidget ();
@@ -346,17 +346,17 @@ public void setText (String string) {
 
 /**
  * Sets the receiver's tool tip text to the argument, which
- * may be null indicating that the default tool tip for the 
+ * may be null indicating that the default tool tip for the
  * control will be shown. For a control that has a default
  * tool tip, such as the Tree control on Windows, setting
  * the tool tip text to an empty string replaces the default,
  * causing no tool tip text to be shown.
  * <p>
  * The mnemonic indicator (character '&amp;') is not displayed in a tool tip.
- * To display a single '&amp;' in the tool tip, the character '&amp;' can be 
+ * To display a single '&amp;' in the tool tip, the character '&amp;' can be
  * escaped by doubling it in the string.
  * </p>
- * 
+ *
  * @param string the new tool tip text (or null)
  *
  * @exception DWTException <ul>

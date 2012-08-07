@@ -3,7 +3,7 @@
  * Authors: Jacob Carlborg
  * Version: Initial created: Nov 18, 2008
  * License: $(LINK2 http://opensource.org/licenses/bsd-license.php, BSD Style)
- * 
+ *
  */
 module dwt.internal.c.Carbon;
 
@@ -17,14 +17,14 @@ import dwt.internal.cocoa.CGRect;
 
  Base integer types for all target OS's and CPU's
 
- UInt8            8-bit unsigned integer 
+ UInt8            8-bit unsigned integer
  SInt8            8-bit signed integer
- UInt16          16-bit uinteger 
- SInt16          16-bit signed integer           
- UInt32          32-bit uinteger 
- SInt32          32-bit signed integer   
- UInt64          64-bit uinteger 
- SInt64          64-bit integer   
+ UInt16          16-bit uinteger
+ SInt16          16-bit signed integer
+ UInt32          32-bit uinteger
+ SInt32          32-bit signed integer
+ UInt64          64-bit uinteger
+ SInt64          64-bit integer
 
  *********************************************************************************/
 alias ubyte UInt8;
@@ -62,7 +62,7 @@ alias byte uint8_t;
  FourCharCode            A 32-bit value made by packing four 1 byte characters together
  OSType                  A FourCharCode used in the OS and file system (e.g. creator)
  ResType                 A FourCharCode used to tag resources (e.g. 'DLOG')
- 
+
  *********************************************************************************/
 alias SInt16 OSErr;
 alias SInt32 OSStatus;
@@ -100,7 +100,7 @@ struct UnsignedWide
     uint lo;
 }
 
-struct ProcessSerialNumber 
+struct ProcessSerialNumber
 {
     uint highLongOfPSN;
     uint lowLongOfPSN;
@@ -188,10 +188,10 @@ alias bindings.GetCurrentButtonState GetCurrentButtonState;
 // CFBase.h
 static if ((void*).sizeof > int.sizeof) // 64bit target
     alias long CFIndex;
-    
+
 else
     alias int CFIndex;
-    
+
 alias void* CFTypeRef;
 struct __CFAllocator;
 alias __CFAllocator* CFAllocatorRef;

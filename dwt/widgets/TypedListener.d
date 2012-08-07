@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -23,9 +23,9 @@ import dwt.events.*;
 import dwt.widgets.Event;
 import dwt.widgets.Listener;
 
-/**  
+/**
  * Instances of this class are <em>internal DWT implementation</em>
- * objects which provide a mapping between the typed and untyped 
+ * objects which provide a mapping between the typed and untyped
  * listener mechanisms that DWT supports.
  * <p>
  * <b>IMPORTANT:</b> This class is <em>not</em> part of the DWT
@@ -38,7 +38,7 @@ import dwt.widgets.Listener;
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
 public class TypedListener : Listener {
-    
+
     /**
      * The receiver's event listener
      */
@@ -105,7 +105,7 @@ public void handleEvent (Event e) {
             if (cast(TreeListener) eventListener) {
                 (cast(TreeListener) eventListener).treeCollapsed(new TreeEvent(e));
             } else {
-                (cast(ExpandListener) eventListener).itemCollapsed(new ExpandEvent(e)); 
+                (cast(ExpandListener) eventListener).itemCollapsed(new ExpandEvent(e));
             }
             break;
         }
@@ -133,7 +133,7 @@ public void handleEvent (Event e) {
             if (cast(TreeListener) eventListener) {
                 (cast(TreeListener) eventListener).treeExpanded(new TreeEvent(e));
             } else {
-                (cast(ExpandListener) eventListener).itemExpanded(new ExpandEvent(e));  
+                (cast(ExpandListener) eventListener).itemExpanded(new ExpandEvent(e));
             }
             break;
         }
@@ -233,7 +233,7 @@ public void handleEvent (Event e) {
         case DWT.Selection: {
             /* Fields set by Sash */
             SelectionEvent event = new SelectionEvent (e);
-            (cast(SelectionListener) eventListener).widgetSelected (event);         
+            (cast(SelectionListener) eventListener).widgetSelected (event);
             e.x = event.x;
             e.y = event.y;
             e.doit = event.doit;
@@ -259,7 +259,7 @@ public void handleEvent (Event e) {
             e.doit = event.doit;
             break;
         }
-        
+
         default:
     }
 }

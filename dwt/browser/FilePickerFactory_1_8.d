@@ -26,8 +26,8 @@ import dwt.internal.mozilla.nsISupports;
 class FilePickerFactory_1_8 : FilePickerFactory {
 
 extern(System)
-nsresult CreateInstance (nsISupports aOuter, nsID* iid, void** result) { 
-     if (result is null) 
+nsresult CreateInstance (nsISupports aOuter, nsID* iid, void** result) {
+     if (result is null)
         return XPCOM.NS_ERROR_INVALID_ARG;
     auto picker = new FilePicker_1_8;
     nsresult rv = picker.QueryInterface( iid, result );

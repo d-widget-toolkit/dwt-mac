@@ -100,7 +100,7 @@ public class StyledTextPrintOptions {
 
     /**
      * Labels used for printing line numbers.
-     * 
+     *
      * @since 3.4
      */
     public String[] lineLabels = null;

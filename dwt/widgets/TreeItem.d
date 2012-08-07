@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -30,7 +30,7 @@ import dwt.widgets.TreeColumn;
 /**
  * Instances of this class represent a selectable user interface object
  * that represents a hierarchy of tree items in a tree widget.
- * 
+ *
  * <dl>
  * <dt><b>Styles:</b></dt>
  * <dd>(none)</dd>
@@ -59,7 +59,7 @@ public class TreeItem : Item {
     Font [] cellFont;
     int width = -1;
     /**
-     * the handle to the OS resource 
+     * the handle to the OS resource
      * (Warning: This field is platform dependent)
      * <p>
      * <b>IMPORTANT:</b> This field is <em>not</em> part of the DWT
@@ -78,7 +78,7 @@ public class TreeItem : Item {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -112,7 +112,7 @@ public this (Tree parent, int style) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -148,7 +148,7 @@ public this (Tree parent, int style, int index) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -182,7 +182,7 @@ public this (TreeItem parentItem, int style) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -333,16 +333,16 @@ void clear () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see DWT#VIRTUAL
  * @see DWT#SetData
- * 
+ *
  * @since 3.2
  */
 public void clear (int index, bool all) {
     checkWidget ();
     int count = getItemCount ();
-    if (index < 0 || index >= count) 
+    if (index < 0 || index >= count)
         DWT.error (DWT.ERROR_INVALID_RANGE);
     parent.clear (this, index, all);
 }
@@ -353,7 +353,7 @@ public void clear (int index, bool all) {
  * attributes of the items are set to their default values. If the
  * tree was created with the <code>DWT.VIRTUAL</code> style, these
  * attributes are requested again as needed.
- * 
+ *
  * @param all <code>true</code> if all child items should be cleared
  * recursively, and <code>false</code> otherwise
  *
@@ -361,10 +361,10 @@ public void clear (int index, bool all) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see DWT#VIRTUAL
  * @see DWT#SetData
- * 
+ *
  * @since 3.2
  */
 public void clearAll (bool all) {
@@ -383,7 +383,7 @@ void clearSelection () {
         }
     }
 }
-    
+
 NSObject createString(int index) {
     String text = index is 0 ? this.text : (strings is null ? "" : strings [index]);
     return NSString.stringWith(text !is null ? text : "");
@@ -403,14 +403,14 @@ void destroyWidget () {
  * Returns the receiver's background color.
  *
  * @return the background color
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 2.0
- * 
+ *
  */
 public Color getBackground () {
     checkWidget ();
@@ -428,7 +428,7 @@ public Color getBackground () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public Color getBackground (int index) {
@@ -470,14 +470,14 @@ public Rectangle getBounds () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public Rectangle getBounds (int index) {
     checkWidget ();
     if (!parent.checkData (this)) error (DWT.ERROR_WIDGET_DISPOSED);
     if (!(0 <= index && index < Math.max (1, parent.columnCount))) return new Rectangle (0, 0, 0, 0);
-    
+
     parent.checkItems ();
     if (parent.columnCount is 0) {
         index = (parent.style & DWT.CHECK) !is 0 ? 1 : 0;
@@ -576,9 +576,9 @@ public Font getFont (int index) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 2.0
- * 
+ *
  */
 public Color getForeground () {
     checkWidget ();
@@ -587,7 +587,7 @@ public Color getForeground () {
 }
 
 /**
- * 
+ *
  * Returns the foreground color at the given column index in the receiver.
  *
  * @param index the column index
@@ -597,7 +597,7 @@ public Color getForeground () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public Color getForeground (int index) {
@@ -646,7 +646,7 @@ public Image getImage () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public Image getImage (int index) {
@@ -671,14 +671,14 @@ public Image getImage (int index) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public Rectangle getImageBounds (int index) {
     checkWidget ();
     if (!parent.checkData (this)) error (DWT.ERROR_WIDGET_DISPOSED);
     if (!(0 <= index && index < Math.max (1, parent.columnCount))) return new Rectangle (0, 0, 0, 0);
-    
+
     parent.checkItems ();
     Image image = index is 0 ? this.image : (images !is null) ? images [index] : null;
     if (parent.columnCount is 0) {
@@ -710,7 +710,7 @@ public Rectangle getImageBounds (int index) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public TreeItem getItem (int index) {
@@ -744,7 +744,7 @@ public int getItemCount () {
  * <p>
  * Note: This is not the actual structure used by the receiver
  * to maintain its list of items, so modifying the array will
- * not affect the receiver. 
+ * not affect the receiver.
  * </p>
  *
  * @return the receiver's items
@@ -820,7 +820,7 @@ public String getText () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public String getText (int index) {
@@ -848,14 +848,14 @@ public String getText (int index) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.3
  */
 public Rectangle getTextBounds (int index) {
     checkWidget ();
     if (!parent.checkData (this)) error (DWT.ERROR_WIDGET_DISPOSED);
     if (!(0 <= index && index < Math.max (1, parent.columnCount))) return new Rectangle (0, 0, 0, 0);
-    
+
     parent.checkItems ();
     Image image = index is 0 ? this.image : (images !is null) ? images [index] : null;
     if (parent.columnCount is 0) {
@@ -877,7 +877,7 @@ public Rectangle getTextBounds (int index) {
 
 /**
  * Searches the receiver's list starting at the first item
- * (index 0) until an item is found that is equal to the 
+ * (index 0) until an item is found that is equal to the
  * argument, and returns the index of that item. If no item
  * is found, returns -1.
  *
@@ -892,7 +892,7 @@ public Rectangle getTextBounds (int index) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public int indexOf (TreeItem item) {
@@ -938,10 +938,10 @@ void release(bool destroy) {
     /*
     * Bug in Cocoa.  When removing selected items from an NSOutlineView, the selection
     * is not properly updated.  The fix is to ensure that the item and its subitems
-    * are deselected before the item is removed by the reloadItem call. 
-    * 
+    * are deselected before the item is removed by the reloadItem call.
+    *
     * This has to be done in release to avoid traversing the tree twice when items are
-    * removed from the tree by setItemCount. 
+    * removed from the tree by setItemCount.
     */
     if (destroy) clearSelection ();
     super.release(destroy);
@@ -1014,17 +1014,17 @@ void sendExpand (bool expand, bool recurse) {
  * if the argument is null.
  *
  * @param color the new color (or null)
- * 
+ *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 2.0
- * 
+ *
  */
 public void setBackground (Color color) {
     checkWidget ();
@@ -1040,7 +1040,7 @@ public void setBackground (Color color) {
 }
 
 /**
- * Sets the background color at the given column index in the receiver 
+ * Sets the background color at the given column index in the receiver
  * to the color specified by the argument, or to the default system color for the item
  * if the argument is null.
  *
@@ -1048,15 +1048,15 @@ public void setBackground (Color color) {
  * @param color the new color (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
- * 
+ *
  */
 public void setBackground (int index, Color color) {
     checkWidget ();
@@ -1073,7 +1073,7 @@ public void setBackground (int index, Color color) {
     if (oldColor is color) return;
     cellBackground [index] = color;
     if (oldColor !is null && oldColor.equals (color)) return;
-    cached = true; 
+    cached = true;
     redraw (index);
 }
 
@@ -1137,13 +1137,13 @@ public void setExpanded (bool expanded) {
  * @param font the new font (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void setFont (Font font) {
@@ -1162,21 +1162,21 @@ public void setFont (Font font) {
 
 /**
  * Sets the font that the receiver will use to paint textual information
- * for the specified cell in this item to the font specified by the 
- * argument, or to the default font for that kind of control if the 
+ * for the specified cell in this item to the font specified by the
+ * argument, or to the default font for that kind of control if the
  * argument is null.
  *
  * @param index the column index
  * @param font the new font (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public void setFont (int index, Font font) {
@@ -1207,17 +1207,17 @@ public void setFont (int index, Font font) {
  * @param color the new color (or null)
  *
  * @since 2.0
- * 
+ *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 2.0
- * 
+ *
  */
 public void setForeground (Color color) {
     checkWidget ();
@@ -1233,7 +1233,7 @@ public void setForeground (Color color) {
 }
 
 /**
- * Sets the foreground color at the given column index in the receiver 
+ * Sets the foreground color at the given column index in the receiver
  * to the color specified by the argument, or to the default system color for the item
  * if the argument is null.
  *
@@ -1241,15 +1241,15 @@ public void setForeground (Color color) {
  * @param color the new color (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
- * 
+ *
  */
 public void setForeground (int index, Color color){
     checkWidget ();
@@ -1271,7 +1271,7 @@ public void setForeground (int index, Color color){
 }
 
 /**
- * Sets the grayed state of the checkbox for this item.  This state change 
+ * Sets the grayed state of the checkbox for this item.  This state change
  * only applies if the Tree was created with the DWT.CHECK style.
  *
  * @param grayed the new grayed state of the checkbox
@@ -1291,8 +1291,8 @@ public void setGrayed (bool grayed) {
 }
 
 /**
- * Sets the image for multiple columns in the tree. 
- * 
+ * Sets the image for multiple columns in the tree.
+ *
  * @param images the array of new images
  *
  * @exception IllegalArgumentException <ul>
@@ -1303,7 +1303,7 @@ public void setGrayed (bool grayed) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public void setImage (Image [] images) {
@@ -1327,7 +1327,7 @@ public void setImage (Image [] images) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public void setImage (int index, Image image) {
@@ -1351,7 +1351,7 @@ public void setImage (int index, Image image) {
         if (image !is null && image.type is DWT.ICON) {
             if (image.equals (images [index])) return;
         }
-        images [index] = image; 
+        images [index] = image;
     }
     cached = true;
     if (index is 0) parent.setScrollWidth (this);
@@ -1382,8 +1382,8 @@ public void setItemCount (int count) {
 }
 
 /**
- * Sets the text for multiple columns in the tree. 
- * 
+ * Sets the text for multiple columns in the tree.
+ *
  * @param strings the array of new strings
  *
  * @exception IllegalArgumentException <ul>
@@ -1393,7 +1393,7 @@ public void setItemCount (int count) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public void setText (String [] strings) {
@@ -1418,7 +1418,7 @@ public void setText (String [] strings) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public void setText (int index, String string) {

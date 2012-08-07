@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -44,7 +44,7 @@ import dwt.widgets.TypedListener;
  *
  * @see <a href="http://www.eclipse.org/swt/snippets/#tray">Tray, TrayItem snippets</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.0
  * @noextend This class is not intended to be subclassed by clients.
  */
@@ -55,9 +55,9 @@ public class TrayItem : Item {
     bool visible = true, highlight;
     NSStatusItem item;
     NSImageView view;
-    
+
     static const float BORDER = 8f;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * (which must be a <code>Tray</code>) and a style value
@@ -66,7 +66,7 @@ public class TrayItem : Item {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -164,7 +164,7 @@ void createHandle () {
     item = statusBar.statusItemWithLength(0);
     if (item is null) error (DWT.ERROR_NO_HANDLES);
     item.retain();
-    item.setHighlightMode(true);    
+    item.setHighlightMode(true);
     view = cast(NSImageView)(new SWTImageView()).alloc();
     if (view is null) error (DWT.ERROR_NO_HANDLES);
     view.init ();
@@ -201,7 +201,7 @@ Point getLocation () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.2
  */
 public Tray getParent () {
@@ -219,7 +219,7 @@ public Tray getParent () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.2
  */
 public ToolTip getToolTip () {
@@ -244,7 +244,7 @@ public String getToolTipText () {
 }
 
 /**
- * Returns <code>true</code> if the receiver is visible and 
+ * Returns <code>true</code> if the receiver is visible and
  * <code>false</code> otherwise.
  *
  * @return the receiver's visibility
@@ -329,7 +329,7 @@ public void removeSelectionListener (SelectionListener listener) {
     if (listener is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (eventTable is null) return;
     eventTable.unhook (DWT.Selection, listener);
-    eventTable.unhook (DWT.DefaultSelection,listener);  
+    eventTable.unhook (DWT.DefaultSelection,listener);
 }
 
 /**
@@ -383,7 +383,7 @@ public void setImage (Image image) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.2
  */
 public void setToolTip (ToolTip toolTip) {
@@ -396,17 +396,17 @@ public void setToolTip (ToolTip toolTip) {
 
 /**
  * Sets the receiver's tool tip text to the argument, which
- * may be null indicating that the default tool tip for the 
+ * may be null indicating that the default tool tip for the
  * control will be shown. For a control that has a default
  * tool tip, such as the Tree control on Windows, setting
  * the tool tip text to an empty string replaces the default,
  * causing no tool tip text to be shown.
  * <p>
  * The mnemonic indicator (character '&amp;') is not displayed in a tool tip.
- * To display a single '&amp;' in the tool tip, the character '&amp;' can be 
+ * To display a single '&amp;' in the tool tip, the character '&amp;' can be
  * escaped by doubling it in the string.
  * </p>
- * 
+ *
  * @param string the new tool tip text (or null)
  *
  * @exception DWTException <ul>
@@ -434,7 +434,7 @@ void _setToolTipText (String string) {
 
 /**
  * Makes the receiver visible if the argument is <code>true</code>,
- * and makes it invisible otherwise. 
+ * and makes it invisible otherwise.
  *
  * @param visible the new visibility state
  *

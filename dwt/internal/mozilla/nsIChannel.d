@@ -6,14 +6,14 @@ import dwt.internal.mozilla.nsISupports;
 
 import dwt.internal.mozilla.nsIRequest;
 import dwt.internal.mozilla.nsIURI;
-import dwt.internal.mozilla.nsIInterfaceRequestor; 
-import dwt.internal.mozilla.nsIInputStream; 
+import dwt.internal.mozilla.nsIInterfaceRequestor;
+import dwt.internal.mozilla.nsIInputStream;
 import dwt.internal.mozilla.nsIStreamListener;
 import dwt.internal.mozilla.nsStringAPI;
 
 const char[] NS_ICHANNEL_IID_STR = "c63a055a-a676-4e71-bf3c-6cfa11082018";
-const nsIID NS_ICHANNEL_IID= 
-  {0xc63a055a, 0xa676, 0x4e71, 
+const nsIID NS_ICHANNEL_IID=
+  {0xc63a055a, 0xa676, 0x4e71,
     [ 0xbf, 0x3c, 0x6c, 0xfa, 0x11, 0x08, 0x20, 0x18 ]};
 
 interface nsIChannel : nsIRequest {

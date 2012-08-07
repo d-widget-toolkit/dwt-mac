@@ -4,15 +4,15 @@ import dwt.internal.mozilla.Common;
 import dwt.internal.mozilla.nsID;
 import dwt.internal.mozilla.nsISupports;
 import dwt.internal.mozilla.nsIProtocolHandler;
-import dwt.internal.mozilla.nsIChannel; 
-import dwt.internal.mozilla.nsIURI; 
-import dwt.internal.mozilla.nsIFile; 
+import dwt.internal.mozilla.nsIChannel;
+import dwt.internal.mozilla.nsIURI;
+import dwt.internal.mozilla.nsIFile;
 import dwt.internal.mozilla.nsStringAPI;
 
 const char[] NS_IIOSERVICE_IID_STR = "bddeda3f-9020-4d12-8c70-984ee9f7935e";
 
-const nsIID NS_IIOSERVICE_IID= 
-  {0xbddeda3f, 0x9020, 0x4d12, 
+const nsIID NS_IIOSERVICE_IID=
+  {0xbddeda3f, 0x9020, 0x4d12,
     [ 0x8c, 0x70, 0x98, 0x4e, 0xe9, 0xf7, 0x93, 0x5e ]};
 
 interface nsIIOService : nsISupports {

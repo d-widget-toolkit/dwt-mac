@@ -10,8 +10,8 @@ alias PRUint32 nsLoadFlags;
 
 const char[] NS_IREQUEST_IID_STR = "ef6bfbd2-fd46-48d8-96b7-9f8f0fd387fe";
 
-const nsIID NS_IREQUEST_IID= 
-  {0xef6bfbd2, 0xfd46, 0x48d8, 
+const nsIID NS_IREQUEST_IID=
+  {0xef6bfbd2, 0xfd46, 0x48d8,
     [ 0x96, 0xb7, 0x9f, 0x8f, 0x0f, 0xd3, 0x87, 0xfe ]};
 
 interface nsIRequest : nsISupports {

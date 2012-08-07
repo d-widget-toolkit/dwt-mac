@@ -6,8 +6,8 @@ import dwt.internal.mozilla.nsISupports;
 
 const char[] NS_IDEBUG_IID_STR = "3bf0c3d7-3bd9-4cf2-a971-33572c503e1e";
 
-const nsIID NS_IDEBUG_IID= 
-  {0x3bf0c3d7, 0x3bd9, 0x4cf2, 
+const nsIID NS_IDEBUG_IID=
+  {0x3bf0c3d7, 0x3bd9, 0x4cf2,
     [ 0xa9, 0x71, 0x33, 0x57, 0x2c, 0x50, 0x3e, 0x1e ]};
 
 interface nsIDebug : nsISupports {

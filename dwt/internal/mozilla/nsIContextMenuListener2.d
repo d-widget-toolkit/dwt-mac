@@ -4,15 +4,15 @@ import dwt.internal.mozilla.Common;
 import dwt.internal.mozilla.nsID;
 import dwt.internal.mozilla.nsISupports;
 import dwt.internal.mozilla.nsIDOMEvent;
-import dwt.internal.mozilla.nsIDOMNode; 
+import dwt.internal.mozilla.nsIDOMNode;
 import dwt.internal.mozilla.imgIContainer;
-import dwt.internal.mozilla.nsIURI; 
+import dwt.internal.mozilla.nsIURI;
 import dwt.internal.mozilla.nsStringAPI;
 
 const char[] NS_ICONTEXTMENULISTENER2_IID_STR = "7fb719b3-d804-4964-9596-77cf924ee314";
 
-const nsIID NS_ICONTEXTMENULISTENER2_IID= 
-  {0x7fb719b3, 0xd804, 0x4964, 
+const nsIID NS_ICONTEXTMENULISTENER2_IID=
+  {0x7fb719b3, 0xd804, 0x4964,
     [ 0x95, 0x96, 0x77, 0xcf, 0x92, 0x4e, 0xe3, 0x14 ]};
 
 interface nsIContextMenuListener2 : nsISupports {
@@ -38,8 +38,8 @@ extern(System):
 
 const char[] NS_ICONTEXTMENUINFO_IID_STR = "2f977d56-5485-11d4-87e2-0010a4e75ef2";
 
-const nsIID NS_ICONTEXTMENUINFO_IID= 
-  {0x2f977d56, 0x5485, 0x11d4, 
+const nsIID NS_ICONTEXTMENUINFO_IID=
+  {0x2f977d56, 0x5485, 0x11d4,
     [ 0x87, 0xe2, 0x00, 0x10, 0xa4, 0xe7, 0x5e, 0xf2 ]};
 
 interface nsIContextMenuInfo : nsISupports {

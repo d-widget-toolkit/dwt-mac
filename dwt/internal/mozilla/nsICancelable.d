@@ -6,8 +6,8 @@ import dwt.internal.mozilla.nsISupports;
 
 const char[] NS_ICANCELABLE_IID_STR = "d94ac0a0-bb18-46b8-844e-84159064b0bd";
 
-const nsIID NS_ICANCELABLE_IID= 
-  {0xd94ac0a0, 0xbb18, 0x46b8, 
+const nsIID NS_ICANCELABLE_IID=
+  {0xd94ac0a0, 0xbb18, 0x46b8,
     [ 0x84, 0x4e, 0x84, 0x15, 0x90, 0x64, 0xb0, 0xbd ]};
 
 interface nsICancelable : nsISupports {

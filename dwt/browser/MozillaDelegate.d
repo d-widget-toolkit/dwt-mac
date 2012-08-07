@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -26,7 +26,7 @@ class MozillaDelegate {
     Browser browser;
     Listener listener;
     boolean hasFocus;
-    
+
 this (Browser browser) {
     this.browser = browser;
 }
@@ -88,7 +88,7 @@ int createBaseWindow (nsIBaseWindow baseWindow) {
     /*
     * Feature of Mozilla on OSX.  Mozilla replaces the OSX application menu whenever
     * a browser's base window is created.  The workaround is to restore the previous
-    * menu after creating the base window. 
+    * menu after creating the base window.
     */
     NSApplication application = NSApplication.sharedApplication ();
     NSMenu mainMenu = application.mainMenu ();
@@ -128,7 +128,7 @@ void handleFocus () {
             browser.getShell ().removeListener (DWT.Deactivate, this);
             listener = null;
         }
-    
+
     };
     browser.getDisplay ().addFilter (DWT.FocusIn, listener);
     browser.getShell ().addListener (DWT.Deactivate, listener);

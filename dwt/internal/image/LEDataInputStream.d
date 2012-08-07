@@ -156,9 +156,9 @@ final class LEDataInputStream : InputStream{
     public int readInt() {
         byte[4] buf = void;
         read(buf);
-        return ((buf[3] & 0xFF) << 24) | 
-            ((buf[2] & 0xFF) << 16) | 
-            ((buf[1] & 0xFF) << 8) | 
+        return ((buf[3] & 0xFF) << 24) |
+            ((buf[2] & 0xFF) << 16) |
+            ((buf[1] & 0xFF) << 8) |
             (buf[0] & 0xFF);
     }
 

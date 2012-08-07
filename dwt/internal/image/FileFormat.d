@@ -78,7 +78,7 @@ public ImageData[] loadFromStream(LEDataInputStream stream) {
 public static ImageData[] load(InputStream istr, ImageLoader loader) {
     FileFormat fileFormat = null;
     LEDataInputStream stream = new LEDataInputStream(istr);
-    bool isSupported = false;   
+    bool isSupported = false;
     foreach( TFormat; TFormats ){
         try{
             fileFormat = new TFormat();

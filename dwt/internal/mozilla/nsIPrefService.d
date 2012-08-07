@@ -8,8 +8,8 @@ import dwt.internal.mozilla.nsIFile;
 
 const char[] NS_IPREFSERVICE_IID_STR = "decb9cc7-c08f-4ea5-be91-a8fc637ce2d2";
 
-const nsIID NS_IPREFSERVICE_IID= 
-  {0xdecb9cc7, 0xc08f, 0x4ea5, 
+const nsIID NS_IPREFSERVICE_IID=
+  {0xdecb9cc7, 0xc08f, 0x4ea5,
     [ 0xbe, 0x91, 0xa8, 0xfc, 0x63, 0x7c, 0xe2, 0xd2 ]};
 
 interface nsIPrefService : nsISupports {

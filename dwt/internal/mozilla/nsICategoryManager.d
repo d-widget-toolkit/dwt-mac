@@ -7,8 +7,8 @@ import dwt.internal.mozilla.nsISimpleEnumerator;
 
 const char[] NS_ICATEGORYMANAGER_IID_STR = "3275b2cd-af6d-429a-80d7-f0c5120342ac";
 
-const nsIID NS_ICATEGORYMANAGER_IID= 
-  {0x3275b2cd, 0xaf6d, 0x429a, 
+const nsIID NS_ICATEGORYMANAGER_IID=
+  {0x3275b2cd, 0xaf6d, 0x429a,
     [ 0x80, 0xd7, 0xf0, 0xc5, 0x12, 0x03, 0x42, 0xac ]};
 
 interface nsICategoryManager : nsISupports {

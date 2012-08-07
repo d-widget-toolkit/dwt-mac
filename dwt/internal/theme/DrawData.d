@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -69,7 +69,7 @@ public class DrawData {
 
     /** Combo parts */
     public static const int COMBO_ARROW = 1;
-    
+
 
 public this() {
     state = new int[1];
@@ -79,7 +79,7 @@ Rectangle computeTrim(Theme theme, GC gc) {
     return new Rectangle(clientArea.x, clientArea.y, clientArea.width, clientArea.height);
 }
 
-void draw(Theme theme, GC gc, Rectangle bounds) {   
+void draw(Theme theme, GC gc, Rectangle bounds) {
 }
 
 void drawImage(Theme theme, Image image, GC gc, Rectangle bounds) {

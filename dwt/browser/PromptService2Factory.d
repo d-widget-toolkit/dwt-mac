@@ -39,7 +39,7 @@ nsresult QueryInterface (nsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
     //nsID guid = new nsID ();
     //XPCOM.memmove (guid, riid, nsID.sizeof);
-    
+
     if (*riid == nsISupports.IID) {
         *ppvObject = cast(void*)cast(nsISupports)this;
         AddRef ();
@@ -50,7 +50,7 @@ nsresult QueryInterface (nsID* riid, void** ppvObject) {
         AddRef ();
         return XPCOM.NS_OK;
     }
-    
+
     *ppvObject = null;
     return XPCOM.NS_ERROR_NO_INTERFACE;
 }
@@ -61,12 +61,12 @@ nsrefcnt Release () {
     //if (refCount is null) disposeCOMInterfaces ();
     return refCount;
 }
-    
+
 /* nsIFactory */
 
 extern(System)
 nsresult CreateInstance (nsISupports aOuter, nsIID* iid, void** result) {
-    if (result is null) 
+    if (result is null)
         return XPCOM.NS_ERROR_INVALID_ARG;
     auto promptService = new PromptService2;
     nsresult rv = promptService.QueryInterface( iid, result );

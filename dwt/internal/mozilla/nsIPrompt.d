@@ -6,8 +6,8 @@ import dwt.internal.mozilla.nsISupports;
 
 const char[] NS_IPROMPT_IID_STR = "a63f70c0-148b-11d3-9333-00104ba0fd40";
 
-const nsIID NS_IPROMPT_IID= 
-  {0xa63f70c0, 0x148b, 0x11d3, 
+const nsIID NS_IPROMPT_IID=
+  {0xa63f70c0, 0x148b, 0x11d3,
     [ 0x93, 0x33, 0x00, 0x10, 0x4b, 0xa0, 0xfd, 0x40 ]};
 
 interface nsIPrompt : nsISupports {

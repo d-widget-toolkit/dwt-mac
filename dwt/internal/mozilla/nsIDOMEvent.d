@@ -10,8 +10,8 @@ alias PRUint64 DOMTimeStamp;
 
 const char[] NS_IDOMEVENT_IID_STR = "a66b7b80-ff46-bd97-0080-5f8ae38add32";
 
-const nsIID NS_IDOMEVENT_IID= 
-  {0xa66b7b80, 0xff46, 0xbd97, 
+const nsIID NS_IDOMEVENT_IID=
+  {0xa66b7b80, 0xff46, 0xbd97,
     [ 0x00, 0x80, 0x5f, 0x8a, 0xe3, 0x8a, 0xdd, 0x32 ]};
 
 interface nsIDOMEvent : nsISupports {

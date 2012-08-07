@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -20,7 +20,7 @@ import dwt.dwthelper.utils;
  * java.lang.Cloneable interface.
  * <p>
  * It is part of our effort to provide support for both J2SE
- * and J2ME platforms. Under this scheme, classes need to 
+ * and J2ME platforms. Under this scheme, classes need to
  * implement CloneableCompatibility instead of java.lang.Cloneable.
  * </p>
  * <p>

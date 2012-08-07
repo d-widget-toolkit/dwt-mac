@@ -7,12 +7,12 @@ import dwt.internal.mozilla.nsStringAPI;
 import XPCOM = dwt.internal.mozilla.XPCOM;
 
 scope class nsEmbedString
-{    
+{
 	this(wchar[] s)
 	{
 		nsresult result;
 		result = NS_StringContainerInit2(&str, s.ptr, s.length, 0);
-		if (XPCOM.NS_FAILED(result)) 
+		if (XPCOM.NS_FAILED(result))
 			throw new Exception("Init string container fail");
 	}
 
@@ -20,7 +20,7 @@ scope class nsEmbedString
 	{
 		nsresult result;
 		result = NS_StringContainerInit(&str);
-		if (XPCOM.NS_FAILED(result)) 
+		if (XPCOM.NS_FAILED(result))
 			throw new Exception("Init string container fail");
 	}
 
@@ -36,7 +36,7 @@ scope class nsEmbedString
 		uint len = NS_StringGetData(cast(nsAString*)&str, &buffer, &terminated);
 		return buffer[0 .. len].dup;
 	}
-    
+
     char[] toString()
     {
         return Utf.toString(this.toString16());
@@ -56,7 +56,7 @@ scope class nsEmbedCString
 	{
 		nsresult result;
 		result = NS_CStringContainerInit2(&str, s.ptr, s.length, 0);
-		if (XPCOM.NS_FAILED(result)) 
+		if (XPCOM.NS_FAILED(result))
 			throw new Exception("Init string container fail");
 	}
 
@@ -64,7 +64,7 @@ scope class nsEmbedCString
 	{
 		nsresult result;
 		result = NS_CStringContainerInit(&str);
-		if (XPCOM.NS_FAILED(result)) 
+		if (XPCOM.NS_FAILED(result))
 			throw new Exception("Init string container fail");
 	}
 

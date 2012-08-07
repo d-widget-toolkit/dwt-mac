@@ -6,13 +6,13 @@ import dwt.internal.mozilla.nsISupports;
 
 import dwt.internal.mozilla.nsIRequest;
 import dwt.internal.mozilla.nsISimpleEnumerator;
-import dwt.internal.mozilla.nsIRequestObserver; 
+import dwt.internal.mozilla.nsIRequestObserver;
 import dwt.internal.mozilla.nsIInterfaceRequestor;
 
 const char[] NS_ILOADGROUP_IID_STR = "3de0a31c-feaf-400f-9f1e-4ef71f8b20cc";
 
-const nsIID NS_ILOADGROUP_IID= 
-  {0x3de0a31c, 0xfeaf, 0x400f, 
+const nsIID NS_ILOADGROUP_IID=
+  {0x3de0a31c, 0xfeaf, 0x400f,
     [ 0x9f, 0x1e, 0x4e, 0xf7, 0x1f, 0x8b, 0x20, 0xcc ]};
 
 interface nsILoadGroup : nsIRequest {

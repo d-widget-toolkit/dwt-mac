@@ -3,7 +3,7 @@
  * Authors: Jacob Carlborg
  * Version: Initial created: Jul 28, 2008
  * License: $(LINK2 http://opensource.org/licenses/bsd-license.php, BSD Style)
- * 
+ *
  */
 module dwt.internal.cocoa.NSComparisonResult;
 

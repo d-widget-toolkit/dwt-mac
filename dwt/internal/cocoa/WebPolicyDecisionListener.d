@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *    Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -32,7 +32,7 @@ public this(objc.id id) {
 public this(cocoa.id id) {
     super(id);
 }
-    
+
 public void download() {
     OS.objc_msgSend(id, OS.sel_download);
 }

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -27,10 +27,10 @@ import dwt.internal.c.Carbon;
 /**
  * Instances of this class manage the operating system resources that
  * implement DWT's RGB color model. To create a color you can either
- * specify the individual color components as integers in the range 
- * 0 to 255 or provide an instance of an <code>RGB</code>. 
+ * specify the individual color components as integers in the range
+ * 0 to 255 or provide an instance of an <code>RGB</code>.
  * <p>
- * Application code must explicitly invoke the <code>Color.dispose()</code> 
+ * Application code must explicitly invoke the <code>Color.dispose()</code>
  * method to release the operating system resources managed by each instance
  * when those instances are no longer required.
  * </p>
@@ -42,11 +42,11 @@ import dwt.internal.c.Carbon;
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
 public final class Color : Resource {
-    
+
     alias Resource.init_ init_;
-    
+
     /**
-     * the handle to the OS color resource 
+     * the handle to the OS color resource
      * (Warning: This field is platform dependent)
      * <p>
      * <b>IMPORTANT:</b> This field is <em>not</em> part of the DWT
@@ -61,16 +61,16 @@ this(Device device) {
     super(device);
 }
 
-/**  
+/**
  * Constructs a new instance of this class given a device and the
  * desired red, green and blue values expressed as ints in the range
  * 0 to 255 (where 0 is black and 255 is full brightness). On limited
  * color devices, the color instance created by this call may not have
  * the same RGB values as the ones specified by the arguments. The
- * RGB values on the returned instance will be the color values of 
+ * RGB values on the returned instance will be the color values of
  * the operating system color.
  * <p>
- * You must dispose the color when it is no longer required. 
+ * You must dispose the color when it is no longer required.
  * </p>
  *
  * @param device the device on which to allocate the color
@@ -91,7 +91,7 @@ public this(Device device, int red, int green, int blue) {
     init_();
 }
 
-/**  
+/**
  * Constructs a new instance of this class given a device and an
  * <code>RGB</code> describing the desired red, green and blue values.
  * On limited color devices, the color instance created by this call
@@ -99,7 +99,7 @@ public this(Device device, int red, int green, int blue) {
  * argument. The RGB values on the returned instance will be the color
  * values of the operating system color.
  * <p>
- * You must dispose the color when it is no longer required. 
+ * You must dispose the color when it is no longer required.
  * </p>
  *
  * @param device the device on which to allocate the color
@@ -191,8 +191,8 @@ public int getRed() {
 }
 
 /**
- * Returns an integer hash code for the receiver. Any two 
- * objects that return <code>true</code> when passed to 
+ * Returns an integer hash code for the receiver. Any two
+ * objects that return <code>true</code> when passed to
  * <code>equals</code> must return the same value for this
  * method.
  *
@@ -221,7 +221,7 @@ public RGB getRGB () {
     return new RGB(getRed(), getGreen(), getBlue());
 }
 
-/**  
+/**
  * Invokes platform specific functionality to allocate a new color.
  * <p>
  * <b>IMPORTANT:</b> This method is <em>not</em> part of the public
@@ -233,7 +233,7 @@ public RGB getRGB () {
  *
  * @param device the device on which to allocate the color
  * @param handle the handle for the color
- * 
+ *
  * @private
  */
 public static Color cocoa_new(Device device, CGFloat[] rgbColor) {

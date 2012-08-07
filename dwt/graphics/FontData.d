@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -96,8 +96,8 @@ public final class FontData {
      * The locales of the font
      */
     String lang, country, variant;
-    
-/**  
+
+/**
  * Constructs a new uninitialized font data.
  */
 public this () {
@@ -110,7 +110,7 @@ public this () {
  * method.
  * <p>
  * Note that the representation varies between platforms,
- * and a FontData can only be created from a string that was 
+ * and a FontData can only be created from a string that was
  * generated on the same platform.
  * </p>
  *
@@ -130,16 +130,16 @@ public this(String str) {
     if (end is -1) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     String version1 = str.substring(start, end);
     try {
-        if (Integer.parseInt(version1) !is 1) DWT.error(DWT.ERROR_INVALID_ARGUMENT); 
+        if (Integer.parseInt(version1) !is 1) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     } catch (NumberFormatException e) {
         DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     }
-    
+
     start = end + 1;
     end = str.indexOf('|', start);
     if (end is -1) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     String name = str.substring(start, end);
-    
+
     start = end + 1;
     end = str.indexOf('|', start);
     if (end is -1) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
@@ -149,7 +149,7 @@ public this(String str) {
     } catch (NumberFormatException e) {
         DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     }
-    
+
     start = end + 1;
     end = str.indexOf('|', start);
     if (end is -1) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
@@ -180,9 +180,9 @@ public this(String str) {
     }
 }
 
-/**  
+/**
  * Constructs a new font data given a font name,
- * the height of the desired font in points, 
+ * the height of the desired font in points,
  * and a font style.
  *
  * @param name the name of the font (must not be null)
@@ -253,7 +253,7 @@ public int getHeight() {
  * given language/country locale, the variant portion of the
  * locale will determine the character set.
  * </p>
- * 
+ *
  * @return the <code>String</code> representing a Locale object
  * @since 3.0
  */
@@ -271,14 +271,14 @@ public String getLocale () {
     if (variant !is null) {
         buffer.append (variant);
     }
-    
+
     String result = buffer.toString ();
     int length = result.length ();
     if (length > 0) {
         if (result.charAt (length - 1) is sep) {
             result = result.substring (0, length - 1);
         }
-    } 
+    }
     return result;
 }
 
@@ -296,12 +296,12 @@ public String getName() {
 }
 
 /**
- * Returns the style of the receiver which is a bitwise OR of 
+ * Returns the style of the receiver which is a bitwise OR of
  * one or more of the <code>DWT</code> constants NORMAL, BOLD
  * and ITALIC.
  *
  * @return the style of this <code>FontData</code>
- * 
+ *
  * @see #setStyle
  */
 public int getStyle() {
@@ -309,8 +309,8 @@ public int getStyle() {
 }
 
 /**
- * Returns an integer hash code for the receiver. Any two 
- * objects that return <code>true</code> when passed to 
+ * Returns an integer hash code for the receiver. Any two
+ * objects that return <code>true</code> when passed to
  * <code>equals</code> must return the same value for this
  * method.
  *
@@ -334,7 +334,7 @@ alias toHash hashCode;
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_INVALID_ARGUMENT - if the height is negative</li>
  * </ul>
- * 
+ *
  * @see #getHeight
  */
 public void setHeight(int height) {
@@ -360,7 +360,7 @@ public void setHeight(int height) {
  * given language/country locale, the variant portion of the
  * locale will determine the character set.
  * </p>
- * 
+ *
  * @param locale the <code>String</code> representing a Locale object
  * @see java.util.Locale#toString
  */
@@ -370,7 +370,7 @@ public void setLocale(String locale) {
         char sep = '_';
         int length = locale.length();
         int firstSep, secondSep;
-        
+
         firstSep = locale.indexOf(sep);
         if (firstSep is -1) {
             firstSep = secondSep = length;
@@ -381,7 +381,7 @@ public void setLocale(String locale) {
         if (firstSep > 0) lang = locale.substring(0, firstSep);
         if (secondSep > firstSep + 1) country = locale.substring(firstSep + 1, secondSep);
         if (length > secondSep + 1) variant = locale.substring(secondSep + 1);
-    }   
+    }
 }
 
 /**
@@ -398,7 +398,7 @@ public void setLocale(String locale) {
  * </p>
  * <p>
  * On platforms that do not support font foundries, only the face name
- * (for example, "courier") is used in <code>setName()</code> and 
+ * (for example, "courier") is used in <code>setName()</code> and
  * <code>getName()</code>.
  * </p>
  *
@@ -417,7 +417,7 @@ public void setName(String name) {
 
 /**
  * Sets the style of the receiver to the argument which must
- * be a bitwise OR of one or more of the <code>DWT</code> 
+ * be a bitwise OR of one or more of the <code>DWT</code>
  * constants NORMAL, BOLD and ITALIC.  All other style bits are
  * ignored.
  *
@@ -432,7 +432,7 @@ public void setStyle(int style) {
 
 /**
  * Returns a string representation of the receiver which is suitable
- * for constructing an equivalent instance using the 
+ * for constructing an equivalent instance using the
  * <code>FontData(String)</code> constructor.
  *
  * @return a string representation of the FontData

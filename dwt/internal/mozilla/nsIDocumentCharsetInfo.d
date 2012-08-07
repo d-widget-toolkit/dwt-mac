@@ -8,8 +8,8 @@ import dwt.internal.mozilla.nsIAtom;
 
 const char[] NS_IDOCUMENTCHARSETINFO_IID_STR = "2d40b291-01e1-11d4-9d0e-0050040007b2";
 
-const nsIID NS_IDOCUMENTCHARSETINFO_IID= 
-  {0x2d40b291, 0x01e1, 0x11d4, 
+const nsIID NS_IDOCUMENTCHARSETINFO_IID=
+  {0x2d40b291, 0x01e1, 0x11d4,
     [ 0x9d, 0x0e, 0x00, 0x50, 0x04, 0x00, 0x07, 0xb2 ]};
 
 interface nsIDocumentCharsetInfo : nsISupports {

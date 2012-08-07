@@ -97,7 +97,7 @@ struct Out
 
     static FormatOutput!(char) delegate(char[] fmt,...) println;
     static FormatOutput!(char) delegate(char[] fmt,...) print;
-    
+
     static this ()
     {
         println = &Stdout.formatln;
@@ -171,7 +171,7 @@ class System {
         }
         return defval;
     }
-    
+
     public static char[] getProperty( char[] key ){
         /* get values for global system keys (environment) */
         switch( key ) {
@@ -180,7 +180,7 @@ class System {
             case "os.name":
                 version (linux) return Environment.get("OSTYPE","linux");
                 version (darwin) return Environment.get("OSTYPE","darwin");
-            
+
             case "user.name": return Environment.get("USER");
             case "user.home": return Environment.get("HOME");
             case "user.dir" : return Environment.get("PWD");
@@ -191,24 +191,24 @@ class System {
                 if (encoding is null)
                     version (linux) return "CP1252"; //default
                     version (darwin) return "UTF-8"; //default
-                else 
+                else
                     return encoding[0..strlen(encoding)].dup;
             default: return null;
         }
-        
+
         /* Get values for local dwt specific keys */
         char[]* p;
         return ((p = key in localProperties) != null) ? *p : null;
     }
-    
+
     public static void setProperty ( char[] key, char[] value ) {
         /* set property for LOCAL dwt keys */
         if (key !is null && value !is null)
             localProperties[ key ] = value;
     }
-    
+
     static Out out_;
     static Err err;
-    
+
     private static char[][char[]] localProperties;
 }

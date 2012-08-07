@@ -1384,7 +1384,7 @@ public void addBidiSegmentListener(BidiSegmentListener listener) {
 }
 /**
  * Adds a caret listener. CaretEvent is sent when the caret offset changes.
- * 
+ *
  * @param listener the listener
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -1393,7 +1393,7 @@ public void addBidiSegmentListener(BidiSegmentListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT when listener is null</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public void addCaretListener(CaretListener listener) {
@@ -1858,7 +1858,7 @@ bool copySelection(int type) {
             }
         }
     } catch (DWTError error) {
-        // Copy to clipboard failed. This happens when another application 
+        // Copy to clipboard failed. This happens when another application
         // is accessing the clipboard while we copy. Ignore the error.
         // Rethrow all other errors. Fixes bug 17578.
         if (error.code !is DND.ERROR_CANNOT_SET_CLIPBOARD) {
@@ -1915,15 +1915,15 @@ int getAvailableHeightBellow(int height) {
     }
     return Math.min(height, availableHeight);
 }
-/** 
+/**
  * Returns the color of the margins.
- * 
+ *
  * @return the color of the margins.
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public Color getMarginColor() {
@@ -2406,7 +2406,7 @@ void doBlockLineVertical(bool up) {
         if (lineIndex + 1 < lineCount) {
             y = getLinePixel(lineIndex + 2) - 1;
             setBlockSelectionLocation(blockXLocation - horizontalScrollOffset, y, true);
-            int bottom = clientAreaHeight - bottomMargin; 
+            int bottom = clientAreaHeight - bottomMargin;
             if (y > bottom) {
                 scrollVertical(y - bottom, true);
             }
@@ -2480,7 +2480,7 @@ void doContent(dchar key) {
         insertBlockSelectionText(key, DWT.NULL);
         return;
     }
-    
+
     Event event = new Event();
     event.start = selection.x;
     event.end = selection.y;
@@ -2657,7 +2657,7 @@ void doLineDown(bool select) {
         }
     } else {
         int[] alignment = new int[1];
-        int offset = getOffsetAtPoint(columnX, y, caretLine, alignment); 
+        int offset = getOffsetAtPoint(columnX, y, caretLine, alignment);
         setCaretOffset(offset, alignment[0]);
     }
     int oldColumnX = columnX;
@@ -2747,7 +2747,7 @@ void doLineUp(bool select) {
         }
     } else {
         int[] alignment = new int[1];
-        int offset = getOffsetAtPoint(columnX, y, caretLine, alignment); 
+        int offset = getOffsetAtPoint(columnX, y, caretLine, alignment);
         setCaretOffset(offset, alignment[0]);
     }
     int oldColumnX = columnX;
@@ -2790,7 +2790,7 @@ void doMouseLocationChange(int x, int y, bool select) {
     int line = getLineIndex(y);
 
     updateCaretDirection = true;
-    
+
     if (blockSelection) {
         x = Math.max(leftMargin, Math.min(x, clientAreaWidth - rightMargin));
         y = Math.max(topMargin, Math.min(y, clientAreaHeight - bottomMargin));
@@ -2798,7 +2798,7 @@ void doMouseLocationChange(int x, int y, bool select) {
             bool wordSelect = (clickCount & 1) is 0;
             if (wordSelect) {
                 Point left = getPointAtOffset(doubleClickSelection.x);
-                int[] trailing = new int[1]; 
+                int[] trailing = new int[1];
                 int offset = getOffsetAtPoint(x, y, trailing, true);
                 if (offset !is -1) {
                     if (x > left.x) {
@@ -2839,7 +2839,7 @@ void doMouseLocationChange(int x, int y, bool select) {
             } else {
                 clearBlockSelection(true, false);
             }
-            int[] trailing = new int[1]; 
+            int[] trailing = new int[1];
             int offset = getOffsetAtPoint(x, y, trailing, true);
             if (offset !is -1) {
                 if (select) {
@@ -2853,7 +2853,7 @@ void doMouseLocationChange(int x, int y, bool select) {
             } else {
                 clearBlockSelection(true, false);
             }
-            int[] trailing = new int[1]; 
+            int[] trailing = new int[1];
             int offset = getOffsetAtPoint(x, y, trailing, true);
             if (offset !is -1) {
                 if (select) {
@@ -2862,7 +2862,7 @@ void doMouseLocationChange(int x, int y, bool select) {
                 }
             } else {
                 if (isFixedLineHeight() && renderer.fixedPitch) {
-                    int avg = renderer.averageCharWidth; 
+                    int avg = renderer.averageCharWidth;
                     x = ((x + avg / 2 - leftMargin + horizontalScrollOffset) / avg * avg) + leftMargin - horizontalScrollOffset;
                 }
                 setBlockSelectionLocation(x, y, true);
@@ -2872,7 +2872,7 @@ void doMouseLocationChange(int x, int y, bool select) {
                 }
             } else {
                 if (isFixedLineHeight() && renderer.fixedPitch) {
-                    int avg = renderer.averageCharWidth; 
+                    int avg = renderer.averageCharWidth;
                     x = ((x + avg / 2 - leftMargin + horizontalScrollOffset) / avg * avg) + leftMargin - horizontalScrollOffset;
                 }
                 setBlockSelectionLocation(x, y, true);
@@ -2899,7 +2899,7 @@ void doMouseLocationChange(int x, int y, bool select) {
     // a different line? If not the autoscroll selection
     // could be incorrectly reset. Fixes 1GKM3XS
     bool vchange = 0 <= y && y < clientAreaHeight || newCaretLine is 0 || newCaretLine is content.getLineCount() - 1;
-    bool hchange = 0 <= x && x < clientAreaWidth || wordWrap || newCaretLine !is content.getLineAtOffset(caretOffset); 
+    bool hchange = 0 <= x && x < clientAreaWidth || wordWrap || newCaretLine !is content.getLineAtOffset(caretOffset);
     if (vchange && hchange && (newCaretOffset !is caretOffset || newCaretAlignemnt !is caretAlignment)) {
         setCaretOffset(newCaretOffset, newCaretAlignemnt);
         if (select) doMouseSelection();
@@ -3577,7 +3577,7 @@ public bool getBidiColoring() {
 /**
 Rectangle getBlockSelectonPosition() {
     int firstLine = getLineIndex(blockYAnchor - getVerticalScrollOffset());
-    int lastLine = getLineIndex(blockYLocation - getVerticalScrollOffset()); 
+    int lastLine = getLineIndex(blockYLocation - getVerticalScrollOffset());
     if (firstLine > lastLine) {
         int temp = firstLine;
         firstLine = lastLine;
@@ -3591,17 +3591,17 @@ Rectangle getBlockSelectonPosition() {
     }
     return new Rectangle (left - horizontalScrollOffset, firstLine, right - horizontalScrollOffset, lastLine);
 }
-/** 
- * Returns the block selection bounds. The bounds is 
+/**
+ * Returns the block selection bounds. The bounds is
  * relative to the upper left corner of the document.
- * 
+ *
  * @return the block selection bounds
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public Rectangle getBlockSelectionBounds() {
@@ -3645,13 +3645,13 @@ String getBlockSelectionText(String delimiter) {
         }
         String text = content.getTextRange(start, end - start);
         buffer.append(text);
-        if (lineIndex < lastLine) buffer.append(delimiter); 
+        if (lineIndex < lastLine) buffer.append(delimiter);
     }
     return buffer.toString();
 }
 Rectangle getBlockSelectonPosition() {
     int firstLine = getLineIndex(blockYAnchor - getVerticalScrollOffset());
-    int lastLine = getLineIndex(blockYLocation - getVerticalScrollOffset()); 
+    int lastLine = getLineIndex(blockYLocation - getVerticalScrollOffset());
     if (firstLine > lastLine) {
         int temp = firstLine;
         firstLine = lastLine;
@@ -3665,17 +3665,17 @@ Rectangle getBlockSelectonPosition() {
     }
     return new Rectangle (left - horizontalScrollOffset, firstLine, right - horizontalScrollOffset, lastLine);
 }
-/** 
- * Returns the block selection bounds. The bounds is 
+/**
+ * Returns the block selection bounds. The bounds is
  * relative to the upper left corner of the document.
- * 
+ *
  * @return the block selection bounds
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public Rectangle getBlockSelectionBounds() {
@@ -3719,7 +3719,7 @@ String getBlockSelectionText(String delimiter) {
         }
         String text = content.getTextRange(start, end - start);
         buffer.append(text);
-        if (lineIndex < lastLine) buffer.append(delimiter); 
+        if (lineIndex < lastLine) buffer.append(delimiter);
     }
     return buffer.toString();
 }
@@ -3753,7 +3753,7 @@ int getBottomIndex() {
     }
     return bottomIndex;
 }
-/** 
+/**
  * Returns the bottom margin.
  *
  * @return the bottom margin.
@@ -3761,7 +3761,7 @@ int getBottomIndex() {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public int getBottomMargin() {
@@ -4381,7 +4381,7 @@ public int getLineIndex(int y) {
     }
     return line;
 }
-/** 
+/**
  * Returns the left margin.
  *
  * @return the left margin.
@@ -4389,7 +4389,7 @@ public int getLineIndex(int y) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public int getLeftMargin() {
@@ -4689,7 +4689,7 @@ public int[] getRanges(int start, int length) {
     }
     return new int[0];
 }
-/** 
+/**
  * Returns the right margin.
  *
  * @return the right margin.
@@ -4697,7 +4697,7 @@ public int[] getRanges(int start, int length) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public int getRightMargin() {
@@ -4755,12 +4755,12 @@ public Point getSelectionRange() {
  * the regular selection.
  *
  * @return the ranges array
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public int[] getSelectionRanges() {
@@ -5313,7 +5313,7 @@ public int getTopIndex() {
     checkWidget();
     return topIndex;
 }
-/** 
+/**
  * Returns the top margin.
  *
  * @return the top margin.
@@ -5321,7 +5321,7 @@ public int getTopIndex() {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public int getTopMargin() {
@@ -5538,7 +5538,7 @@ public void insert(String string) {
 //     if (string is null) {
 //         DWT.error(DWT.ERROR_NULL_ARGUMENT);
 //     }
-        insertBlockSelectionText(string, false); 
+        insertBlockSelectionText(string, false);
     Point sel = getSelectionRange();
     replaceTextRange(sel.x, sel.y, string);
 }
@@ -5648,7 +5648,7 @@ void insertBlockSelectionText(char key, int action) {
         }
         int end = getOffsetAtPoint(right, linePixel, trailing, true);
         if (end is -1) {
-            end = right < leftMargin ? lineOffset : lineEndOffset; 
+            end = right < leftMargin ? lineOffset : lineEndOffset;
         } else {
             end += trailing[0];
         }
@@ -5659,10 +5659,10 @@ void insertBlockSelectionText(char key, int action) {
         }
         if (start is end && !outOfLine) {
             switch (action) {
-                case ST.DELETE_PREVIOUS: 
+                case ST.DELETE_PREVIOUS:
                     if (start > lineOffset) start = getClusterPrevious(start, lineIndex);
                     break;
-                case ST.DELETE_NEXT: 
+                case ST.DELETE_NEXT:
                     if (end < lineEndOffset) end = getClusterNext(end, lineIndex);
                     break;
             }
@@ -6105,7 +6105,7 @@ void handleMouseMove(Event event) {
         update();
         doAutoScroll(event);
         doMouseLocationChange(event.x, event.y, true);
-    } 
+    }
     if (renderer.hasLinks) {
         doMouseLinkCursor(event.x, event.y);
     }
@@ -6157,7 +6157,7 @@ void handlePaint(Event event) {
             gc.setAdvanced(false);
         }
     }
-    
+
     // fill the margin background
     gc.setBackground(marginColor !is null ? marginColor : background);
     if (topMargin > 0) {
@@ -6277,7 +6277,7 @@ void handleTextChanged(TextChangedEvent event) {
     if (lastTextChangeReplaceCharCount > 0) {
         claimRightFreeSpace();
     }
-    
+
     sendAccessibleTextChanged(lastTextChangeStart, lastTextChangeNewCharCount, lastTextChangeReplaceCharCount);
     lastCharCount += lastTextChangeNewCharCount;
     lastCharCount -= lastTextChangeReplaceCharCount;
@@ -6324,7 +6324,7 @@ void handleTextChanging(TextChangingEvent event) {
     // handleTextChanging and handleTextChanged events and this API sets the
     // caretOffset.
     int newEndOfText = content.getCharCount() - event.replaceCharCount + event.newCharCount;
-    if (caretOffset > newEndOfText) setCaretOffset(newEndOfText, DWT.DEFAULT); 
+    if (caretOffset > newEndOfText) setCaretOffset(newEndOfText, DWT.DEFAULT);
 }
 /**
  * Called when the widget content is set programmatically, overwriting
@@ -6644,7 +6644,7 @@ public void invokeAction(int action) {
 }
 /**
 * Returns true if an action should not be performed when block
-* selection in active  
+* selection in active
 */
 bool invokeBlockAction(int action) {
     switch (action) {
@@ -6700,7 +6700,7 @@ bool invokeBlockAction(int action) {
         case ST.SELECT_WINDOW_END:
             //blocked actions
             return true;
-        // Modification         
+        // Modification
         case ST.CUT:
         case ST.COPY:
         case ST.PASTE:
@@ -7119,7 +7119,7 @@ public void removeBidiSegmentListener(BidiSegmentListener listener) {
  * Removes the specified caret listener.
  *
  * @param listener the listener which should no longer be notified
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
@@ -7127,7 +7127,7 @@ public void removeBidiSegmentListener(BidiSegmentListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT when listener is null</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public void removeCaretListener(CaretListener listener) {
@@ -7798,7 +7798,7 @@ public override void setBackground(Color color) {
  * Sets the block selection mode.
  *
  * @param blockSelection true=enable block selection, false=disable block selection
- * 
+ *
  * @since 3.5
  */
 public void setBlockSelection(bool blockSelection) {
@@ -7809,7 +7809,7 @@ public void setBlockSelection(bool blockSelection) {
     this.blockSelection = blockSelection;
     if (cursor is null) {
         Display display = getDisplay();
-        int type = blockSelection ? DWT.CURSOR_CROSS : DWT.CURSOR_IBEAM; 
+        int type = blockSelection ? DWT.CURSOR_CROSS : DWT.CURSOR_IBEAM;
         super.setCursor(display.getSystemCursor(type));
     }
     if (blockSelection) {
@@ -7823,11 +7823,11 @@ public void setBlockSelection(bool blockSelection) {
     }
 }
 /**
- * Sets the block selection bounds. The bounds is 
+ * Sets the block selection bounds. The bounds is
  * relative to the upper left corner of the document.
- *  
+ *
  * @param rect the new bounds for the block selection
- * 
+ *
  * @see #setBlockSelectionBounds(int, int, int, int)
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -7836,7 +7836,7 @@ public void setBlockSelection(bool blockSelection) {
  * @exception IllegalArgumentException <ul>
  *   <li>ERROR_NULL_ARGUMENT when point is null</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public void setBlockSelectionBounds(Rectangle rect) {
@@ -7845,19 +7845,19 @@ public void setBlockSelectionBounds(Rectangle rect) {
     setBlockSelectionBounds(rect.x, rect.y, rect.width, rect.height);
 }
 /**
- * Sets the block selection bounds. The bounds is 
+ * Sets the block selection bounds. The bounds is
  * relative to the upper left corner of the document.
- * 
+ *
  * @param x the new x coordinate for the block selection
  * @param y the new y coordinate for the block selection
  * @param width the new width for the block selection
  * @param height the new height for the block selection
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public void setBlockSelectionBounds(int x, int y, int width, int height) {
@@ -7865,7 +7865,7 @@ public void setBlockSelectionBounds(int x, int y, int width, int height) {
     int verticalScrollOffset = getVerticalScrollOffset();
     if (!blockSelection) {
         x -= horizontalScrollOffset;
-        y -= verticalScrollOffset; 
+        y -= verticalScrollOffset;
         int start = getOffsetAtPoint(x, y, null);
         int end = getOffsetAtPoint(x+width-1, y+height-1, null);
         setSelection(start, end - start, false, false);
@@ -7881,7 +7881,7 @@ public void setBlockSelectionBounds(int x, int y, int width, int height) {
     int locationX = Math.max(minX, Math.min(maxX, x + width)) - horizontalScrollOffset;
     int locationY = Math.max(minY, Math.min(maxY, y + height - 1)) - verticalScrollOffset;
     if (isFixedLineHeight() && renderer.fixedPitch) {
-        int avg = renderer.averageCharWidth; 
+        int avg = renderer.averageCharWidth;
         anchorX = ((anchorX - leftMargin + horizontalScrollOffset) / avg * avg) + leftMargin - horizontalScrollOffset;
         locationX = ((locationX + avg / 2 - leftMargin + horizontalScrollOffset) / avg * avg) + leftMargin - horizontalScrollOffset;
     }
@@ -7965,15 +7965,15 @@ public void setBidiColoring(bool mode) {
     checkWidget();
     bidiColoring = mode;
 }
-/** 
+/**
  * Sets the bottom margin.
- * 
+ *
  * @param bottomMargin the bottom margin.
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public void setBottomMargin (int bottomMargin) {
@@ -8410,15 +8410,15 @@ public void setKeyBinding(int key, int action) {
         }
     }
 }
-/** 
+/**
  * Sets the left margin.
- * 
+ *
  * @param leftMargin the left margin.
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public void setLeftMargin (int leftMargin) {
@@ -8694,18 +8694,18 @@ public void setLineSpacing(int lineSpacing) {
     setCaretLocation();
     super.redraw();
 }
-/** 
+/**
  * Sets the color of the margins.
- * 
+ *
  * @param color the new color (or null)
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public void setMarginColor(Color color) {
@@ -8714,9 +8714,9 @@ public void setMarginColor(Color color) {
     marginColor = color;
     super.redraw();
 }
-/** 
+/**
  * Sets the margins.
- * 
+ *
  * @param leftMargin the left margin.
  * @param topMargin the top margin.
  * @param rightMargin the right margin.
@@ -8725,7 +8725,7 @@ public void setMarginColor(Color color) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public void setMargins (int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
@@ -8789,15 +8789,15 @@ public void setOrientation(int orientation) {
     createKeyBindings();
     super.redraw();
 }
-/** 
+/**
  * Sets the right margin.
- * 
+ *
  * @param rightMargin the right margin.
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public void setRightMargin (int rightMargin) {
@@ -9027,7 +9027,7 @@ void setSelection(int start, int length, bool sendEvent) {
         }
     }
 }
-/** 
+/**
  * Sets the selection.
  * <p>
  * The new selection may not be visible. Call showSelection to scroll the selection
@@ -9368,7 +9368,7 @@ public void setText(String text) {
             styledTextEvent.text = content.getTextRange(event.start, event.end - event.start);
         }
         content.setText(event.text);
-        notifyListeners(DWT.Modify, event); 
+        notifyListeners(DWT.Modify, event);
         if (styledTextEvent !is null) {
             notifyListeners(ExtendedModify, styledTextEvent);
         }
@@ -9440,15 +9440,15 @@ public void setTopIndex(int topIndex) {
     }
     scrollVertical(pixel, true);
 }
-/** 
+/**
  * Sets the top margin.
- * 
+ *
  * @param topMargin the top margin.
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public void setTopMargin (int topMargin) {
@@ -9531,7 +9531,7 @@ bool showLocation(Rectangle rect, bool scrollPage) {
             scrolled = scrollVertical(rect.y + rect.height - (clientAreaHeight - bottomMargin), true);
         }
     }
-    int width = clientAreaWidth - rightMargin - leftMargin; 
+    int width = clientAreaWidth - rightMargin - leftMargin;
     if (width > 0) {
         int minScroll = scrollPage ? width / 4 : 0;
         if (rect.x < leftMargin) {
@@ -9611,7 +9611,7 @@ void updateCaretVisibility() {
         } else {
             Point location = caret.getLocation();
             Point size = caret.getSize();
-            bool visible = 
+            bool visible =
                 topMargin <= location.y + size.y && location.y <= clientAreaHeight - bottomMargin &&
                 leftMargin <= location.x + size.x && location.x <= clientAreaWidth - rightMargin;
             caret.setVisible(visible);
@@ -9626,7 +9626,7 @@ void updateCaretVisibility() {
         } else {
             Point location = caret.getLocation();
             Point size = caret.getSize();
-            bool visible = 
+            bool visible =
                 topMargin <= location.y + size.y && location.y <= clientAreaHeight - bottomMargin &&
                 leftMargin <= location.x + size.x && location.x <= clientAreaWidth - rightMargin;
             caret.setVisible(visible);

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -22,38 +22,38 @@ import dwt.accessibility.Accessible;
 import objc = dwt.internal.objc.runtime;
 
 class SWTAccessibleDelegate : NSObject {
-    
+
     /**
-     * Accessible Key: The string constant for looking up the accessible 
+     * Accessible Key: The string constant for looking up the accessible
      * for a control using <code>getData(String)</code>. When an accessible
-     * is created for a control, it is stored as a property in the control 
+     * is created for a control, it is stored as a property in the control
      * using <code>setData(String, Object)</code>.
      */
-    static const String ACCESSIBLE_KEY = "Accessible"; //$NON-NLS-1$ 
+    static const String ACCESSIBLE_KEY = "Accessible"; //$NON-NLS-1$
     static const String SWT_OBJECT = "SWT_OBJECT";
-    
+
     static objc.IMP proc2Args, proc3Args, proc4Args;
-    
+
     Accessible accessibleParent;
     void* delegateJniRef;
     int childID;
-    
+
     NSArray attributeNames = null;
     NSArray parameterizedAttributeNames = null;
     NSArray actionNames = null;
-    
+
     static this (){
         ClassInfo clazz = SWTAccessibleDelegate.classinfo;
-        
+
         proc2Args = cast(objc.IMP) &accessibleProc2;
-        
-        proc3Args = cast(objc.IMP) &accessibleProc3;       
-        
-        proc4Args = cast(objc.IMP) &accessibleProc4;      
-        
-        // Accessible custom controls need to implement the NSAccessibility protocol. To do that, 
-        // we dynamically add the methods to the control's class that are required 
-        // by NSAccessibility. Then, when external assistive technology services are used, 
+
+        proc3Args = cast(objc.IMP) &accessibleProc3;
+
+        proc4Args = cast(objc.IMP) &accessibleProc4;
+
+        // Accessible custom controls need to implement the NSAccessibility protocol. To do that,
+        // we dynamically add the methods to the control's class that are required
+        // by NSAccessibility. Then, when external assistive technology services are used,
         // those methods get called to provide the needed information.
 
         String className = "SWTAccessibleDelegate";
@@ -96,20 +96,20 @@ class SWTAccessibleDelegate : NSObject {
     }
 
     NSArray accessibilityActionNames() {
-        
+
         if (actionNames !is null)
             return retainedAutoreleased(actionNames);
-        
+
         actionNames = accessibleParent.internal_accessibilityActionNames(childID);
         actionNames.retain();
         return retainedAutoreleased(actionNames);
     }
 
     NSArray accessibilityAttributeNames() {
-        
+
         if (attributeNames !is null)
             return retainedAutoreleased(attributeNames);
-        
+
         attributeNames = accessibleParent.internal_accessibilityAttributeNames(childID);
         attributeNames.retain();
         return retainedAutoreleased(attributeNames);
@@ -121,10 +121,10 @@ class SWTAccessibleDelegate : NSObject {
 
     // parameterized attribute methods
     NSArray accessibilityParameterizedAttributeNames() {
-        
+
         if (parameterizedAttributeNames !is null)
             return retainedAutoreleased(parameterizedAttributeNames);
-        
+
         parameterizedAttributeNames = accessibleParent.internal_accessibilityParameterizedAttributeNames(childID);
         parameterizedAttributeNames.retain();
         return retainedAutoreleased(parameterizedAttributeNames);
@@ -156,15 +156,15 @@ class SWTAccessibleDelegate : NSObject {
     void accessibilityPerformAction(NSString action) {
         accessibleParent.internal_accessibilityPerformAction(action, childID);
     }
-    
+
     cocoa.id accessibilityActionDescription(NSString action) {
         return accessibleParent.internal_accessibilityActionDescription(action, childID);
     }
-    
-    
+
+
     void accessibilitySetValue_forAttribute(cocoa.id value, NSString attribute) {
     }
-    
+
     static NSArray retainedAutoreleased(NSArray inObject) {
         cocoa.id temp = inObject.retain();
         cocoa.id temp2 = (new NSObject(temp.id)).autorelease();
@@ -174,7 +174,7 @@ class SWTAccessibleDelegate : NSObject {
     static objc.id accessibleProc2(objc.id id, objc.SEL sel) {
         SWTAccessibleDelegate swtAcc = getAccessibleDelegate(id);
         if (swtAcc is null) return null;
-        
+
         if (sel is OS.sel_accessibilityAttributeNames) {
             NSArray retObject = swtAcc.accessibilityAttributeNames();
             return (retObject is null ? null : retObject.id);
@@ -198,7 +198,7 @@ class SWTAccessibleDelegate : NSObject {
     static objc.id accessibleProc3(objc.id id, objc.SEL sel, objc.id arg0) {
         SWTAccessibleDelegate swtAcc = getAccessibleDelegate(id);
         if (swtAcc is null) return null;
-        
+
         if (sel is OS.sel_accessibilityAttributeValue_) {
             NSString attribute = new NSString(arg0);
             cocoa.id retObject = swtAcc.accessibilityAttributeValue(attribute);
@@ -226,7 +226,7 @@ class SWTAccessibleDelegate : NSObject {
     static objc.id accessibleProc4(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
         SWTAccessibleDelegate swtAcc = getAccessibleDelegate(id);
         if (swtAcc is null) return null;
-        
+
         if (sel is OS.sel_accessibilityAttributeValue_forParameter_) {
             NSString attribute = new NSString(arg0);
             cocoa.id parameter = new cocoa.id(arg1);
@@ -248,15 +248,15 @@ class SWTAccessibleDelegate : NSObject {
         if (jniRef is null) return null;
         return cast(SWTAccessibleDelegate)OS.JNIGetObject(jniRef);
     }
-    
+
     public void internal_dispose_SWTAccessibleDelegate() {
         if (actionNames !is null) actionNames.release();
         actionNames = null;
         if (attributeNames !is null) attributeNames.release();
         attributeNames = null;
         if (parameterizedAttributeNames !is null) parameterizedAttributeNames.release();
-        parameterizedAttributeNames = null; 
-        
+        parameterizedAttributeNames = null;
+
         if (delegateJniRef !is 0) OS.DeleteGlobalRef(delegateJniRef);
         delegateJniRef = null;
         OS.object_setInstanceVariable(this.id, SWT_OBJECT, null);

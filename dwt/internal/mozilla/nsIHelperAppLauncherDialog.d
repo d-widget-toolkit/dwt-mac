@@ -8,7 +8,7 @@ import dwt.internal.mozilla.nsILocalFile;
 
 const char[] NS_IHELPERAPPLAUNCHERDIALOG_IID_STR = "d7ebddf0-4c84-11d4-807a-00600811a9c3";
 
-const nsIID NS_IHELPERAPPLAUNCHERDIALOG_IID= 
+const nsIID NS_IHELPERAPPLAUNCHERDIALOG_IID=
   { 0xd7ebddf0, 0x4c84, 0x11d4, [ 0x80,0x7a,0x00,0x60,0x08,0x11,0xa9,0xc3 ]};
 
 interface nsIHelperAppLauncherDialog : nsISupports {

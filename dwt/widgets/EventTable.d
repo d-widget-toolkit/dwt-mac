@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -37,7 +37,7 @@ class EventTable {
     Listener [] listeners;
     int level;
     static const int GROW_SIZE = 4;
-    
+
 public Listener [] getListeners (int eventType) {
     if (types is null) return new Listener [0];
     int count = 0;

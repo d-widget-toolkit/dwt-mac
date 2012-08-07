@@ -5,17 +5,17 @@ import dwt.internal.mozilla.nsID;
 import dwt.internal.mozilla.nsISupports;
 
 import dwt.internal.mozilla.nsIHistoryEntry;
-import dwt.internal.mozilla.nsIContentViewer; 
+import dwt.internal.mozilla.nsIContentViewer;
 import dwt.internal.mozilla.nsIURI;
-import dwt.internal.mozilla.nsIInputStream; 
+import dwt.internal.mozilla.nsIInputStream;
 import dwt.internal.mozilla.nsIDocShellTreeItem;
 import dwt.internal.mozilla.nsISupportsArray;
 import dwt.internal.mozilla.nsStringAPI;
 
 const char[] NS_ISHENTRY_IID_STR = "542a98b9-2889-4922-aaf4-02b6056f4136";
 
-const nsIID NS_ISHENTRY_IID= 
-  {0x542a98b9, 0x2889, 0x4922, 
+const nsIID NS_ISHENTRY_IID=
+  {0x542a98b9, 0x2889, 0x4922,
     [ 0xaa, 0xf4, 0x02, 0xb6, 0x05, 0x6f, 0x41, 0x36 ]};
 
 interface nsISHEntry : nsIHistoryEntry {

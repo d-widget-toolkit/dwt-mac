@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -40,7 +40,7 @@ import dwt.internal.cocoa.*;
 public class PrintDialog : Dialog {
     PrinterData printerData = new PrinterData();
     int returnCode;
-    
+
     // the following Callbacks are never freed
     static Callback dialogCallback5;
     static final byte[] DWT_OBJECT = {'S', 'W', 'T', '_', 'O', 'B', 'J', 'E', 'C', 'T', '\0'};
@@ -62,7 +62,7 @@ public class PrintDialog : Dialog {
  * @see Widget#checkSubclass
  * @see Widget#getStyle
  */
-public this (Shell parent) {    
+public this (Shell parent) {
     this (parent, DWT.PRIMARY_MODAL);
 }
 
@@ -72,7 +72,7 @@ public this (Shell parent) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -94,7 +94,7 @@ public this (Shell parent) {
  * @see Widget#checkSubclass
  * @see Widget#getStyle
  */
-public this (Shell parent, int style) {    
+public this (Shell parent, int style) {
     super (parent, checkStyle(parent, style));
     checkSubclass ();
 }
@@ -123,9 +123,9 @@ static int checkStyle (Shell parent, int style) {
  * Setting the printer data to null is equivalent to
  * resetting all data fields to their default values.
  * </p>
- * 
+ *
  * @param data the data that will be used when the dialog is opened or null to use default data
- * 
+ *
  * @since 3.4
  */
 public void setPrinterData(PrinterData data) {
@@ -135,9 +135,9 @@ public void setPrinterData(PrinterData data) {
 /**
  * Returns the printer data that will be used when the dialog
  * is opened.
- * 
+ *
  * @return the data that will be used when the dialog is opened
- * 
+ *
  * @since 3.4
  */
 public PrinterData getPrinterData() {
@@ -161,7 +161,7 @@ public PrinterData open() {
     NSPrintPanel panel = NSPrintPanel.printPanel();
     NSPrintInfo printInfo = new NSPrintInfo(NSPrintInfo.sharedPrintInfo().copy());
     printInfo.setOrientation(printerData.orientation is PrinterData.LANDSCAPE ? OS.NSLandscapeOrientation : OS.NSPortraitOrientation);
-    NSMutableDictionary dict = printInfo.dictionary();  
+    NSMutableDictionary dict = printInfo.dictionary();
     dict.setValue(NSNumber.numberWithBool(printerData.collate), OS.NSPrintMustCollate);
     dict.setValue(NSNumber.numberWithInt(printerData.copyCount), OS.NSPrintCopies);
     if (printerData.printToFile) {
@@ -260,11 +260,11 @@ static int /*long*/ dialogProc(int /*long*/ id, int /*long*/ sel, int /*long*/ a
 void initClasses () {
     String className = "SWTPrintPanelDelegate";
     if (OS.objc_lookUpClass (className) !is 0) return;
-    
+
     dialogCallback5 = new Callback(getClass(), "dialogProc", 5);
     int /*long*/ dialogProc5 = dialogCallback5.getAddress();
-    if (dialogProc5 is 0) DWT.error (DWT.ERROR_NO_MORE_CALLBACKS);  
-    
+    if (dialogProc5 is 0) DWT.error (DWT.ERROR_NO_MORE_CALLBACKS);
+
     byte[] types = {'*','\0'};
     int size = C.PTR_SIZEOF, align = C.PTR_SIZEOF is 4 ? 2 : 3;
     int /*long*/ cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
@@ -319,7 +319,7 @@ public int getStartPage() {
  * This value can be from 1 to the maximum number of pages for the platform.
  * Note that it is only valid if the scope is <code>PrinterData.PAGE_RANGE</code>.
  * </p>
- * 
+ *
  * @param startPage the startPage setting when the dialog is opened
  */
 public void setStartPage(int startPage) {
@@ -347,7 +347,7 @@ public int getEndPage() {
  * This value can be from 1 to the maximum number of pages for the platform.
  * Note that it is only valid if the scope is <code>PrinterData.PAGE_RANGE</code>.
  * </p>
- * 
+ *
  * @param endPage the end page setting when the dialog is opened
  */
 public void setEndPage(int endPage) {

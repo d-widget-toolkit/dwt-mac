@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *    Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -85,5 +85,5 @@ public static NSValue valueWithSize(NSSize size) {
     objc.id result = OS.objc_msgSend(OS.class_NSValue, OS.sel_valueWithSize_, size);
     return result !is null ? new NSValue(result) : null;
 }
-    
+
 }

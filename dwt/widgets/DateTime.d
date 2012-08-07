@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -48,7 +48,7 @@ import dwt.widgets.TypedListener;
  * </p><p>
  * IMPORTANT: This class is <em>not</em> intended to be subclassed.
  * </p>
- * 
+ *
  * @see <a href="http://www.eclipse.org/swt/snippets/#datetime">DateTime snippets</a>
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: ControlExample</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
@@ -59,14 +59,14 @@ import dwt.widgets.TypedListener;
 public class DateTime : Composite {
     static final int MIN_YEAR = 1752; // Gregorian switchover in North America: September 19, 1752
     static final int MAX_YEAR = 9999;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * and a style value describing its behavior and appearance.
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -351,7 +351,7 @@ public void removeSelectionListener (SelectionListener listener) {
     if (listener is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (eventTable is null) return;
     eventTable.unhook (DWT.Selection, listener);
-    eventTable.unhook (DWT.DefaultSelection, listener); 
+    eventTable.unhook (DWT.DefaultSelection, listener);
 }
 
 bool sendKeyEvent (NSEvent nsEvent, int type) {
@@ -434,7 +434,7 @@ public void setDate (int year, int month, int day) {
  * Sets the receiver's date, or day of the month, to the specified day.
  * <p>
  * The first day of the month is 1, and the last day depends on the month and year.
- * If the specified day is not valid for the receiver's month and year, then it is ignored. 
+ * If the specified day is not valid for the receiver's month and year, then it is ignored.
  * </p>
  *
  * @param day a positive integer beginning with 1
@@ -443,7 +443,7 @@ public void setDate (int year, int month, int day) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #setDate
  */
 public void setDay (int day) {
@@ -518,7 +518,7 @@ public void setMinutes (int minutes) {
  * Sets the receiver's month.
  * <p>
  * The first month of the year is 0, and the last month is 11.
- * If the specified month is not valid for the receiver's day and year, then it is ignored. 
+ * If the specified month is not valid for the receiver's day and year, then it is ignored.
  * </p>
  *
  * @param month an integer between 0 and 11
@@ -527,7 +527,7 @@ public void setMinutes (int minutes) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #setDate
  */
 public void setMonth (int month) {
@@ -589,7 +589,7 @@ public void setTime (int hours, int minutes, int seconds) {
  * Sets the receiver's year.
  * <p>
  * The first year is 1752 and the last year is 9999.
- * If the specified year is not valid for the receiver's day and month, then it is ignored. 
+ * If the specified year is not valid for the receiver's day and month, then it is ignored.
  * </p>
  *
  * @param year an integer between 1752 and 9999
@@ -598,7 +598,7 @@ public void setTime (int hours, int minutes, int seconds) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #setDate
  */
 public void setYear (int year) {

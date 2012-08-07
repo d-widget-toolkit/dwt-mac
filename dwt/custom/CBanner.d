@@ -54,9 +54,9 @@ public class CBanner : Composite {
     Control left;
     Control right;
     Control bottom;
-    
+
     bool simple = true;
-    
+
     int[] curve;
     int curveStart = 0;
     Rectangle curveRect;
@@ -80,8 +80,8 @@ public class CBanner : Composite {
     static const int BEZIER_LEFT = 30;
     static const int MIN_LEFT = 10;
     static int BORDER1 = DWT.COLOR_WIDGET_HIGHLIGHT_SHADOW;
-    
-        
+
+
 /**
  * Constructs a new instance of this class given its parent
  * and a style value describing its behavior and appearance.
@@ -111,7 +111,7 @@ public this(Composite parent, int style) {
     super(parent, checkStyle(style));
     super.setLayout(new CBannerLayout());
     resizeCursor = new Cursor(getDisplay(), DWT.CURSOR_SIZEWE);
-    
+
     listener = new class() Listener {
         public void handleEvent(Event e) {
             switch (e.type) {
@@ -195,14 +195,14 @@ public override Rectangle getClientArea() {
 
 /**
 * Returns the Control that appears on the left side of the banner.
-* 
+*
 * @return the control that appears on the left side of the banner or null
-* 
+*
 * @exception DWTException <ul>
 *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
 *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
 * </ul>
-* 
+*
 * @since 3.0
 */
 public Control getLeft() {
@@ -212,14 +212,14 @@ public Control getLeft() {
 
 /**
 * Returns the Control that appears on the right side of the banner.
-* 
+*
 * @return the control that appears on the right side of the banner or null
-* 
+*
 * @exception DWTException <ul>
 *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
 *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
 * </ul>
-* 
+*
 * @since 3.0
 */
 public Control getRight() {
@@ -228,9 +228,9 @@ public Control getRight() {
 }
 /**
  * Returns the minimum size of the control that appears on the right of the banner.
- * 
+ *
  * @return the minimum size of the control that appears on the right of the banner
- * 
+ *
  * @since 3.1
  */
 public Point getRightMinimumSize() {
@@ -239,9 +239,9 @@ public Point getRightMinimumSize() {
 }
 /**
  * Returns the width of the control that appears on the right of the banner.
- * 
+ *
  * @return the width of the control that appears on the right of the banner
- * 
+ *
  * @since 3.0
  */
 public int getRightWidth() {
@@ -256,9 +256,9 @@ public int getRightWidth() {
 /**
  * Returns <code>true</code> if the CBanner is rendered
  * with a simple, traditional shape.
- * 
+ *
  * @return <code>true</code> if the CBanner is rendered with a simple shape
- * 
+ *
  * @since 3.0
  */
 public bool getSimple() {
@@ -300,7 +300,7 @@ void onMouseMove(int x, int y) {
         return;
     }
     if (curveRect.contains(x, y)) {
-        setCursor(resizeCursor); 
+        setCursor(resizeCursor);
     } else {
         setCursor(null);
     }
@@ -311,7 +311,7 @@ void onMouseUp () {
 void onPaint(GC gc) {
 //   Useful for debugging paint problems
 //  {
-//  Point size = getSize(); 
+//  Point size = getSize();
 //  gc.setBackground(getDisplay().getSystemColor(DWT.COLOR_GREEN));
 //  gc.fillRectangle(-10, -10, size.x+20, size.y+20);
 //  }
@@ -337,10 +337,10 @@ void onPaint(GC gc) {
     line1[index++] = 0;
     line1[index++] = size.x;
     line1[index++] = 0;
-    
+
     Color background = getBackground();
-        
-    if (getDisplay().getDepth() >= 15) { 
+
+    if (getDisplay().getDepth() >= 15) {
         // Anti- aliasing
         int[] line2 = new int[line1.length];
         index = 0;
@@ -364,7 +364,7 @@ void onPaint(GC gc) {
         gc.drawPolyline(line2);
         gc.drawPolyline(line3);
         color.dispose();
-        
+
         // draw tail fading to background
         int x1 = Math.max(0, curveStart - CURVE_TAIL);
         gc.setForeground(background);
@@ -376,7 +376,7 @@ void onPaint(GC gc) {
         gc.setForeground(border1);
         gc.drawLine(x1, size.y - BORDER_STRIPE, curveStart+1, size.y - BORDER_STRIPE);
     }
-    
+
     // draw border
     gc.setForeground(border1);
     gc.drawPolyline(line1);

@@ -5,8 +5,8 @@ import dwt.internal.mozilla.nsID;
 import dwt.internal.mozilla.nsISupports;
 
 const char[] NS_ISERVICEMANAGER_IID_STR = "8bb35ed9-e332-462d-9155-4a002ab5c958";
-const nsIID NS_ISERVICEMANAGER_IID= 
-  {0x8bb35ed9, 0xe332, 0x462d, 
+const nsIID NS_ISERVICEMANAGER_IID=
+  {0x8bb35ed9, 0xe332, 0x462d,
     [ 0x91, 0x55, 0x4a, 0x00, 0x2a, 0xb5, 0xc9, 0x58 ]};
 
 interface nsIServiceManager : nsISupports {

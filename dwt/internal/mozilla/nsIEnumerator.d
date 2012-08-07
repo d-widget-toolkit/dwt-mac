@@ -10,8 +10,8 @@ import dwt.internal.mozilla.nsISupports;
 
 const char[] NS_IENUMERATOR_IID_STR = "ad385286-cbc4-11d2-8cca-0060b0fc14a3";
 
-const nsIID NS_IENUMERATOR_IID= 
-  {0xad385286, 0xcbc4, 0x11d2, 
+const nsIID NS_IENUMERATOR_IID=
+  {0xad385286, 0xcbc4, 0x11d2,
     [ 0x8c, 0xca, 0x00, 0x60, 0xb0, 0xfc, 0x14, 0xa3 ]};
 
 interface nsIEnumerator : nsISupports {
@@ -33,8 +33,8 @@ extern(System):
 
 const char[] NS_IBIDIRECTIONALENUMERATOR_IID_STR = "75f158a0-cadd-11d2-8cca-0060b0fc14a3";
 
-const nsIID NS_IBIDIRECTIONALENUMERATOR_IID= 
-  {0x75f158a0, 0xcadd, 0x11d2, 
+const nsIID NS_IBIDIRECTIONALENUMERATOR_IID=
+  {0x75f158a0, 0xcadd, 0x11d2,
     [ 0x8c, 0xca, 0x00, 0x60, 0xb0, 0xfc, 0x14, 0xa3 ]};
 
 interface nsIBidirectionalEnumerator : nsIEnumerator {

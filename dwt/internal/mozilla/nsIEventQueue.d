@@ -5,8 +5,8 @@ import dwt.internal.mozilla.nsID;
 import dwt.internal.mozilla.nsIEventTarget;
 
 const char[] NS_IEVENTQUEUE_IID_STR = "176afb41-00a4-11d3-9f2a-00400553eef0";
-const nsIID NS_IEVENTQUEUE_IID= 
-  {0x176afb41, 0x00a4, 0x11d3, 
+const nsIID NS_IEVENTQUEUE_IID=
+  {0x176afb41, 0x00a4, 0x11d3,
     [ 0x9f, 0x2a, 0x00, 0x40, 0x05, 0x53, 0xee, 0xf0 ]};
 
 interface nsIEventQueue : nsIEventTarget {

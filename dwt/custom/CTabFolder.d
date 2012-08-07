@@ -330,12 +330,12 @@ public this(Composite parent, int style) {
     // Add all listeners
     listener = new class(this) Listener {
         CTabFolder ctf;
-        
+
         this (CTabFolder ctf)
         {
             this.ctf = ctf;
         }
-        
+
         public void handleEvent(Event event) {
             switch (event.type) {
                 case DWT.Dispose:          ctf.onDispose(event); break;
@@ -1827,7 +1827,7 @@ void initAccessible() {
     addListener(DWT.Selection, new class(accessible, this) Listener {
         Accessible accessible;
         CTabFolder ctf;
-        
+
         this (Accessible accessible, CTabFolder ctf)
         {
             this.accessible = accessible;
@@ -1844,7 +1844,7 @@ void initAccessible() {
             }
         }
     });
-    
+
     addListener(DWT.FocusIn, new class(accessible) Listener {
         Accessible acc;
         this( Accessible a ){ this.acc = a; }
@@ -2604,7 +2604,7 @@ void setBackground(Color[] colors, int[] percents, bool vertical) {
     }
 
     // Are these settings the same as before?
-    if ((gradientColors !is null) && (colors !is null) && 
+    if ((gradientColors !is null) && (colors !is null) &&
         (gradientColors.length is colors.length)) {
         bool same = false;
         for (int i = 0; i < gradientColors.length; i++) {
@@ -3892,12 +3892,12 @@ void showList (Rectangle rect) {
         item.addSelectionListener(new class(this, id) SelectionAdapter {
             CTabFolder ctf;
 			const String id;
-            
+
             this (CTabFolder ctf, String id) {
                 this.ctf = ctf;
 				this.id = id;
             }
-            
+
             public void widgetSelected(SelectionEvent e) {
                 MenuItem menuItem = cast(MenuItem)e.widget;
                 int index = ctf.indexOf(cast(CTabItem)menuItem.getData(id));

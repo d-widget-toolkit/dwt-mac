@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -42,7 +42,7 @@ import dwt.dwthelper.utils;
  */
 
 /* NOTE:
- *   Good javadoc coding style is to put the values of static final 
+ *   Good javadoc coding style is to put the values of static final
  *   constants in the comments. This reinforces the fact that
  *   consumers are allowed to rely on the value (and they must
  *   since the values are compiled inline in their code). We
@@ -55,18 +55,18 @@ public class DWT {
 
     /**
      * The null event type (value is 0).
-     * 
+     *
      * @since 3.0
      */
     public static const int None = 0;
 
     /**
      * The key down event type (value is 1).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addKeyListener
      * @see dwt.widgets.Tracker#addKeyListener
      * @see dwt.events.KeyListener#keyPressed
@@ -76,11 +76,11 @@ public class DWT {
 
     /**
      * The key up event type (value is 2).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addKeyListener
      * @see dwt.widgets.Tracker#addKeyListener
      * @see dwt.events.KeyListener#keyReleased
@@ -90,11 +90,11 @@ public class DWT {
 
     /**
      * The mouse down event type (value is 3).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addMouseListener
      * @see dwt.events.MouseListener#mouseDown
      * @see dwt.events.MouseEvent
@@ -103,11 +103,11 @@ public class DWT {
 
     /**
      * The mouse up event type (value is 4).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addMouseListener
      * @see dwt.events.MouseListener#mouseUp
      * @see dwt.events.MouseEvent
@@ -116,11 +116,11 @@ public class DWT {
 
     /**
      * The mouse move event type (value is 5).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addMouseMoveListener
      * @see dwt.events.MouseMoveListener#mouseMove
      * @see dwt.events.MouseEvent
@@ -129,11 +129,11 @@ public class DWT {
 
     /**
      * The mouse enter event type (value is 6).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addMouseTrackListener
      * @see dwt.events.MouseTrackListener#mouseEnter
      * @see dwt.events.MouseEvent
@@ -142,11 +142,11 @@ public class DWT {
 
     /**
      * The mouse exit event type (value is 7).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addMouseTrackListener
      * @see dwt.events.MouseTrackListener#mouseExit
      * @see dwt.events.MouseEvent
@@ -155,11 +155,11 @@ public class DWT {
 
     /**
      * The mouse double click event type (value is 8).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addMouseListener
      * @see dwt.events.MouseListener#mouseDoubleClick
      * @see dwt.events.MouseEvent
@@ -168,11 +168,11 @@ public class DWT {
 
     /**
      * The paint event type (value is 9).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addPaintListener
      * @see dwt.events.PaintListener#paintControl
      * @see dwt.events.PaintEvent
@@ -181,11 +181,11 @@ public class DWT {
 
     /**
      * The move event type (value is 10).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addControlListener
      * @see dwt.widgets.TableColumn#addControlListener
      * @see dwt.widgets.Tracker#addControlListener
@@ -197,11 +197,11 @@ public class DWT {
 
     /**
      * The resize event type (value is 11).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addControlListener
      * @see dwt.widgets.TableColumn#addControlListener
      * @see dwt.widgets.Tracker#addControlListener
@@ -213,12 +213,12 @@ public class DWT {
 
     /**
      * The dispose event type (value is 12).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Widget#addDisposeListener
      * @see dwt.events.DisposeListener#widgetDisposed
      * @see dwt.events.DisposeEvent
@@ -227,11 +227,11 @@ public class DWT {
 
     /**
      * The selection event type (value is 13).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Button#addSelectionListener
      * @see dwt.widgets.Combo#addSelectionListener
      * @see dwt.widgets.CoolItem#addSelectionListener
@@ -256,11 +256,11 @@ public class DWT {
 
     /**
      * The default selection event type (value is 14).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Combo#addSelectionListener
      * @see dwt.widgets.List#addSelectionListener
      * @see dwt.widgets.Spinner#addSelectionListener
@@ -275,11 +275,11 @@ public class DWT {
 
     /**
      * The focus in event type (value is 15).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addFocusListener
      * @see dwt.events.FocusListener#focusGained
      * @see dwt.events.FocusEvent
@@ -288,11 +288,11 @@ public class DWT {
 
     /**
      * The focus out event type (value is 16).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addFocusListener
      * @see dwt.events.FocusListener#focusLost
      * @see dwt.events.FocusEvent
@@ -301,11 +301,11 @@ public class DWT {
 
     /**
      * The expand event type (value is 17).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Tree#addTreeListener
      * @see dwt.events.TreeListener#treeExpanded
      * @see dwt.events.TreeEvent
@@ -314,11 +314,11 @@ public class DWT {
 
     /**
      * The collapse event type (value is 18).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Tree#addTreeListener
      * @see dwt.events.TreeListener#treeCollapsed
      * @see dwt.events.TreeEvent
@@ -327,11 +327,11 @@ public class DWT {
 
     /**
      * The iconify event type (value is 19).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Shell#addShellListener
      * @see dwt.events.ShellListener#shellIconified
      * @see dwt.events.ShellEvent
@@ -340,11 +340,11 @@ public class DWT {
 
     /**
      * The de-iconify event type (value is 20).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Shell#addShellListener
      * @see dwt.events.ShellListener#shellDeiconified
      * @see dwt.events.ShellEvent
@@ -353,12 +353,12 @@ public class DWT {
 
     /**
      * The close event type (value is 21).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Shell#addShellListener
      * @see dwt.events.ShellListener#shellClosed
      * @see dwt.events.ShellEvent
@@ -367,11 +367,11 @@ public class DWT {
 
     /**
      * The show event type (value is 22).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Menu#addMenuListener
      * @see dwt.events.MenuListener#menuShown
      * @see dwt.events.MenuEvent
@@ -380,11 +380,11 @@ public class DWT {
 
     /**
      * The hide event type (value is 23).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Menu#addMenuListener
      * @see dwt.events.MenuListener#menuHidden
      * @see dwt.events.MenuEvent
@@ -393,11 +393,11 @@ public class DWT {
 
     /**
      * The modify event type (value is 24).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Combo#addModifyListener
      * @see dwt.widgets.Spinner#addModifyListener
      * @see dwt.widgets.Text#addModifyListener
@@ -408,11 +408,11 @@ public class DWT {
 
     /**
      * The verify event type (value is 25).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.custom.CCombo#addVerifyListener
      * @see dwt.widgets.Combo#addVerifyListener
      * @see dwt.custom.StyledText#addVerifyListener
@@ -424,11 +424,11 @@ public class DWT {
 
     /**
      * The activate event type (value is 26).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Shell#addShellListener
      * @see dwt.events.ShellListener#shellActivated
      * @see dwt.events.ShellEvent
@@ -437,11 +437,11 @@ public class DWT {
 
     /**
      * The deactivate event type (value is 27).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Shell#addShellListener
      * @see dwt.events.ShellListener#shellDeactivated
      * @see dwt.events.ShellEvent
@@ -450,11 +450,11 @@ public class DWT {
 
     /**
      * The help event type (value is 28).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addHelpListener
      * @see dwt.widgets.Menu#addHelpListener
      * @see dwt.widgets.MenuItem#addHelpListener
@@ -465,22 +465,22 @@ public class DWT {
 
     /**
      * The drag detect event type (value is 29).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.dnd.DragSource
      */
     public static const int DragDetect = 29;
 
     /**
      * The arm event type (value is 30).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.MenuItem#addArmListener
      * @see dwt.events.ArmListener#widgetArmed
      * @see dwt.events.ArmEvent
@@ -489,11 +489,11 @@ public class DWT {
 
     /**
      * The traverse event type (value is 31).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addTraverseListener
      * @see dwt.events.TraverseListener#keyTraversed
      * @see dwt.events.TraverseEvent
@@ -502,11 +502,11 @@ public class DWT {
 
     /**
      * The mouse hover event type (value is 32).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Control#addMouseTrackListener
      * @see dwt.events.MouseTrackListener#mouseHover
      * @see dwt.events.MouseEvent
@@ -515,7 +515,7 @@ public class DWT {
 
     /**
      * The hardware key down event type (value is 33).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
@@ -524,7 +524,7 @@ public class DWT {
 
     /**
      * The hardware key up event type (value is 34).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
@@ -533,36 +533,36 @@ public class DWT {
 
     /**
      * The menu detect event type (value is 35).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @since 3.0
      */
     public static const int MenuDetect = 35;
 
     /**
      * The set data event type (value is 36).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @see dwt.widgets.Table
      * @see dwt.widgets.Tree
-     * 
+     *
      * @since 3.0
      */
     public static const int SetData = 36;
 
     /**
      * The mouse wheel event type (value is 37).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @since 3.1
      */
     public static const int MouseWheel = 37;
@@ -580,66 +580,66 @@ public class DWT {
      * cached value.  The operating system automatically redraws and
      * lays out all widgets after this event is sent.
      * </p>
-     * 
+     *
      * @see dwt.widgets.Display#addListener
      * @see dwt.widgets.Event
-     * 
+     *
      * @since 3.2
      */
     public static const int Settings = 39;
 
     /**
      * The erase item event type (value is 40).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @since 3.2
      */
     public static const int EraseItem = 40;
 
     /**
      * The measure item event type (value is 41).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @since 3.2
      */
     public static const int MeasureItem = 41;
 
     /**
      * The paint item event type (value is 42).
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @since 3.2
      */
     public static const int PaintItem = 42;
 
     /**
-     * The IME composition event type (value is 43).  
+     * The IME composition event type (value is 43).
      * <p>
      * The IME composition event is sent to allow
      * custom text editors to implement in-line
-     * editing of international text. 
-     * </p> 
-     * 
+     * editing of international text.
+     * </p>
+     *
      * The detail field indicates the action to be taken:
      * <p><ul>
      * <li>{@link DWT#COMPOSITION_CHANGED}</li>
      * <li>{@link DWT#COMPOSITION_OFFSET}</li>
      * <li>{@link DWT#COMPOSITION_SELECTION}</li>
      * </ul></p>
-     * 
+     *
      * @see dwt.widgets.Widget#addListener
      * @see dwt.widgets.Display#addFilter
      * @see dwt.widgets.Event
-     * 
+     *
      * @since 3.4
      */
     public static const int ImeComposition = 43;
@@ -649,14 +649,14 @@ public class DWT {
     /**
      * The IME composition event detail that indicates
      * a change in the IME composition. The text field
-     * of the event is the new composition text. 
+     * of the event is the new composition text.
      * The start and end indicate the offsets where the
      * composition text should be inserted.
-     * The styles and ranges are stored in the IME 
+     * The styles and ranges are stored in the IME
      * object (value is 1).
-     * 
+     *
      * @see DWT#ImeComposition
-     * 
+     *
      * @since 3.4
      */
     public static const int COMPOSITION_CHANGED = 1;
@@ -664,17 +664,17 @@ public class DWT {
     /**
      * The IME composition event detail that indicates
      * that the IME needs the offset for a given location.
-     * The x and y fields of the event are used by the 
+     * The x and y fields of the event are used by the
      * application to determine the offset.
-     * 
-     * The index field of the event should be set to the 
-     * text offset at that location. The count field should 
+     *
+     * The index field of the event should be set to the
+     * text offset at that location. The count field should
      * be set to indicate whether the location is closer to
      * the leading edge (0) or the trailing edge (1) (value is 2).
-     * 
+     *
      * @see DWT#ImeComposition
      * @see dwt.graphics.TextLayout#getOffset(int, int, int[])
-     * 
+     *
      * @since 3.4
      */
     public static const int COMPOSITION_OFFSET = 2;
@@ -683,9 +683,9 @@ public class DWT {
      * The IME composition event detail that indicates
      * that IME needs the selected text and its start
      * and end offsets (value is 3).
-     * 
+     *
      * @see DWT#ImeComposition
-     * 
+     *
      * @since 3.4
      */
     public static const int COMPOSITION_SELECTION = 3;
@@ -743,14 +743,14 @@ public class DWT {
     //public static const int HOT = 1 << 6;
     //public static const int DEFAULTED = 1 << 7;
     /**
-     * Traversal event detail field value indicating that no 
+     * Traversal event detail field value indicating that no
      * traversal action should be taken
      * (value is 0).
      */
     public static const int TRAVERSE_NONE = 0;
 
     /**
-     * Traversal event detail field value indicating that the 
+     * Traversal event detail field value indicating that the
      * key which designates that a dialog should be cancelled was
      * pressed; typically, this is the ESC key
      * (value is 1&lt;&lt;1).
@@ -766,7 +766,7 @@ public class DWT {
     public static const int TRAVERSE_RETURN = 1 << 2;
 
     /**
-     * Traversal event detail field value indicating that the 
+     * Traversal event detail field value indicating that the
      * key which designates that focus should be given to the
      * previous tab group was pressed; typically, this is the
      * SHIFT-TAB key sequence
@@ -775,7 +775,7 @@ public class DWT {
     public static const int TRAVERSE_TAB_PREVIOUS = 1 << 3;
 
     /**
-     * Traversal event detail field value indicating that the 
+     * Traversal event detail field value indicating that the
      * key which designates that focus should be given to the
      * next tab group was pressed; typically, this is the
      * TAB key
@@ -784,7 +784,7 @@ public class DWT {
     public static const int TRAVERSE_TAB_NEXT = 1 << 4;
 
     /**
-     * Traversal event detail field value indicating that the 
+     * Traversal event detail field value indicating that the
      * key which designates that focus should be given to the
      * previous tab item was pressed; typically, this is either
      * the LEFT-ARROW or UP-ARROW keys
@@ -793,7 +793,7 @@ public class DWT {
     public static const int TRAVERSE_ARROW_PREVIOUS = 1 << 5;
 
     /**
-     * Traversal event detail field value indicating that the 
+     * Traversal event detail field value indicating that the
      * key which designates that focus should be given to the
      * previous tab item was pressed; typically, this is either
      * the RIGHT-ARROW or DOWN-ARROW keys
@@ -802,14 +802,14 @@ public class DWT {
     public static const int TRAVERSE_ARROW_NEXT = 1 << 6;
 
     /**
-     * Traversal event detail field value indicating that a 
+     * Traversal event detail field value indicating that a
      * mnemonic key sequence was pressed
      * (value is 1&lt;&lt;7).
      */
     public static const int TRAVERSE_MNEMONIC = 1 << 7;
 
     /**
-     * Traversal event detail field value indicating that the 
+     * Traversal event detail field value indicating that the
      * key which designates that the previous page of a multi-page
      * window should be shown was pressed; typically, this
      * is the CTRL-PAGEUP key sequence
@@ -818,7 +818,7 @@ public class DWT {
     public static const int TRAVERSE_PAGE_PREVIOUS = 1 << 8;
 
     /**
-     * Traversal event detail field value indicating that the 
+     * Traversal event detail field value indicating that the
      * key which designates that the next page of a multi-page
      * window should be shown was pressed; typically, this
      * is the CTRL-PAGEDOWN key sequence
@@ -845,28 +845,28 @@ public class DWT {
 
     /**
      * Indicates that a property is off (value is 0).
-     * 
+     *
      * @since 3.1
      */
     public static const int OFF = 0;
 
     /**
      * Indicates that a property is on (value is 1).
-     * 
+     *
      * @since 3.1
      */
     public static const int ON = 1;
 
     /**
      * Indicates low quality (value is 1).
-     * 
+     *
      * @since 3.1
      */
     public static const int LOW = 1;
 
     /**
      * Indicates high quality (value is 2).
-     * 
+     *
      * @since 3.1
      */
     public static const int HIGH = 2;
@@ -1016,7 +1016,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>Text</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.3
      */
     public static const int SEARCH = 1 << 7;
@@ -1034,7 +1034,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>Text</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.0
      */
     public static const int PASSWORD = 1 << 22;
@@ -1192,7 +1192,7 @@ public class DWT {
      * are free to create the default scroll bars for the control.
      * Using NO_SCROLL overrides the default and forces the control
      * to have no scroll bars.
-     * 
+     *
      * <b>Used By:</b><ul>
      * <li><code>Tree</code></li>
      * <li><code>Table</code></li>
@@ -1239,7 +1239,7 @@ public class DWT {
      * </ul></p>
      */
     public static const int ON_TOP = 1 << 14;
-    
+
     /**
      * Style constant for sheet window behavior (value is 1&lt;&lt;28).
      * <p>
@@ -1254,11 +1254,11 @@ public class DWT {
      * <li><code>Dialog</code> and subclasses</li>
      * <li><code>Shell</code> and subclasses</li>
      * </ul></p>
-     * 
+     *
      * @since 3.5
      */
     public static const int SHEET = 1 << 28;
-    
+
     /**
      * Style constant for sheet window behavior (value is 1&lt;&lt;28).
      * <p>
@@ -1273,7 +1273,7 @@ public class DWT {
      * <li><code>Dialog</code> and subclasses</li>
      * <li><code>Shell</code> and subclasses</li>
      * </ul></p>
-     * 
+     *
      * @since 3.5
      */
     public static final int SHEET = 1 << 28;
@@ -1346,15 +1346,15 @@ public class DWT {
     public static const int HIDE_SELECTION = 1 << 15;
 
     /**
-     * Style constant for full row selection behavior and 
-     * selection constant indicating that a full line should be 
+     * Style constant for full row selection behavior and
+     * selection constant indicating that a full line should be
      * drawn. (value is 1&lt;&lt;16).
      * <br>Note that for some widgets this is a <em>HINT</em>.
      * <p><b>Used By:</b><ul>
      * <li><code>Table</code></li>
      * <li><code>Tree</code></li>
      * <li><code>StyledText</code></li>
-     * <li><code>TextLayout</code></li> 
+     * <li><code>TextLayout</code></li>
      * </ul></p>
      */
     public static const int FULL_SELECTION = 1 << 16;
@@ -1401,7 +1401,7 @@ public class DWT {
      * tool bars and sashes, don't normally take focus when the mouse is clicked
      * or accept focus when assigned from within the program.  This style allows
      * Composites to implement "no focus" mouse behavior.
-     * 
+     *
      * <br>Note that this is a <em>HINT</em>.
      * </p>
      * <p><b>Used By:</b><ul>
@@ -1418,7 +1418,7 @@ public class DWT {
      * the DWT.Paint event is not sent. When it gets bigger, an DWT.Paint event is
      * sent with a GC clipped to only the new areas to be painted. Without this
      * style, the entire client area will be repainted.
-     * 
+     *
      * <br>Note that this is a <em>HINT</em>.
      * </p><p><b>Used By:</b><ul>
      * <li><code>Composite</code></li>
@@ -1428,7 +1428,7 @@ public class DWT {
 
     /**
      * Style constant for no paint event merging behavior (value is 1&lt;&lt;21).
-     * 
+     *
      * <br>Note that this is a <em>HINT</em>.
      * <p><b>Used By:</b><ul>
      * <li><code>Composite</code></li>
@@ -1458,9 +1458,9 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>Control</code></li>
      * <li><code>Menu</code></li>
-     * <li><code>GC</code></li> 
+     * <li><code>GC</code></li>
      * </ul></p>
-     * 
+     *
      * @since 2.1.2
      */
     public static const int LEFT_TO_RIGHT = 1 << 25;
@@ -1478,9 +1478,9 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>Control</code></li>
      * <li><code>Menu</code></li>
-     * <li><code>GC</code></li> 
+     * <li><code>GC</code></li>
      * </ul></p>
-     * 
+     *
      * @since 2.1.2
      */
     public static const int RIGHT_TO_LEFT = 1 << 26;
@@ -1491,7 +1491,7 @@ public class DWT {
      * <li><code>Control</code></li>
      * <li><code>Menu</code></li>
      * </ul></p>
-     * 
+     *
      * @since 2.1.2
      */
     public static const int MIRRORED = 1 << 27;
@@ -1501,7 +1501,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>Composite</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.0
      */
     public static const int EMBEDDED = 1 << 24;
@@ -1512,7 +1512,7 @@ public class DWT {
      * <li><code>Table</code></li>
      * <li><code>Tree</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.0
      */
     public static const int VIRTUAL = 1 << 28;
@@ -1522,7 +1522,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>Control</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.1
      */
     public static const int DOUBLE_BUFFERED = 1 << 29;
@@ -1538,7 +1538,7 @@ public class DWT {
      * </ul></p>
      *
      * @since 3.4
-     * 
+     *
      * WARNING: THIS API IS UNDER CONSTRUCTION AND SHOULD NOT BE USED
      */
     public static const int TRANSPARENT = 1 << 30;
@@ -1560,7 +1560,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>TextStyle</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.4
      */
     public static const int UNDERLINE_SINGLE = 0;
@@ -1570,7 +1570,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>TextStyle</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.4
      */
     public static const int UNDERLINE_DOUBLE = 1;
@@ -1580,7 +1580,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>TextStyle</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.4
      */
     public static const int UNDERLINE_ERROR = 2;
@@ -1590,7 +1590,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>TextStyle</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.4
      */
     public static const int UNDERLINE_SQUIGGLE = 3;
@@ -1608,7 +1608,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>TextStyle</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.5
      */
     public static const int UNDERLINE_LINK = 4;
@@ -1626,7 +1626,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>TextStyle</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.5
      */
     public static final int UNDERLINE_LINK = 4;
@@ -1636,7 +1636,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>TextStyle</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.4
      */
     public static const int BORDER_SOLID = 1;
@@ -1646,7 +1646,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>TextStyle</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.4
      */
     public static const int BORDER_DASH = 2;
@@ -1656,7 +1656,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>TextStyle</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.4
      */
     public static const int BORDER_DOT = 4;
@@ -1700,7 +1700,7 @@ public class DWT {
      * <li><code>Tracker</code></li>
      * <li><code>FormAttachment</code> in a <code>FormLayout</code></li>
      * </ul></p>
-     * 
+     *
      * @since 2.1.2
      */
     public static const int LEAD = 1 << 14;
@@ -1722,7 +1722,7 @@ public class DWT {
      * <li><code>Tracker</code></li>
      * <li><code>FormAttachment</code> in a <code>FormLayout</code></li>
      * </ul></p>
-     * 
+     *
      * @since 2.1.2
      */
     public static const int TRAIL = 1 << 17;
@@ -1784,7 +1784,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>DateTime</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.3
      */
     public static const int DATE = 1 << 5;
@@ -1794,7 +1794,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>DateTime</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.3
      */
     public static const int TIME = 1 << 7;
@@ -1804,7 +1804,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>DateTime</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.3
      */
     public static const int CALENDAR = 1 << 10;
@@ -1819,7 +1819,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>DateTime</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.3
      */
     public static const int SHORT = 1 << 15;
@@ -1834,7 +1834,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>DateTime</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.3
      */
     public static const int MEDIUM = 1 << 16;
@@ -1850,7 +1850,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>DateTime</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.3
      */
     public static const int LONG = 1 << 28;
@@ -1862,7 +1862,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>Browser</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.3
      */
     public static const int MOZILLA = 1 << 15;
@@ -1956,7 +1956,7 @@ public class DWT {
     /**
      * ASCII character convenience constant for the tab character
      * (value is the <code>char</code> '\t').
-     * 
+     *
      * @since 2.1
      */
     public static const char TAB = '\t';
@@ -1993,7 +1993,7 @@ public class DWT {
      * Keyboard and/or mouse event mask indicating that the COMMAND key
      * was pushed on the keyboard when the event was generated
      * (value is 1&lt;&lt;22).
-     * 
+     *
      * @since 2.1
      */
     public static const int COMMAND = 1 << 22;
@@ -2001,15 +2001,15 @@ public class DWT {
     /**
      * Keyboard and/or mouse event mask indicating all possible
      * keyboard modifiers.
-     * 
-     * To allow for the future, this mask  is intended to be used in 
-     * place of code that references  each individual keyboard mask. 
-     *  For example, the following expression will determine whether 
-     * any modifier is pressed and will continue to work as new modifier 
+     *
+     * To allow for the future, this mask  is intended to be used in
+     * place of code that references  each individual keyboard mask.
+     *  For example, the following expression will determine whether
+     * any modifier is pressed and will continue to work as new modifier
      * masks are added.
-     * 
+     *
      * <code>(stateMask & DWT.MODIFIER_MASK) !is 0</code>.
-     * 
+     *
      * @since 2.1
      */
     public static const int MODIFIER_MASK;
@@ -2035,7 +2035,7 @@ public class DWT {
     /**
      * Keyboard and/or mouse event mask indicating that mouse button four
      * was pushed when the event was generated. (value is 1&lt;&lt;23).
-     * 
+     *
      * @since 3.1
      */
     public static const int BUTTON4 = 1 << 23;
@@ -2043,7 +2043,7 @@ public class DWT {
     /**
      * Keyboard and/or mouse event mask indicating that mouse button five
      * was pushed when the event was generated. (value is 1&lt;&lt;25).
-     * 
+     *
      * @since 3.1
      */
     public static const int BUTTON5 = 1 << 25;
@@ -2051,15 +2051,15 @@ public class DWT {
     /**
      * Keyboard and/or mouse event mask indicating all possible
      * mouse buttons.
-     * 
-     * To allow for the future, this mask  is intended to be used 
-     * in place of code that references each individual button mask.  
+     *
+     * To allow for the future, this mask  is intended to be used
+     * in place of code that references each individual button mask.
      * For example, the following expression will determine whether
-     * any button is pressed and will continue to work as new button 
+     * any button is pressed and will continue to work as new button
      * masks are added.
-     * 
+     *
      * <code>(stateMask & DWT.BUTTON_MASK) !is 0</code>.
-     * 
+     *
      * @since 2.1
      */
     public static const int BUTTON_MASK;
@@ -2067,9 +2067,9 @@ public class DWT {
     /**
      * Keyboard and/or mouse event mask indicating that the MOD1 key
      * was pushed on the keyboard when the event was generated.
-     * 
+     *
      * This is the primary keyboard modifier for the platform.
-     * 
+     *
      * @since 2.1
      */
     public static const int MOD1;
@@ -2077,9 +2077,9 @@ public class DWT {
     /**
      * Keyboard and/or mouse event mask indicating that the MOD2 key
      * was pushed on the keyboard when the event was generated.
-     * 
+     *
      * This is the secondary keyboard modifier for the platform.
-     * 
+     *
      * @since 2.1
      */
     public static const int MOD2;
@@ -2087,7 +2087,7 @@ public class DWT {
     /**
      * Keyboard and/or mouse event mask indicating that the MOD3 key
      * was pushed on the keyboard when the event was generated.
-     * 
+     *
      * @since 2.1
      */
     public static const int MOD3;
@@ -2095,7 +2095,7 @@ public class DWT {
     /**
      * Keyboard and/or mouse event mask indicating that the MOD4 key
      * was pushed on the keyboard when the event was generated.
-     * 
+     *
      * @since 2.1
      */
     public static const int MOD4;
@@ -2105,7 +2105,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>Control</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.1
      */
     public static const int SCROLL_LINE = 1;
@@ -2115,7 +2115,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>Control</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.1
      */
     public static const int SCROLL_PAGE = 2;
@@ -2123,22 +2123,22 @@ public class DWT {
     /**
      * Accelerator constant used to differentiate a key code from a
      * unicode character.
-     * 
+     *
      * If this bit is set, then the key stroke
      * portion of an accelerator represents a key code.  If this bit
      * is not set, then the key stroke portion of an accelerator is
      * a unicode character.
-     * 
+     *
      * The following expression is false:
-     * 
+     *
      * <code>((DWT.MOD1 | DWT.MOD2 | 'T') & DWT.KEYCODE_BIT) !is 0</code>.
-     * 
+     *
      * The following expression is true:
-     * 
+     *
      * <code>((DWT.MOD3 | DWT.F2) & DWT.KEYCODE_BIT) !is 0</code>.
-     * 
+     *
      * (value is (1&lt;&lt;24))
-     * 
+     *
      * @since 2.1
      */
     public static const int KEYCODE_BIT = (1 << 24);
@@ -2146,11 +2146,11 @@ public class DWT {
     /**
      * Accelerator constant used to extract the key stroke portion of
      * an accelerator.
-     * 
+     *
      * The key stroke may be a key code or a unicode
      * value.  If the key stroke is a key code <code>KEYCODE_BIT</code>
      * will be set.
-     * 
+     *
      * @since 2.1
      */
     public static const int KEY_MASK = KEYCODE_BIT + 0xFFFF;
@@ -2284,7 +2284,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the F13 key
      * (value is (1&lt;&lt;24)+22).
-     * 
+     *
      * @since 3.0
      */
     public static const int F13 = KEYCODE_BIT + 22;
@@ -2292,7 +2292,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the F14 key
      * (value is (1&lt;&lt;24)+23).
-     * 
+     *
      * @since 3.0
      */
     public static const int F14 = KEYCODE_BIT + 23;
@@ -2300,7 +2300,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the F15 key
      * (value is (1&lt;&lt;24)+24).
-     * 
+     *
      * @since 3.0
      */
     public static const int F15 = KEYCODE_BIT + 24;
@@ -2308,7 +2308,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad multiply key (value is (1&lt;&lt;24)+42).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_MULTIPLY = KEYCODE_BIT + 42;
@@ -2316,7 +2316,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad add key (value is (1&lt;&lt;24)+43).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_ADD = KEYCODE_BIT + 43;
@@ -2324,7 +2324,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad subtract key (value is (1&lt;&lt;24)+45).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_SUBTRACT = KEYCODE_BIT + 45;
@@ -2332,7 +2332,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad decimal key (value is (1&lt;&lt;24)+46).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_DECIMAL = KEYCODE_BIT + 46;
@@ -2340,7 +2340,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad divide key (value is (1&lt;&lt;24)+47).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_DIVIDE = KEYCODE_BIT + 47;
@@ -2348,7 +2348,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad zero key (value is (1&lt;&lt;24)+48).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_0 = KEYCODE_BIT + 48;
@@ -2356,7 +2356,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad one key (value is (1&lt;&lt;24)+49).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_1 = KEYCODE_BIT + 49;
@@ -2364,7 +2364,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad two key (value is (1&lt;&lt;24)+50).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_2 = KEYCODE_BIT + 50;
@@ -2372,7 +2372,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad three key (value is (1&lt;&lt;24)+51).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_3 = KEYCODE_BIT + 51;
@@ -2380,7 +2380,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad four key (value is (1&lt;&lt;24)+52).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_4 = KEYCODE_BIT + 52;
@@ -2388,7 +2388,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad five key (value is (1&lt;&lt;24)+53).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_5 = KEYCODE_BIT + 53;
@@ -2396,7 +2396,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad six key (value is (1&lt;&lt;24)+54).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_6 = KEYCODE_BIT + 54;
@@ -2404,7 +2404,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad seven key (value is (1&lt;&lt;24)+55).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_7 = KEYCODE_BIT + 55;
@@ -2412,7 +2412,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad eight key (value is (1&lt;&lt;24)+56).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_8 = KEYCODE_BIT + 56;
@@ -2420,7 +2420,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad nine key (value is (1&lt;&lt;24)+57).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_9 = KEYCODE_BIT + 57;
@@ -2428,7 +2428,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad equal key (value is (1&lt;&lt;24)+61).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_EQUAL = KEYCODE_BIT + 61;
@@ -2436,7 +2436,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the numeric key
      * pad enter key (value is (1&lt;&lt;24)+80).
-     * 
+     *
      * @since 3.0
      */
     public static const int KEYPAD_CR = KEYCODE_BIT + 80;
@@ -2444,14 +2444,14 @@ public class DWT {
     /**
      * Keyboard event constant representing the help
      * key (value is (1&lt;&lt;24)+81).
-     * 
+     *
      * NOTE: The HELP key maps to the key labeled "help",
      * not "F1". If your keyboard does not have a HELP key,
      * you will never see this key press.  To listen for
      * help on a control, use DWT.Help.
-     * 
+     *
      * @since 3.0
-     * 
+     *
      * @see DWT#Help
      */
     public static const int HELP = KEYCODE_BIT + 81;
@@ -2459,7 +2459,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the caps
      * lock key (value is (1&lt;&lt;24)+82).
-     * 
+     *
      * @since 3.0
      */
     public static const int CAPS_LOCK = KEYCODE_BIT + 82;
@@ -2467,7 +2467,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the num
      * lock key (value is (1&lt;&lt;24)+83).
-     * 
+     *
      * @since 3.0
      */
     public static const int NUM_LOCK = KEYCODE_BIT + 83;
@@ -2475,7 +2475,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the scroll
      * lock key (value is (1&lt;&lt;24)+84).
-     * 
+     *
      * @since 3.0
      */
     public static const int SCROLL_LOCK = KEYCODE_BIT + 84;
@@ -2483,7 +2483,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the pause
      * key (value is (1&lt;&lt;24)+85).
-     * 
+     *
      * @since 3.0
      */
     public static const int PAUSE = KEYCODE_BIT + 85;
@@ -2491,7 +2491,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the break
      * key (value is (1&lt;&lt;24)+86).
-     * 
+     *
      * @since 3.0
      */
     public static const int BREAK = KEYCODE_BIT + 86;
@@ -2499,7 +2499,7 @@ public class DWT {
     /**
      * Keyboard event constant representing the print screen
      * key (value is (1&lt;&lt;24)+87).
-     * 
+     *
      * @since 3.0
      */
     public static const int PRINT_SCREEN = KEYCODE_BIT + 87;
@@ -2533,76 +2533,76 @@ public class DWT {
      * behavior (value is 1&lt;&lt;4).
      */
     public static const int ICON_WORKING = 1 << 4;
-    
+
     /**
-     * The style constant for "search" icon. This style constant is 
+     * The style constant for "search" icon. This style constant is
      * used with <code>Text</code> in combination with <code>DWT.SEARCH
      * </code> (value is 1&lt;&lt;9).
-     * <br>Note that this is a <em>HINT</em>. 
-     * 
+     * <br>Note that this is a <em>HINT</em>.
+     *
      * <p><b>Used By:</b><ul>
      * <li><code>Text</code></li>
      * </ul></p>
-     * 
+     *
      * @see #SEARCH
      * @see #ICON_CANCEL
-     * 
+     *
      * @since 3.5
      */
     public static const int ICON_SEARCH = 1 << 9;
-    
+
     /**
-     * The style constant for "cancel" icon. This style constant is 
+     * The style constant for "cancel" icon. This style constant is
      * used with <code>Text</code> in combination with <code>DWT.SEARCH
      * </code> (value is 1&lt;&lt;8).
-     * <br>Note that this is a <em>HINT</em>. 
-     * 
+     * <br>Note that this is a <em>HINT</em>.
+     *
      * <p><b>Used By:</b><ul>
      * <li><code>Text</code></li>
      * </ul></p>
-     * 
+     *
      * @see #SEARCH
      * @see #ICON_SEARCH
-     * 
+     *
      * @since 3.5
      */
     public static const int ICON_CANCEL = 1 << 8;
-    
-    
+
+
     /**
-     * The style constant for "search" icon. This style constant is 
+     * The style constant for "search" icon. This style constant is
      * used with <code>Text</code> in combination with <code>DWT.SEARCH
      * </code> (value is 1&lt;&lt;9).
-     * <br>Note that this is a <em>HINT</em>. 
-     * 
+     * <br>Note that this is a <em>HINT</em>.
+     *
      * <p><b>Used By:</b><ul>
      * <li><code>Text</code></li>
      * </ul></p>
-     * 
+     *
      * @see #SEARCH
      * @see #ICON_CANCEL
-     * 
+     *
      * @since 3.5
      */
     public static final int ICON_SEARCH = 1 << 9;
-    
+
     /**
-     * The style constant for "cancel" icon. This style constant is 
+     * The style constant for "cancel" icon. This style constant is
      * used with <code>Text</code> in combination with <code>DWT.SEARCH
      * </code> (value is 1&lt;&lt;8).
-     * <br>Note that this is a <em>HINT</em>. 
-     * 
+     * <br>Note that this is a <em>HINT</em>.
+     *
      * <p><b>Used By:</b><ul>
      * <li><code>Text</code></li>
      * </ul></p>
-     * 
+     *
      * @see #SEARCH
      * @see #ICON_SEARCH
-     * 
+     *
      * @since 3.5
      */
     public static final int ICON_CANCEL = 1 << 8;
-    
+
 
     /**
      * The <code>MessageBox</code> style constant for an OK button;
@@ -2629,7 +2629,7 @@ public class DWT {
      * The <code>MessageBox</code> style constant for a CANCEL button;
      * valid combinations are OK|CANCEL, YES|NO|CANCEL, RETRY|CANCEL
      * (value is 1&lt;&lt;8).
-     * 
+     *
      * <p><b>Used By:</b><ul>
      * <li><code>MessageBox</code></li>
      * </ul></p>
@@ -2915,160 +2915,160 @@ public class DWT {
     public static const int DRAW_MNEMONIC = 1 << 3;
 
     /**
-     * Selection constant indicating that a line delimiter should be 
+     * Selection constant indicating that a line delimiter should be
      * drawn (value is 1&lt;&lt;17).
-     * 
+     *
      * <p><b>Used By:</b><ul>
      * <li><code>TextLayout</code></li>
      * </ul></p>
      *
      * @see #FULL_SELECTION
      * @see #LAST_LINE_SELECTION
-     * 
+     *
      * @since 3.3
      */
     public static const int DELIMITER_SELECTION = 1 << 17;
 
     /**
      * Selection constant indicating that the last line is selected
-     * to the end and should be drawn using either a line delimiter 
+     * to the end and should be drawn using either a line delimiter
      * or full line selection (value is 1&lt;&lt;20).
-     * 
+     *
      * <p><b>Used By:</b><ul>
      * <li><code>TextLayout</code></li>
      * </ul></p>
-     * 
+     *
      * @see #DELIMITER_SELECTION
      * @see #FULL_SELECTION
-     * 
+     *
      * @since 3.3
      */
     public static const int LAST_LINE_SELECTION = 1 << 20;
 
-    /** 
+    /**
      * DWT error constant indicating that no error number was specified
      * (value is 1).
      */
     public static const int ERROR_UNSPECIFIED = 1;
 
-    /** 
+    /**
      * DWT error constant indicating that no more handles for an
      * operating system resource are available
      * (value is 2).
      */
     public static const int ERROR_NO_HANDLES = 2;
 
-    /** 
+    /**
      * DWT error constant indicating that no more callback resources are available
      * (value is 3).
      */
     public static const int ERROR_NO_MORE_CALLBACKS = 3;
 
-    /** 
+    /**
      * DWT error constant indicating that a null argument was passed in
-     * (value is 4). 
+     * (value is 4).
      */
     public static const int ERROR_NULL_ARGUMENT = 4;
 
-    /** 
+    /**
      * DWT error constant indicating that an invalid argument was passed in
      * (value is 5).
      */
     public static const int ERROR_INVALID_ARGUMENT = 5;
 
-    /** 
+    /**
      * DWT error constant indicating that a value was found to be
      * outside the allowable range
      * (value is 6).
      */
     public static const int ERROR_INVALID_RANGE = 6;
 
-    /** 
-     * DWT error constant indicating that a value which can not be 
+    /**
+     * DWT error constant indicating that a value which can not be
      * zero was found to be
      * (value is 7).
      */
     public static const int ERROR_CANNOT_BE_ZERO = 7;
 
-    /** 
+    /**
      * DWT error constant indicating that the underlying operating
      * system was unable to provide the value of an item
      * (value is 8).
      */
     public static const int ERROR_CANNOT_GET_ITEM = 8;
 
-    /** 
+    /**
      * DWT error constant indicating that the underlying operating
      * system was unable to provide the selection
      * (value is 9).
      */
     public static const int ERROR_CANNOT_GET_SELECTION = 9;
 
-    /** 
+    /**
      * DWT error constant indicating that the matrix is not invertible
      * (value is 10).
-     * 
+     *
      * @since 3.1
      */
     public static const int ERROR_CANNOT_INVERT_MATRIX = 10;
 
-    /** 
+    /**
      * DWT error constant indicating that the underlying operating
      * system was unable to provide the height of an item
      * (value is 11).
      */
     public static const int ERROR_CANNOT_GET_ITEM_HEIGHT = 11;
 
-    /** 
+    /**
      * DWT error constant indicating that the underlying operating
      * system was unable to provide the text of a widget
      * (value is 12).
      */
     public static const int ERROR_CANNOT_GET_TEXT = 12;
 
-    /** 
+    /**
      * DWT error constant indicating that the underlying operating
      * system was unable to set the text of a widget
      * (value is 13).
      */
     public static const int ERROR_CANNOT_SET_TEXT = 13;
 
-    /** 
+    /**
      * DWT error constant indicating that the underlying operating
      * system was unable to add an item
      * (value is 14).
      */
     public static const int ERROR_ITEM_NOT_ADDED = 14;
 
-    /** 
+    /**
      * DWT error constant indicating that the underlying operating
      * system was unable to remove an item
      * (value is 15).
      */
     public static const int ERROR_ITEM_NOT_REMOVED = 15;
 
-    /** 
+    /**
      * DWT error constant indicating that the graphics library
      * is not available
      * (value is 16).
      */
     public static const int ERROR_NO_GRAPHICS_LIBRARY = 16;
 
-    /** 
+    /**
      * DWT error constant indicating that a particular feature has
      * not been implemented on this platform
      * (value is 20).
      */
     public static const int ERROR_NOT_IMPLEMENTED = 20;
 
-    /** 
+    /**
      * DWT error constant indicating that a menu which needed
      * to have the drop down style had some other style instead
      * (value is 21).
      */
     public static const int ERROR_MENU_NOT_DROP_DOWN = 21;
 
-    /** 
+    /**
      * DWT error constant indicating that an attempt was made to
      * invoke an DWT operation which can only be executed by the
      * user-interface thread from some other thread
@@ -3076,99 +3076,99 @@ public class DWT {
      */
     public static const int ERROR_THREAD_INVALID_ACCESS = 22;
 
-    /** 
+    /**
      * DWT error constant indicating that an attempt was made to
      * invoke an DWT operation using a widget which had already
      * been disposed
-     * (value is 24). 
+     * (value is 24).
      */
     public static const int ERROR_WIDGET_DISPOSED = 24;
 
-    /** 
+    /**
      * DWT error constant indicating that a menu item which needed
      * to have the cascade style had some other style instead
      * (value is 27).
      */
     public static const int ERROR_MENUITEM_NOT_CASCADE = 27;
 
-    /** 
+    /**
      * DWT error constant indicating that the underlying operating
      * system was unable to set the selection of a widget
      * (value is 28).
      */
     public static const int ERROR_CANNOT_SET_SELECTION = 28;
 
-    /** 
+    /**
      * DWT error constant indicating that the underlying operating
      * system was unable to set the menu
      * (value is 29).
      */
     public static const int ERROR_CANNOT_SET_MENU = 29;
 
-    /** 
+    /**
      * DWT error constant indicating that the underlying operating
      * system was unable to set the enabled state
      * (value is 30).
      */
     public static const int ERROR_CANNOT_SET_ENABLED = 30;
 
-    /** 
+    /**
      * DWT error constant indicating that the underlying operating
      * system was unable to provide enabled/disabled state information
      * (value is 31).
      */
     public static const int ERROR_CANNOT_GET_ENABLED = 31;
 
-    /** 
+    /**
      * DWT error constant indicating that a provided widget can
      * not be used as a parent in the current operation
      * (value is 32).
      */
     public static const int ERROR_INVALID_PARENT = 32;
 
-    /** 
+    /**
      * DWT error constant indicating that a menu which needed
      * to have the menu bar style had some other style instead
      * (value is 33).
      */
     public static const int ERROR_MENU_NOT_BAR = 33;
 
-    /** 
+    /**
      * DWT error constant indicating that the underlying operating
      * system was unable to provide count information
      * (value is 36).
      */
     public static const int ERROR_CANNOT_GET_COUNT = 36;
 
-    /** 
+    /**
      * DWT error constant indicating that a menu which needed
      * to have the pop up menu style had some other style instead
      * (value is 37).
      */
     public static const int ERROR_MENU_NOT_POP_UP = 37;
 
-    /** 
+    /**
      * DWT error constant indicating that a graphics operation
      * was attempted with an image of an unsupported depth
      * (value is 38).
      */
     public static const int ERROR_UNSUPPORTED_DEPTH = 38;
 
-    /** 
+    /**
      * DWT error constant indicating that an input/output operation
      * failed during the execution of an DWT operation
      * (value is 39).
      */
     public static const int ERROR_IO = 39;
 
-    /** 
+    /**
      * DWT error constant indicating that a graphics operation
      * was attempted with an image having an invalid format
      * (value is 40).
      */
     public static const int ERROR_INVALID_IMAGE = 40;
 
-    /** 
+    /**
      * DWT error constant indicating that a graphics operation
      * was attempted with an image having a valid but unsupported
      * format
@@ -3176,20 +3176,20 @@ public class DWT {
      */
     public static const int ERROR_UNSUPPORTED_FORMAT = 42;
 
-    /** 
+    /**
      * DWT error constant indicating that an attempt was made
      * to subclass an DWT widget class without implementing the
      * <code>checkSubclass()</code> method
      * (value is 43).
-     * 
-     * For additional information see the comment in 
+     *
+     * For additional information see the comment in
      * <code>Widget.checkSubclass()</code>.
      *
      * @see dwt.widgets.Widget#checkSubclass
      */
     public static const int ERROR_INVALID_SUBCLASS = 43;
 
-    /** 
+    /**
      * DWT error constant indicating that an attempt was made to
      * invoke an DWT operation using a graphics object which had
      * already been disposed
@@ -3197,86 +3197,86 @@ public class DWT {
      */
     public static const int ERROR_GRAPHIC_DISPOSED = 44;
 
-    /** 
+    /**
      * DWT error constant indicating that an attempt was made to
      * invoke an DWT operation using a device which had already
      * been disposed
-     * (value is 45). 
+     * (value is 45).
      */
     public static const int ERROR_DEVICE_DISPOSED = 45;
 
-    /** 
+    /**
      * DWT error constant indicating that an exception happened
      * when executing a runnable
      * (value is 46).
      */
     public static const int ERROR_FAILED_EXEC = 46;
 
-    /** 
+    /**
      * DWT error constant indicating that an unsatisfied link
      * error occurred while attempting to load a library
      * (value is 47).
-     * 
+     *
      * @since 3.1
      */
     public static const int ERROR_FAILED_LOAD_LIBRARY = 47;
 
-    /** 
+    /**
      * DWT error constant indicating that a font is not valid
      * (value is 48).
-     * 
+     *
      * @since 3.1
      */
     public static const int ERROR_INVALID_FONT = 48;
 
-    /** 
+    /**
      * DWT error constant indicating that an attempt was made to
      * use an BrowserFunction object which had already been disposed
      * (value is 49).
-     * 
+     *
      * @since 3.5
      */
     public static const int ERROR_FUNCTION_DISPOSED = 49;
 
-    /** 
+    /**
      * DWT error constant indicating that an exception happened
      * when evaluating a javascript expression
      * (value is 50).
-     * 
+     *
      * @since 3.5
      */
     public static const int ERROR_FAILED_EVALUATE = 50;
 
-    /** 
+    /**
      * DWT error constant indicating that an invalid value was returned
      * (value is 51).
-     * 
+     *
      * @since 3.5
      */
     public static const int ERROR_INVALID_RETURN_VALUE = 51;
 
-    /** 
+    /**
      * DWT error constant indicating that an attempt was made to
      * use an BrowserFunction object which had already been disposed
      * (value is 49).
-     * 
+     *
      * @since 3.5
      */
     public static final int ERROR_FUNCTION_DISPOSED = 49;
 
-    /** 
+    /**
      * DWT error constant indicating that an exception happened
      * when evaluating a javascript expression
      * (value is 50).
-     * 
+     *
      * @since 3.5
      */
     public static final int ERROR_FAILED_EVALUATE = 50;
 
-    /** 
+    /**
      * DWT error constant indicating that an invalid value was returned
      * (value is 51).
-     * 
+     *
      * @since 3.5
      */
     public static final int ERROR_INVALID_RETURN_VALUE = 51;
@@ -3318,7 +3318,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>ProgressBar</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.4
      */
     public static const int ERROR = 1;
@@ -3328,7 +3328,7 @@ public class DWT {
      * <p><b>Used By:</b><ul>
      * <li><code>ProgressBar</code></li>
      * </ul></p>
-     * 
+     *
      * @since 3.4
      */
     public static const int PAUSED = 1 << 2;
@@ -3467,60 +3467,60 @@ public class DWT {
 
     /**
      * Line drawing style for flat end caps (value is 1).
-     * 
+     *
      * @see dwt.graphics.GC#setLineCap(int)
      * @see dwt.graphics.GC#getLineCap()
-     * 
+     *
      * @since 3.1
      */
     public static const int CAP_FLAT = 1;
 
     /**
      * Line drawing style for rounded end caps (value is 2).
-     * 
+     *
      * @see dwt.graphics.GC#setLineCap(int)
      * @see dwt.graphics.GC#getLineCap()
-     * 
+     *
      * @since 3.1
      */
     public static const int CAP_ROUND = 2;
 
     /**
      * Line drawing style for square end caps (value is 3).
-     * 
+     *
      * @see dwt.graphics.GC#setLineCap(int)
      * @see dwt.graphics.GC#getLineCap()
-     * 
+     *
      * @since 3.1
      */
     public static const int CAP_SQUARE = 3;
 
     /**
      * Line drawing style for miter joins (value is 1).
-     * 
+     *
      * @see dwt.graphics.GC#setLineJoin(int)
      * @see dwt.graphics.GC#getLineJoin()
-     * 
+     *
      * @since 3.1
      */
     public static const int JOIN_MITER = 1;
 
     /**
      * Line drawing  style for rounded joins (value is 2).
-     * 
+     *
      * @see dwt.graphics.GC#setLineJoin(int)
      * @see dwt.graphics.GC#getLineJoin()
-     * 
+     *
      * @since 3.1
      */
     public static const int JOIN_ROUND = 2;
 
     /**
      * Line drawing style for bevel joins (value is 3).
-     * 
+     *
      * @see dwt.graphics.GC#setLineJoin(int)
      * @see dwt.graphics.GC#getLineJoin()
-     * 
+     *
      * @since 3.1
      */
     public static const int JOIN_BEVEL = 3;
@@ -3552,59 +3552,59 @@ public class DWT {
 
     /**
      * Line drawing style for custom dashed lines (value is 6).
-     * 
+     *
      * @see dwt.graphics.GC#setLineDash(int[])
      * @see dwt.graphics.GC#getLineDash()
-     * 
+     *
      * @since 3.1
      */
     public static const int LINE_CUSTOM = 6;
 
     /**
      * Path constant that represents a "move to" operation (value is 1).
-     * 
+     *
      * @since 3.1
      */
     public static const int PATH_MOVE_TO = 1;
 
     /**
      * Path constant that represents a "line to" operation (value is 2).
-     * 
+     *
      * @since 3.1
      */
     public static const int PATH_LINE_TO = 2;
 
     /**
      * Path constant that represents a "quadratic curve to" operation (value is 3).
-     * 
+     *
      * @since 3.1
      */
     public static const int PATH_QUAD_TO = 3;
 
     /**
      * Path constant that represents a "cubic curve to" operation (value is 4).
-     * 
+     *
      * @since 3.1
      */
     public static const int PATH_CUBIC_TO = 4;
 
     /**
      * Path constant that represents a "close" operation (value is 5).
-     * 
+     *
      * @since 3.1
      */
     public static const int PATH_CLOSE = 5;
 
     /**
      * Even odd rule for filling operations (value is 1).
-     * 
+     *
      * @since 3.1
      */
     public static const int FILL_EVEN_ODD = 1;
 
     /**
      * Winding rule for filling operations (value is 2).
-     * 
+     *
      * @since 3.1
      */
     public static const int FILL_WINDING = 2;
@@ -3620,7 +3620,7 @@ public class DWT {
     public static const int IMAGE_BMP = 0;
 
     /**
-     * Image format constant indicating a run-length encoded 
+     * Image format constant indicating a run-length encoded
      * Windows BMP format image (value is 1).
      */
     public static const int IMAGE_BMP_RLE = 1;
@@ -3663,7 +3663,7 @@ public class DWT {
 
     /**
      * GIF image disposal method constants indicating that the
-     * disposal method is to do nothing; that is, to leave the 
+     * disposal method is to do nothing; that is, to leave the
      * previous image in place (value is 1).
      */
     public static const int DM_FILL_NONE = 0x1;
@@ -3709,10 +3709,10 @@ public class DWT {
     /**
      * The character movement type (value is 1&lt;&lt;0).
      * This constant is used to move a text offset over a character.
-     * 
+     *
      * @see dwt.graphics.TextLayout#getNextOffset(int, int)
      * @see dwt.graphics.TextLayout#getPreviousOffset(int, int)
-     * 
+     *
      * @since 3.0
      */
     public static const int MOVEMENT_CHAR = 1 << 0;
@@ -3720,13 +3720,13 @@ public class DWT {
     /**
      * The cluster movement type (value is 1&lt;&lt;1).
      * This constant is used to move a text offset over a cluster.
-     * A cluster groups one or more characters. A cluster is 
+     * A cluster groups one or more characters. A cluster is
      * undivisible, this means that a caret offset can not be placed in the
-     * middle of a cluster.  
-     * 
+     * middle of a cluster.
+     *
      * @see dwt.graphics.TextLayout#getNextOffset(int, int)
      * @see dwt.graphics.TextLayout#getPreviousOffset(int, int)
-     * 
+     *
      * @since 3.0
      */
     public static const int MOVEMENT_CLUSTER = 1 << 1;
@@ -3734,15 +3734,15 @@ public class DWT {
     /**
      * The word movement type (value is 1&lt;&lt;2).
      * This constant is used to move a text offset over a word.
-     * The behavior of this constant depends on the platform and on the 
-     * direction of the movement. For example, on Windows the stop is 
-     * always at the start of the word. On GTK and Mac the stop is at the end 
-     * of the word if the direction is next and at the start of the word if the 
+     * The behavior of this constant depends on the platform and on the
+     * direction of the movement. For example, on Windows the stop is
+     * always at the start of the word. On GTK and Mac the stop is at the end
+     * of the word if the direction is next and at the start of the word if the
      * direction is previous.
-     * 
+     *
      * @see dwt.graphics.TextLayout#getNextOffset(int, int)
      * @see dwt.graphics.TextLayout#getPreviousOffset(int, int)
-     * 
+     *
      * @since 3.0
      */
     public static const int MOVEMENT_WORD = 1 << 2;
@@ -3750,12 +3750,12 @@ public class DWT {
     /**
      * The word end movement type (value is 1&lt;&lt;3).
      * This constant is used to move a text offset to the next or previous
-     * word end. The behavior of this constant does not depend on the platform.  
-     * 
-     * 
+     * word end. The behavior of this constant does not depend on the platform.
+     *
+     *
      * @see dwt.graphics.TextLayout#getNextOffset(int, int)
      * @see dwt.graphics.TextLayout#getPreviousOffset(int, int)
-     * 
+     *
      * @since 3.3
      */
     public static const int MOVEMENT_WORD_END = 1 << 3;
@@ -3763,11 +3763,11 @@ public class DWT {
     /**
      * The word start movement type (value is 1&lt;&lt;4).
      * This constant is used to move a text offset to the next or previous
-     * word start. The behavior of this constant does not depend on the platform.  
-     * 
+     * word start. The behavior of this constant does not depend on the platform.
+     *
      * @see dwt.graphics.TextLayout#getNextOffset(int, int)
      * @see dwt.graphics.TextLayout#getPreviousOffset(int, int)
-     * 
+     *
      * @since 3.3
      */
     public static const int MOVEMENT_WORD_START = 1 << 4;
@@ -3868,10 +3868,10 @@ static String findErrorText (int code) {
 
 /**
  * Returns the NLS'ed message for the given argument.
- * 
+ *
  * @param key the key to look up
  * @return the message for the given key
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the key is null</li>
  * </ul>
@@ -3967,14 +3967,14 @@ public static void error (int code, Exception throwable) {
  * @see DWTError
  * @see DWTException
  * @see IllegalArgumentException
- * 
+ *
  * @since 3.0
  */
 public static void error (int code, Throwable throwable, String detail) {
 
     /*
      * This code prevents the creation of "chains" of DWTErrors and
-     * DWTExceptions which in turn contain other DWTErrors and 
+     * DWTExceptions which in turn contain other DWTErrors and
      * DWTExceptions as their throwable. This can occur when low level
      * code throws an exception past a point where a higher layer is
      * being "safe" and catching all exceptions. (Note that, this is
@@ -3982,7 +3982,7 @@ public static void error (int code, Throwable throwable, String detail) {
      *
      * On the theory that the low level code is closest to the
      * original problem, we simply re-throw the original exception here.
-     * 
+     *
      * NOTE: Exceptions thrown in syncExec and asyncExec must be
      * wrapped.
      */

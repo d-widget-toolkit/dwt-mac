@@ -17,15 +17,15 @@ import dwt.browser.WindowEvent;
 
 /**
  * This listener interface may be implemented in order to receive
- * a {@link WindowEvent} notification when a {@link Browser} is 
+ * a {@link WindowEvent} notification when a {@link Browser} is
  * about to be closed and when its host window should be closed
  * by the application.
- * 
+ *
  * @see Browser#addCloseWindowListener(CloseWindowListener)
  * @see Browser#removeCloseWindowListener(CloseWindowListener)
  * @see OpenWindowListener
  * @see VisibilityWindowListener
- * 
+ *
  * @since 3.0
  */
 public interface CloseWindowListener : DWTEventListener {
@@ -43,10 +43,10 @@ public interface CloseWindowListener : DWTEventListener {
  *
  * @param event the <code>WindowEvent</code> that specifies the <code>Browser</code>
  * that is going to be disposed
- * 
+ *
  * @see dwt.widgets.Shell#close()
- * 
+ *
  * @since 3.0
- */ 
+ */
 public void close(WindowEvent event);
 }

@@ -13,8 +13,8 @@ typedef nsresult function(nsIInputStream aInStream,
 
 const char[] NS_IINPUTSTREAM_IID_STR = "fa9c7f6c-61b3-11d4-9877-00c04fa0cf4a";
 
-const nsIID NS_IINPUTSTREAM_IID= 
-  {0xfa9c7f6c, 0x61b3, 0x11d4, 
+const nsIID NS_IINPUTSTREAM_IID=
+  {0xfa9c7f6c, 0x61b3, 0x11d4,
     [ 0x98, 0x77, 0x00, 0xc0, 0x4f, 0xa0, 0xcf, 0x4a ]};
 
 interface nsIInputStream : nsISupports {

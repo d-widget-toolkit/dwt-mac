@@ -125,11 +125,11 @@ public this (Composite parent) {
 
     controlListener = new class(this) Listener {
         ControlEditor ce;
-        
+
         this (ControlEditor ce) {
             this.ce = ce;
         }
-        
+
         public void handleEvent(Event e) {
             ce.layout ();
         }
@@ -140,11 +140,11 @@ public this (Composite parent) {
 
     scrollbarListener = new class(this) Listener {
         ControlEditor ce;
-        
+
         this (ControlEditor ce) {
             this.ce = ce;
         }
-        
+
         public void handleEvent(Event e) {
             ce.scroll (e);
         }

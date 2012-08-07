@@ -4,12 +4,12 @@ import dwt.internal.mozilla.Common;
 import dwt.internal.mozilla.nsID;
 import dwt.internal.mozilla.nsISupports;
 
-import dwt.internal.mozilla.nsIWebBrowser; 
+import dwt.internal.mozilla.nsIWebBrowser;
 
 const char[] NS_IWEBBROWSERCHROME_IID_STR = "ba434c60-9d52-11d3-afb0-00a024ffc08c";
 
-const nsIID NS_IWEBBROWSERCHROME_IID= 
-  {0xba434c60, 0x9d52, 0x11d3, 
+const nsIID NS_IWEBBROWSERCHROME_IID=
+  {0xba434c60, 0x9d52, 0x11d3,
     [ 0xaf, 0xb0, 0x00, 0xa0, 0x24, 0xff, 0xc0, 0x8c ]};
 
 interface nsIWebBrowserChrome : nsISupports {

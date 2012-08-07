@@ -23,7 +23,7 @@ import tango.util.Convert;
 /**
  * This event is sent when an event is generated in the CTabFolder.
  *
- * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a> 
+ * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
 public class CTabFolderEvent : TypedEvent {
     /**

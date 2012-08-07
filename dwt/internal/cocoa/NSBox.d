@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -37,7 +37,7 @@ enum {
 }
 
 public class NSBox : NSView {
-    
+
 public this () {
     super();
 }

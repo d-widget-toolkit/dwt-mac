@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -70,12 +70,12 @@ import dwt.widgets.TypedListener;
 public class Text : Scrollable {
 
     alias Scrollable.computeSize computeSize;
-    alias Scrollable.dragDetect dragDetect;    
+    alias Scrollable.dragDetect dragDetect;
     alias Scrollable.setBackground setBackground;
     alias Scrollable.setFont setFont;
     alias Scrollable.setForeground setForeground;
     alias Scrollable.translateTraversal translateTraversal;
-    
+
     int textLimit, tabs = 8;
     wchar echoCharacter = '\0';
     bool doubleClick, receivingFocus;
@@ -83,7 +83,7 @@ public class Text : Scrollable {
     NSRange* selectionRange;
     id targetSearch, targetCancel;
     int /*long*/ actionSearch, actionCancel;
-    
+
     /**
     * The maximum number of characters that can be entered
     * into a text widget.
@@ -118,7 +118,7 @@ public class Text : Scrollable {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -152,7 +152,7 @@ public class Text : Scrollable {
  */
 public this (Composite parent, int style) {
     textLimit = LIMIT;
-    
+
     super (parent, checkStyle (style));
     if ((style & DWT.SEARCH) !is 0) {
         /*
@@ -328,10 +328,10 @@ static int checkStyle (int style) {
     if ((style & DWT.SEARCH) !is 0) {
         style |= DWT.SINGLE | DWT.BORDER;
         style &= ~DWT.PASSWORD;
-        /* 
+        /*
         * NOTE: ICON_CANCEL has the same value as H_SCROLL and
         * ICON_SEARCH has the same value as V_SCROLL so they are
-        * cleared because DWT.SINGLE is set. 
+        * cleared because DWT.SINGLE is set.
         */
     }
     if ((style & DWT.SINGLE) !is 0 && (style & DWT.MULTI) !is 0) {
@@ -360,7 +360,7 @@ static int checkStyle (int style) {
 public void clearSelection () {
     checkWidget ();
     Point selection = getSelection ();
-    setSelection (selection.x); 
+    setSelection (selection.x);
 }
 
 public Point computeSize (int wHint, int hHint, bool changed) {
@@ -511,11 +511,11 @@ void createHandle () {
         scrollWidget.setHasHorizontalScroller ((style & DWT.HORIZONTAL) !is 0);
         scrollWidget.setAutoresizesSubviews (true);
         if ((style & DWT.BORDER) !is 0) scrollWidget.setBorderType (OS.NSBezelBorder);
-        
+
         NSTextView widget = cast(NSTextView) (new SWTTextView ()).alloc ();
         widget.init ();
         widget.setEditable ((style & DWT.READ_ONLY) is 0);
-        
+
         NSSize size = NSSize ();
         size.width = size.height = Float.MAX_VALUE;
         widget.setMaxSize (size);
@@ -616,7 +616,7 @@ Color defaultForeground () {
 
 void deregister() {
     super.deregister();
-    
+
     if ((style & DWT.SINGLE) !is 0) {
         display.removeWidget((cast(NSControl)view).cell());
     }
@@ -743,7 +743,7 @@ public int getCharCount () {
  * default action of the text widget when the user
  * double clicks.
  * </p>
- * 
+ *
  * @return whether or not double click is enabled
  *
  * @exception DWTException <ul>
@@ -763,14 +763,14 @@ public bool getDoubleClickEnabled () {
  * displayed when the user enters text or the
  * text is changed by the programmer.
  * </p>
- * 
+ *
  * @return the echo character
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #setEchoChar
  */
 public char getEchoChar () {
@@ -782,7 +782,7 @@ public char getEchoChar () {
  * Returns the editable state.
  *
  * @return whether or not the receiver is editable
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
@@ -869,7 +869,7 @@ public int getLineCount () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #DELIMITER
  */
 public String getLineDelimiter () {
@@ -908,12 +908,12 @@ public int getLineHeight () {
  * constants <code>DWT.LEFT_TO_RIGHT</code> or <code>DWT.RIGHT_TO_LEFT</code>.
  *
  * @return the orientation style
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 2.1.2
  */
 public int getOrientation () {
@@ -927,14 +927,14 @@ public int getOrientation () {
  * <p>
  * Typically this is used in conjunction with <code>DWT.SEARCH</code>.
  * </p>
- * 
+ *
  * @return the widget message
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.3
  */
 public String getMessage () {
@@ -951,7 +951,7 @@ int /*long*/ getPosition (int /*long*/ x, int /*long*/ y) {
         viewLocation.y = y;
         return widget.characterIndexForInsertionAtPoint(viewLocation);
     } else {
-        //TODO 
+        //TODO
         return 0;
     }
 }
@@ -1014,7 +1014,7 @@ public int getSelectionCount () {
  * Gets the selected text, or an empty string if there is no current selection.
  *
  * @return the selected text
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
@@ -1030,7 +1030,7 @@ public String getSelectionText () {
         NSTextView widget = cast(NSTextView) view;
         NSRange range = widget.selectedRange ();
         NSString str = widget.textStorage ().string ();
-        wchar[] buffer = new wchar [range.length];        
+        wchar[] buffer = new wchar [range.length];
         str.getCharacters (buffer.ptr, range);
         return buffer.fromString16();
     }
@@ -1129,19 +1129,19 @@ public String getText (int start, int end) {
 }
 
 /**
- * Returns the maximum number of characters that the receiver is capable of holding. 
+ * Returns the maximum number of characters that the receiver is capable of holding.
  * <p>
  * If this has not been changed by <code>setTextLimit()</code>,
  * it will be the constant <code>Text.LIMIT</code>.
  * </p>
- * 
+ *
  * @return the text limit
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #LIMIT
  */
 public int getTextLimit () {
@@ -1315,7 +1315,7 @@ public void paste () {
 
 void register() {
     super.register();
-    
+
     if ((style & DWT.SINGLE) !is 0) {
         display.addWidget((cast(NSControl)view).cell(), this);
     }
@@ -1499,7 +1499,7 @@ void updateBackground () {
  * Note: This operation is a hint and is not supported on
  * platforms that do not have this concept.
  * </p>
- * 
+ *
  * @param doubleClick the new double click flag
  *
  * @exception DWTException <ul>
@@ -1617,12 +1617,12 @@ void setForeground (Carbon.CGFloat [] color) {
  * </p>
  *
  * @param orientation new orientation style
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 2.1.2
  */
 public void setOrientation (int orientation) {
@@ -1635,7 +1635,7 @@ public void setOrientation (int orientation) {
  * <p>
  * Typically this is used in conjunction with <code>DWT.SEARCH</code>.
  * </p>
- * 
+ *
  * @param message the new message
  *
  * @exception IllegalArgumentException <ul>
@@ -1645,7 +1645,7 @@ public void setOrientation (int orientation) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.3
  */
 public void setMessage (String message) {
@@ -1863,7 +1863,7 @@ public void setText (String stri) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #LIMIT
  */
 public void setTextLimit (int limit) {
@@ -1940,7 +1940,7 @@ bool shouldChangeTextInRange_replacementString(int /*long*/ id, int /*long*/ sel
  * in the receiver, this method simply returns.  Otherwise,
  * lines are scrolled until the selection is visible.
  * </p>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>

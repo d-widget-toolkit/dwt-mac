@@ -10,8 +10,8 @@ import dwt.internal.mozilla.nsIInputStream;
 
 const char[] NS_ISTREAMLISTENER_IID_STR = "1a637020-1482-11d3-9333-00104ba0fd40";
 
-const nsIID NS_ISTREAMLISTENER_IID= 
-  {0x1a637020, 0x1482, 0x11d3, 
+const nsIID NS_ISTREAMLISTENER_IID=
+  {0x1a637020, 0x1482, 0x11d3,
     [ 0x93, 0x33, 0x00, 0x10, 0x4b, 0xa0, 0xfd, 0x40 ]};
 
 interface nsIStreamListener : nsIRequestObserver {

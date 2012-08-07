@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -34,15 +34,15 @@ import dwt.internal.DWTEventObject;
  * @see AccessibleTextListener
  * @see AccessibleTextAdapter
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.0
  */
 public class AccessibleTextEvent : DWTEventObject {
     public int childID;             // IN
     public int offset, length;      // OUT
-    
+
     static const long serialVersionUID = 3977019530868308275L;
-    
+
 /**
  * Constructs a new instance of this class.
  *

@@ -62,7 +62,7 @@ nsresult QueryInterface (nsID* riid, void** ppvObject) {
     return XPCOM.NS_ERROR_NO_INTERFACE;
 }
 
-extern(System)          
+extern(System)
 nsresult Release () {
     refCount--;
     /*
@@ -98,7 +98,7 @@ nsresult PromptForSaveToFile (nsIHelperAppLauncher_1_9 aLauncher, nsISupports aW
     FileDialog fileDialog = new FileDialog (shell, DWT.SAVE);
     fileDialog.setFileName (defaultFile);
     String[] tmp;
-    tmp ~= suggestedFileExtension; 
+    tmp ~= suggestedFileExtension;
     fileDialog.setFilterExtensions (tmp);
     String name = fileDialog.open ();
     shell.close ();
@@ -109,15 +109,15 @@ nsresult PromptForSaveToFile (nsIHelperAppLauncher_1_9 aLauncher, nsISupports aW
         return XPCOM.NS_ERROR_FAILURE;
     }
     scope auto path = new nsEmbedString (name.toString16());
-    
+
     nsILocalFile localFile;
     int rc = XPCOM.NS_NewLocalFile (cast(nsAString*)path, 1, &localFile);
     //path.dispose ();
     if (rc !is XPCOM.NS_OK) Mozilla.error (rc,__FILE__,__LINE__);
     if (localFile is null) Mozilla.error (XPCOM.NS_ERROR_NULL_POINTER,__FILE__,__LINE__);
     /* Our own nsIDownload has been registered during the Browser initialization. It will be invoked by Mozilla. */
-    *_retval = localFile; 
-    //XPCOM.memmove (_retval, result, C.PTR_SIZEOF);  
+    *_retval = localFile;
+    //XPCOM.memmove (_retval, result, C.PTR_SIZEOF);
     return XPCOM.NS_OK;
 }
 }

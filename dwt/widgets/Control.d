@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -57,18 +57,18 @@ import dwt.widgets.Widget;
  * IMPORTANT: This class is intended to be subclassed <em>only</em>
  * within the DWT implementation.
  * </p>
- * 
+ *
  * @see <a href="http://www.eclipse.org/swt/snippets/#control">Control snippets</a>
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: ControlExample</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  * @noextend This class is not intended to be subclassed by clients.
  */
 public abstract class Control : Widget , Drawable {
-    
+
     alias Widget.setInputState setInputState;
-    
+
     /**
-     * the handle to the OS resource 
+     * the handle to the OS resource
      * (Warning: This field is platform dependent)
      * <p>
      * <b>IMPORTANT:</b> This field is <em>not</em> part of the DWT
@@ -94,17 +94,17 @@ public abstract class Control : Widget , Drawable {
 
     final static int CLIPPING = 1 << 10;
     final static int VISIBLE_REGION = 1 << 12;
-    
+
     /**
      * Magic number comes from experience. There's no API for this value in Cocoa or Carbon.
      */
     static final int DEFAULT_DRAG_HYSTERESIS = 5;
-    
+
     /**
      * Magic number comes from experience. There's no API for this value in Cocoa or Carbon.
      */
     static final int DEFAULT_DRAG_HYSTERESIS = 5;
-    
+
 this () {
     /* Do nothing */
 }
@@ -115,7 +115,7 @@ this () {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -156,20 +156,20 @@ int /*long*/ accessibilityActionNames(int /*long*/ id, int /*long*/ sel) {
         NSArray returnValue = accessible.internal_accessibilityActionNames(ACC.CHILDID_SELF);
         if (returnValue !is null) return returnValue.id;
     }
-    
+
     return super.accessibilityActionNames(id, sel);
 }
 
 objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
-    
+
     if (id is view.id || (cast(NSControl)view && (cast(NSControl)view).cell() !is null && (cast(NSControl)view).cell().id is id)) {
         if (accessible !is null) {
-            
+
             // First, see if the accessible is going to define a set of attributes for the control.
             // If it does, return that.
             NSArray returnValue = accessible.internal_accessibilityAttributeNames(ACC.CHILDID_SELF);
             if (returnValue !is null) return returnValue.id;
-            
+
             // If not, see if it will override or augment the standard list.
             // Help, title, and description can be overridden.
             NSMutableArray extraAttributes = NSMutableArray.arrayWithCapacity(3);
@@ -189,14 +189,14 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
                 NSArray baseAttributes = new NSArray(superResult);
                 NSMutableArray mutableAttributes = NSMutableArray.arrayWithCapacity(baseAttributes.count() + 1);
                 mutableAttributes.addObjectsFromArray(baseAttributes);
-                
+
                 for (int i = 0; i < extraAttributes.count(); i++) {
                     cocoa.id currAttribute = extraAttributes.objectAtIndex(i);
                     if (!mutableAttributes.containsObject(currAttribute)) {
                         mutableAttributes.addObject(currAttribute);
                     }
                 }
-                
+
                 return mutableAttributes.id;
             }
         }
@@ -254,7 +254,7 @@ objc.id accessibilityAttributeValue(objc.id id, objc.SEL sel, objc.id arg0) {
     NSString attribute = new NSString(arg0);
     objc.id returnValue = null;
     cocoa.id returnObject = null;
-    
+
     if (accessible !is null) {
         returnObject = accessible.internal_accessibilityAttributeValue(attribute, ACC.CHILDID_SELF);
     }
@@ -266,20 +266,20 @@ objc.id accessibilityAttributeValue(objc.id id, objc.SEL sel, objc.id arg0) {
     } else {
         returnValue = returnObject.id;
     }
-    
+
     return returnValue;
 }
 
 objc.id accessibilityAttributeValue_forParameter(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
     NSString attribute = new NSString(arg0);
-    
+
     cocoa.id returnValue = null;
-    
+
     if (accessible !is null) {
         cocoa.id parameter = new cocoa.id(arg1);
         returnValue = accessible.internal_accessibilityAttributeValue_forParameter(attribute, parameter, ACC.CHILDID_SELF);
     }
-    
+
     // If we had an accessible and it didn't handle the attribute request, let the
     // superclass handle it.
     if (returnValue is null)
@@ -333,7 +333,7 @@ public void addControlListener(ControlListener listener) {
  *
  * @see DragDetectListener
  * @see #removeDragDetectListener
- * 
+ *
  * @since 3.3
  */
 public void addDragDetectListener (DragDetectListener listener) {
@@ -692,7 +692,7 @@ void calculateVisibleRegion (NSView view, int /*long*/ visibleRgn, bool clipChil
 void checkBackground () {
     Shell shell = getShell ();
     if (this is shell) return;
-    state &= ~PARENT_BACKGROUND;    
+    state &= ~PARENT_BACKGROUND;
     Composite composite = parent;
     do {
         int mode = composite.backgroundMode;
@@ -706,7 +706,7 @@ void checkBackground () {
                     control = control.parent;
                 } while (control !is composite);
             }
-            state |= PARENT_BACKGROUND;                 
+            state |= PARENT_BACKGROUND;
             return;
         }
         if (composite is shell) break;
@@ -733,8 +733,8 @@ void checkToolTip (Widget target) {
  * best be displayed at. The width hint and height hint arguments
  * allow the caller to ask a control questions such as "Given a particular
  * width, how high does the control need to be to show all of the contents?"
- * To indicate that the caller does not wish to constrain a particular 
- * dimension, the constant <code>DWT.DEFAULT</code> is passed for the hint. 
+ * To indicate that the caller does not wish to constrain a particular
+ * dimension, the constant <code>DWT.DEFAULT</code> is passed for the hint.
  * </p>
  *
  * @param wHint the width hint (can be <code>DWT.DEFAULT</code>)
@@ -764,14 +764,14 @@ public Point computeSize (int wHint, int hHint) {
  * best be displayed at. The width hint and height hint arguments
  * allow the caller to ask a control questions such as "Given a particular
  * width, how high does the control need to be to show all of the contents?"
- * To indicate that the caller does not wish to constrain a particular 
- * dimension, the constant <code>DWT.DEFAULT</code> is passed for the hint. 
+ * To indicate that the caller does not wish to constrain a particular
+ * dimension, the constant <code>DWT.DEFAULT</code> is passed for the hint.
  * </p><p>
  * If the changed flag is <code>true</code>, it indicates that the receiver's
  * <em>contents</em> have changed, therefore any caches that a layout manager
  * containing the control may have been keeping need to be flushed. When the
  * control is resized, the changed flag will be <code>false</code>, so layout
- * manager caches can be retained. 
+ * manager caches can be retained.
  * </p>
  *
  * @param wHint the width hint (can be <code>DWT.DEFAULT</code>)
@@ -920,7 +920,7 @@ void doCommandBySelector (objc.id id, objc.SEL sel, objc.SEL selector) {
         NSEvent nsEvent = NSApplication.sharedApplication ().currentEvent ();
         if (nsEvent !is null && nsEvent.type () is OS.NSKeyDown) {
             /*
-             * Feature in Cocoa.  Pressing Alt+UpArrow invokes doCommandBySelector 
+             * Feature in Cocoa.  Pressing Alt+UpArrow invokes doCommandBySelector
              * twice, with selectors moveBackward and moveToBeginningOfParagraph
              * (Alt+DownArrow behaves similarly).  In order to avoid sending
              * multiple events for these keys, do not send a KeyDown if we already sent one
@@ -946,7 +946,7 @@ void doCommandBySelector (objc.id id, objc.SEL sel, objc.SEL selector) {
  * Detects a drag and drop gesture.  This method is used
  * to detect a drag gesture when called from within a mouse
  * down listener.
- * 
+ *
  * <p>By default, a drag is detected when the gesture
  * occurs anywhere within the client area of a control.
  * Some controls, such as tables and trees, override this
@@ -959,7 +959,7 @@ void doCommandBySelector (objc.id id, objc.SEL sel, objc.SEL selector) {
  * </p>
  *
  * @param event the mouse down event
- * 
+ *
  * @return <code>true</code> if the gesture occurred, and <code>false</code> otherwise.
  *
  * @exception IllegalArgumentException <ul>
@@ -969,13 +969,13 @@ void doCommandBySelector (objc.id id, objc.SEL sel, objc.SEL selector) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- *  
+ *
  * @see DragDetectListener
  * @see #addDragDetectListener
- * 
+ *
  * @see #getDragDetect
  * @see #setDragDetect
- * 
+ *
  * @since 3.3
  */
 public bool dragDetect (Event event) {
@@ -988,7 +988,7 @@ public bool dragDetect (Event event) {
  * Detects a drag and drop gesture.  This method is used
  * to detect a drag gesture when called from within a mouse
  * down listener.
- * 
+ *
  * <p>By default, a drag is detected when the gesture
  * occurs anywhere within the client area of a control.
  * Some controls, such as tables and trees, override this
@@ -1001,7 +1001,7 @@ public bool dragDetect (Event event) {
  * </p>
  *
  * @param event the mouse down event
- * 
+ *
  * @return <code>true</code> if the gesture occurred, and <code>false</code> otherwise.
  *
  * @exception IllegalArgumentException <ul>
@@ -1011,13 +1011,13 @@ public bool dragDetect (Event event) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see DragDetectListener
  * @see #addDragDetectListener
- * 
+ *
  * @see #getDragDetect
  * @see #setDragDetect
- * 
+ *
  * @since 3.3
  */
 public bool dragDetect (MouseEvent event) {
@@ -1036,15 +1036,15 @@ bool dragDetect (int x, int y, bool filter, bool [] consume) {
     /**
      * Feature in Cocoa. Mouse drag events do not account for hysteresis.
      * As soon as the mouse drags a mouse dragged event is fired.  Fix is to
-     * check for another mouse drag event that is at least 5 pixels away 
-     * from the start of the drag. 
+     * check for another mouse drag event that is at least 5 pixels away
+     * from the start of the drag.
      */
     NSApplication application = NSApplication.sharedApplication();
     bool dragging = false;
     int /*long*/ eventType = OS.NSLeftMouseDown;
     float /*double*/ dragX = x;
     float /*double*/ dragY = y;
-    
+
     /**
      * To check for an actual drag we need to pull off mouse moved and mouse up events
      * to detect if the user dragged outside of a 10 x 10 box centered on the mouse down location.
@@ -1057,7 +1057,7 @@ bool dragDetect (int x, int y, bool filter, bool [] consume) {
         NSEvent event = application.nextEventMatchingMask((OS.NSLeftMouseUpMask | OS.NSLeftMouseDraggedMask),
                 NSDate.distantFuture(), OS.NSEventTrackingRunLoopMode, true);
         eventType = event.type();
-        
+
         if (eventType is OS.NSLeftMouseDragged) {
             dragEvents.addObject(event);
             NSPoint windowLoc = event.locationInWindow();
@@ -1074,7 +1074,7 @@ bool dragDetect (int x, int y, bool filter, bool [] consume) {
         }
     }
 
-    // Push back any events we took out of the queue so the control can receive them. 
+    // Push back any events we took out of the queue so the control can receive them.
     if (mouseUpEvent !is null) application.postEvent(mouseUpEvent, true);
 
     if (dragEvents.count() > 0) {
@@ -1122,10 +1122,10 @@ void enableWidget (bool enabled) {
 bool equals(float /*double*/ [] color1, float /*double*/ [] color2) {
     if (color1 is color2) return true;
     if (color1 is null) return color2 is null;
-    if (color2 is null) return color1 is null;  
+    if (color2 is null) return color1 is null;
     for (int i = 0; i < color1.length; i++) {
         if (color1 [i] !is color2 [i]) return false;
-    }   
+    }
     return true;
 }
 
@@ -1289,10 +1289,10 @@ public bool forceFocus () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see Accessible#addAccessibleListener
  * @see Accessible#addAccessibleControlListener
- * 
+ *
  * @since 2.0
  */
 public Accessible getAccessible () {
@@ -1335,7 +1335,7 @@ Color getBackgroundColor () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.2
  */
 public Image getBackgroundImage () {
@@ -1381,15 +1381,15 @@ public Rectangle getBounds () {
 
 /**
  * Returns <code>true</code> if the receiver is detecting
- * drag gestures, and  <code>false</code> otherwise. 
+ * drag gestures, and  <code>false</code> otherwise.
  *
  * @return the receiver's drag detect state
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.3
  */
 public bool getDragDetect () {
@@ -1414,7 +1414,7 @@ bool getDrawing () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.3
  */
 public Cursor getCursor () {
@@ -1434,7 +1434,7 @@ public Cursor getCursor () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #isEnabled
  */
 public bool getEnabled () {
@@ -1494,8 +1494,8 @@ public Object getLayoutData () {
 /**
  * Returns a point describing the receiver's location relative
  * to its parent (or its display if its parent is null), unless
- * the receiver is a shell. In this case, the point is 
- * relative to the display. 
+ * the receiver is a shell. In this case, the point is
+ * relative to the display.
  *
  * @return the receiver's location
  *
@@ -1536,9 +1536,9 @@ int getMininumHeight () {
 
 /**
  * Returns the receiver's monitor.
- * 
+ *
  * @return the receiver's monitor
- * 
+ *
  * @since 3.0
  */
 public dwt.widgets.Monitor.Monitor getMonitor () {
@@ -1568,7 +1568,7 @@ public dwt.widgets.Monitor.Monitor getMonitor () {
         if (index is -1 || distance < value) {
             index = i;
             value = distance;
-        } 
+        }
     }
     return monitors [index];
 }
@@ -1623,12 +1623,12 @@ NSBezierPath getPath(int /*long*/ region) {
     return path;
 }
 
-/** 
+/**
  * Returns the region that defines the shape of the control,
  * or null if the control has the default shape.
  *
  * @return the region that defines the shape of the shell (or null)
- *  
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
@@ -1787,7 +1787,7 @@ bool imeInComposition () {
     return super.insertText (id, sel, string);
 }
 
-/**  
+/**
  * Invokes platform specific functionality to allocate a new GC handle.
  * <p>
  * <b>IMPORTANT:</b> This method is <em>not</em> part of the public
@@ -1797,7 +1797,7 @@ bool imeInComposition () {
  * application code.
  * </p>
  *
- * @param data the platform specific GC data 
+ * @param data the platform specific GC data
  * @return the platform specific GC handle
  */
 public objc.id internal_new_GC (GCData data) {
@@ -1832,12 +1832,12 @@ public objc.id internal_new_GC (GCData data) {
         Control control = findBackgroundControl ();
         if (control is null) control = this;
         data.background = control.getBackgroundColor ().handle;
-        data.font = font !is null ? font : defaultFont ();      
+        data.font = font !is null ? font : defaultFont ();
     }
     return context;
 }
 
-/**  
+/**
  * Invokes platform specific functionality to dispose a GC handle.
  * <p>
  * <b>IMPORTANT:</b> This method is <em>not</em> part of the public
@@ -1848,7 +1848,7 @@ public objc.id internal_new_GC (GCData data) {
  * </p>
  *
  * @param hDC the platform specific GC handle
- * @param data the platform specific GC data 
+ * @param data the platform specific GC data
  */
 public void internal_dispose_GC (objc.id context, GCData data) {
     checkWidget ();
@@ -1908,7 +1908,7 @@ bool isDrawing () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #getEnabled
  */
 public bool isEnabled () {
@@ -2043,7 +2043,7 @@ void keyDown (objc.id id, objc.SEL sel, objc.id theEvent) {
     if (view.window ().firstResponder ().id is id) {
         Shell s = this.getShell();
         s.keyInputHappened = false;
-        bool textInput = OS.objc_msgSend (id, OS.sel_conformsToProtocol_, OS.objc_getProtocol ("NSTextInput")) !is null;       
+        bool textInput = OS.objc_msgSend (id, OS.sel_conformsToProtocol_, OS.objc_getProtocol ("NSTextInput")) !is null;
         if (!textInput) {
             // Not a text field, so send a key event here.
             NSEvent nsEvent = new NSEvent (theEvent);
@@ -2079,10 +2079,10 @@ void keyDown (objc.id id, objc.SEL sel, objc.id theEvent) {
                 if (!sendKeyEvent (nsEvent, DWT.KeyDown)) return;
                 if (consume [0]) return;
             }
-            
+
             return;
             }
-            
+
             return;
         }
     }
@@ -2141,7 +2141,7 @@ void scrollWheel (objc.id id, objc.SEL sel, objc.id theEvent) {
             }
         }
     }
-    super.scrollWheel(id, sel, theEvent); 
+    super.scrollWheel(id, sel, theEvent);
 }
 
 bool isEventView (int /*long*/ id) {
@@ -2184,7 +2184,7 @@ bool mouseEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent, int t
             display.checkEnterExit (display.findControl(true), nsEvent, false);
             break;
     }
-    sendMouseEvent (nsEvent, type, false);  
+    sendMouseEvent (nsEvent, type, false);
     if (type is DWT.MouseDown && nsEvent.clickCount() is 2) {
         sendMouseEvent (nsEvent, DWT.MouseDoubleClick, false);
     }
@@ -2256,13 +2256,13 @@ void moved () {
  * @param control the sibling control (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the control has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the control has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see Control#moveBelow
  * @see Composite#getChildren
  */
@@ -2285,13 +2285,13 @@ public void moveAbove (Control control) {
  * @param control the sibling control (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the control has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the control has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see Control#moveAbove
  * @see Composite#getChildren
  */
@@ -2334,11 +2334,11 @@ public void pack () {
  * <em>contents</em> have changed, therefore any caches that a layout manager
  * containing the control may have been keeping need to be flushed. When the
  * control is resized, the changed flag will be <code>false</code>, so layout
- * manager caches can be retained. 
+ * manager caches can be retained.
  * </p>
  *
  * @param changed whether or not the receiver's contents have changed
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
@@ -2357,7 +2357,7 @@ NSView paintView () {
 
 /**
  * Prints the receiver and all children.
- * 
+ *
  * @param gc the gc where the drawing occurs
  * @return <code>true</code> if the operation was successful and <code>false</code> otherwise
  *
@@ -2369,14 +2369,14 @@ NSView paintView () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.4
  */
 public bool print (GC gc) {
     checkWidget ();
     if (gc is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (gc.isDisposed ()) error (DWT.ERROR_INVALID_ARGUMENT);
-    
+
     gc.handle.saveGraphicsState();
     NSGraphicsContext.setCurrentContext(gc.handle);
     NSAffineTransform transform = NSAffineTransform.transform ();
@@ -2419,7 +2419,7 @@ void redraw (bool children) {
 
 /**
  * Causes the rectangular area of the receiver specified by
- * the arguments to be marked as needing to be redrawn. 
+ * the arguments to be marked as needing to be redrawn.
  * The next time a paint request is processed, that area of
  * the receiver will be painted, including the background.
  * If the <code>all</code> flag is <code>true</code>, any
@@ -2579,7 +2579,7 @@ public void removeControlListener (ControlListener listener) {
  *
  * @see DragDetectListener
  * @see #addDragDetectListener
- * 
+ *
  * @since 3.3
  */
 public void removeDragDetectListener(DragDetectListener listener) {
@@ -2822,12 +2822,12 @@ public void removePaintListener(PaintListener listener) {
 void removeRelation () {
     if (!isDescribedByLabel()) return;
     NSObject accessibleElement = focusView();
-    
+
     if (accessibleElement instanceof NSControl) {
         NSControl viewAsControl = (NSControl) accessibleElement;
         if (viewAsControl.cell() !is null) accessibleElement = viewAsControl.cell();
     }
-    
+
     accessibleElement.accessibilitySetOverrideValue(accessibleElement, OS.NSAccessibilityTitleUIElementAttribute);
 }
 
@@ -2956,7 +2956,7 @@ bool sendMouseEvent (NSEvent nsEvent, int type, bool send) {
     NSView view = eventView ();
     if (nsEvent is null || nsEvent.type() is OS.NSMouseMoved) {
         NSWindow window = view.window();
-        windowPoint = window.convertScreenToBase(NSEvent.mouseLocation()); 
+        windowPoint = window.convertScreenToBase(NSEvent.mouseLocation());
     } else {
         windowPoint = nsEvent.locationInWindow();
     }
@@ -2992,7 +2992,7 @@ void setBackground () {
  * @param color the new color (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -3023,14 +3023,14 @@ public void setBackground (Color color) {
  * @param image the new image (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
- *    <li>ERROR_INVALID_ARGUMENT - if the argument is not a bitmap</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument is not a bitmap</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.2
  */
 public void setBackgroundImage (Image image) {
@@ -3050,9 +3050,9 @@ void setBackground (NSColor nsColor) {
 
 /**
  * Sets the receiver's size and location to the rectangular
- * area specified by the arguments. The <code>x</code> and 
+ * area specified by the arguments. The <code>x</code> and
  * <code>y</code> arguments are relative to the receiver's
- * parent (or its display if its parent is null), unless 
+ * parent (or its display if its parent is null), unless
  * the receiver is a shell. In this case, the <code>x</code>
  * and <code>y</code> arguments are relative to the display.
  * <p>
@@ -3100,7 +3100,7 @@ void setBounds (int x, int y, int width, int height, bool move, bool resize) {
 
 /**
  * Sets the receiver's size and location to the rectangular
- * area specified by the argument. The <code>x</code> and 
+ * area specified by the argument. The <code>x</code> and
  * <code>y</code> fields of the rectangle are relative to
  * the receiver's parent (or its display if its parent is null).
  * <p>
@@ -3164,7 +3164,7 @@ void setClipRegion (float /*double*/ x, float /*double*/ y) {
  * @param cursor the new cursor (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -3198,13 +3198,13 @@ void setDefaultFont () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.3
  */
 public void setDragDetect (bool dragDetect) {
     checkWidget ();
     if (dragDetect) {
-        state |= DRAG_DETECT;   
+        state |= DRAG_DETECT;
     } else {
         state &= ~DRAG_DETECT;
     }
@@ -3245,7 +3245,7 @@ public void setEnabled (bool enabled) {
 }
 
 /**
- * Causes the receiver to have the <em>keyboard focus</em>, 
+ * Causes the receiver to have the <em>keyboard focus</em>,
  * such that all keyboard events will be delivered to it.  Focus
  * reassignment will respect applicable platform constraints.
  *
@@ -3272,7 +3272,7 @@ public bool setFocus () {
  * @param font the new font (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -3281,7 +3281,7 @@ public bool setFocus () {
  */
 public void setFont (Font font) {
     checkWidget();
-    if (font !is null) { 
+    if (font !is null) {
         if (font.isDisposed()) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     }
     this.font = font;
@@ -3304,7 +3304,7 @@ void setFont (NSFont font) {
  * @param color the new color (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -3356,9 +3356,9 @@ void setFrameSize (objc.id id, objc.SEL sel, NSSize size) {
 
 /**
  * Sets the layout data associated with the receiver to the argument.
- * 
+ *
  * @param layoutData the new layout data for the receiver.
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
@@ -3372,9 +3372,9 @@ public void setLayoutData (Object layoutData) {
 /**
  * Sets the receiver's location to the point specified by
  * the arguments which are relative to the receiver's
- * parent (or its display if its parent is null), unless 
- * the receiver is a shell. In this case, the point is 
- * relative to the display. 
+ * parent (or its display if its parent is null), unless
+ * the receiver is a shell. In this case, the point is
+ * relative to the display.
  *
  * @param x the new x coordinate for the receiver
  * @param y the new y coordinate for the receiver
@@ -3392,9 +3392,9 @@ public void setLocation (int x, int y) {
 /**
  * Sets the receiver's location to the point specified by
  * the arguments which are relative to the receiver's
- * parent (or its display if its parent is null), unless 
- * the receiver is a shell. In this case, the point is 
- * relative to the display. 
+ * parent (or its display if its parent is null), unless
+ * the receiver is a shell. In this case, the point is
+ * relative to the display.
  *
  * @param location the new location for the receiver
  *
@@ -3427,7 +3427,7 @@ public void setLocation (Point location) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_MENU_NOT_POP_UP - the menu is not a pop up menu</li>
  *    <li>ERROR_INVALID_PARENT - if the menu is not in the same widget tree</li>
- *    <li>ERROR_INVALID_ARGUMENT - if the menu has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the menu has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -3458,7 +3458,7 @@ public void setMenu (Menu menu) {
  *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
- *    <li>ERROR_NULL_ARGUMENT - if the parent is <code>null</code></li> 
+ *    <li>ERROR_NULL_ARGUMENT - if the parent is <code>null</code></li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -3506,7 +3506,7 @@ public bool setParent (Composite parent) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #redraw(int, int, int, int, bool)
  * @see #update()
  */
@@ -3534,7 +3534,7 @@ public void setRedraw (bool redraw) {
  *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_INVALID_ARGUMENT - if the region has been disposed</li>
- * </ul>  
+ * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
@@ -3630,17 +3630,17 @@ bool setTabItemFocus () {
 
 /**
  * Sets the receiver's tool tip text to the argument, which
- * may be null indicating that the default tool tip for the 
+ * may be null indicating that the default tool tip for the
  * control will be shown. For a control that has a default
  * tool tip, such as the Tree control on Windows, setting
  * the tool tip text to an empty string replaces the default,
  * causing no tool tip text to be shown.
  * <p>
  * The mnemonic indicator (character '&amp;') is not displayed in a tool tip.
- * To display a single '&amp;' in the tool tip, the character '&amp;' can be 
+ * To display a single '&amp;' in the tool tip, the character '&amp;' can be
  * escaped by doubling it in the string.
  * </p>
- * 
+ *
  * @param string the new tool tip text (or null)
  *
  * @exception DWTException <ul>
@@ -3656,7 +3656,7 @@ public void setToolTipText (String string) {
 
 /**
  * Marks the receiver as visible if the argument is <code>true</code>,
- * and marks it invisible otherwise. 
+ * and marks it invisible otherwise.
  * <p>
  * If one of the receiver's ancestors is not visible or some
  * other condition makes the receiver not visible, marking
@@ -3688,7 +3688,7 @@ public void setVisible (bool visible) {
         sendEvent (DWT.Show);
         if (isDisposed ()) return;
     }
-    
+
     /*
     * Feature in the Macintosh.  If the receiver has focus, hiding
     * the receiver causes no control to have focus.  Also, the focus
@@ -3768,7 +3768,7 @@ void setZOrder (Control sibling, bool above) {
     parent.contentView().addSubview(view, above ? OS.NSWindowAbove : OS.NSWindowBelow, otherView);
     view.release();
     invalidateVisibleRegion();
-    
+
     /* determine the receiver's new index in the parent */
     if (sibling !is null) {
         if (above) {
@@ -3841,7 +3841,7 @@ String tooltipText () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 2.1
  */
 public Point toControl (int x, int y) {
@@ -3884,7 +3884,7 @@ public Point toControl (Point point) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 2.1
  */
 public Point toDisplay (int x, int y) {
@@ -3990,8 +3990,8 @@ bool traverseMnemonic (char key) {
 /**
  * Based on the argument, perform one of the expected platform
  * traversal action. The argument should be one of the constants:
- * <code>DWT.TRAVERSE_ESCAPE</code>, <code>DWT.TRAVERSE_RETURN</code>, 
- * <code>DWT.TRAVERSE_TAB_NEXT</code>, <code>DWT.TRAVERSE_TAB_PREVIOUS</code>, 
+ * <code>DWT.TRAVERSE_ESCAPE</code>, <code>DWT.TRAVERSE_RETURN</code>,
+ * <code>DWT.TRAVERSE_TAB_NEXT</code>, <code>DWT.TRAVERSE_TAB_PREVIOUS</code>,
  * <code>DWT.TRAVERSE_ARROW_NEXT</code> and <code>DWT.TRAVERSE_ARROW_PREVIOUS</code>.
  *
  * @param traversal the type of traversal
@@ -4022,7 +4022,7 @@ bool traverse (Event event) {
         case DWT.TRAVERSE_TAB_PREVIOUS:     return traverseGroup (false);
         case DWT.TRAVERSE_ARROW_NEXT:       return traverseItem (true);
         case DWT.TRAVERSE_ARROW_PREVIOUS:   return traverseItem (false);
-        case DWT.TRAVERSE_MNEMONIC:         return traverseMnemonic (event);    
+        case DWT.TRAVERSE_MNEMONIC:         return traverseMnemonic (event);
         case DWT.TRAVERSE_PAGE_NEXT:        return traversePage (true);
         case DWT.TRAVERSE_PAGE_PREVIOUS:    return traversePage (false);
             default:

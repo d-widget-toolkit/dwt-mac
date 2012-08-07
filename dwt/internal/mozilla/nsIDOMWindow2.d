@@ -7,8 +7,8 @@ import dwt.internal.mozilla.nsIDOMEventTarget;
 
 const char[] NS_IDOMWINDOW2_IID_STR = "65455132-b96a-40ec-adea-52fa22b1028c";
 
-const nsIID NS_IDOMWINDOW2_IID= 
-  {0x65455132, 0xb96a, 0x40ec, 
+const nsIID NS_IDOMWINDOW2_IID=
+  {0x65455132, 0xb96a, 0x40ec,
     [ 0xad, 0xea, 0x52, 0xfa, 0x22, 0xb1, 0x02, 0x8c ]};
 
 interface nsIDOMWindow2 : nsIDOMWindow {

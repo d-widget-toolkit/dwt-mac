@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -40,11 +40,11 @@ import dwt.dwthelper.utils;
  * @see AccessibleTextListener
  * @see AccessibleTextEvent
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.0
  */
 public abstract class AccessibleTextAdapter : AccessibleTextListener {
-    
+
     /**
      * Sent when an accessibility client requests the current character offset
      * of the text caret.

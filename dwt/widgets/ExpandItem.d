@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -36,10 +36,10 @@ import dwt.widgets.Item;
  * </p><p>
  * IMPORTANT: This class is <em>not</em> intended to be subclassed.
  * </p>
- * 
+ *
  * @see ExpandBar
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.2
  * @noextend This class is not intended to be subclassed by clients.
  */
@@ -52,14 +52,14 @@ public class ExpandItem : Item {
     static const int TEXT_INSET = 6;
     static const int BORDER = 1;
     static const int CHEVRON_SIZE = 24;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * and a style value describing its behavior and appearance.
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -91,7 +91,7 @@ public this (ExpandBar parent, int style) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -122,7 +122,7 @@ public this (ExpandBar parent, int style, int index) {
 
 static ExpandBar checkNull (ExpandBar control) {
     if (control is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
-    return control; 
+    return control;
 }
 
 public void dispose () {
@@ -230,9 +230,9 @@ public bool getExpanded() {
 }
 
 /**
- * Returns the height of the receiver's header 
+ * Returns the height of the receiver's header
  *
- * @return the height of the header 
+ * @return the height of the header
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -321,7 +321,7 @@ void setBounds (int x, int y, int width, int height, bool move, bool size) {
  * @param control the new control (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the control has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the control has been disposed</li>
  *    <li>ERROR_INVALID_PARENT - if the control is not in the same widget tree</li>
  * </ul>
  * @exception DWTException <ul>
@@ -377,7 +377,7 @@ public void setImage (Image image) {
 }
 
 /**
- * Sets the height of the receiver. This is height of the item when it is expanded, 
+ * Sets the height of the receiver. This is height of the item when it is expanded,
  * excluding the height of the header.
  *
  * @param height the new height

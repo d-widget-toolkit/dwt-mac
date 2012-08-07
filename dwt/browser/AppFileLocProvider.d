@@ -29,12 +29,12 @@ import dwt.internal.mozilla.nsISimpleEnumerator;
 import dwt.internal.mozilla.nsIDirectoryService;
 import dwt.internal.mozilla.nsStringAPI;
 
-class AppFileLocProvider : nsIDirectoryServiceProvider2 { 
+class AppFileLocProvider : nsIDirectoryServiceProvider2 {
     int refCount = 0;
     String mozillaPath, profilePath, componentsPath;
     String[] pluginDirs;
     bool isXULRunner;
-    
+
     static       String SEPARATOR_OS;
     static final String CHROME_DIR = "chrome"; //$NON-NLS-1$
     static final String COMPONENTS_DIR = "components"; //$NON-NLS-1$
@@ -64,7 +64,7 @@ extern(System)
 nsresult QueryInterface (nsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
 
-    if (*riid == nsISupports.IID) {    
+    if (*riid == nsISupports.IID) {
         *ppvObject = cast(void*)cast(nsISupports)this;
         AddRef ();
         return XPCOM.NS_OK;
@@ -79,7 +79,7 @@ nsresult QueryInterface (nsID* riid, void** ppvObject) {
         AddRef ();
         return XPCOM.NS_OK;
     }
-    
+
     *ppvObject = null;
     return XPCOM.NS_ERROR_NO_INTERFACE;
 }
@@ -156,7 +156,7 @@ nsresult GetFiles (char* prop, nsISimpleEnumerator* _retval) {
                 if (rc !is XPCOM.NS_OK) Mozilla.error (rc);
                 if (localFile is null) Mozilla.error (XPCOM.NS_ERROR_NULL_POINTER);
                 //rc = localFile.QueryInterface (&nsIFile.IID, cast(void**)&file); TODO
-                rc = localFile.QueryInterface (&NS_IFILE_IID, cast(void**)&file); 
+                rc = localFile.QueryInterface (&NS_IFILE_IID, cast(void**)&file);
                 if (rc !is XPCOM.NS_OK) Mozilla.error (rc);
                 if (file is null) Mozilla.error (XPCOM.NS_ERROR_NO_INTERFACE);
                 localFile.Release ();
@@ -177,8 +177,8 @@ nsresult GetFiles (char* prop, nsISimpleEnumerator* _retval) {
     }
 
     return XPCOM.NS_ERROR_FAILURE;
-}   
-    
+}
+
 /* nsIDirectoryServiceProvider implementation */
 extern(System)
 nsresult GetFile(char* prop, PRBool* persistent, nsIFile* _retval) {
@@ -223,10 +223,10 @@ nsresult GetFile(char* prop, PRBool* persistent, nsIFile* _retval) {
         * < 1.7.  Unfortunately this property is queried early enough in the
         * Browser creation process that the Mozilla version being used is not
         * yet determined.  However it is known if XULRunner is being used or not.
-        * 
+        *
         * For now answer a value for this property iff XULRunner is the GRE.
         * If the range of Mozilla versions supported by the Browser is changed
-        * in the future to be >= 1.7 then this value can always be answered.  
+        * in the future to be >= 1.7 then this value can always be answered.
         */
         if (isXULRunner) propertyValue = profilePath;
     }
@@ -239,10 +239,10 @@ nsresult GetFile(char* prop, PRBool* persistent, nsIFile* _retval) {
         int rc = XPCOM.NS_NewLocalFile (cast(nsAString*)pathString, 1, &localFile);
         if (rc !is XPCOM.NS_OK) Mozilla.error (rc);
         if (localFile is null) Mozilla.error (XPCOM.NS_ERROR_NULL_POINTER);
-        
+
         nsIFile file;
 
-        rc = localFile.QueryInterface (&nsIFile.IID, cast(void**)&file); 
+        rc = localFile.QueryInterface (&nsIFile.IID, cast(void**)&file);
         if (rc !is XPCOM.NS_OK) Mozilla.error (rc);
         if (file is null) Mozilla.error (XPCOM.NS_ERROR_NO_INTERFACE);
 
@@ -252,5 +252,5 @@ nsresult GetFile(char* prop, PRBool* persistent, nsIFile* _retval) {
     }
 
     return XPCOM.NS_ERROR_FAILURE;
-}       
+}
 }

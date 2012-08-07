@@ -23,14 +23,14 @@ import dwt.custom.BidiSegmentEvent;
 public interface BidiSegmentListener : DWTEventListener {
 
 /**
- * This method is called when a line needs to be reordered for 
- * measuring or rendering in a bidi locale. 
+ * This method is called when a line needs to be reordered for
+ * measuring or rendering in a bidi locale.
  * <p>
  * The following event fields are used:<ul>
  * <li>event.lineOffset line start offset (input)</li>
  * <li>event.lineText line text (input)</li>
- * <li>event.segments text segments that should be reordered 
- *  separately. (output)</li> 
+ * <li>event.segments text segments that should be reordered
+ *  separately. (output)</li>
  * </ul>
  *
  * @param event the given event

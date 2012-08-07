@@ -143,11 +143,11 @@ public final class RowLayout : Layout {
      * or centered horizontally in each cell for vertical layouts.
      *
      * The default value is false.
-     * 
+     *
      * @since 3.4
      */
     public bool center = false;
-    
+
     /**
      * justify specifies whether the controls in a row should be
      * fully justified, with any extra space placed between the controls.

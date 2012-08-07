@@ -24,13 +24,13 @@ import dwt.events.*;
  * {@link StatusTextListener}'s when the status text is changed.
  * The status text is typically displayed in the status bar of
  * a browser application.
- * 
+ *
  * @since 3.0
  */
 public class StatusTextEvent : TypedEvent {
     /** status text */
     public String text;
-    
+
     static final long serialVersionUID = 3258407348371600439L;
 
 /**
@@ -51,8 +51,8 @@ public this(Widget widget) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} {text = {}}", 
-        super.toString[1 .. $-2], text );  
+    return Format( "{} {text = {}}",
+        super.toString[1 .. $-2], text );
 }
 
 }

@@ -38,7 +38,7 @@ nsrefcnt AddRef () {
 extern(System)
 nsresult QueryInterface (nsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
-    
+
     if (*riid == nsISupports.IID) {
         *ppvObject = cast(void*)cast(nsISupports)this;
         AddRef ();
@@ -49,7 +49,7 @@ nsresult QueryInterface (nsID* riid, void** ppvObject) {
         AddRef ();
         return XPCOM.NS_OK;
     }
-    
+
     *ppvObject = null;
     return XPCOM.NS_ERROR_NO_INTERFACE;
 }
@@ -64,8 +64,8 @@ nsrefcnt Release () {
 /* nsIFactory */
 
 extern(System)
-nsresult CreateInstance (nsISupports aOuter, nsID* iid, void** result) { 
-        if (result is null) 
+nsresult CreateInstance (nsISupports aOuter, nsID* iid, void** result) {
+        if (result is null)
             return XPCOM.NS_ERROR_INVALID_ARG;
         auto helperAppLauncherDialog = new HelperAppLauncherDialog;
         nsresult rv = helperAppLauncherDialog.QueryInterface( iid, result );
@@ -73,7 +73,7 @@ nsresult CreateInstance (nsISupports aOuter, nsID* iid, void** result) {
             *result = null;
             delete helperAppLauncherDialog;
         } else {
-            if (result is null) 
+            if (result is null)
                 return XPCOM.NS_ERROR_INVALID_ARG;
             auto helperAppLauncherDialog19 = new HelperAppLauncherDialog_1_9;
             rv = helperAppLauncherDialog19.QueryInterface( iid, result );

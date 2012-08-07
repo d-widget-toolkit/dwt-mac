@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -32,7 +32,7 @@ import dwt.widgets.Display;
  * will be filled in. The contents of the fields which are not used
  * by the event are unspecified.
  * </p>
- * 
+ *
  * @see Listener
  * @see dwt.events.TypedEvent
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: ControlExample, Listeners</a>
@@ -40,19 +40,19 @@ import dwt.widgets.Display;
  */
 
 public class Event {
-    
+
     /**
      * the display where the event occurred
-     * 
-     * @since 2.0 
-     */ 
+     *
+     * @since 2.0
+     */
     public Display display;
-        
+
     /**
      * the widget that issued the event
      */
     public Widget widget;
-    
+
     /**
      * the type of event, as defined by the event type constants
      * in class <code>DWT</code>
@@ -60,27 +60,27 @@ public class Event {
      * @see dwt.DWT
      */
     public int type;
-    
+
     /**
      * the event specific detail field, as defined by the detail constants
      * in class <code>DWT</code>
-     * 
+     *
      * @see dwt.DWT
      */
     public int detail;
-    
+
     /**
      * the item that the event occurred in (can be null)
      */
     public Widget item;
-    
+
     /**
      * the index of the item where the event occurred
-     * 
+     *
      * @since 3.2
      */
     public int index;
-    
+
     /**
      * the graphics context to use when painting
      * that is configured to use the colors, font and
@@ -88,7 +88,7 @@ public class Event {
      * only during the paint and must not be disposed
      */
     public GC gc;
-    
+
     /**
      * depending on the event type, the x offset of the bounding
      * rectangle of the region that requires painting or the
@@ -96,7 +96,7 @@ public class Event {
      * time the mouse button was pressed or released
      */
     public int x;
-    
+
     /**
      * depending on the event type, the y offset of the bounding
      * rectangle of the  region that requires painting or the
@@ -104,15 +104,15 @@ public class Event {
      * time the mouse button was pressed or released
      */
     public int y;
-    
+
     /**
-     * the width of the bounding rectangle of the 
+     * the width of the bounding rectangle of the
      * region that requires painting
      */
     public int width;
-    
+
     /**
-     * the height of the bounding rectangle of the 
+     * the height of the bounding rectangle of the
      * region that requires painting
      */
     public int height;
@@ -124,23 +124,23 @@ public class Event {
      * scroll using the mouse wheel
      */
     public int count;
-    
+
     /**
      * the time that the event occurred.
-     * 
+     *
      * NOTE: This field is an unsigned integer and should
      * be AND'ed with 0xFFFFFFFFL so that it can be treated
      * as a signed long.
-     */ 
+     */
     public int time;
-    
+
     /**
      * the button that was pressed or released; 1 for the
      * first button, 2 for the second button, and 3 for the
      * third button, etc.
-     */ 
+     */
     public int button;
-    
+
     /**
      * depending on the event, the character represented by the key
      * that was typed.  This is the final character that results
@@ -151,7 +151,7 @@ public class Event {
      * resulting character will not be correct.
      */
     public wchar character = '\0';
-    
+
     /**
      * depending on the event, the key code of the key that was typed,
      * as defined by the key code constants in class <code>DWT</code>.
@@ -160,26 +160,26 @@ public class Event {
      * example, typing Ctrl+M or Enter both result in the character '\r'
      * but the keyCode field will also contain '\r' when Enter was typed
      * and 'm' when Ctrl+M was typed.
-     * 
+     *
      * @see dwt.DWT
      */
     public int keyCode;
-    
+
     /**
      * depending on the event, the state of the keyboard modifier
      * keys and mouse masks at the time the event was generated.
-     * 
+     *
      * @see dwt.DWT
      */
     public int stateMask;
-    
+
     /**
      * depending on the event, the range of text being modified.
-     * Setting these fields only has effect during ImeComposition 
+     * Setting these fields only has effect during ImeComposition
      * events.
      */
     public int start, end;
-    
+
     /**
      * depending on the event, the new text that will be inserted.
      * Setting this field will change the text that is about to
@@ -193,15 +193,15 @@ public class Event {
      * operation.
      */
     public bool doit = true;
-    
+
     /**
      * a field for application use
      */
     public Object data;
-    
+
 /**
  * Gets the bounds.
- * 
+ *
  * @return a rectangle that is the bounds.
  */
 public Rectangle getBounds () {
@@ -210,7 +210,7 @@ public Rectangle getBounds () {
 
 /**
  * Sets the bounds.
- * 
+ *
  * @param rect the new rectangle
  */
 public void setBounds (Rectangle rect) {

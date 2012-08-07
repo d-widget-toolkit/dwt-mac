@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -23,20 +23,20 @@ import dwt.graphics.*;
  * @see Display
  * @see <a href="http://www.eclipse.org/swt/snippets/#monitor">Monitor snippets</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.0
  */
 public final class Monitor {
     int /*long*/ handle;
     int x, y, width, height;
     int clientX, clientY, clientWidth, clientHeight;
-    
+
 /**
  * Prevents uninitialized instances from being created outside the package.
  */
-this () {    
+this () {
 }
-    
+
 /**
  * Compares the argument to the receiver, and returns true
  * if they represent the <em>same</em> object using a class
@@ -53,7 +53,7 @@ public int opEquals (Object object) {
     dwt.widgets.Monitor.Monitor monitor = cast(dwt.widgets.Monitor.Monitor) object;
     return handle is monitor.handle;
 }
-    
+
 alias opEquals equals;
 
 /**
@@ -62,24 +62,24 @@ alias opEquals equals;
  * origin can be negative.
  *
  * @return the receiver's bounding rectangle
- */ 
+ */
 public Rectangle getBounds () {
     return new Rectangle (x, y, width, height);
 }
-    
+
 /**
  * Returns a rectangle which describes the area of the
  * receiver which is capable of displaying data.
- * 
+ *
  * @return the client area
  */
 public Rectangle getClientArea () {
     return new Rectangle (clientX, clientY, clientWidth, clientHeight);
 }
-    
+
 /**
- * Returns an integer hash code for the receiver. Any two 
- * objects that return <code>true</code> when passed to 
+ * Returns an integer hash code for the receiver. Any two
+ * objects that return <code>true</code> when passed to
  * <code>equals</code> must return the same value for this
  * method.
  *
@@ -92,5 +92,5 @@ public hash_t toHash () {
 }
 
 alias toHash hashCode;
-    
+
 }

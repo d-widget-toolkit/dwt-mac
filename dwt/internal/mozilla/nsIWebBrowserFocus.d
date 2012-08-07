@@ -3,13 +3,13 @@ module dwt.internal.mozilla.nsIWebBrowserFocus;
 import dwt.internal.mozilla.Common;
 import dwt.internal.mozilla.nsID;
 import dwt.internal.mozilla.nsISupports;
-import dwt.internal.mozilla.nsIDOMWindow; 
+import dwt.internal.mozilla.nsIDOMWindow;
 import dwt.internal.mozilla.nsIDOMElement;
 
 const char[] NS_IWEBBROWSERFOCUS_IID_STR = "9c5d3c58-1dd1-11b2-a1c9-f3699284657a";
 
-const nsIID NS_IWEBBROWSERFOCUS_IID= 
-  {0x9c5d3c58, 0x1dd1, 0x11b2, 
+const nsIID NS_IWEBBROWSERFOCUS_IID=
+  {0x9c5d3c58, 0x1dd1, 0x11b2,
     [ 0xa1, 0xc9, 0xf3, 0x69, 0x92, 0x84, 0x65, 0x7a ]};
 
 interface nsIWebBrowserFocus : nsISupports {

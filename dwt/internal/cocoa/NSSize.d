@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *    Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -21,8 +21,8 @@ public struct NSSize {
     public CGFloat width = 0.0;
     public CGFloat height = 0.0;
     //public static final int sizeof = OS.NSSize_sizeof();
-    
+
     public String toString() {
-        return Format("NSSize{" , width , "," , height , "}"); 
+        return Format("NSSize{" , width , "," , height , "}");
     }
 }

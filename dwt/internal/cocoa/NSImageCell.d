@@ -3,7 +3,7 @@
  * Authors: Jacob Carlborg
  * Version: Initial created: Nov 28, 2008
  * License: $(LINK2 http://opensource.org/licenses/bsd-license.php, BSD Style)
- * 
+ *
  */
 module dwt.internal.cocoa.NSImageCell;
 
@@ -18,4 +18,4 @@ enum NSImageAlignment
     NSImageAlignBottomLeft,
     NSImageAlignBottomRight,
     NSImageAlignRight
-} 
+}

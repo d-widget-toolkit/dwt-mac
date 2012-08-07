@@ -54,7 +54,7 @@ nsrefcnt AddRef () {
 extern(System)
 nsresult QueryInterface (nsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
- 
+
     if (*riid == nsISupports.IID) {
         *ppvObject = cast(void*)cast(nsISupports)this;
         AddRef ();
@@ -91,16 +91,16 @@ Browser getBrowser (nsIDOMWindow aDOMWindow) {
     auto rc = XPCOM.NS_GetServiceManager (&serviceManager);
     if (rc !is XPCOM.NS_OK) Mozilla.error (rc);
     if (serviceManager is null) Mozilla.error (XPCOM.NS_NOINTERFACE);
-    
+
     //nsIServiceManager serviceManager = new nsIServiceManager (result[0]);
     //result[0] = 0;
     //byte[] aContractID = MozillaDelegate.wcsToMbcs (null, XPCOM.NS_WINDOWWATCHER_CONTRACTID, true);
     nsIWindowWatcher windowWatcher;
     rc = serviceManager.GetServiceByContractID (XPCOM.NS_WINDOWWATCHER_CONTRACTID.ptr, &nsIWindowWatcher.IID, cast(void**)&windowWatcher);
     if (rc !is XPCOM.NS_OK) Mozilla.error(rc);
-    if (windowWatcher is null) Mozilla.error (XPCOM.NS_NOINTERFACE);       
+    if (windowWatcher is null) Mozilla.error (XPCOM.NS_NOINTERFACE);
     serviceManager.Release ();
-    
+
     //nsIWindowWatcher windowWatcher = new nsIWindowWatcher (result[0]);
     //result[0] = 0;
     /* the chrome will only be answered for the top-level nsIDOMWindow */
@@ -114,27 +114,27 @@ Browser getBrowser (nsIDOMWindow aDOMWindow) {
     nsIWebBrowserChrome webBrowserChrome;
     rc = windowWatcher.GetChromeForWindow (top, &webBrowserChrome);
     if (rc !is XPCOM.NS_OK) Mozilla.error (rc);
-    if (webBrowserChrome is null) Mozilla.error (XPCOM.NS_NOINTERFACE);       
-    windowWatcher.Release ();   
-    
+    if (webBrowserChrome is null) Mozilla.error (XPCOM.NS_NOINTERFACE);
+    windowWatcher.Release ();
+
     //nsIWebBrowserChrome webBrowserChrome = new nsIWebBrowserChrome (result[0]);
     //result[0] = 0;
     nsIEmbeddingSiteWindow embeddingSiteWindow;
     rc = webBrowserChrome.QueryInterface (&nsIEmbeddingSiteWindow.IID, cast(void**)&embeddingSiteWindow);
     if (rc !is XPCOM.NS_OK) Mozilla.error (rc);
-    if (embeddingSiteWindow is null) Mozilla.error (XPCOM.NS_NOINTERFACE);       
+    if (embeddingSiteWindow is null) Mozilla.error (XPCOM.NS_NOINTERFACE);
     webBrowserChrome.Release ();
-    
+
     //nsIEmbeddingSiteWindow embeddingSiteWindow = new nsIEmbeddingSiteWindow (result[0]);
     //result[0] = 0;
-    
+
     void* result;
     rc = embeddingSiteWindow.GetSiteWindow (&result);
     if (rc !is XPCOM.NS_OK) Mozilla.error (rc);
-    if (result is null) Mozilla.error (XPCOM.NS_NOINTERFACE);       
+    if (result is null) Mozilla.error (XPCOM.NS_NOINTERFACE);
     embeddingSiteWindow.Release ();
-    
-    return Mozilla.findBrowser (result); 
+
+    return Mozilla.findBrowser (result);
 }
 
 String getLabel (int buttonFlag, int index, PRUnichar* buttonTitle) {
@@ -163,7 +163,7 @@ String getLabel (int buttonFlag, int index, PRUnichar* buttonTitle) {
 extern(System)
 nsresult Alert (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText) {
     Browser browser = getBrowser (aParent);
-    
+
     int span = XPCOM.strlen_PRUnichar (aDialogTitle);
     //char[] dest = new char[length];
     //XPCOM.memmove (dest, aDialogTitle, length * 2);
@@ -174,7 +174,7 @@ nsresult Alert (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText)
     //XPCOM.memmove (dest, aText, length * 2);
     String textLabel = Utf.toString (aText[0 .. span]);
 
-    Shell shell = browser is null ? new Shell () : browser.getShell (); 
+    Shell shell = browser is null ? new Shell () : browser.getShell ();
     MessageBox messageBox = new MessageBox (shell, DWT.OK | DWT.ICON_WARNING);
     messageBox.setText (titleLabel);
     messageBox.setMessage (textLabel);
@@ -185,7 +185,7 @@ nsresult Alert (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText)
 extern(System)
 nsresult AlertCheck (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText, PRUnichar* aCheckMsg, PRBool* aCheckState) {
     Browser browser = getBrowser (aParent);
-    
+
     int span = XPCOM.strlen_PRUnichar (aDialogTitle);
     //char[] dest = new char[length];
     //XPCOM.memmove (dest, aDialogTitle, length * 2);
@@ -218,7 +218,7 @@ nsresult AsyncPromptAuth(nsIDOMWindow aParent, nsIChannel aChannel, nsIAuthPromp
 extern(System)
 nsresult Confirm (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText, PRBool* _retval) {
     Browser browser = getBrowser (aParent);
-    
+
     int span = XPCOM.strlen_PRUnichar (aDialogTitle);
     //char[] dest = new char[length];
     //XPCOM.memmove (dest, aDialogTitle, length * 2);
@@ -247,7 +247,7 @@ nsresult ConfirmCheck (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar*
 extern(System)
 nsresult ConfirmEx (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText, PRUint32 aButtonFlags, PRUnichar* aButton0Title, PRUnichar* aButton1Title, PRUnichar* aButton2Title, PRUnichar* aCheckMsg, PRBool* aCheckState, PRInt32* _retval) {
     Browser browser = getBrowser (aParent);
-    
+
     int span = XPCOM.strlen_PRUnichar (aDialogTitle);
     //char[] dest = new char[length];
     //XPCOM.memmove (dest, aDialogTitle, length * 2);
@@ -257,7 +257,7 @@ nsresult ConfirmEx (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aT
     //dest = new char[length];
     //XPCOM.memmove (dest, aText, length * 2);
     String textLabel = Utf.toString (aText[0 .. span]);
-    
+
     String checkLabel = null;
     if (aCheckMsg !is null) {
         span = XPCOM.strlen_PRUnichar (aCheckMsg);
@@ -265,18 +265,18 @@ nsresult ConfirmEx (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aT
         //XPCOM.memmove (dest, aCheckMsg, length * 2);
         checkLabel = Utf.toString (aCheckMsg[0 .. span]);
     }
-    
+
     String button0Label = getLabel (aButtonFlags, nsIPromptService.BUTTON_POS_0, aButton0Title);
     String button1Label = getLabel (aButtonFlags, nsIPromptService.BUTTON_POS_1, aButton1Title);
     String button2Label = getLabel (aButtonFlags, nsIPromptService.BUTTON_POS_2, aButton2Title);
-    
+
     int defaultIndex = 0;
     if ((aButtonFlags & nsIPromptService.BUTTON_POS_1_DEFAULT) !is 0) {
         defaultIndex = 1;
     } else if ((aButtonFlags & nsIPromptService.BUTTON_POS_2_DEFAULT) !is 0) {
         defaultIndex = 2;
     }
-    
+
     Shell shell = browser is null ? new Shell () : browser.getShell ();
     PromptDialog dialog = new PromptDialog (shell);
     int check, result;
@@ -301,12 +301,12 @@ nsresult Prompt (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText
         //XPCOM.memmove (dest, aDialogTitle, length * 2);
         titleLabel = Utf.toString (aDialogTitle[0 .. span]);
     }
-    
+
     span = XPCOM.strlen_PRUnichar (aText);
     //dest = new char[length];
     //XPCOM.memmove (dest, aText, length * 2);
     textLabel = Utf.toString (aText[0 .. span]);
-    
+
     //int /*long*/[] valueAddr = new int /*long*/[1];
     //XPCOM.memmove (valueAddr, aValue, C.PTR_SIZEOF);
     auto valueAddr = aValue;
@@ -316,7 +316,7 @@ nsresult Prompt (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText
         //XPCOM.memmove (dest, valueAddr[0], length * 2);
         valueLabel = Utf.toString ((valueAddr[0])[0 .. span]);
     }
-    
+
     if (aCheckMsg !is null) {
         span = XPCOM.strlen_PRUnichar (aCheckMsg);
         if (span > 0) {
@@ -333,7 +333,7 @@ nsresult Prompt (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText
     dialog.prompt (titleLabel, textLabel, checkLabel, /*ref*/valueLabel,/*ref*/ check,/*ref*/ result);
     *_retval = result;
     if (result is 1) {
-        /* 
+        /*
         * User selected OK. User name and password are returned as PRUnichar values. Any default
         * value that we override must be freed using the nsIMemory service.
         */
@@ -348,7 +348,7 @@ nsresult Prompt (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText
                 //byte[] aContractID = MozillaDelegate.wcsToMbcs (null, XPCOM.NS_MEMORY_CONTRACTID, true);
                 rc = serviceManager.GetServiceByContractID (XPCOM.NS_MEMORY_CONTRACTID.ptr, &nsIMemory.IID, cast(void**)&memory);
             if (rc !is XPCOM.NS_OK) DWT.error (rc);
-                if (memory is null) DWT.error (XPCOM.NS_NOINTERFACE);      
+                if (memory is null) DWT.error (XPCOM.NS_NOINTERFACE);
             serviceManager.Release ();
 
                 //nsIMemory memory = new nsIMemory (result2[0]);
@@ -503,7 +503,7 @@ nsresult PromptAuth(nsIDOMWindow aParent, nsIChannel aChannel, PRUint32 level, n
         rc = authInfo.SetUsername(cast(nsAString*)string1);
         if (rc !is XPCOM.NS_OK) DWT.error (rc);
         //string.dispose ();
-        
+
         scope auto string2 = new nsEmbedString (toString16(passLabel));
         rc = authInfo.SetPassword(cast(nsAString*)string2);
         if (rc !is XPCOM.NS_OK) DWT.error (rc);
@@ -561,7 +561,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
         //titleLabel = DWT.getMessage ("SWT_Authentication_Required");    //$NON-NLS-1$
         titleLabel = "Authentication Required";
         }
-        
+
     //span = XPCOM.strlen_PRUnichar (aText);
     //dest = new char[length];
     //XPCOM.memmove (dest, aText, length * 2);
@@ -574,7 +574,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
             //span = XPCOM.strlen_PRUnichar (userAddr[0]);
             //dest = new char[length];
             //XPCOM.memmove (dest, userAddr[0], length * 2);
-            userLabel = Utf.toString(fromString16z(*aUsername));       
+            userLabel = Utf.toString(fromString16z(*aUsername));
         }
 
     //int /*long*/[] passAddr = new int /*long*/[1];
@@ -584,9 +584,9 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
             //span = XPCOM.strlen_PRUnichar (passAddr[0]);
             //dest = new char[length];
             //XPCOM.memmove (dest, passAddr[0], length * 2);
-            passLabel = Utf.toString(fromString16z(*aPassword));       
+            passLabel = Utf.toString(fromString16z(*aPassword));
         }
-        
+
     if (aCheckMsg !is null) {
         //span = XPCOM.strlen_PRUnichar (aCheckMsg);
         //if (span > 0) {
@@ -595,13 +595,13 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
         checkLabel = Utf.toString (fromString16z(aCheckMsg));
         //}
         }
-    
+
         Shell shell = browser is null ? new Shell () : browser.getShell ();
         PromptDialog dialog = new PromptDialog (shell);
     int check, result;
     if (aCheckState !is null) check = *aCheckState;   /* PRBool */
     dialog.promptUsernameAndPassword (titleLabel, textLabel, checkLabel, /*ref*/ userLabel, /*ref*/ passLabel, check, result);
-    
+
     *_retval = result; /* PRBool */
     if (result is 1) {
             /* User selected OK */
@@ -612,7 +612,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
     }
 
     if (user !is null) {
-        /* 
+        /*
         * User name and password are returned as PRUnichar values. Any default
         * value that we override must be freed using the nsIMemory service.
         */
@@ -624,7 +624,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
             *aUsername = toString16z(Utf.toString16(userLabel));
             //XPCOM.memmove (aUsername, new int /*long*/[] {ptr}, C.PTR_SIZEOF);
             nsIServiceManager serviceManager;
-            
+
         int /*long*/[] result = new int /*long*/[1];
         int rc = XPCOM.NS_GetServiceManager (result);
         if (rc !is XPCOM.NS_OK) DWT.error (rc);
@@ -636,7 +636,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
                 nsIMemory memory;
                 rc = serviceManager.GetServiceByContractID (XPCOM.NS_MEMORY_CONTRACTID.ptr, &nsIMemory.IID, cast(void**)&memory);
         if (rc !is XPCOM.NS_OK) DWT.error (rc);
-                if (memory is null) DWT.error (XPCOM.NS_NOINTERFACE);       
+                if (memory is null) DWT.error (XPCOM.NS_NOINTERFACE);
         serviceManager.Release ();
 
         //nsIMemory memory = new nsIMemory (result[0]);

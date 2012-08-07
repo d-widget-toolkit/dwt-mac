@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -34,7 +34,7 @@ import dwt.widgets.Listener;
 import dwt.widgets.TypedListener;
 
 /**
- * This class is the abstract superclass of all user interface objects.  
+ * This class is the abstract superclass of all user interface objects.
  * Widgets are created, disposed and issue notification to listeners
  * when events occur which affect them.
  * <dl>
@@ -81,7 +81,7 @@ public abstract class Widget {
     static const int IGNORE_WHEEL     = 1 << 9;
     static const int PARENT_BACKGROUND = 1 << 10;
     static const int THEME_BACKGROUND = 1 << 11;
-    
+
     /* A layout was requested on this widget */
     static const int LAYOUT_NEEDED  = 1<<12;
 
@@ -93,7 +93,7 @@ public abstract class Widget {
 
     /* More global state flags */
     static const int RELEASED = 1<<15;
-    static const int DISPOSE_SENT = 1<<16;  
+    static const int DISPOSE_SENT = 1<<16;
     static const int FOREIGN_HANDLE = 1<<17;
     static const int DRAG_DETECT = 1<<18;
 
@@ -116,7 +116,7 @@ this () {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -436,14 +436,14 @@ void checkParent (Widget parent) {
 /**
  * Checks that this class can be subclassed.
  * <p>
- * The DWT class library is intended to be subclassed 
- * only at specific, controlled points (most notably, 
+ * The DWT class library is intended to be subclassed
+ * only at specific, controlled points (most notably,
  * <code>Composite</code> and <code>Canvas</code> when
  * implementing new widgets). This method enforces this
  * rule unless it is overridden.
  * </p><p>
  * <em>IMPORTANT:</em> By providing an implementation of this
- * method that allows a subclass of a class which does not 
+ * method that allows a subclass of a class which does not
  * normally allow subclassing to be created, the implementer
  * agrees to be fully responsible for the fact that any such
  * subclass will likely fail between DWT releases and will be
@@ -474,7 +474,7 @@ protected void checkSubclass () {
  * widget implementors to enforce the standard DWT invariants.
  * <p>
  * Currently, it is an error to invoke any method (other than
- * <code>isDisposed()</code>) on a widget that has had its 
+ * <code>isDisposed()</code>) on a widget that has had its
  * <code>dispose()</code> method called. It is also an error
  * to call widget methods from any thread that is different
  * from the thread that created the widget.
@@ -534,7 +534,7 @@ void createWidget () {
     createHandle ();
     register ();
 }
-    
+
 void deregister () {
 }
 
@@ -617,7 +617,7 @@ void drawRect (objc.id id, objc.SEL sel, NSRect rect) {
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
     OS.objc_msgSendSuper(super_struct, sel, rect);
     if (!isDisposed()) {
-        /* 
+        /*
         * Feature in Cocoa. There are widgets that draw outside of the UI thread,
         * such as the progress bar and default button.  The fix is to draw the
         * widget but not send paint events.
@@ -695,7 +695,7 @@ int fixMnemonic (char [] buffer) {
  * Returns the application defined widget data associated
  * with the receiver, or null if it has not been set. The
  * <em>widget data</em> is a single, unnamed field that is
- * stored with every widget. 
+ * stored with every widget.
  * <p>
  * Applications may put arbitrary objects in this field. If
  * the object stored in the widget data needs to be notified
@@ -781,8 +781,8 @@ bool getDrawing () {
 }
 
 /**
- * Returns an array of listeners who will be notified when an event 
- * of the given type occurs. The event type is one of the event constants 
+ * Returns an array of listeners who will be notified when an event
+ * of the given type occurs. The event type is one of the event constants
  * defined in class <code>DWT</code>.
  *
  * @param eventType the type of event to listen for
@@ -798,7 +798,7 @@ bool getDrawing () {
  * @see #addListener(int, Listener)
  * @see #removeListener(int, Listener)
  * @see #notifyListeners
- * 
+ *
  * @since 3.4
  */
 public Listener[] getListeners (int eventType) {
@@ -850,7 +850,7 @@ bool hasMarkedText (objc.id id, objc.SEL sel) {
 void helpRequested(objc.id id, objc.SEL sel, objc.id theEvent) {
 }
 
-void highlightSelectionInClipRect(objc.id id, objc.SEL sel, objc.id rect) {   
+void highlightSelectionInClipRect(objc.id id, objc.SEL sel, objc.id rect) {
 }
 
 objc.id hitTest (objc.id id, objc.SEL sel, NSPoint point) {
@@ -1124,7 +1124,7 @@ bool outlineView_writeItems_toPasteboard(objc.id id, objc.SEL sel, objc.id arg0,
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see DWT
  * @see #addListener
  * @see #getListeners(int)
@@ -1351,7 +1351,7 @@ bool sendKeyEvent (NSEvent nsEvent, int type) {
 bool sendKeyEvent (int type, Event event) {
     sendEvent (type, event);
     // widget could be disposed at this point
-    
+
     /*
     * It is possible (but unlikely), that application
     * code could have disposed the widget in the key
@@ -1381,7 +1381,7 @@ void sendVerticalSelection () {
  * Sets the application defined widget data associated
  * with the receiver to be the argument. The <em>widget
  * data</em> is a single, unnamed field that is stored
- * with every widget. 
+ * with every widget.
  * <p>
  * Applications may put arbitrary objects in this field. If
  * the object stored in the widget data needs to be notified
@@ -1396,7 +1396,7 @@ void sendVerticalSelection () {
  *    <li>ERROR_WIDGET_DISPOSED - when the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - when called from the wrong thread</li>
  * </ul>
- * 
+ *
  * @see #getData()
  */
 public void setData (Object data) {
@@ -1573,7 +1573,7 @@ bool setInputState (Event event, NSEvent nsEvent, int type) {
             if (event.keyCode is DWT.COMMAND) event.stateMask |= DWT.COMMAND;
             break;
         default:
-    }       
+    }
     return true;
 }
 
@@ -1607,16 +1607,16 @@ bool setKeyState (Event event, int type, NSEvent nsEvent) {
                 ubyte* uchrPtr = null;
                 TISInputSourceRef currentKbd = OS.TISCopyCurrentKeyboardInputSource();
                 CFDataRef uchrCFData = cast(CFDataRef) OS.TISGetInputSourceProperty(currentKbd, OS.kTISPropertyUnicodeKeyLayoutData);
-                
+
                 if (uchrCFData !is null) {
                     // If the keyboard changed since the last keystroke clear the dead key state.
                     if (uchrCFData !is display.currentKeyboardUCHRdata) display.deadKeyState[0] = 0;
                     uchrPtr = OS.CFDataGetBytePtr(uchrCFData);
-                    
+
                     if (uchrPtr !is null && OS.CFDataGetLength(uchrCFData) > 0) {
                         CGEventRef cgEvent = nsEvent.CGEvent();
                         long keyboardType = OS.CGEventGetIntegerValueField(cgEvent, OS.kCGKeyboardEventKeyboardType);
-                        
+
                         UniCharCount maxStringLength = 256;
                         wchar [] output = new wchar [maxStringLength];
                         UniCharCount [] actualStringLength = new UniCharCount [1];
@@ -1634,10 +1634,10 @@ bool setKeyState (Event event, int type, NSEvent nsEvent) {
                     NSString unmodifiedChars = nsEvent.charactersIgnoringModifiers ().lowercaseString();
                     if (unmodifiedChars.length() > 0) event.keyCode = cast(char)unmodifiedChars.characterAtIndex(0);
                 }
-                
+
                 if (currentKbd !is null) OS.CFRelease(currentKbd);
                 }
-                
+
                 if (currentKbd !is 0) OS.CFRelease(currentKbd);
             }
     }
@@ -1778,7 +1778,7 @@ objc.id tableView_objectValueForTableColumn_row(objc.id id, objc.SEL sel, objc.i
     return null;
 }
 
-void tableView_setObjectValue_forTableColumn_row(objc.id id, objc.SEL sel, objc.id aTableView, objc.id anObject, objc.id aTableColumn, objc.id rowIndex) { 
+void tableView_setObjectValue_forTableColumn_row(objc.id id, objc.SEL sel, objc.id aTableView, objc.id anObject, objc.id aTableColumn, objc.id rowIndex) {
 }
 
 bool tableView_shouldEditTableColumn_row(objc.id id, objc.SEL sel, objc.id aTableView, objc.id aTableColumn, objc.id rowIndex) {
@@ -1874,7 +1874,7 @@ int /*long*/ view_stringForToolTip_point_userData (int /*long*/ id, int /*long*/
     return 0;
 }
 
-void viewDidMoveToWindow(int /*long*/ id, int /*long*/ sel) {   
+void viewDidMoveToWindow(int /*long*/ id, int /*long*/ sel) {
 }
 
 }
@@ -1890,7 +1890,7 @@ objc.id view_stringForToolTip_point_userData (objc.id id, objc.SEL sel, objc.id 
     return null;
 }
 
-void viewDidMoveToWindow(objc.id id, objc.SEL sel) {   
+void viewDidMoveToWindow(objc.id id, objc.SEL sel) {
 }
 
 void windowDidMove(objc.id id, objc.SEL sel, objc.id notification) {

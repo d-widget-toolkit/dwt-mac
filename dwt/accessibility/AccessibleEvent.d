@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -31,7 +31,7 @@ import dwt.dwthelper.utils;
  * @see AccessibleListener
  * @see AccessibleAdapter
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 2.0
  */
 public class AccessibleEvent : DWTEventObject {
@@ -42,7 +42,7 @@ public class AccessibleEvent : DWTEventObject {
      * or a 0-based integer representing a specific child of the control.
      */
     public int childID;
-    
+
     /**
      * The value of this field must be set in the accessible listener
      * method before returning.

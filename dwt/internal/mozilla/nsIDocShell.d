@@ -28,7 +28,7 @@ import dwt.internal.mozilla.nsStringAPI;
 
 const char[] NS_IDOCSHELL_IID_STR = "69e5de00-7b8b-11d3-af61-00a024ffc08c";
 
-const nsIID NS_IDOCSHELL_IID= 
+const nsIID NS_IDOCSHELL_IID=
   { 0x69e5de00, 0x7b8b, 0x11d3, [0xaf,0x61,0x00,0xa0,0x24,0xff,0xc0,0x8c] };
 interface nsIDocShell : nsISupports {
 
@@ -131,9 +131,9 @@ extern(System):
 
 const char[] NS_IDOCSHELL_1_8_IID_STR = "9f0c7461-b9a4-47f6-b88c-421dce1bce66";
 
-const nsIID NS_IDOCSHELL_1_8_IID= 
-    { 0x9f0c7461, 0xb9a4, 0x47f6, 
-       [ 0xb8,0x8c,0x42,0x1d,0xce,0x1b,0xce,0x66 ] }; 
+const nsIID NS_IDOCSHELL_1_8_IID=
+    { 0x9f0c7461, 0xb9a4, 0x47f6,
+       [ 0xb8,0x8c,0x42,0x1d,0xce,0x1b,0xce,0x66 ] };
 
 interface nsIDocShell_1_8 : nsIDocShell {
 
@@ -152,7 +152,7 @@ extern(System):
 
 const char[] NS_IDOCSHELL_1_9_IID_STR = "10ed386d-8598-408c-b571-e75ad18edeb0";
 
-const nsIID NS_IDOCSHELL_1_9_IID = 
+const nsIID NS_IDOCSHELL_1_9_IID =
     {0x10ed386d, 0x8598, 0x408c, [ 0xb5, 0x71, 0xe7, 0x5a, 0xd1, 0x8e, 0xde, 0xb0 ] };
 
 interface nsIDocShell_1_9 : nsIDocShell_1_8 {

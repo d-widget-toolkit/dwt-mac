@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Frank Benoit <benoit@tionex.de>
  *     Jacob Carlborg <jacob.carlborg@gmail.com>

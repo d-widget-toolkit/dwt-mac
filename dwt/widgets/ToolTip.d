@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -49,7 +49,7 @@ import dwt.widgets.Widget;
  * @see <a href="http://www.eclipse.org/swt/snippets/#tooltips">Tool Tips snippets</a>
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: ControlExample</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.2
  * @noextend This class is not intended to be subclassed by clients.
  */
@@ -64,21 +64,21 @@ public class ToolTip : Widget {
     Region region;
     Font boldFont;
     Runnable runnable;
-    
+
     static final int BORDER = 5;
     static final int PADDING = 5;
     static final int INSET = 4;
     static final int TIP_HEIGHT = 20;
     static final int IMAGE_SIZE = 16;
     static final int DELAY = 10000;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * and a style value describing its behavior and appearance.
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -107,7 +107,7 @@ public this (Shell parent, int style) {
     super (parent, checkStyle (style));
     this.parent = parent;
     this.autohide = true;
-    x = y = -1; 
+    x = y = -1;
     Display display = getDisplay ();
     tip = new Shell (parent, DWT.ON_TOP | DWT.NO_TRIM);
     Color background = display.getSystemColor (DWT.COLOR_INFO_BACKGROUND);
@@ -198,72 +198,72 @@ void configure () {
     if (dest.width >= x + size.x) {
         if (dest.height >= y + size.y + t) {
             polyline = [
-                        0, 5+t, 1, 5+t, 1, 3+t, 3, 1+t, 5, 1+t, 5, t, 
+                        0, 5+t, 1, 5+t, 1, 3+t, 3, 1+t, 5, 1+t, 5, t,
                         16, t, 16, 0, 35, t,
                         w-5, t, w-5, 1+t, w-3, 1+t, w-1, 3+t, w-1, 5+t, w, 5+t,
                         w, h-5+t, w-1, h-5+t, w-1, h-3+t, w-2, h-3+t, w-2, h-2+t, w-3, h-2+t, w-3, h-1+t, w-5, h-1+t, w-5, h+t,
-                        5, h+t, 5, h-1+t, 3, h-1+t, 3, h-2+t, 2, h-2+t, 2, h-3+t, 1, h-3+t, 1, h-5+t, 0, h-5+t, 
+                        5, h+t, 5, h-1+t, 3, h-1+t, 3, h-2+t, 2, h-2+t, 2, h-3+t, 1, h-3+t, 1, h-5+t, 0, h-5+t,
                         0, 5+t];
             borderPolygon = [
-                             0, 5+t, 1, 4+t, 1, 3+t, 3, 1+t,  4, 1+t, 5, t, 
+                             0, 5+t, 1, 4+t, 1, 3+t, 3, 1+t,  4, 1+t, 5, t,
                              16, t, 16, 1, 35, t,
                              w-6, 0+t, w-5, 1+t, w-4, 1+t, w-2, 3+t, w-2, 4+t, w-1, 5+t,
                              w-1, h-6+t, w-2, h-5+t, w-2, h-4+t, w-4, h-2+t, w-5, h-2+t, w-6, h-1+t,
-                             5, h-1+t, 4, h-2+t, 3, h-2+t, 1, h-4+t, 1, h-5+t, 0, h-6+t, 
+                             5, h-1+t, 4, h-2+t, 3, h-2+t, 1, h-4+t, 1, h-5+t, 0, h-6+t,
                              0, 5+t];
             tip.setLocation (Math.max (0, x - i), y);
         } else {
             polyline = [
-                        0, 5, 1, 5, 1, 3, 3, 1, 5, 1, 5, 0, 
+                        0, 5, 1, 5, 1, 3, 3, 1, 5, 1, 5, 0,
                         w-5, 0, w-5, 1, w-3, 1, w-1, 3, w-1, 5, w, 5,
                         w, h-5, w-1, h-5, w-1, h-3, w-2, h-3, w-2, h-2, w-3, h-2, w-3, h-1, w-5, h-1, w-5, h,
                         35, h, 16, h+t, 16, h,
-                        5, h, 5, h-1, 3, h-1, 3, h-2, 2, h-2, 2, h-3, 1, h-3, 1, h-5, 0, h-5, 
+                        5, h, 5, h-1, 3, h-1, 3, h-2, 2, h-2, 2, h-3, 1, h-3, 1, h-5, 0, h-5,
                         0, 5];
             borderPolygon = [
-                             0, 5, 1, 4, 1, 3, 3, 1,  4, 1, 5, 0, 
+                             0, 5, 1, 4, 1, 3, 3, 1,  4, 1, 5, 0,
                              w-6, 0, w-5, 1, w-4, 1, w-2, 3, w-2, 4, w-1, 5,
                              w-1, h-6, w-2, h-5, w-2, h-4, w-4, h-2, w-5, h-2, w-6, h-1,
                              36, h-1, 16, h+t-1, 16, h-1,
-                             5, h-1, 4, h-2, 3, h-2, 1, h-4, 1, h-5, 0, h-6, 
+                             5, h-1, 4, h-2, 3, h-2, 1, h-4, 1, h-5, 0, h-6,
                              0, 5];
             tip.setLocation (Math.max (0, x - i), y - size.y - t);
         }
     } else {
         if (dest.height >= y + size.y + t) {
             polyline = [
-                        0, 5+t, 1, 5+t, 1, 3+t, 3, 1+t, 5, 1+t, 5, t, 
+                        0, 5+t, 1, 5+t, 1, 3+t, 3, 1+t, 5, 1+t, 5, t,
                         w-35, t, w-16, 0, w-16, t,
                         w-5, t, w-5, 1+t, w-3, 1+t, w-1, 3+t, w-1, 5+t, w, 5+t,
                         w, h-5+t, w-1, h-5+t, w-1, h-3+t, w-2, h-3+t, w-2, h-2+t, w-3, h-2+t, w-3, h-1+t, w-5, h-1+t, w-5, h+t,
-                        5, h+t, 5, h-1+t, 3, h-1+t, 3, h-2+t, 2, h-2+t, 2, h-3+t, 1, h-3+t, 1, h-5+t, 0, h-5+t, 
+                        5, h+t, 5, h-1+t, 3, h-1+t, 3, h-2+t, 2, h-2+t, 2, h-3+t, 1, h-3+t, 1, h-5+t, 0, h-5+t,
                         0, 5+t];
             borderPolygon = [
-                             0, 5+t, 1, 4+t, 1, 3+t, 3, 1+t,  4, 1+t, 5, t, 
+                             0, 5+t, 1, 4+t, 1, 3+t, 3, 1+t,  4, 1+t, 5, t,
                              w-35, t, w-17, 2, w-17, t,
                              w-6, t, w-5, 1+t, w-4, 1+t, w-2, 3+t, w-2, 4+t, w-1, 5+t,
                              w-1, h-6+t, w-2, h-5+t, w-2, h-4+t, w-4, h-2+t, w-5, h-2+t, w-6, h-1+t,
-                             5, h-1+t, 4, h-2+t, 3, h-2+t, 1, h-4+t, 1, h-5+t, 0, h-6+t, 
+                             5, h-1+t, 4, h-2+t, 3, h-2+t, 1, h-4+t, 1, h-5+t, 0, h-6+t,
                              0, 5+t];
             tip.setLocation (Math.min (dest.width - size.x, x - size.x + i), y);
         } else {
             polyline = [
-                        0, 5, 1, 5, 1, 3, 3, 1, 5, 1, 5, 0, 
+                        0, 5, 1, 5, 1, 3, 3, 1, 5, 1, 5, 0,
                         w-5, 0, w-5, 1, w-3, 1, w-1, 3, w-1, 5, w, 5,
                         w, h-5, w-1, h-5, w-1, h-3, w-2, h-3, w-2, h-2, w-3, h-2, w-3, h-1, w-5, h-1, w-5, h,
                         w-16, h, w-16, h+t, w-35, h,
-                        5, h, 5, h-1, 3, h-1, 3, h-2, 2, h-2, 2, h-3, 1, h-3, 1, h-5, 0, h-5, 
+                        5, h, 5, h-1, 3, h-1, 3, h-2, 2, h-2, 2, h-3, 1, h-3, 1, h-5, 0, h-5,
                         0, 5];
             borderPolygon = [
-                             0, 5, 1, 4, 1, 3, 3, 1,  4, 1, 5, 0, 
+                             0, 5, 1, 4, 1, 3, 3, 1,  4, 1, 5, 0,
                              w-6, 0, w-5, 1, w-4, 1, w-2, 3, w-2, 4, w-1, 5,
                              w-1, h-6, w-2, h-5, w-2, h-4, w-4, h-2, w-5, h-2, w-6, h-1,
                              w-17, h-1, w-17, h+t-2, w-36, h-1,
-                             5, h-1, 4, h-2, 3, h-2, 1, h-4, 1, h-5, 0, h-6, 
+                             5, h-1, 4, h-2, 3, h-2, 1, h-4, 1, h-5, 0, h-6,
                              0, 5];
             tip.setLocation (Math.min (dest.width - size.x, x - size.x + i), y - size.y - t);
         }
-    }   
+    }
     if ((style & DWT.BALLOON) !is 0) {
         if (region !is null) region.dispose ();
         region = new Region (display);
@@ -282,7 +282,7 @@ void configure () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  */
 public bool getAutoHide () {
     checkWidget ();
@@ -305,7 +305,7 @@ bool hasImage =     layoutText !is null && (style & DWT.BALLOON) !is 0 && (style
     int width = Math.min (maxWidth, Math.max (textWidth + textTrim, messageWidth + messageTrim));
     int textHeight = 0, messageHeight = 0;
     if (layoutText !is null) {
-        layoutText.setWidth (maxWidth - textTrim);  
+        layoutText.setWidth (maxWidth - textTrim);
         textHeight = layoutText.getBounds ().height;
     }
     if (layoutMessage !is null) {
@@ -411,7 +411,7 @@ void onDispose (Event event) {
     removeListener (DWT.Dispose, listener);
     notifyListeners (DWT.Dispose, event);
     event.type = DWT.None;
-    
+
     if (runnable !is null) {
         Display display = getDisplay ();
         display.timerExec (-1, runnable);
@@ -445,7 +445,7 @@ void onPaint (Event event) {
     } else {
         Rectangle rect = tip.getClientArea ();
         gc.drawRectangle(rect.x, rect.y, rect.width - 1, rect.height -1);
-    } 
+    }
     if (layoutText !is null) {
         int id = style & (DWT.ICON_ERROR | DWT.ICON_INFORMATION | DWT.ICON_WARNING);
         if ((style & DWT.BALLOON) !is 0 && id !is 0) {
@@ -487,7 +487,7 @@ public void removeSelectionListener (SelectionListener listener) {
     if (listener is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (eventTable is null) return;
     eventTable.unhook (DWT.Selection, listener);
-    eventTable.unhook (DWT.DefaultSelection,listener);  
+    eventTable.unhook (DWT.DefaultSelection,listener);
 }
 
 /**
@@ -500,7 +500,7 @@ public void removeSelectionListener (SelectionListener listener) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #getVisible
  * @see #setVisible
  */
@@ -582,7 +582,7 @@ public void setMessage (String string) {
     if (layoutMessage !is null) layoutMessage.dispose();
     layoutMessage = null;
     if (string.length () !is 0) {
-        Display display = getDisplay (); 
+        Display display = getDisplay ();
         layoutMessage = new TextLayout (display);
         layoutMessage.setText (string);
     }
@@ -624,7 +624,7 @@ public void setText (String string) {
 
 /**
  * Marks the receiver as visible if the argument is <code>true</code>,
- * and marks it invisible otherwise. 
+ * and marks it invisible otherwise.
  * <p>
  * If one of the receiver's ancestors is not visible or some
  * other condition makes the receiver not visible, marking

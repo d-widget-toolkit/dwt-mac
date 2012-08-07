@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -131,7 +131,7 @@ class Safari : WebBrowser {
                 storage.setCookie (cookie);
                 CookieResult = true;
             }
-        };  
+        };
     }
 
 public void create (Composite parent, int style) {
@@ -265,7 +265,7 @@ public void create (Composite parent, int style) {
 
     webView.setFrameLoadDelegate(delegate_);
     webView.setResourceLoadDelegate(delegate_);
-    webView.setUIDelegate(delegate_);    
+    webView.setUIDelegate(delegate_);
     webView.setPolicyDelegate(delegate_);
     webView.setDownloadDelegate(delegate_);
     webView.setApplicationNameForUserAgent(NSString.stringWith(AGENT_STRING));
@@ -278,7 +278,7 @@ public void create (Composite parent, int style) {
 }
 
 public bool back() {
-    html = null;    
+    html = null;
     return webView.goBack();
 }
 
@@ -323,7 +323,7 @@ static objc.id browserProc4(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1
     } else if (sel is OS.sel_webView_setFrame_) {
         safari.webView_setFrame(arg0, arg1);
     } else if (sel is OS.sel_webView_createWebViewWithRequest_) {
-        return safari.webView_createWebViewWithRequest(arg0, arg1);     
+        return safari.webView_createWebViewWithRequest(arg0, arg1);
     } else if (sel is OS.sel_webView_setStatusBarVisible_) {
         safari.webView_setStatusBarVisible(arg0, arg1 !is null);
     } else if (sel is OS.sel_webView_setResizable_) {
@@ -467,7 +467,7 @@ public bool setText(String html) {
     /*
     * Bug in Safari.  The web view segment faults in some circumstances
     * when the text changes during the location changing callback.  The
-    * fix is to defer the work until the callback is done. 
+    * fix is to defer the work until the callback is done.
     */
     if (changingLocation) {
         this.html = html;
@@ -476,8 +476,8 @@ public bool setText(String html) {
     }
     return true;
 }
-    
-void _setText(String html) {    
+
+void _setText(String html) {
     NSString string = NSString.stringWith(html);
     NSString URLString = NSString.stringWith(URI_FROMMEMORY);
     NSURL URL = NSURL.URLWithString(URLString);
@@ -553,13 +553,13 @@ void webView_didChangeLocationWithinPageForFrame(objc.id sender, objc.id frameID
 void webView_didFailProvisionalLoadWithError_forFrame(objc.id sender, objc.id error, objc.id frame) {
     if (frame is webView.mainFrame().id) {
         /*
-        * Feature on Safari.  The identifier is used here as a marker for the events 
-        * related to the top frame and the URL changes related to that top frame as 
+        * Feature on Safari.  The identifier is used here as a marker for the events
+        * related to the top frame and the URL changes related to that top frame as
         * they should appear on the location bar of a browser.  It is expected to reset
-        * the identifier to 0 when the event didFinishLoadingFromDataSource related to 
+        * the identifier to 0 when the event didFinishLoadingFromDataSource related to
         * the identifierForInitialRequest event is received.  However, Safari fires
         * the didFinishLoadingFromDataSource event before the entire content of the
-        * top frame is loaded.  It is possible to receive multiple willSendRequest 
+        * top frame is loaded.  It is possible to receive multiple willSendRequest
         * events in this interval, causing the Browser widget to send unwanted
         * Location.changing events.  For this reason, the identifier is reset to 0
         * when the top frame has either finished loading (didFinishLoadForFrame
@@ -625,18 +625,18 @@ void webView_didFinishLoadForFrame(objc.id sender, objc.id frameID) {
                     */
                     display.asyncExec(
                         new class (display, browser, listener) Runnable {
-                            
+
                             Display display;
                             Browser browser;
                             TitleListener listener;
-                            
+
                             this (Display display, Browser browser, TitleListener listener)
                             {
                                 this.display = display;
                                 this.browser = browser;
                                 this.listener = listener;
                             }
-                            
+
                             public void run() {
                                 if (!display.isDisposed() && !browser.isDisposed()) {
                                     listener.changed(newEvent);
@@ -658,25 +658,25 @@ void webView_didFinishLoadForFrame(objc.id sender, objc.id frameID) {
             * Note on WebKit.  Running the event loop from a Browser
             * delegate callback breaks the WebKit (stop loading or
             * crash).  The ProgressBar widget currently touches the
-            * event loop every time the method setSelection is called.  
+            * event loop every time the method setSelection is called.
             * The workaround is to invoke Display.asyncExec() so that
-            * the Browser does not crash when the user updates the 
+            * the Browser does not crash when the user updates the
             * selection of the ProgressBar.
             */
             display.asyncExec(
                 new class (display, browser, listener) Runnable {
-                    
+
                     Display display;
                     Browser browser;
                     ProgressListener listener;
-                    
+
                     this (Display display, Browser browser, ProgressListener listener)
                     {
                         this.display = display;
                         this.browser = browser;
                         this.listener = listener;
                     }
-                    
+
                     public void run() {
                         if (!display.isDisposed() && !browser.isDisposed()) {
                             listener.completed(progress);
@@ -694,13 +694,13 @@ void webView_didFinishLoadForFrame(objc.id sender, objc.id frameID) {
         }
 
         /*
-        * Feature on Safari.  The identifier is used here as a marker for the events 
-        * related to the top frame and the URL changes related to that top frame as 
+        * Feature on Safari.  The identifier is used here as a marker for the events
+        * related to the top frame and the URL changes related to that top frame as
         * they should appear on the location bar of a browser.  It is expected to reset
-        * the identifier to 0 when the event didFinishLoadingFromDataSource related to 
+        * the identifier to 0 when the event didFinishLoadingFromDataSource related to
         * the identifierForInitialRequest event is received.  However, Safari fires
         * the didFinishLoadingFromDataSource event before the entire content of the
-        * top frame is loaded.  It is possible to receive multiple willSendRequest 
+        * top frame is loaded.  It is possible to receive multiple willSendRequest
         * events in this interval, causing the Browser widget to send unwanted
         * Location.changing events.  For this reason, the identifier is reset to 0
         * when the top frame has either finished loading (didFinishLoadForFrame
@@ -755,7 +755,7 @@ void webView_didReceiveTitle_forFrame(objc.id sender, objc.id titleID, objc.id f
 }
 
 void webView_didStartProvisionalLoadForFrame(objc.id sender, objc.id frameID) {
-    /* 
+    /*
     * This code is intentionally commented.  WebFrameLoadDelegate:didStartProvisionalLoadForFrame is
     * called before WebResourceLoadDelegate:willSendRequest and
     * WebFrameLoadDelegate:didCommitLoadForFrame.  The resource count is reset when didCommitLoadForFrame
@@ -786,7 +786,7 @@ void webView_didCommitLoadForFrame(objc.id sender, objc.id frameID) {
     bool top = frameID is webView.mainFrame().id;
     if (top) {
         /* reset resource status variables */
-        resourceCount = 0;      
+        resourceCount = 0;
         this.url = url2;
 
         final ProgressEvent progress = new ProgressEvent(browser);
@@ -800,25 +800,25 @@ void webView_didCommitLoadForFrame(objc.id sender, objc.id frameID) {
             * Note on WebKit.  Running the event loop from a Browser
             * delegate callback breaks the WebKit (stop loading or
             * crash).  The widget ProgressBar currently touches the
-            * event loop every time the method setSelection is called.  
+            * event loop every time the method setSelection is called.
             * The workaround is to invoke Display.asyncexec so that
-            * the Browser does not crash when the user updates the 
+            * the Browser does not crash when the user updates the
             * selection of the ProgressBar.
             */
             display.asyncExec(
                 new class (display, browser, listener) Runnable {
-                    
+
                     Display display;
                     Browser browser;
                     ProgressListener listener;
-                    
+
                     this (Display display, Browser browser, ProgressListener listener)
                     {
                         this.display = display;
                         this.browser = browser;
                         this.listener = listener;
                     }
-                    
+
                     public void run() {
                         if (!display.isDisposed() && !browser.isDisposed())
                             listener.changed(progress);
@@ -855,13 +855,13 @@ void webView_windowScriptObjectAvailable (int /*long*/ webView, int /*long*/ win
 
 void webView_resource_didFinishLoadingFromDataSource(objc.id sender, objc.id identifier, objc.id dataSource) {
     /*
-    * Feature on Safari.  The identifier is used here as a marker for the events 
-    * related to the top frame and the URL changes related to that top frame as 
+    * Feature on Safari.  The identifier is used here as a marker for the events
+    * related to the top frame and the URL changes related to that top frame as
     * they should appear on the location bar of a browser.  It is expected to reset
-    * the identifier to 0 when the event didFinishLoadingFromDataSource related to 
+    * the identifier to 0 when the event didFinishLoadingFromDataSource related to
     * the identifierForInitialRequest event is received.  However, Safari fires
     * the didFinishLoadingFromDataSource event before the entire content of the
-    * top frame is loaded.  It is possible to receive multiple willSendRequest 
+    * top frame is loaded.  It is possible to receive multiple willSendRequest
     * events in this interval, causing the Browser widget to send unwanted
     * Location.changing events.  For this reason, the identifier is reset to 0
     * when the top frame has either finished loading (didFinishLoadForFrame
@@ -873,13 +873,13 @@ void webView_resource_didFinishLoadingFromDataSource(objc.id sender, objc.id ide
 
 void webView_resource_didFailLoadingWithError_fromDataSource(objc.id sender, objc.id identifier, objc.id error, objc.id dataSource) {
     /*
-    * Feature on Safari.  The identifier is used here as a marker for the events 
-    * related to the top frame and the URL changes related to that top frame as 
+    * Feature on Safari.  The identifier is used here as a marker for the events
+    * related to the top frame and the URL changes related to that top frame as
     * they should appear on the location bar of a browser.  It is expected to reset
-    * the identifier to 0 when the event didFinishLoadingFromDataSource related to 
+    * the identifier to 0 when the event didFinishLoadingFromDataSource related to
     * the identifierForInitialRequest event is received.  However, Safari fires
     * the didFinishLoadingFromDataSource event before the entire content of the
-    * top frame is loaded.  It is possible to receive multiple willSendRequest 
+    * top frame is loaded.  It is possible to receive multiple willSendRequest
     * events in this interval, causing the Browser widget to send unwanted
     * Location.changing events.  For this reason, the identifier is reset to 0
     * when the top frame has either finished loading (didFinishLoadForFrame
@@ -1001,7 +1001,7 @@ bool showAuthenticationDialog (final String[] user, final String[] password, Str
             password[0] = passwordText.getText();
             result[0] = event.widget is buttons[1];
             shell.close();
-        }   
+        }
     };
 
     Composite composite = new Composite (shell, DWT.NONE);
@@ -1041,25 +1041,25 @@ bool showAuthenticationDialog (final String[] user, final String[] password, Str
         * Note on WebKit.  Running the event loop from a Browser
         * delegate callback breaks the WebKit (stop loading or
         * crash).  The widget ProgressBar currently touches the
-        * event loop every time the method setSelection is called.  
+        * event loop every time the method setSelection is called.
         * The workaround is to invoke Display.asyncexec so that
-        * the Browser does not crash when the user updates the 
+        * the Browser does not crash when the user updates the
         * selection of the ProgressBar.
         */
         display.asyncExec(
             new class (display, browser, listener) Runnable {
-                
+
                 Display display;
                 Browser browser;
                 ProgressListener listener;
-                
+
                 this (Display display, Browser browser, ProgressListener listener)
                 {
                     this.display = display;
                     this.browser = browser;
                     this.listener = listener;
                 }
-                
+
                 public void run() {
                     if (!display.isDisposed() && !browser.isDisposed())
                         listener.changed(progress);
@@ -1075,7 +1075,7 @@ bool showAuthenticationDialog (final String[] user, final String[] password, Str
         if (frame.id is webView.mainFrame().id) this.identifier = identifier.id;
     }
     return identifier.id;
-        
+
 }
 
 objc.id webView_resource_willSendRequest_redirectResponse_fromDataSource(objc.id sender, objc.id identifier, objc.id request, objc.id redirectResponse, objc.id dataSource) {
@@ -1511,7 +1511,7 @@ void handleEvent(objc.id evtId) {
         /*
         * Bug in Safari.  Spurious and redundant mousemove events are received in
         * various contexts, including following every MouseUp.  The workaround is
-        * to not fire MouseMove events whose x and y values match the last MouseMove  
+        * to not fire MouseMove events whose x and y values match the last MouseMove
         */
         if (mouseEvent.x is lastMouseMoveX && mouseEvent.y is lastMouseMoveY) return;
         mouseEvent.type = DWT.MouseMove;

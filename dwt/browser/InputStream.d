@@ -25,7 +25,7 @@ class InputStream : nsIInputStream {
 
     byte[] buffer;
     int index = 0;
-    
+
 this (byte[] buffer) {
     this.buffer = buffer;
     index = 0;
@@ -42,7 +42,7 @@ nsresult QueryInterface (nsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
     //nsID guid = new nsID ();
     //XPCOM.memmove (guid, riid, nsID.sizeof);
-    
+
     if (*riid == nsISupports.IID) {
         *ppvObject = cast(void*)cast(nsISupports)this;
         AddRef ();
@@ -52,7 +52,7 @@ nsresult QueryInterface (nsID* riid, void** ppvObject) {
         *ppvObject = cast(void*)cast(nsIInputStream)this;
         AddRef ();
         return XPCOM.NS_OK;
-    }   
+    }
     *ppvObject = null;
     return XPCOM.NS_ERROR_NO_INTERFACE;
 }
@@ -118,5 +118,5 @@ nsresult IsNonBlocking (PRBool* _retval) {
     /* blocking */
     *_retval = 0;
     return XPCOM.NS_OK;
-}       
+}
 }

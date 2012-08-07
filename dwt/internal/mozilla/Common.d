@@ -1,4 +1,4 @@
-module dwt.internal.mozilla.Common; 
+module dwt.internal.mozilla.Common;
 
 version(Windows) {
     const NS_WIN32 = 1;

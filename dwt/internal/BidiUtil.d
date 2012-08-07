@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -21,7 +21,7 @@ import objc = dwt.internal.objc.runtime;
 
 /*
  * This class is supplied so that the StyledText code that supports bidi text (supported
- * for win platforms) is not platform dependent.  Bidi text is not implemented on 
+ * for win platforms) is not platform dependent.  Bidi text is not implemented on
  * emulated platforms.
  */
 public class BidiUtil {
@@ -35,13 +35,13 @@ public class BidiUtil {
     public static const int LINKBEFORE = 2;
     public static const int LINKAFTER = 4;
 
-    // bidi rendering/ordering constants, not used on 
+    // bidi rendering/ordering constants, not used on
     // emulated platforms
     public static const int CLASS_HEBREW = 2;
     public static const int CLASS_ARABIC = 2;
     public static const int CLASS_LOCALNUMBER = 4;
-    public static const int CLASS_LATINNUMBER = 5;  
-    public static const int REORDER = 0;                
+    public static const int CLASS_LATINNUMBER = 5;
+    public static const int REORDER = 0;
     public static const int LIGATE = 0;
     public static const int GLYPHSHAPE = 0;
 
@@ -75,7 +75,7 @@ public static boolean isKeyboardBidi() {
  * Not implemented.
  */
 public static int getFontBidiAttributes(GC gc) {
-    return 0;   
+    return 0;
 }
 /*
  *  Not implemented.
@@ -100,7 +100,7 @@ public static int getKeyboardLanguage() {
  * Not implemented.
  */
 public static void removeLanguageListener(objc.id hwnd) {
-}   
+}
 public static void removeLanguageListener (Control control) {
 }
 /*

@@ -39,8 +39,8 @@ import dwt.widgets.Shell;
 /**
  * This class implements the nsIDownload interface for mozilla
  * version 1.8.x.  For mozilla versions 1.4 - 1.7.x this interface
- * is implemented by class nsIDownload.  Mozilla versions later 
- * than 1.8.x do not need to call this interface. 
+ * is implemented by class nsIDownload.  Mozilla versions later
+ * than 1.8.x do not need to call this interface.
  */
 class Download_1_8 {
     XPCOMObject supports;
@@ -166,18 +166,18 @@ void disposeCOMInterfaces() {
     if (supports !is null) {
         supports.dispose ();
         supports = null;
-    }   
+    }
     if (download !is null) {
         download.dispose ();
-        download = null;    
+        download = null;
     }
     if (progressDialog !is null) {
         progressDialog.dispose ();
-        progressDialog = null;  
+        progressDialog = null;
     }
     if (webProgressListener !is null) {
         webProgressListener.dispose ();
-        webProgressListener = null; 
+        webProgressListener = null;
     }
 }
 
@@ -284,7 +284,7 @@ int Init (int /*long*/ aSource, int /*long*/ aTarget, int /*long*/ aDisplayName,
     data.grabExcessHorizontalSpace = true;
     data.grabExcessVerticalSpace = true;
     status.setLayoutData (data);
-    
+
     cancel = new Button (shell, DWT.PUSH);
     cancel.setText (DWT.getMessage ("DWT_Cancel")); //$NON-NLS-1$
     data = new GridData ();
@@ -409,9 +409,9 @@ int OnStateChange (int /*long*/ aWebProgress, int /*long*/ aRequest, int aStateF
         shell = null;
     }
     return XPCOM.NS_OK;
-}   
+}
 
 int OnStatusChange (int /*long*/ aWebProgress, int /*long*/ aRequest, int aStatus, int /*long*/ aMessage) {
     return XPCOM.NS_OK;
-}       
+}
 }

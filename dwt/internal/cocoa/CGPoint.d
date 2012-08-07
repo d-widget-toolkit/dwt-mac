@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -18,7 +18,7 @@ import dwt.internal.c.Carbon;
 /* this shouldn't be needed but CGFloat is not recognized*/
 static if ((void*).sizeof > int.sizeof) // 64bit target
     alias double CGFloat;
-    
+
 else
     alias float CGFloat;
 

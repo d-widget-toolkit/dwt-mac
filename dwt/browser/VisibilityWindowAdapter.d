@@ -23,14 +23,14 @@ import dwt.browser.VisibilityWindowListener;
  * extend this class and override only the methods which they are
  * interested in.
  * </p>
- * 
+ *
  * @since 3.0
  */
 public abstract class VisibilityWindowAdapter : VisibilityWindowListener {
 
 public void hide(WindowEvent event) {
 }
- 
+
 public void show(WindowEvent event) {
 }
 }

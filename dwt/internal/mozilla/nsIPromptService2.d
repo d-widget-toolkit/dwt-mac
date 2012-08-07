@@ -13,8 +13,8 @@ import dwt.internal.mozilla.nsIDOMWindow;
 
 const char[] NS_IPROMPTSERVICE2_IID_STR = "cf86d196-dbee-4482-9dfa-3477aa128319";
 
-const nsIID NS_IPROMPTSERVICE2_IID= 
-  {0xcf86d196, 0xdbee, 0x4482, 
+const nsIID NS_IPROMPTSERVICE2_IID=
+  {0xcf86d196, 0xdbee, 0x4482,
     [ 0x9d, 0xfa, 0x34, 0x77, 0xaa, 0x12, 0x83, 0x19 ]};
 
 interface nsIPromptService2 : nsIPromptService {

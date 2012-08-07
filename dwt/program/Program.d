@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -250,7 +250,7 @@ public static Program [] getPrograms () {
  *
  * @param fileName the file or program name or URL (http:// or https://)
  * @return <code>true</code> if the file is launched, otherwise <code>false</code>
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT when fileName is null</li>
  * </ul>
@@ -283,12 +283,12 @@ public static bool launch (String fileName) {
 /**
  * Executes the program with the file as the single argument
  * in the operating system.  It is the responsibility of the
- * programmer to ensure that the file contains valid data for 
+ * programmer to ensure that the file contains valid data for
  * this program.
  *
  * @param fileName the file or program name
  * @return <code>true</code> if the file is launched, otherwise <code>false</code>
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT when fileName is null</li>
  * </ul>
@@ -344,7 +344,7 @@ public ImageData getImageData () {
                 nsImage.setSize(size);
                 NSBitmapImageRep imageRep = null;
                 NSImageRep rep = nsImage.bestRepresentationForDevice(null);
-                if (rep.isKindOfClass(cast(objc.Class) OS.class_NSBitmapImageRep)) { 
+                if (rep.isKindOfClass(cast(objc.Class) OS.class_NSBitmapImageRep)) {
                     imageRep = new NSBitmapImageRep(rep.id);
                 }
                 if (imageRep !is null) {
@@ -407,8 +407,8 @@ public int opEquals(Object other) {
 alias opEquals equals;
 
 /**
- * Returns an integer hash code for the receiver. Any two 
- * objects that return <code>true</code> when passed to 
+ * Returns an integer hash code for the receiver. Any two
+ * objects that return <code>true</code> when passed to
  * <code>equals</code> must return the same value for this
  * method.
  *

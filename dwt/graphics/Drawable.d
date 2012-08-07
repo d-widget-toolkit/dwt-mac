@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -29,14 +29,14 @@ import objc = dwt.internal.objc.runtime;
  * within the packages provided by DWT. It should never be
  * referenced from application code.
  * </p>
- * 
+ *
  * @see Device
  * @see Image
  * @see GC
  */
 public interface Drawable {
 
-/**  
+/**
  * Invokes platform specific functionality to allocate a new GC handle.
  * <p>
  * <b>IMPORTANT:</b> This method is <em>not</em> part of the public
@@ -46,13 +46,13 @@ public interface Drawable {
  * application code.
  * </p>
  *
- * @param data the platform specific GC data 
+ * @param data the platform specific GC data
  * @return the platform specific GC handle
  */
- 
+
 public objc.id internal_new_GC (GCData data);
 
-/**  
+/**
  * Invokes platform specific functionality to dispose a GC handle.
  * <p>
  * <b>IMPORTANT:</b> This method is <em>not</em> part of the public
@@ -63,7 +63,7 @@ public objc.id internal_new_GC (GCData data);
  * </p>
  *
  * @param handle the platform specific GC handle
- * @param data the platform specific GC data 
+ * @param data the platform specific GC data
  */
 public void internal_dispose_GC (objc.id handle, GCData data);
 

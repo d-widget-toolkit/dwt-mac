@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -19,7 +19,7 @@ import dwt.dwthelper.utils;
 import dwt.graphics.Device;
 
 /**
- * This class is the abstract superclass of all graphics resource objects.  
+ * This class is the abstract superclass of all graphics resource objects.
  * Resources created by the application must be disposed.
  * <p>
  * IMPORTANT: This class is intended to be subclassed <em>only</em>
@@ -38,11 +38,11 @@ import dwt.graphics.Device;
  * @see #dispose
  * @see #isDisposed
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.1
  */
 public abstract class Resource {
-    
+
     /**
      * the device where this resource was created
      */
@@ -78,7 +78,7 @@ public void dispose() {
  * created.
  *
  * @return <code>Device</code> the device of the receiver
- * 
+ *
  * @since 3.2
  */
 public Device getDevice() {

@@ -513,7 +513,7 @@ bool hasLink(int offset) {
     if (event !is null) {
         StyleRange[] styles = event.styles;
         if (styles !is null) {
-            int[] ranges = event.ranges; 
+            int[] ranges = event.ranges;
             if (ranges !is null) {
                 for (int i = 0; i < ranges.length; i+=2) {
                     if (ranges[i] <= offset && offset < ranges[i] + ranges[i+1] && styles[i >> 1].underline && styles[i >> 1].underlineStyle is DWT.UNDERLINE_LINK) {
@@ -533,7 +533,7 @@ bool hasLink(int offset) {
             int rangeCount = styleCount << 1;
             int index = getRangeIndex(offset, -1, rangeCount);
             if (index >= rangeCount) return false;
-            int rangeStart = ranges[index]; 
+            int rangeStart = ranges[index];
             int rangeLength = ranges[index + 1];
             StyleRange rangeStyle = styles[index >> 1];
             if (rangeStart <= offset && offset < rangeStart + rangeLength && rangeStyle.underline && rangeStyle.underlineStyle is DWT.UNDERLINE_LINK) {

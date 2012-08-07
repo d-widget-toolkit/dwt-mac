@@ -28,10 +28,10 @@ public class LONG
     {
         if (object is this)
             return true;
-        
+
         if (auto obj = cast(LONG) object)
             return obj.value is this.value;
-        
+
         return false;
     }
 

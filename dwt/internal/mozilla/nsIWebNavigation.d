@@ -6,13 +6,13 @@ import dwt.internal.mozilla.nsISupports;
 
 import dwt.internal.mozilla.nsIDOMDocument;
 import dwt.internal.mozilla.nsIInputStream;
-import dwt.internal.mozilla.nsISHistory; 
-import dwt.internal.mozilla.nsIURI; 
+import dwt.internal.mozilla.nsISHistory;
+import dwt.internal.mozilla.nsIURI;
 
 const char[] NS_IWEBNAVIGATION_IID_STR = "f5d9e7b0-d930-11d3-b057-00a024ffc08c";
 
-const nsIID NS_IWEBNAVIGATION_IID= 
-  {0xf5d9e7b0, 0xd930, 0x11d3, 
+const nsIID NS_IWEBNAVIGATION_IID=
+  {0xf5d9e7b0, 0xd930, 0x11d3,
     [ 0xb0, 0x57, 0x00, 0xa0, 0x24, 0xff, 0xc0, 0x8c ]};
 
 interface nsIWebNavigation : nsISupports {

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -25,7 +25,7 @@ public struct NSPoint {
 
 
         public String toString() {
-        return Format("NSPoint{" , x , "," , y , "}"); 
+        return Format("NSPoint{" , x , "," , y , "}");
     }
 
     // For comparing with null

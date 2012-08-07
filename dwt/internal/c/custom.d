@@ -17,7 +17,7 @@ static void drawRect(id obj, SEL sel, NSRect rect)
 {
 	return drawRect_1CALLBACK(obj, sel, &rect);
 }
-	
+
 IMP drawRect_CALLBACK (IMP func)
 {
 	drawRect_1CALLBACK = func;

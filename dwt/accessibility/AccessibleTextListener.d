@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -41,11 +41,11 @@ import dwt.internal.*;
  *
  * @see AccessibleTextAdapter
  * @see AccessibleTextEvent
- * 
+ *
  * @since 3.0
  */
 public interface AccessibleTextListener : DWTEventListener {
-    
+
     /**
      * Sent when an accessibility client requests the current character offset
      * of the text caret.

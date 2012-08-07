@@ -63,7 +63,7 @@ public static final native int nsDynamicFunctionLoad_sizeof ();
  * @param size cast=(size_t)
  */
 public static final native void memmove (int /*long*/ dest, nsDynamicFunctionLoad src, int /*long*/ size);
-   
+
 const String MOZILLA_FIVE_HOME = "MOZILLA_FIVE_HOME"; //$NON-NLS-1$
 const String MOZILLA_PLUGIN_PATH = "MOZ_PLUGIN_PATH"; //$NON-NLS-1$
 const String CONTENT_MAYBETEXT = "application/x-vnd.mozilla.maybe-text"; //$NON-NLS-1$
@@ -364,7 +364,7 @@ public nsresult NS_SUCCEEDED( nsresult result ) {
 public PRUint32 strlen_PRUnichar ( PRUnichar* str )
 {
     PRUint32 len = 0;
-    if (str !is null) 
+    if (str !is null)
         while (*(str++) != 0) len++;
     return len;
     }

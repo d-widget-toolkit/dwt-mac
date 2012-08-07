@@ -111,7 +111,7 @@ override void validate(PngFileReadState readState, PngIhdrChunk headerChunk) {
 
     // Palette chunks' data fields must be event multiples
     // of 3. Each 3-byte group represents an RGB value.
-    if (getLength() % 3 !is 0) DWT.error(DWT.ERROR_INVALID_IMAGE);  
+    if (getLength() % 3 !is 0) DWT.error(DWT.ERROR_INVALID_IMAGE);
 
     // Palettes cannot have more entries than 2^bitDepth
     // where bitDepth is the bit depth of the image given

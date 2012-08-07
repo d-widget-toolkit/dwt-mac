@@ -6,14 +6,14 @@ import dwt.internal.mozilla.nsID;
         String osName = System.getProperty ("os.name").toLowerCase (); //$NON-NLS-1$
         IsSolaris = osName.startsWith ("sunos") || osName.startsWith("solaris"); //$NON-NLS-1$
     }
-    
+
     static final int FIRST_METHOD_ID = IsSolaris ? 2 : 0;
     static final int LAST_METHOD_ID = FIRST_METHOD_ID + 2;
 
 const char[] NS_ISUPPORTS_IID_STR = "00000000-0000-0000-c000-000000000046";
 
-const nsIID NS_ISUPPORTS_IID= 
-        { 0x00000000, 0x0000, 0x0000, 
+const nsIID NS_ISUPPORTS_IID=
+        { 0x00000000, 0x0000, 0x0000,
           [ 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 ] };
 
 interface IUnknown

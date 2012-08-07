@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -30,7 +30,7 @@ import dwt.widgets.Composite;
 import dwt.widgets.Scrollable;
 import dwt.widgets.TypedListener;
 
-/** 
+/**
  * Instances of this class represent a selectable user interface
  * object that displays a list of strings and issues notification
  * when a string is selected.  A list may be single or multi select.
@@ -64,7 +64,7 @@ public class List : Scrollable {
     String [] items;
     int itemCount;
     bool ignoreSelect;
-    
+
     static int NEXT_ID;
 
     static final int CELL_GAP = 1;
@@ -75,7 +75,7 @@ public class List : Scrollable {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -103,21 +103,21 @@ public this (Composite parent, int style) {
 }
 
 objc.id accessibilityAttributeValue (objc.id id, objc.SEL sel, objc.id arg0) {
-    
+
     if (accessible !is null) {
         NSString attribute = new NSString(arg0);
         cocoa.id returnValue = accessible.internal_accessibilityAttributeValue(attribute, ACC.CHILDID_SELF);
         if (returnValue !is null) return returnValue.id;
     }
-    
+
     NSString attributeName = new NSString(arg0);
-    
+
     // Accessibility Verifier queries for a title or description.  NSOutlineView doesn't
     // seem to return either, so we return a default description value here.
     if (attributeName.isEqualToString (OS.NSAccessibilityDescriptionAttribute)) {
         return NSString.stringWith("").id;
     }
-    
+
     //  if (attributeName.isEqualToString(OS.NSAccessibilityHeaderAttribute)) {
     //      /*
     //      * Bug in the Macintosh.  Even when the header is not visible,
@@ -128,7 +128,7 @@ objc.id accessibilityAttributeValue (objc.id id, objc.SEL sel, objc.id arg0) {
     //      */
     //      return 0;
     //  }
-    
+
     return super.accessibilityAttributeValue(id, sel, arg0);
 }
 
@@ -273,7 +273,7 @@ void createHandle () {
     if ((style & DWT.V_SCROLL) !is 0) scrollWidget.setHasVerticalScroller(true);
     scrollWidget.setAutohidesScrollers(true);
     scrollWidget.setBorderType((style & DWT.BORDER) !is 0 ? OS.NSBezelBorder : OS.NSNoBorder);
-    
+
     NSTableView widget = cast(NSTableView)(new SWTTableView()).alloc();
     widget.init();
     widget.setAllowsMultipleSelection((style & DWT.MULTI) !is 0);
@@ -288,12 +288,12 @@ void createHandle () {
     widget.setIntercellSpacing(spacing);
     widget.setDoubleAction(OS.sel_sendDoubleSelection);
     if (!hasBorder()) widget.setFocusRingType(OS.NSFocusRingTypeNone);
-    
+
     column = cast(NSTableColumn)(new NSTableColumn()).alloc();
     column = column.initWithIdentifier(NSString.stringWith(String.valueOf(++NEXT_ID)));
     column.setWidth(0);
     widget.addTableColumn (column);
-    
+
     scrollView = scrollWidget;
     view = widget;
 }
@@ -339,7 +339,7 @@ public void deselect (int index) {
 
 /**
  * Deselects the items at the given zero-relative indices in the receiver.
- * If the item at the given zero-relative index in the receiver 
+ * If the item at the given zero-relative index in the receiver
  * is selected, it is deselected.  If the item at the index
  * was not selected, it remains deselected.  The range of the
  * indices is inclusive. Indices that are out of range are ignored.
@@ -372,7 +372,7 @@ public void deselect (int start, int end) {
 
 /**
  * Deselects the items at the given zero-relative indices in the receiver.
- * If the item at the given zero-relative index in the receiver 
+ * If the item at the given zero-relative index in the receiver
  * is selected, it is deselected.  If the item at the index
  * was not selected, it remains deselected. Indices that are out
  * of range and duplicate indices are ignored.
@@ -525,11 +525,11 @@ public int getItemHeight () {
 
 /**
  * Returns a (possibly empty) array of <code>String</code>s which
- * are the items in the receiver. 
+ * are the items in the receiver.
  * <p>
  * Note: This is not the actual structure used by the receiver
  * to maintain its list of items, so modifying the array will
- * not affect the receiver. 
+ * not affect the receiver.
  * </p>
  *
  * @return the items in the receiver's list
@@ -553,7 +553,7 @@ public String [] getItems () {
  * <p>
  * Note: This is not the actual structure used by the receiver
  * to maintain its selection, so modifying the array will
- * not affect the receiver. 
+ * not affect the receiver.
  * </p>
  * @return an array representing the selection
  *
@@ -625,7 +625,7 @@ public int getSelectionIndex () {
  * <p>
  * Note: This is not the actual structure used by the receiver
  * to maintain its selection, so modifying the array will
- * not affect the receiver. 
+ * not affect the receiver.
  * </p>
  * @return the array of indices of the selected items
  *
@@ -704,7 +704,7 @@ public int indexOf (String item) {
 }
 
 /**
- * Searches the receiver's list starting at the given, 
+ * Searches the receiver's list starting at the given,
  * zero-relative index until an item is found that is equal
  * to the argument, and returns the index of that item. If
  * no item is found or the starting index is out of range,
@@ -752,20 +752,20 @@ public bool isSelected (int index) {
 
 /*
  * Feature in Cocoa: Table views do not change the selection when the user
- * right-clicks or control-clicks on an NSTableView or its subclasses. Fix is to select the 
+ * right-clicks or control-clicks on an NSTableView or its subclasses. Fix is to select the
  * clicked-on row ourselves.
  */
 int /*long*/ menuForEvent(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
     NSEvent event = new NSEvent(theEvent);
     NSTableView table = (NSTableView)view;
-    
-    // get the current selections for the outline view. 
+
+    // get the current selections for the outline view.
     NSIndexSet selectedRowIndexes = table.selectedRowIndexes();
-    
+
     // select the row that was clicked before showing the menu for the event
     NSPoint mousePoint = view.convertPoint_fromView_(event.locationInWindow(), null);
     int /*long*/ row = table.rowAtPoint(mousePoint);
-    
+
     // figure out if the row that was just clicked on is currently selected
     if (selectedRowIndexes.containsIndex(row) is false) {
         NSIndexSet set = (NSIndexSet)new NSIndexSet().alloc();
@@ -774,26 +774,26 @@ int /*long*/ menuForEvent(int /*long*/ id, int /*long*/ sel, int /*long*/ theEve
         set.release();
     }
     // else that row is currently selected, so don't change anything.
-    
+
     return super.menuForEvent(id, sel, theEvent);
 }
 
 /*
  * Feature in Cocoa: Table views do not change the selection when the user
- * right-clicks or control-clicks on an NSTableView or its subclasses. Fix is to select the 
+ * right-clicks or control-clicks on an NSTableView or its subclasses. Fix is to select the
  * clicked-on row ourselves.
  */
 int /*long*/ menuForEvent(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
     NSEvent event = new NSEvent(theEvent);
     NSTableView table = (NSTableView)view;
-    
-    // get the current selections for the outline view. 
+
+    // get the current selections for the outline view.
     NSIndexSet selectedRowIndexes = table.selectedRowIndexes();
-    
+
     // select the row that was clicked before showing the menu for the event
     NSPoint mousePoint = view.convertPoint_fromView_(event.locationInWindow(), null);
     int /*long*/ row = table.rowAtPoint(mousePoint);
-    
+
     // figure out if the row that was just clicked on is currently selected
     if (selectedRowIndexes.containsIndex(row) is false) {
         NSIndexSet set = (NSIndexSet)new NSIndexSet().alloc();
@@ -802,7 +802,7 @@ int /*long*/ menuForEvent(int /*long*/ id, int /*long*/ sel, int /*long*/ theEve
         set.release();
     }
     // else that row is currently selected, so don't change anything.
-    
+
     return super.menuForEvent(id, sel, theEvent);
 }
 
@@ -814,7 +814,7 @@ void releaseHandle () {
     column = null;
 }
 
-void releaseWidget () { 
+void releaseWidget () {
     super.releaseWidget ();
     items = null;
 }
@@ -849,7 +849,7 @@ void remove (int index, bool fixScroll) {
 
 /**
  * Removes the items from the receiver which are
- * between the given zero-relative start and end 
+ * between the given zero-relative start and end
  * indices (inclusive).
  *
  * @param start the start of the range
@@ -876,7 +876,7 @@ public void remove (int start, int end) {
 
 /**
  * Searches the receiver's list starting at the first item
- * until an item is found that is equal to the argument, 
+ * until an item is found that is equal to the argument,
  * and removes that item from the list.
  *
  * @param string the item to remove
@@ -978,7 +978,7 @@ public void removeSelectionListener(SelectionListener listener) {
 }
 
 /**
- * Selects the item at the given zero-relative index in the receiver's 
+ * Selects the item at the given zero-relative index in the receiver's
  * list.  If the item at the index was already selected, it remains
  * selected. Indices that are out of range are ignored.
  *
@@ -1021,7 +1021,7 @@ public void select (int index) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see List#setSelection(int,int)
  */
 public void select (int start, int end) {
@@ -1064,7 +1064,7 @@ public void select (int start, int end) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see List#setSelection(int[])
  */
 public void select (int [] indices) {
@@ -1147,7 +1147,7 @@ void updateBackground () {
         nsColor = NSColor.colorWithPatternImage(backgroundImage.handle);
     } else if (background !is null) {
         nsColor = NSColor.colorWithDeviceRed(background[0], background[1], background[2], background[3]);
-    } 
+    }
     (cast(NSTableView) view).setBackgroundColor (nsColor);
 }
 
@@ -1245,7 +1245,7 @@ bool setScrollWidth () {
 }
 
 /**
- * Selects the item at the given zero-relative index in the receiver. 
+ * Selects the item at the given zero-relative index in the receiver.
  * If the item at the index was already selected, it remains selected.
  * The current selection is first cleared, then the new item is selected.
  * Indices that are out of range are ignored.

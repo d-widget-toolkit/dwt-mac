@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -37,7 +37,7 @@ import dwt.internal.DWTEventListener;
  *
  * @see AccessibleAdapter
  * @see AccessibleEvent
- * 
+ *
  * @since 2.0
  */
 public interface AccessibleListener : DWTEventListener {

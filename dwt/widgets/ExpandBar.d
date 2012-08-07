@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -44,7 +44,7 @@ import dwt.widgets.TypedListener;
  * </p><p>
  * IMPORTANT: This class is <em>not</em> intended to be subclassed.
  * </p>
- * 
+ *
  * @see ExpandItem
  * @see ExpandEvent
  * @see ExpandListener
@@ -52,11 +52,11 @@ import dwt.widgets.TypedListener;
  * @see <a href="http://www.eclipse.org/swt/snippets/#expandbar">ExpandBar snippets</a>
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: ControlExample</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.2
  * @noextend This class is not intended to be subclassed by clients.
  */
-public class ExpandBar : Composite {  
+public class ExpandBar : Composite {
     ExpandItem [] items;
     int itemCount;
     ExpandItem focusItem;
@@ -66,14 +66,14 @@ public class ExpandBar : Composite {
     Color foreground;
     Listener listener;
     bool inDispose;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * and a style value describing its behavior and appearance.
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -97,15 +97,15 @@ public class ExpandBar : Composite {
  */
 public this (Composite parent, int style) {
     super (parent, checkStyle (style));
-    items = new ExpandItem [4]; 
-    
+    items = new ExpandItem [4];
+
     listener = new class (this) Listener {
         ExpandBar eb;
-        
+
         this (ExpandBar eb) {
             this.eb = eb;
         }
-        
+
         public void handleEvent (Event event) {
             switch (event.type) {
                 case DWT.Dispose:       eb.onDispose (event);          break;
@@ -130,7 +130,7 @@ public this (Composite parent, int style) {
     addListener (DWT.FocusIn, listener);
     addListener (DWT.FocusOut, listener);
     addListener (DWT.Traverse, listener);
-    
+
     ScrollBar verticalBar = getVerticalBar ();
     if (verticalBar !is null) {
         verticalBar.addListener (DWT.Selection, new class () Listener {
@@ -188,7 +188,7 @@ public Point computeSize (int wHint, int hHint, bool changed) {
                 height += item.getHeaderHeight ();
                 if (item.expanded) height += item.height;
                 height += spacing;
-                width = Math.max (width, item.getPreferredWidth (gc));          
+                width = Math.max (width, item.getPreferredWidth (gc));
             }
             gc.dispose ();
         }
@@ -198,7 +198,7 @@ public Point computeSize (int wHint, int hHint, bool changed) {
     if (wHint !is DWT.DEFAULT) width = wHint;
     if (hHint !is DWT.DEFAULT) height = hHint;
     Rectangle trim = computeTrim (0, 0, width, height);
-    return new Point (trim.width, trim.height); 
+    return new Point (trim.width, trim.height);
 }
 
 void createItem (ExpandItem item, int style, int index) {
@@ -273,7 +273,7 @@ public Color getForeground () {
  */
 public ExpandItem getItem (int index) {
     checkWidget ();
-    if (!(0 <= index && index < itemCount)) error (DWT.ERROR_INVALID_RANGE);    
+    if (!(0 <= index && index < itemCount)) error (DWT.ERROR_INVALID_RANGE);
     return items [index];
 }
 
@@ -294,11 +294,11 @@ public int getItemCount () {
 
 /**
  * Returns an array of <code>ExpandItem</code>s which are the items
- * in the receiver. 
+ * in the receiver.
  * <p>
  * Note: This is not the actual structure used by the receiver
  * to maintain its list of items, so modifying the array will
- * not affect the receiver. 
+ * not affect the receiver.
  * </p>
  *
  * @return the items in the receiver
@@ -332,7 +332,7 @@ public int getSpacing () {
 
 /**
  * Searches the receiver's list starting at the first item
- * (index 0) until an item is found that is equal to the 
+ * (index 0) until an item is found that is equal to the
  * argument, and returns the index of that item. If no item
  * is found, returns -1.
  *
@@ -397,7 +397,7 @@ public void removeExpandListener (ExpandListener listener) {
     if (listener is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (eventTable is null) return;
     eventTable.unhook (DWT.Expand, listener);
-    eventTable.unhook (DWT.Collapse, listener); 
+    eventTable.unhook (DWT.Collapse, listener);
 }
 
 public void setFont(Font font) {
@@ -419,14 +419,14 @@ void setScrollbar () {
     ExpandItem item = items [itemCount - 1];
     int maxHeight = item.y + getBandHeight () + spacing;
     if (item.expanded) maxHeight += item.height;
-    
+
     //claim bottom free space
     if (yCurrentScroll > 0 && height > maxHeight) {
         yCurrentScroll = Math.max (0, yCurrentScroll + maxHeight - height);
         layoutItems (0, false);
     }
     maxHeight += yCurrentScroll;
-    
+
     int selection = Math.min (yCurrentScroll, maxHeight);
     int increment = verticalBar.getIncrement ();
     int pageIncrement = verticalBar.getPageIncrement ();
@@ -435,9 +435,9 @@ void setScrollbar () {
 }
 
 /**
- * Sets the receiver's spacing. Spacing specifies the number of pixels allocated around 
+ * Sets the receiver's spacing. Spacing specifies the number of pixels allocated around
  * each item.
- * 
+ *
  * @param spacing the spacing around each item
  *
  * @exception DWTException <ul>
@@ -474,14 +474,14 @@ void onDispose (Event event) {
     notifyListeners (DWT.Dispose, event);
     event.type = DWT.None;
     /*
-     * Usually when an item is disposed, destroyItem will change the size of the items array, 
+     * Usually when an item is disposed, destroyItem will change the size of the items array,
      * reset the bounds of all the tabs and manage the widget associated with the tab.
      * Since the whole folder is being disposed, this is not necessary.  For speed
      * the inDispose flag is used to skip over this part of the item dispose.
      */
     inDispose = true;
-    
-    for (int i = 0; i < itemCount; i++) {               
+
+    for (int i = 0; i < itemCount; i++) {
         items [i].dispose ();
     }
     items = null;
@@ -523,7 +523,7 @@ void onKeyDown (Event event) {
             }
             break;
         }
-            
+
         default:
     }
 }
@@ -534,7 +534,7 @@ void onMouseDown (Event event) {
     int y = event.y;
     for (int i = 0; i < itemCount; i++) {
         ExpandItem item = items[i];
-        bool hover = item.x <= x && x < (item.x + item.width) && item.y <= y && y < (item.y + getBandHeight ()); 
+        bool hover = item.x <= x && x < (item.x + item.width) && item.y <= y && y < (item.y + getBandHeight ());
         if (hover && item !is focusItem) {
             focusItem.redraw ();
             focusItem = item;
@@ -550,7 +550,7 @@ void onMouseUp (Event event) {
     if (focusItem is null) return;
     int x = event.x;
     int y = event.y;
-    bool hover = focusItem.x <= x && x < (focusItem.x + focusItem.width) && focusItem.y <= y && y < (focusItem.y + getBandHeight ()); 
+    bool hover = focusItem.x <= x && x < (focusItem.x + focusItem.width) && focusItem.y <= y && y < (focusItem.y + getBandHeight ());
     if (hover) {
         Event ev = new Event ();
         ev.item = focusItem;
@@ -569,7 +569,7 @@ void onPaint (Event event) {
 }
 
 void onResize () {
-    Rectangle rect = getClientArea ();  
+    Rectangle rect = getClientArea ();
     int width = Math.max (0, rect.width - spacing * 2);
     for (int i = 0; i < itemCount; i++) {
         ExpandItem item = items[i];

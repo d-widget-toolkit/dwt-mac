@@ -8,8 +8,8 @@ import dwt.internal.mozilla.nsIWebBrowserChrome;
 
 const char[] NS_IWINDOWCREATOR_IID_STR = "30465632-a777-44cc-90f9-8145475ef999";
 
-const nsIID NS_IWINDOWCREATOR_IID= 
-  {0x30465632, 0xa777, 0x44cc, 
+const nsIID NS_IWINDOWCREATOR_IID=
+  {0x30465632, 0xa777, 0x44cc,
     [ 0x90, 0xf9, 0x81, 0x45, 0x47, 0x5e, 0xf9, 0x99 ]};
 
 interface nsIWindowCreator : nsISupports {

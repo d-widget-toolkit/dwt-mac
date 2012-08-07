@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -52,9 +52,9 @@ public class TableColumn : Item {
     NSTableColumn nsColumn;
     String toolTipText, displayText;
     bool movable;
-    
+
     static const int MARGIN = 2;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * (which must be a <code>Table</code>) and a style value
@@ -63,7 +63,7 @@ public class TableColumn : Item {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -101,7 +101,7 @@ public this (Table parent, int style) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -224,10 +224,10 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect cel
     int columnIndex = parent.indexOf (nsColumn);
     NSRect headerRect = parent.headerView.headerRectOfColumn (columnIndex);
     if (headerRect.x !is cellRect.x || headerRect.width !is cellRect.width) return;
-    
+
     NSGraphicsContext context = NSGraphicsContext.currentContext ();
     context.saveGraphicsState ();
-    
+
     int contentWidth = 0;
     NSSize stringSize, imageSize;
     NSAttributedString attrString = null;
@@ -243,7 +243,7 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect cel
         imageSize = image.handle.size ();
         contentWidth += Math.ceil (imageSize.width);
     }
-    
+
     if (parent.sortColumn is this && parent.sortDirection !is DWT.NONE) {
         bool ascending = parent.sortDirection is DWT.UP;
         headerCell.drawSortIndicatorWithFrame (cellRect, new NSView(view), ascending, 0);
@@ -251,7 +251,7 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect cel
         NSRect sortRect = headerCell.sortIndicatorRectForBounds (cellRect);
         cellRect.width = Math.max (0, sortRect.x - cellRect.x);
     }
-    
+
     int drawX = 0;
     if ((style & DWT.CENTER) !is 0) {
         drawX = cast(int)(cellRect.x + Math.max (MARGIN, ((cellRect.width - contentWidth) / 2)));
@@ -260,14 +260,14 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect cel
     } else {
         drawX = cast(int)cellRect.x + MARGIN;
     }
-    
+
     if (image !is null) {
         NSRect destRect = NSRect ();
         destRect.x = drawX;
         destRect.y = cellRect.y;
         destRect.width = Math.min (imageSize.width, cellRect.width - 2 * MARGIN);
         destRect.height = Math.min (imageSize.height, cellRect.height);
-        bool isFlipped = (new NSView (view)).isFlipped(); 
+        bool isFlipped = (new NSView (view)).isFlipped();
         if (isFlipped) {
             context.saveGraphicsState ();
             NSAffineTransform transform = NSAffineTransform.transform ();
@@ -282,7 +282,7 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect cel
         if (isFlipped) context.restoreGraphicsState ();
         drawX += destRect.width;
     }
-    
+
     if (displayText !is null && displayText.length () > 0) {
         if (image !is null) drawX += MARGIN; /* space between image and text */
         NSRect destRect = NSRect ();
@@ -293,7 +293,7 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect cel
         attrString.drawInRect (destRect);
     }
     if (attrString !is null) attrString.release ();
-    
+
     context.restoreGraphicsState ();
 }
 
@@ -302,7 +302,7 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect cel
  * text or image in the receiver. The value will be one of
  * <code>LEFT</code>, <code>RIGHT</code> or <code>CENTER</code>.
  *
- * @return the alignment 
+ * @return the alignment
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -338,8 +338,8 @@ public Table getParent () {
 
 /**
  * Gets the moveable attribute. A column that is
- * not moveable cannot be reordered by the user 
- * by dragging the header but may be reordered 
+ * not moveable cannot be reordered by the user
+ * by dragging the header but may be reordered
  * by the programmer.
  *
  * @return the moveable attribute
@@ -348,12 +348,12 @@ public Table getParent () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see Table#getColumnOrder()
  * @see Table#setColumnOrder(int[])
  * @see TableColumn#setMoveable(bool)
  * @see DWT#Move
- * 
+ *
  * @since 3.1
  */
 public bool getMoveable () {
@@ -388,7 +388,7 @@ public bool getResizable () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.2
  */
 public String getToolTipText () {
@@ -427,9 +427,9 @@ public int getWidth () {
  */
 public void pack () {
     checkWidget ();
-    
+
     int width = 0;
-    
+
     /* compute header width */
     if (displayText !is null) {
         NSTableHeaderCell headerCell = nsColumn.headerCell ();
@@ -453,7 +453,7 @@ public void pack () {
         NSRect sortRect = headerCell.sortIndicatorRectForBounds (rect);
         width += Math.ceil (sortRect.width);
     }
-    
+
     /* compute item widths down column */
     GC gc = new GC (parent);
     int index = parent.indexOf (this);
@@ -526,7 +526,7 @@ public void removeSelectionListener(SelectionListener listener) {
     if (listener is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (eventTable is null) return;
     eventTable.unhook (DWT.Selection, listener);
-    eventTable.unhook (DWT.DefaultSelection,listener);  
+    eventTable.unhook (DWT.DefaultSelection,listener);
 }
 
 /**
@@ -537,7 +537,7 @@ public void removeSelectionListener(SelectionListener listener) {
  * Note that due to a restriction on some platforms, the first column
  * is always left aligned.
  * </p>
- * @param alignment the new alignment 
+ * @param alignment the new alignment
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -577,8 +577,8 @@ public void setImage (Image image) {
 /**
  * Sets the moveable attribute.  A column that is
  * moveable can be reordered by the user by dragging
- * the header. A column that is not moveable cannot be 
- * dragged by the user but may be reordered 
+ * the header. A column that is not moveable cannot be
+ * dragged by the user but may be reordered
  * by the programmer.
  *
  * @param moveable the moveable attribute
@@ -587,12 +587,12 @@ public void setImage (Image image) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see Table#setColumnOrder(int[])
  * @see Table#getColumnOrder()
  * @see TableColumn#getMoveable()
  * @see DWT#Move
- * 
+ *
  * @since 3.1
  */
 public void setMoveable (bool moveable) {
@@ -603,8 +603,8 @@ public void setMoveable (bool moveable) {
 /**
  * Sets the resizable attribute.  A column that is
  * resizable can be resized by the user dragging the
- * edge of the header.  A column that is not resizable 
- * cannot be dragged by the user but may be resized 
+ * edge of the header.  A column that is not resizable
+ * cannot be dragged by the user but may be resized
  * by the programmer.
  *
  * @param resizable the resize attribute
@@ -638,24 +638,24 @@ public void setText (String string) {
 
 /**
  * Sets the receiver's tool tip text to the argument, which
- * may be null indicating that the default tool tip for the 
+ * may be null indicating that the default tool tip for the
  * control will be shown. For a control that has a default
  * tool tip, such as the Tree control on Windows, setting
  * the tool tip text to an empty string replaces the default,
  * causing no tool tip text to be shown.
  * <p>
  * The mnemonic indicator (character '&amp;') is not displayed in a tool tip.
- * To display a single '&amp;' in the tool tip, the character '&amp;' can be 
+ * To display a single '&amp;' in the tool tip, the character '&amp;' can be
  * escaped by doubling it in the string.
  * </p>
- * 
+ *
  * @param string the new tool tip text (or null)
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.2
  */
 public void setToolTipText (String string) {
@@ -678,7 +678,7 @@ public void setWidth (int width) {
     checkWidget ();
     if (width < 0) return;
     // TODO how to differentiate 0 and 1 cases?
-    width = Math.max (0, width - Table.CELL_GAP); 
+    width = Math.max (0, width - Table.CELL_GAP);
     nsColumn.setWidth (width);
 }
 

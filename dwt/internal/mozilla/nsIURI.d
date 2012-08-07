@@ -7,8 +7,8 @@ import dwt.internal.mozilla.nsStringAPI;
 
 const char[] NS_IURI_IID_STR = "07a22cc0-0ce5-11d3-9331-00104ba0fd40";
 
-const nsIID NS_IURI_IID= 
-  {0x07a22cc0, 0x0ce5, 0x11d3, 
+const nsIID NS_IURI_IID=
+  {0x07a22cc0, 0x0ce5, 0x11d3,
     [ 0x93, 0x31, 0x00, 0x10, 0x4b, 0xa0, 0xfd, 0x40 ]};
 
 interface nsIURI : nsISupports {

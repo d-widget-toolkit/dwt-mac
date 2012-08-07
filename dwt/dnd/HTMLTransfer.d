@@ -7,14 +7,14 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
 module dwt.dnd.HTMLTransfer;
 
 import dwt.dwthelper.utils;
- 
+
 import dwt.internal.cocoa.*;
 
 import dwt.dnd.ByteArrayTransfer;
@@ -22,13 +22,13 @@ import dwt.dnd.DND;
 import dwt.dnd.TransferData;
 
 /**
- * The class <code>HTMLTransfer</code> provides a platform specific mechanism 
- * for converting text in HTML format represented as a java <code>String</code> 
+ * The class <code>HTMLTransfer</code> provides a platform specific mechanism
+ * for converting text in HTML format represented as a java <code>String</code>
  * to a platform specific representation of the data and vice versa.
- * 
- * <p>An example of a java <code>String</code> containing HTML text is shown 
+ *
+ * <p>An example of a java <code>String</code> containing HTML text is shown
  * below:</p>
- * 
+ *
  * <code><pre>
  *     String htmlData = "<p>This is a paragraph of text.</p>";
  * </code></pre>
@@ -40,7 +40,7 @@ public class HTMLTransfer : ByteArrayTransfer {
     static HTMLTransfer _instance;
     static const String HTML;
     static const int HTMLID;
-    
+
     static this ()
     {
         _instance = new HTMLTransfer();
@@ -62,11 +62,11 @@ public static HTMLTransfer getInstance () {
 /**
  * This implementation of <code>javaToNative</code> converts HTML-formatted text
  * represented by a java <code>String</code> to a platform specific representation.
- * 
+ *
  * @param object a java <code>String</code> containing HTML text
  * @param transferData an empty <code>TransferData</code> object that will
  *      be filled in on return with the platform specific format of the data
- * 
+ *
  * @see Transfer#nativeToJava
  */
 public void javaToNative (Object object, TransferData transferData){
@@ -77,19 +77,19 @@ public void javaToNative (Object object, TransferData transferData){
 }
 
 /**
- * This implementation of <code>nativeToJava</code> converts a platform specific 
+ * This implementation of <code>nativeToJava</code> converts a platform specific
  * representation of HTML text to a java <code>String</code>.
- * 
+ *
  * @param transferData the platform specific representation of the data to be converted
  * @return a java <code>String</code> containing HTML text if the conversion was successful;
  *      otherwise null
- * 
+ *
  * @see Transfer#javaToNative
  */
 public Object nativeToJava(TransferData transferData){
     if (!isSupportedType(transferData) || transferData.data is null) return null;
     NSString string = cast(NSString) transferData.data;
-    return new ArrayWrapperString(string.getString()); 
+    return new ArrayWrapperString(string.getString());
 }
 
 protected int[] getTypeIds() {

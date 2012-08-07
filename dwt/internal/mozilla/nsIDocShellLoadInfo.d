@@ -4,7 +4,7 @@ import dwt.internal.mozilla.Common;
 import dwt.internal.mozilla.nsID;
 import dwt.internal.mozilla.nsISupports;
 
-import dwt.internal.mozilla.nsIURI; 
+import dwt.internal.mozilla.nsIURI;
 import dwt.internal.mozilla.nsIInputStream;
 import dwt.internal.mozilla.nsISHEntry;
 
@@ -12,8 +12,8 @@ alias PRInt32 nsDocShellInfoLoadType;
 
 const char[] NS_IDOCSHELLLOADINFO_IID_STR = "4f813a88-7aca-4607-9896-d97270cdf15e";
 
-const nsIID NS_IDOCSHELLLOADINFO_IID= 
-  {0x4f813a88, 0x7aca, 0x4607, 
+const nsIID NS_IDOCSHELLLOADINFO_IID=
+  {0x4f813a88, 0x7aca, 0x4607,
     [ 0x98, 0x96, 0xd9, 0x72, 0x70, 0xcd, 0xf1, 0x5e ]};
 
 interface nsIDocShellLoadInfo : nsISupports {

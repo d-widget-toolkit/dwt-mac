@@ -3,7 +3,7 @@
  * Authors: Jacob Carlborg
  * Version: Initial created: 2008
  * License: $(LINK2 http://opensource.org/licenses/bsd-license.php, BSD Style)
- * 
+ *
  */
 module dwt.internal.objc.runtime;
 
@@ -46,7 +46,7 @@ struct objc_super
 {
     id receiver;
     Class clazz;
-    
+
     // for dwt compatibility
     alias clazz cls;
     alias clazz super_class;
@@ -71,7 +71,7 @@ struct objc_ivar
     char* ivar_name;
     char* ivar_type;
     int ivar_offset;
-    
+
     version (X86_64)
     int space;
 }
@@ -79,10 +79,10 @@ struct objc_ivar
 struct objc_ivar_list
 {
     int ivar_count;
-    
+
     version (X86_64)
     int space;
-    
+
     /* variable length structure */
     objc_ivar ivar_list[1];
 }
@@ -97,12 +97,12 @@ struct objc_method
 struct objc_method_list
 {
     objc_method_list* obsolete;
-    
+
     int method_count;
-    
+
     version (X86_64)
     int space;
-    
+
     /* variable length structure */
     objc_method method_list[1];
 }
@@ -219,13 +219,13 @@ void objc_msgSend_struct (T, ARGS...) (T* result, id theReceiver, SEL theSelecto
 }
 
 void objc_msgSend_stret (T, ARGS...) (T* stretAddr, id theReceiver, SEL theSelector, ARGS args)
-{    
+{
     if (T.sizeof > STRUCT_SIZE_LIMIT)
     {
         alias extern (C) void function (T *, id, SEL, ARGS) fp;
         (cast(fp)&bindings.objc_msgSend_stret)(stretAddr, theReceiver, theSelector, args);
     }
-    
+
     else
     {
         alias extern (C) T* function (id, SEL, ARGS) fp;
@@ -246,7 +246,7 @@ id objc_msgSendSuper_stret (T, ARGS...) (T* stretAddr, objc_super* super_, SEL o
         alias extern (C) void function (T*, objc_super*, SEL, ARGS) fp;
         (cast(fp)&bindings.objc_msgSendSuper_stret)(stretAddr, super_, theSelector, args);
     }
-    
+
     else
     {
         alias extern (C) T* function (objc_super*, SEL, ARGS) fp;

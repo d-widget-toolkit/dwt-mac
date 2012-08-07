@@ -7,13 +7,13 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
 module dwt.widgets.ScrollBar;
 
- 
+
 import dwt.internal.cocoa.*;
 
 import dwt.*;
@@ -30,9 +30,9 @@ import dwt.widgets.Widget;
 
 /**
  * Instances of this class are selectable user interface
- * objects that represent a range of positive, numeric values. 
+ * objects that represent a range of positive, numeric values.
  * <p>
- * At any given moment, a given scroll bar will have a 
+ * At any given moment, a given scroll bar will have a
  * single 'selection' that is considered to be its
  * value, which is constrained to be within the range of
  * values the scroll bar represents (that is, between its
@@ -72,7 +72,7 @@ import dwt.widgets.Widget;
  * have no operating system resources and are not children of the control.
  * For this reason, scroll bars are treated specially.  To create a control
  * that looks like a scroll bar but has operating system resources, use
- * <code>Slider</code>. 
+ * <code>Slider</code>.
  * </p>
  * <dl>
  * <dt><b>Styles:</b></dt>
@@ -172,7 +172,7 @@ bool getDrawing () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #isEnabled
  */
 public bool getEnabled () {
@@ -347,7 +347,7 @@ public bool getVisible () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #getEnabled
  */
 public bool isEnabled () {
@@ -467,7 +467,7 @@ void sendSelection () {
 /**
  * Sets the amount that the receiver's value will be
  * modified by when the up/down (or right/left) arrows
- * are pressed to the argument, which must be at least 
+ * are pressed to the argument, which must be at least
  * one.
  *
  * @param value the new increment (must be greater than zero)
@@ -632,7 +632,7 @@ public void setThumb (int value) {
  * value, thumb, increment and page increment all at once.
  * <p>
  * Note: This is similar to setting the values individually
- * using the appropriate methods, but may be implemented in a 
+ * using the appropriate methods, but may be implemented in a
  * more efficient fashion on some platforms.
  * </p>
  *
@@ -665,7 +665,7 @@ public void setValues (int selection, int minimum, int maximum, int thumb, int i
 
 /**
  * Marks the receiver as visible if the argument is <code>true</code>,
- * and marks it invisible otherwise. 
+ * and marks it invisible otherwise.
  * <p>
  * If one of the receiver's ancestors is not visible or some
  * other condition makes the receiver not visible, marking
@@ -691,7 +691,7 @@ void updateBar (int selection, int minimum, int maximum, int thumb) {
     float fraction = range <= 0 ? 1 : cast(float) (selection - minimum) / range;
     Carbon.CGFloat knob = range <= 0 ? 1 : cast(Carbon.CGFloat) thumb / (maximum - minimum);
     widget.setFloatValue (fraction, knob);
-    widget.setEnabled (range > 0); 
+    widget.setEnabled (range > 0);
 }
 
 }

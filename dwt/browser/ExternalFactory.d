@@ -36,7 +36,7 @@ void createCOMInterfaces () {
         public int /*long*/ method1 (int /*long*/[] args) {return AddRef ();}
         public int /*long*/ method2 (int /*long*/[] args) {return Release ();}
     };
-    
+
     factory = new XPCOMObject (new int[] {2, 0, 0, 3, 1}) {
         public int /*long*/ method0 (int /*long*/[] args) {return QueryInterface (args[0], args[1]);}
         public int /*long*/ method1 (int /*long*/[] args) {return AddRef ();}
@@ -50,10 +50,10 @@ void disposeCOMInterfaces () {
     if (supports !is null) {
         supports.dispose ();
         supports = null;
-    }   
+    }
     if (factory !is null) {
         factory.dispose ();
-        factory = null; 
+        factory = null;
     }
 }
 
@@ -65,7 +65,7 @@ int QueryInterface (int /*long*/ riid, int /*long*/ ppvObject) {
     if (riid is 0 || ppvObject is 0) return XPCOM.NS_ERROR_NO_INTERFACE;
     nsID guid = new nsID ();
     XPCOM.memmove (guid, riid, nsID.sizeof);
-    
+
     if (guid.Equals (nsISupports.NS_ISUPPORTS_IID)) {
         XPCOM.memmove (ppvObject, new int /*long*/[] {supports.getAddress ()}, C.PTR_SIZEOF);
         AddRef ();

@@ -8,8 +8,8 @@ import dwt.internal.mozilla.nsISupports;
 
 const char[] NS_IAUTHPROMPT_IID_STR = "2f977d45-5485-11d4-87e2-0010a4e75ef2";
 
-const nsIID NS_IAUTHPROMPT_IID= 
-  {0x2f977d45, 0x5485, 0x11d4, 
+const nsIID NS_IAUTHPROMPT_IID=
+  {0x2f977d45, 0x5485, 0x11d4,
     [ 0x87, 0xe2, 0x00, 0x10, 0xa4, 0xe7, 0x5e, 0xf2 ]};
 
 interface nsIAuthPrompt : nsISupports {

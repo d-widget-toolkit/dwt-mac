@@ -7,8 +7,8 @@ import dwt.internal.mozilla.nsIEventQueue;
 
 const char[] NS_IAPPSHELL_IID_STR = "a0757c31-eeac-11d1-9ec1-00aa002fb821";
 
-const nsIID NS_IAPPSHELL_IID= 
-  {0xa0757c31, 0xeeac, 0x11d1, 
+const nsIID NS_IAPPSHELL_IID=
+  {0xa0757c31, 0xeeac, 0x11d1,
     [ 0x9e, 0xc1, 0x00, 0xaa, 0x00, 0x2f, 0xb8, 0x21 ]};
 
 interface nsIAppShell : nsISupports {

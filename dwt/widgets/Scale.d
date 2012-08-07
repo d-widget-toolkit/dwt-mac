@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -52,14 +52,14 @@ import dwt.widgets.TypedListener;
 public class Scale : Control {
     int increment = 1;
     int pageIncrement = 10;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * and a style value describing its behavior and appearance.
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -126,7 +126,7 @@ public Point computeSize (int wHint, int hHint, bool changed) {
     NSSlider widget = cast(NSSlider)view;
     float /*double*/ thickness = widget.knobThickness();
     int width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT;
-    if ((style & DWT.HORIZONTAL) !is 0) {       
+    if ((style & DWT.HORIZONTAL) !is 0) {
         height = (int)Math.ceil(thickness);
         width = height * 10;
     } else {
@@ -269,14 +269,14 @@ public void removeSelectionListener(SelectionListener listener) {
 
 void sendSelection () {
     NSEvent currEvent = NSApplication.sharedApplication().currentEvent();
-    
+
     if (currEvent.type() !is OS.NSLeftMouseUp)
         postEvent (DWT.Selection);
 }
 
 void sendSelection () {
     NSEvent currEvent = NSApplication.sharedApplication().currentEvent();
-    
+
     if (currEvent.type() !is OS.NSLeftMouseUp)
         postEvent (DWT.Selection);
 }
@@ -284,7 +284,7 @@ void sendSelection () {
 /**
  * Sets the amount that the receiver's value will be
  * modified by when the up/down (or right/left) arrows
- * are pressed to the argument, which must be at least 
+ * are pressed to the argument, which must be at least
  * one.
  *
  * @param increment the new increment (must be greater than zero)

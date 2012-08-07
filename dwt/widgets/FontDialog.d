@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -38,7 +38,7 @@ import dwt.widgets.Shell;
  * IMPORTANT: This class is intended to be subclassed <em>only</em>
  * within the DWT implementation.
  * </p>
- * 
+ *
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: ControlExample, Dialog tab</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  * @noextend This class is not intended to be subclassed by clients.
@@ -48,7 +48,7 @@ public class FontDialog : Dialog {
     RGB rgb;
     bool selected;
     int fontID, fontSize;
-    
+
 /**
  * Constructs a new instance of this class given only its parent.
  *
@@ -72,7 +72,7 @@ public this (Shell parent) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -94,15 +94,15 @@ public this (Shell parent) {
     super (parent, checkStyle (parent, style));
         checkSubclass ();
     }
-    
+
 void changeFont(objc.id id, objc.SEL sel, objc.id arg0) {
     selected = true;
     }
-    
+
     /**
  * Returns a FontData object describing the font that was
  * selected in the dialog, or null if none is available.
- * 
+ *
  * @return the FontData for the selected font, or null
  * @deprecated use #getFontList ()
  */
@@ -113,7 +113,7 @@ public FontData getFontData () {
 /**
  * Returns a FontData set describing the font that was
  * selected in the dialog, or null if none is available.
- * 
+ *
  * @return the FontData for the selected font, or null
  * @since 2.1.1
  */
@@ -131,7 +131,7 @@ public FontData [] getFontList () {
  * @return the RGB value for the selected color, or null
  *
  * @see PaletteData#getRGBs
- * 
+ *
  * @since 2.1
  */
 public RGB getRGB () {
@@ -151,7 +151,7 @@ public RGB getRGB () {
  * </ul>
  */
 public FontData open () {
-    Display display = parent !is null ? parent.display : Display.getCurrent (); 
+    Display display = parent !is null ? parent.display : Display.getCurrent ();
     NSFontPanel panel = NSFontPanel.sharedFontPanel();
     panel.setTitle(NSString.stringWith(title !is null ? title : ""));
     bool create = fontData !is null;
@@ -182,7 +182,7 @@ public FontData open () {
  * Sets a FontData object describing the font to be
  * selected by default in the dialog, or null to let
  * the platform choose one.
- * 
+ *
  * @param fontData the FontData to use initially, or null
  * @deprecated use #setFontList (FontData [])
  */
@@ -194,12 +194,12 @@ public void setFontData (FontData fontData) {
  * Sets the set of FontData objects describing the font to
  * be selected by default in the dialog, or null to let
  * the platform choose one.
- * 
+ *
  * @param fontData the set of FontData objects to use initially, or null
  *        to let the platform select a default when open() is called
  *
  * @see Font#getFontData
- * 
+ *
  * @since 2.1.1
  */
 public void setFontList (FontData [] fontData) {
@@ -218,13 +218,13 @@ public void setFontList (FontData [] fontData) {
  *        the platform select a default when open() is called
  *
  * @see PaletteData#getRGBs
- * 
+ *
  * @since 2.1
  */
 public void setRGB (RGB rgb) {
     this.rgb = rgb;
 }
-    
+
 void windowWillClose(objc.id id, objc.SEL sel, objc.id sender) {
     NSApplication.sharedApplication().stop(null);
 }

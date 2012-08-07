@@ -21,23 +21,23 @@ import dwt.dwthelper.utils;
 /**
  * A <code>LocationEvent</code> is sent by a {@link Browser} to
  * {@link LocationListener}'s when the <code>Browser</code>
- * navigates to a different URL. This notification typically 
- * occurs when the application navigates to a new location with 
+ * navigates to a different URL. This notification typically
+ * occurs when the application navigates to a new location with
  * {@link Browser#setUrl(String)} or when the user activates a
  * hyperlink.
- * 
+ *
  * @since 3.0
  */
 public class LocationEvent : TypedEvent {
     /** current location */
     public String location;
-    
+
     /**
      * A flag indicating whether the location opens in the top frame
      * or not.
      */
     public bool top;
-    
+
     /**
      * A flag indicating whether the location loading should be allowed.
      * Setting this field to <code>false</code> will cancel the operation.
@@ -45,7 +45,7 @@ public class LocationEvent : TypedEvent {
     public bool doit;
 
     static final long serialVersionUID = 3906644198244299574L;
-    
+
 /**
  * Constructs a new instance of this class.
  *
@@ -64,7 +64,7 @@ public this(Widget widget) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} {location = {}, top = {}, doit = {}}", 
-        super.toString[1 .. $-2], location, top, doit );  
+    return Format( "{} {location = {}, top = {}, doit = {}}",
+        super.toString[1 .. $-2], location, top, doit );
 }
 }

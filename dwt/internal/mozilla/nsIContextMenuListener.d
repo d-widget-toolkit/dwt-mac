@@ -3,13 +3,13 @@ module dwt.internal.mozilla.nsIContextMenuListener;
 import dwt.internal.mozilla.Common;
 import dwt.internal.mozilla.nsID;
 import dwt.internal.mozilla.nsISupports;
-import dwt.internal.mozilla.nsIDOMEvent; 
-import dwt.internal.mozilla.nsIDOMNode; 
+import dwt.internal.mozilla.nsIDOMEvent;
+import dwt.internal.mozilla.nsIDOMNode;
 
 const char[] NS_ICONTEXTMENULISTENER_IID_STR = "3478b6b0-3875-11d4-94ef-0020183bf181";
 
-const nsIID NS_ICONTEXTMENULISTENER_IID= 
-  {0x3478b6b0, 0x3875, 0x11d4, 
+const nsIID NS_ICONTEXTMENULISTENER_IID=
+  {0x3478b6b0, 0x3875, 0x11d4,
     [ 0x94, 0xef, 0x00, 0x20, 0x18, 0x3b, 0xf1, 0x81 ]};
 
 interface nsIContextMenuListener : nsISupports {

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Frank Benoit <benoit@tionex.de>
  *     Jacob Carlborg <jacob.carlborg@gmail.com>
@@ -54,7 +54,7 @@ public class Library
 
     version (darwin)
         static const String SEPARATOR = "\n";
-   
+
     else
         static assert(false, "Only Mac OS X supported for this port");
     static final String SUFFIX_64 = "-64";  //$NON-NLS-1$
@@ -116,7 +116,7 @@ public class Library
 
     /**
      * Returns the Java version number as an integer.
-     * 
+     *
      * @param major
      * @param minor
      * @param micro
@@ -129,7 +129,7 @@ public class Library
 
     /**
      * Returns the DWT version number as an integer.
-     * 
+     *
      * @param major
      * @param minor
      * @return the version
@@ -184,7 +184,7 @@ public class Library
  System.load (libName);
  } else {
  System.loadLibrary (libName);
- }       
+ }
  return true;
  } catch (UnsatisfiedLinkError e) {}
  return false;
@@ -228,7 +228,7 @@ public class Library
             throw new UnsatisfiedLinkError ("Cannot load 32-bit DWT libraries on 64-bit JVM"); //$NON-NLS-1$
         }
     }
- 
+
  /* Compute the library name and mapped name */
  String libName1, libName2, mappedName1, mappedName2;
  if (mapName) {
@@ -241,7 +241,7 @@ public class Library
  } else {
  if (MINOR_VERSION < 100) version += "0"; //$NON-NLS-1$
  }
- version += MINOR_VERSION;       
+ version += MINOR_VERSION;
  /* No "r" until first revision */
  if (REVISION > 0) version += "r" + REVISION; //$NON-NLS-1$
  }
@@ -289,13 +289,13 @@ public class Library
         if (load (path + SEPARATOR + fileName1)) return;
         if (mapName && load (path + SEPARATOR + fileName2)) return;
  }
- 
+
  /* Try extracting and loading library from jar */
  if (path !is null) {
         if (extract (path + SEPARATOR + fileName1, mappedName1)) return;
         if (mapName && extract (path + SEPARATOR + fileName2, mappedName2)) return;
  }
- 
+
  /* Failed to find the library */
  throw new UnsatisfiedLinkError ("no " + libName1 + " or " + libName2 + " in swt.library.path, java.library.path or the jar file"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 }

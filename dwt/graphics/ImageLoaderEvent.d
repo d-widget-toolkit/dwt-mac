@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -30,20 +30,20 @@ import dwt.graphics.ImageLoader;
  * <b>Notes:</b>
  * </p><ul>
  * <li>The number of events which will be sent when loading images
- * is not constant. It varies by image type, and for JPEG images it 
+ * is not constant. It varies by image type, and for JPEG images it
  * varies from image to image.</li>
- * <li>For image sources which contain multiple images, the 
+ * <li>For image sources which contain multiple images, the
  * <code>endOfImage</code> flag in the event will be set to true
  * after each individual image is loaded.</li>
  * </ul>
- * 
+ *
  * @see ImageLoader
  * @see ImageLoaderListener
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
 
 public class ImageLoaderEvent : DWTEventObject {
-    
+
     /**
      * if the <code>endOfImage</code> flag is false, then this is a
      * partially complete copy of the current <code>ImageData</code>,
@@ -65,9 +65,9 @@ public class ImageLoaderEvent : DWTEventObject {
      * exception is thrown
      */
     public bool endOfImage;
-    
+
     static const long serialVersionUID = 3257284738325558065L;
-    
+
 /**
  * Constructs a new instance of this class given the event source and
  * the values to store in its fields.

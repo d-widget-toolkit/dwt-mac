@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -19,7 +19,7 @@ import dwt.internal.theme.RangeDrawData;
 public class ScaleDrawData : RangeDrawData {
     public int increment;
     public int pageIncrement;
-    
+
 public this() {
     state = new int[4];
 }

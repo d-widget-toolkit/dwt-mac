@@ -112,10 +112,10 @@ public this (Tree tree) {
     treeListener = new class(this) TreeListener {
         TreeEditor td;
         Runnable runnable;
-        
+
         this (TreeEditor td) {
             this.td = td;
-            
+
             runnable = new class() Runnable {
                 public void run() {
                     if (td.editor is null || td.editor.isDisposed()) return;

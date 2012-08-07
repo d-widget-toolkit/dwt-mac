@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -21,7 +21,7 @@ import dwt.internal.cocoa.OS;
 import objc = dwt.internal.objc.runtime;
 
 public class NSBrowserCell : NSCell {
-    
+
 public this () {
     super();
 }

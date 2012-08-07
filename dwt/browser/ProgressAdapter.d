@@ -23,11 +23,11 @@ import dwt.browser.ProgressListener;
  * extend this class and override only the methods which they are
  * interested in.
  * </p>
- * 
+ *
  * @since 3.0
  */
 public abstract class ProgressAdapter : ProgressListener {
- 
+
 public void changed(ProgressEvent event) {
 }
 

@@ -3,14 +3,14 @@ module dwt.internal.mozilla.nsIProtocolHandler;
 import dwt.internal.mozilla.Common;
 import dwt.internal.mozilla.nsISupports;
 import dwt.internal.mozilla.nsID;
-import dwt.internal.mozilla.nsIURI; 
+import dwt.internal.mozilla.nsIURI;
 import dwt.internal.mozilla.nsIChannel;
 import dwt.internal.mozilla.nsStringAPI;
 
 const char[] NS_IPROTOCOLHANDLER_IID_STR = "15fd6940-8ea7-11d3-93ad-00104ba0fd40";
 
-const nsIID NS_IPROTOCOLHANDLER_IID= 
-  {0x15fd6940, 0x8ea7, 0x11d3, 
+const nsIID NS_IPROTOCOLHANDLER_IID=
+  {0x15fd6940, 0x8ea7, 0x11d3,
     [ 0x93, 0xad, 0x00, 0x10, 0x4b, 0xa0, 0xfd, 0x40 ]};
 
 interface nsIProtocolHandler : nsISupports {

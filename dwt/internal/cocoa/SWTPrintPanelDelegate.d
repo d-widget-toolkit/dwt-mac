@@ -19,7 +19,7 @@ public class SWTPrintPanelDelegate : NSObject {
 public this() {
     super(cast(objc.id) null);
 }
-    
+
 public this(objc.id id) {
     super(id);
 }

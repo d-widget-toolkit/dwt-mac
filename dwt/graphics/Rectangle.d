@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -37,7 +37,7 @@ import dwt.graphics.Point;
  * The hashCode() method in this class uses the values of the public
  * fields to compute the hash value. When storing instances of the
  * class in hashed collections, do not modify these fields after the
- * object has been inserted.  
+ * object has been inserted.
  * </p>
  * <p>
  * Application code does <em>not</em> need to explicitly release the
@@ -50,31 +50,31 @@ import dwt.graphics.Point;
  */
 
 public final class Rectangle : SerializableCompatibility {
-    
+
     /**
      * the x coordinate of the rectangle
      */
     public int x;
-    
+
     /**
      * the y coordinate of the rectangle
      */
     public int y;
-    
+
     /**
      * the width of the rectangle
      */
     public int width;
-    
+
     /**
      * the height of the rectangle
      */
     public int height;
 
     static const long serialVersionUID = 3256439218279428914L;
-    
+
 /**
- * Construct a new instance of this class given the 
+ * Construct a new instance of this class given the
  * x, y, width and height values.
  *
  * @param x the x coordinate of the origin of the rectangle
@@ -168,8 +168,8 @@ public int opEquals (Object object) {
 alias opEquals equals;
 
 /**
- * Returns an integer hash code for the receiver. Any two 
- * objects that return <code>true</code> when passed to 
+ * Returns an integer hash code for the receiver. Any two
+ * objects that return <code>true</code> when passed to
  * <code>equals</code> must return the same value for this
  * method.
  *
@@ -193,7 +193,7 @@ alias toHash hashCode;
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the argument is null</li>
  * </ul>
- * 
+ *
  * since 3.0
  */
 public void intersect (Rectangle rect) {
@@ -215,7 +215,7 @@ public void intersect (Rectangle rect) {
 
 /**
  * Returns a new rectangle which represents the intersection
- * of the receiver and the given rectangle. 
+ * of the receiver and the given rectangle.
  * <p>
  * The intersection of two rectangles is the rectangle that
  * covers the area which is contained within both rectangles.
@@ -267,7 +267,7 @@ public Rectangle intersection (Rectangle rect) {
  *
  * @see #intersection(Rectangle)
  * @see #isEmpty()
- * 
+ *
  * @since 3.0
  */
 public bool intersects (int x, int y, int width, int height) {
@@ -297,14 +297,14 @@ public bool intersects (Rectangle rect) {
     if (rect is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     return rect is this || intersects (rect.x, rect.y, rect.width, rect.height);
 }
-        
+
 /**
  * Returns <code>true</code> if the receiver does not cover any
  * area in the (x, y) coordinate plane, and <code>false</code> if
  * the receiver does cover some area in the plane.
  * <p>
- * A rectangle is considered to <em>cover area</em> in the 
- * (x, y) coordinate plane if both its width and height are 
+ * A rectangle is considered to <em>cover area</em> in the
+ * (x, y) coordinate plane if both its width and height are
  * non-zero.
  * </p>
  *

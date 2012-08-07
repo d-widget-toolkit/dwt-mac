@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -40,7 +40,7 @@ public class C : Platform {
     alias stdcstring.memset memset;
     alias stdcstring.memmove memmove;
     alias stdcstring.strlen strlen;
-    
+
 /+public static final native void free (int /*long*/ ptr);
 public static final native int /*long*/ malloc (int /*long*/ size);
 /**

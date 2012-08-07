@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -35,7 +35,7 @@ import dwt.widgets.TypedListener;
 
 /**
  * Instances of this class represent a selectable user interface object that
- * issues notification when pressed and released. 
+ * issues notification when pressed and released.
  * <dl>
  * <dt><b>Styles:</b></dt>
  * <dd>ARROW, CHECK, PUSH, RADIO, TOGGLE, FLAT</dd>
@@ -44,7 +44,7 @@ import dwt.widgets.TypedListener;
  * <dd>Selection</dd>
  * </dl>
  * <p>
- * Note: Only one of the styles ARROW, CHECK, PUSH, RADIO, and TOGGLE 
+ * Note: Only one of the styles ARROW, CHECK, PUSH, RADIO, and TOGGLE
  * may be specified.
  * </p><p>
  * Note: Only one of the styles LEFT, RIGHT, and CENTER may be specified.
@@ -55,7 +55,7 @@ import dwt.widgets.TypedListener;
  * IMPORTANT: This class is intended to be subclassed <em>only</em>
  * within the DWT implementation.
  * </p>
- * 
+ *
  * @see <a href="http://www.eclipse.org/swt/snippets/#button">Button snippets</a>
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: ControlExample</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
@@ -66,21 +66,21 @@ public class Button : Control {
     alias Control.setBackground setBackground;
     alias Control.setForeground setForeground;
     alias Control.computeSize computeSize;
-    
+
     Image image;
     bool grayed;
-    
+
     static final int EXTRA_HEIGHT = 2;
     static final int EXTRA_WIDTH = 6;
     static final int IMAGE_GAP = 2;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * and a style value describing its behavior and appearance.
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -118,21 +118,21 @@ public this (Composite parent, int style) {
 
 objc.id accessibilityAttributeValue (objc.id id, objc.SEL sel, objc.id arg0) {
     NSString nsAttributeName = new NSString(arg0);
-    
+
     if (accessible !is null) {
         cocoa.id returnObject = accessible.internal_accessibilityAttributeValue(nsAttributeName, ACC.CHILDID_SELF);
         if (returnObject !is null) return returnObject.id;
     }
-    
+
     if (nsAttributeName.isEqualToString (OS.NSAccessibilityRoleAttribute) || nsAttributeName.isEqualToString (OS.NSAccessibilityRoleDescriptionAttribute)) {
         NSString role = null;
-        
+
         if ((style & DWT.RADIO) !is 0) {
             role = OS.NSAccessibilityRadioButtonRole;
         } else if ((style & DWT.ARROW) !is 0) {
             role = OS.NSAccessibilityButtonRole;
         }
-        
+
         if (role !is null) {
             if (nsAttributeName.isEqualToString (OS.NSAccessibilityRoleAttribute))
                 return role.id;
@@ -141,7 +141,7 @@ objc.id accessibilityAttributeValue (objc.id id, objc.SEL sel, objc.id arg0) {
             }
         }
     }
-    
+
     return super.accessibilityAttributeValue(id, sel, arg0);
 }
 
@@ -257,7 +257,7 @@ void createHandle () {
     } else if ((style & DWT.CHECK) !is 0) {
         type = OS.NSSwitchButton;
     } else if ((style & DWT.RADIO) !is 0) {
-        type = OS.NSRadioButton;        
+        type = OS.NSRadioButton;
     } else if ((style & DWT.TOGGLE) !is 0) {
         type = OS.NSPushOnPushOffButton;
         if ((style & DWT.FLAT) !is 0) {
@@ -348,7 +348,7 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect cel
 }
 
 void drawWidget (int /*long*/ id, NSGraphicsContext context, NSRect rect) {
-    if ((style & DWT.ARROW) !is 0) {    
+    if ((style & DWT.ARROW) !is 0) {
         NSRect frame = view.frame();
         int arrowSize = Math.min(cast(int)frame.height, cast(int)frame.width) / 2;
         context.saveGraphicsState();
@@ -360,13 +360,13 @@ void drawWidget (int /*long*/ id, NSGraphicsContext context, NSRect rect) {
         p2.y = p1.y;
         NSPoint p3 = NSPoint();
         p3.y = arrowSize / 2;
-    
+
         NSBezierPath path = NSBezierPath.bezierPath();
         path.moveToPoint(p1);
         path.lineToPoint(p2);
         path.lineToPoint(p3);
         path.closePath();
-    
+
         NSAffineTransform transform = NSAffineTransform.transform();
         if ((style & DWT.LEFT) !is 0) {
             transform.rotateByDegrees(90);
@@ -379,7 +379,7 @@ void drawWidget (int /*long*/ id, NSGraphicsContext context, NSRect rect) {
         transform = NSAffineTransform.transform();
         transform.translateXBy(frame.width / 2, frame.height / 2);
         path.transformUsingAffineTransform(transform);
-    
+
         NSColor color = isEnabled() ? NSColor.blackColor() : NSColor.disabledControlTextColor();
         color.set();
         path.fill();
@@ -392,12 +392,12 @@ void drawWidget (int /*long*/ id, NSGraphicsContext context, NSRect rect) {
  * Returns a value which describes the position of the
  * text or image in the receiver. The value will be one of
  * <code>LEFT</code>, <code>RIGHT</code> or <code>CENTER</code>
- * unless the receiver is an <code>ARROW</code> button, in 
+ * unless the receiver is an <code>ARROW</code> button, in
  * which case, the alignment will indicate the direction of
- * the arrow (one of <code>LEFT</code>, <code>RIGHT</code>, 
+ * the arrow (one of <code>LEFT</code>, <code>RIGHT</code>,
  * <code>UP</code> or <code>DOWN</code>).
  *
- * @return the alignment 
+ * @return the alignment
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -430,7 +430,7 @@ public int getAlignment () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.4
  */
 public bool getGrayed() {
@@ -513,7 +513,7 @@ int /*long*/ nextState(int /*long*/ id, int /*long*/ sel) {
         return ((NSButton)view).state() is OS.NSMixedState ? OS.NSOffState : OS.NSMixedState;
     }
 
-    return super.nextState(id, sel);    
+    return super.nextState(id, sel);
 }
 
 void register() {
@@ -599,12 +599,12 @@ void sendSelection () {
  * Controls how text, images and arrows will be displayed
  * in the receiver. The argument should be one of
  * <code>LEFT</code>, <code>RIGHT</code> or <code>CENTER</code>
- * unless the receiver is an <code>ARROW</code> button, in 
+ * unless the receiver is an <code>ARROW</code> button, in
  * which case, the argument indicates the direction of
- * the arrow (one of <code>LEFT</code>, <code>RIGHT</code>, 
+ * the arrow (one of <code>LEFT</code>, <code>RIGHT</code>,
  * <code>UP</code> or <code>DOWN</code>).
  *
- * @param alignment the new alignment 
+ * @param alignment the new alignment
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -619,7 +619,7 @@ public void setAlignment (int alignment) {
 
 void _setAlignment (int alignment) {
     if ((style & DWT.ARROW) !is 0) {
-        if ((style & (DWT.UP | DWT.DOWN | DWT.LEFT | DWT.RIGHT)) is 0) return; 
+        if ((style & (DWT.UP | DWT.DOWN | DWT.LEFT | DWT.RIGHT)) is 0) return;
         style &= ~(DWT.UP | DWT.DOWN | DWT.LEFT | DWT.RIGHT);
         style |= alignment & (DWT.UP | DWT.DOWN | DWT.LEFT | DWT.RIGHT);
 //      int orientation = OS.kThemeDisclosureRight;
@@ -687,7 +687,7 @@ void setForeground (float /*double*/ [] color) {
 }
 
 /**
- * Sets the grayed state of the receiver.  This state change 
+ * Sets the grayed state of the receiver.  This state change
  * only applies if the control was created with the DWT.CHECK
  * style.
  *
@@ -697,7 +697,7 @@ void setForeground (float /*double*/ [] color) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.4
  */
 public void setGrayed(bool grayed) {
@@ -729,7 +729,7 @@ public void setGrayed(bool grayed) {
  *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_INVALID_ARGUMENT - if the image has been disposed</li>
- * </ul> 
+ * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
@@ -768,7 +768,7 @@ bool setRadioSelection (bool value){
 }
 
 /**
- * Sets the selection state of the receiver, if it is of type <code>CHECK</code>, 
+ * Sets the selection state of the receiver, if it is of type <code>CHECK</code>,
  * <code>RADIO</code>, or <code>TOGGLE</code>.
  *
  * <p>
@@ -837,7 +837,7 @@ NSRect titleRectForBounds (int /*long*/ id, int /*long*/ sel, NSRect cellFrame) 
     NSRect rect = super.titleRectForBounds(id, sel, cellFrame);
     if (image !is null && ((style & (DWT.CHECK|DWT.RADIO)) !is 0)) {
         NSSize imageSize = image.handle.size();
-        rect.x += imageSize.width + IMAGE_GAP; 
+        rect.x += imageSize.width + IMAGE_GAP;
         rect.width -= (imageSize.width + IMAGE_GAP);
         rect.width = Math.max(0f, rect.width);
     }
@@ -856,8 +856,8 @@ void updateAlignment () {
     if ((style & (DWT.PUSH | DWT.TOGGLE)) !is 0) {
         if (text.length() !is 0 && image !is null) {
             widget.setImagePosition(OS.NSImageLeft);
-        } else {    
-            widget.setImagePosition(text.length() !is 0 ? OS.NSNoImage : OS.NSImageOnly);       
+        } else {
+            widget.setImagePosition(text.length() !is 0 ? OS.NSNoImage : OS.NSImageOnly);
         }
     }
 }

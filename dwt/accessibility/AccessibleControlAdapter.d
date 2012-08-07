@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -40,7 +40,7 @@ import dwt.accessibility.AccessibleControlEvent;
  * @see AccessibleControlListener
  * @see AccessibleControlEvent
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 2.0
  */
 public abstract class AccessibleControlAdapter : AccessibleControlListener {
@@ -65,7 +65,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      */
     public void getChildAtPoint(AccessibleControlEvent e) {
     }
-    
+
     /**
      * Sent when an accessibility client requests the location
      * of the control, or the location of a child of the control.
@@ -83,7 +83,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      */
     public void getLocation(AccessibleControlEvent e) {
     }
-    
+
     /**
      * Sent when an accessibility client requests the accessible object
      * for a child of the control.
@@ -102,7 +102,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      */
     public void getChild(AccessibleControlEvent e) {
     }
-    
+
     /**
      * Sent when an accessibility client requests the number of
      * children in the control.
@@ -118,7 +118,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      */
     public void getChildCount(AccessibleControlEvent e) {
     }
-    
+
     /**
      * Sent when an accessibility client requests the default action
      * of the control, or the default action of a child of the control.
@@ -140,7 +140,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      */
     public void getDefaultAction(AccessibleControlEvent e) {
     }
-    
+
     /**
      * Sent when an accessibility client requests the identity of
      * the child or control that has keyboard focus.
@@ -159,7 +159,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      */
     public void getFocus(AccessibleControlEvent e) {
     }
-    
+
     /**
      * Sent when an accessibility client requests the role
      * of the control, or the role of a child of the control.
@@ -177,7 +177,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      */
     public void getRole(AccessibleControlEvent e) {
     }
-    
+
     /**
      * Sent when an accessibility client requests the identity of
      * the child or control that is currently selected.
@@ -197,7 +197,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      */
     public void getSelection(AccessibleControlEvent e) {
     }
-    
+
     /**
      * Sent when an accessibility client requests the state
      * of the control, or the state of a child of the control.
@@ -215,7 +215,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      */
     public void getState(AccessibleControlEvent e) {
     }
-    
+
     /**
      * Sent when an accessibility client requests the value
      * of the control, or the value of a child of the control.
@@ -239,7 +239,7 @@ public abstract class AccessibleControlAdapter : AccessibleControlListener {
      */
     public void getValue(AccessibleControlEvent e) {
     }
-    
+
     /**
      * Sent when an accessibility client requests the children of the control.
      * The default behavior is to do nothing.

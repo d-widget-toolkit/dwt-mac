@@ -8,8 +8,8 @@ import dwt.internal.mozilla.nsIURI;
 
 const char[] NS_ISHISTORYLISTENER_IID_STR = "3b07f591-e8e1-11d4-9882-00c04fa02f40";
 
-const nsIID NS_ISHISTORYLISTENER_IID= 
-  {0x3b07f591, 0xe8e1, 0x11d4, 
+const nsIID NS_ISHISTORYLISTENER_IID=
+  {0x3b07f591, 0xe8e1, 0x11d4,
     [ 0x98, 0x82, 0x00, 0xc0, 0x4f, 0xa0, 0x2f, 0x40 ]};
 
 interface nsISHistoryListener : nsISupports {

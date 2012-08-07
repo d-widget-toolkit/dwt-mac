@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -18,7 +18,7 @@ module dwt.accessibility.ACC;
  * Accessible object.
  *
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 2.0
  */
 public class ACC {
@@ -73,7 +73,7 @@ public class ACC {
     public static const int ROLE_PROGRESSBAR = 0x30;
     public static const int ROLE_SLIDER = 0x33;
     public static const int ROLE_LINK = 0x1e;
-    
+
     public static const int CHILDID_SELF = -1;
     public static const int CHILDID_NONE = -2;
     public static const int CHILDID_MULTIPLE = -3;

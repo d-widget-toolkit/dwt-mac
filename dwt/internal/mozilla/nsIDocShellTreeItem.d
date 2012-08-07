@@ -8,8 +8,8 @@ import dwt.internal.mozilla.nsIDocShellTreeOwner;
 
 const char[] NS_IDOCSHELLTREEITEM_IID_STR = "7d935d63-6d2a-4600-afb5-9a4f7d68b825";
 
-const nsIID NS_IDOCSHELLTREEITEM_IID= 
-  {0x7d935d63, 0x6d2a, 0x4600, 
+const nsIID NS_IDOCSHELLTREEITEM_IID=
+  {0x7d935d63, 0x6d2a, 0x4600,
     [ 0xaf, 0xb5, 0x9a, 0x4f, 0x7d, 0x68, 0xb8, 0x25 ]};
 
 interface nsIDocShellTreeItem : nsISupports {

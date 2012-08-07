@@ -52,7 +52,7 @@ nsresult QueryInterface (nsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
     //nsID guid = new nsID ();
     //XPCOM.memmove (guid, riid, nsID.sizeof);
-    
+
     if (*riid == nsISupports.IID) {
         *ppvObject = cast(void*)cast(nsISupports)this;
         AddRef ();
@@ -94,7 +94,7 @@ nsresult CreateChromeWindow2 (nsIWebBrowserChrome parent, PRUint32 chromeFlags, 
     if (parent is null && (chromeFlags & nsIWebBrowserChrome.CHROME_OPENAS_CHROME) is 0) {
         return XPCOM.NS_ERROR_NOT_IMPLEMENTED;
     }
-    Browser src = null; 
+    Browser src = null;
     if (parent !is null) {
         //nsIWebBrowserChrome browserChromeParent = new nsIWebBrowserChrome (parent);
         nsIWebBrowser webBrowser;
@@ -128,7 +128,7 @@ nsresult CreateChromeWindow2 (nsIWebBrowserChrome parent, PRUint32 chromeFlags, 
         * reason modal requests are handled here so that the user is not exposed to them.
         */
         int style = DWT.DIALOG_TRIM;
-        if ((chromeFlags & nsIWebBrowserChrome.CHROME_MODAL) !is 0) style |= DWT.APPLICATION_MODAL; 
+        if ((chromeFlags & nsIWebBrowserChrome.CHROME_MODAL) !is 0) style |= DWT.APPLICATION_MODAL;
         Shell shell = src is null ?
             new Shell (style) :
             new Shell (src.getShell(), style);
@@ -179,7 +179,7 @@ nsresult CreateChromeWindow2 (nsIWebBrowserChrome parent, PRUint32 chromeFlags, 
         }
         browser = event.browser;
 
-        /* Ensure that the Browser provided by the client is valid for use */ 
+        /* Ensure that the Browser provided by the client is valid for use */
         doit = browser !is null && !browser.isDisposed ();
         if (doit) {
             String platform = Platform.PLATFORM;
@@ -189,10 +189,10 @@ nsresult CreateChromeWindow2 (nsIWebBrowserChrome parent, PRUint32 chromeFlags, 
     }
     if (doit) {
         // STRANGE but TRUE:  browser.webBrowser is always instantiated as Mozilla (on this platform),
-        // so it can be cast back to the subclass Mozilla safely.  Looks very dangerous, though... 
-        // considering the next few lines of code that cast the Mozilla class to the interface, 
+        // so it can be cast back to the subclass Mozilla safely.  Looks very dangerous, though...
+        // considering the next few lines of code that cast the Mozilla class to the interface,
         // nsIWebBrowserChrome.
-        // This is an ugly D conversion hack because interfaces are implemented differently than 
+        // This is an ugly D conversion hack because interfaces are implemented differently than
         // in the Java SWT version.  Watch this code section carefully for errors/bugs. -JJR
         Mozilla mozilla = cast(Mozilla)browser.webBrowser;
         mozilla.isChild = true;

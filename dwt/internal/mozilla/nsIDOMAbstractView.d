@@ -10,8 +10,8 @@ alias PRUint64 DOMTimeStamp;
 
 const char[] NS_IDOMABSTRACTVIEW_IID_STR = "f51ebade-8b1a-11d3-aae7-0010830123b4";
 
-const nsIID NS_IDOMABSTRACTVIEW_IID= 
-  {0xf51ebade, 0x8b1a, 0x11d3, 
+const nsIID NS_IDOMABSTRACTVIEW_IID=
+  {0xf51ebade, 0x8b1a, 0x11d3,
     [ 0xaa, 0xe7, 0x00, 0x10, 0x83, 0x01, 0x23, 0xb4 ]};
 
 interface nsIDOMAbstractView : nsISupports {

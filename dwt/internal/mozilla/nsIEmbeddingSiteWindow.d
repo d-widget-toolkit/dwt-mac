@@ -6,8 +6,8 @@ import dwt.internal.mozilla.nsISupports;
 
 const char[] NS_IEMBEDDINGSITEWINDOW_IID_STR = "3e5432cd-9568-4bd1-8cbe-d50aba110743";
 
-const nsIID NS_IEMBEDDINGSITEWINDOW_IID= 
-  {0x3e5432cd, 0x9568, 0x4bd1, 
+const nsIID NS_IEMBEDDINGSITEWINDOW_IID=
+  {0x3e5432cd, 0x9568, 0x4bd1,
     [ 0x8c, 0xbe, 0xd5, 0x0a, 0xba, 0x11, 0x07, 0x43 ]};
 
 interface nsIEmbeddingSiteWindow : nsISupports {

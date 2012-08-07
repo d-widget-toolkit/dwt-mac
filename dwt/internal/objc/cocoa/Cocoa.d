@@ -3,7 +3,7 @@
  * Authors: Jacob Carlborg
  * Version: Initial created: Nov 18, 2008
  * License: $(LINK2 http://opensource.org/licenses/bsd-license.php, BSD Style)
- * 
+ *
  */
 module dwt.internal.objc.cocoa.Cocoa;
 
@@ -523,7 +523,7 @@ extern (C)
         id NSUnderlineStyleAttributeName;
         id NSDefaultRunLoopMode;
         id NSErrorFailingURLStringKey;
-        
+
         id kCFRunLoopCommonModes;
         id NSViewGlobalFrameDidChangeNotification;
         id NSToolbarWillAddItemNotification;
@@ -852,7 +852,7 @@ enum NSImageInterpolation
     NSImageInterpolationNone,
     NSImageInterpolationLow,
     NSImageInterpolationHigh
-} 
+}
 
 
 
@@ -926,7 +926,7 @@ enum NSNumberFormatterStyle
 // NSObjCRuntime.h
 alias bindings.NSGetSizeAndAlignment NSGetSizeAndAlignment;
 
-enum 
+enum
 {
     NSNotFound = 0x7fffffff
 }
@@ -983,7 +983,7 @@ enum NSOpenGLPixelFormatAttribute : uint
 
 
 // NSParagraphStyle.h
-enum NSLineBreakMode 
+enum NSLineBreakMode
 {
     NSLineBreakByWordWrapping = 0,
     NSLineBreakByCharWrapping,
@@ -1062,7 +1062,7 @@ enum NSPrintPanelOptions : NSInteger
 
 
 // NSSegmentedCell.h
-enum  NSSegmentSwitchTracking 
+enum  NSSegmentSwitchTracking
 {
     NSSegmentSwitchTrackingSelectOne = 0,
     NSSegmentSwitchTrackingSelectAny = 1,

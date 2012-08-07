@@ -172,7 +172,7 @@ override bool isFileFormat(LEDataInputStream stream) {
         if ((signature[4] & 0xFF) !is 13) return false; //<RETURN>
         if ((signature[5] & 0xFF) !is 10) return false; //<LINEFEED>
         if ((signature[6] & 0xFF) !is 26) return false; //<CTRL/Z>
-        if ((signature[7] & 0xFF) !is 10) return false; //<LINEFEED>        
+        if ((signature[7] & 0xFF) !is 10) return false; //<LINEFEED>
         return true;
     } catch (Exception e) {
         return false;

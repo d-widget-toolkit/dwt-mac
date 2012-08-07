@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -25,7 +25,7 @@ import dwt.widgets.Composite;
  * of the children of a composite widget.
  * This class is the abstract base class for
  * layouts.
- * 
+ *
  * @see Composite#setLayout(Layout)
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
@@ -35,8 +35,8 @@ public abstract class Layout {
  * Computes and returns the size of the specified
  * composite's client area according to this layout.
  * <p>
- * This method computes the size that the client area 
- * of the composite must be in order to position all 
+ * This method computes the size that the client area
+ * of the composite must be in order to position all
  * children at their preferred size inside the
  * composite according to the layout algorithm
  * encoded by this layout.
@@ -55,7 +55,7 @@ public abstract class Layout {
  * @param hHint height (<code>DWT.DEFAULT</code> for preferred size)
  * @param flushCache <code>true</code> means flush cached layout values
  * @return a point containing the computed size (width, height)
- * 
+ *
  * @see #layout
  * @see Control#getBorderWidth
  * @see Control#getBounds
@@ -67,12 +67,12 @@ public abstract Point computeSize (Composite composite, int wHint, int hHint, bo
 
 /**
  * Instruct the layout to flush any cached values
- * associated with the control specified in the argument 
+ * associated with the control specified in the argument
  * <code>control</code>.
- * 
+ *
  * @param control a control managed by this layout
  * @return true if the Layout has flushed all cached information associated with control
- * 
+ *
  * @since 3.1
  */
 public bool flushCache (Control control) {

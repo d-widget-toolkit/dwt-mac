@@ -13,8 +13,8 @@ import dwt.internal.mozilla.nsStringAPI;
 
 const char[] NS_IDOCSHELLTREEOWNER_IID_STR = "9e508466-5ebb-4618-abfa-9ad47bed0b2e";
 
-const nsIID NS_IDOCSHELLTREEOWNER_IID= 
-  {0x9e508466, 0x5ebb, 0x4618, 
+const nsIID NS_IDOCSHELLTREEOWNER_IID=
+  {0x9e508466, 0x5ebb, 0x4618,
     [ 0xab, 0xfa, 0x9a, 0xd4, 0x7b, 0xed, 0x0b, 0x2e ]};
 
 interface nsIDocShellTreeOwner : nsISupports {
@@ -38,8 +38,8 @@ extern(System):
 
 const char[] NS_IDOCSHELLTREEOWNER_MOZILLA_1_8_BRANCH_IID_STR = "3c2a6927-e923-4ea8-bbda-a335c768ce4e";
 
-const nsIID NS_IDOCSHELLTREEOWNER_MOZILLA_1_8_BRANCH_IID= 
-  {0x3c2a6927, 0xe923, 0x4ea8, 
+const nsIID NS_IDOCSHELLTREEOWNER_MOZILLA_1_8_BRANCH_IID=
+  {0x3c2a6927, 0xe923, 0x4ea8,
     [ 0xbb, 0xda, 0xa3, 0x35, 0xc7, 0x68, 0xce, 0x4e ]};
 
 interface nsIDocShellTreeOwner_MOZILLA_1_8_BRANCH : nsIDocShellTreeOwner {

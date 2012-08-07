@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *     Frank Benoit <benoit@tionex.de>
@@ -21,15 +21,15 @@ import tango.core.Traits;
 import tango.core.Tuple;
 
 /**
- * Implementers of <code>Listener</code> provide a simple 
- * <code>handleEvent()</code> method that is used internally 
+ * Implementers of <code>Listener</code> provide a simple
+ * <code>handleEvent()</code> method that is used internally
  * by DWT to dispatch events.
  * <p>
  * After creating an instance of a class that implements this interface
- * it can be added to a widget using the 
+ * it can be added to a widget using the
  * <code>addListener(int eventType, Listener handler)</code> method and
- * removed using the 
- * <code>removeListener (int eventType, Listener handler)</code> method. 
+ * removed using the
+ * <code>removeListener (int eventType, Listener handler)</code> method.
  * When the specified event occurs, <code>handleEvent(...)</code> will
  * be sent to the instance.
  * </p>
@@ -38,10 +38,10 @@ import tango.core.Tuple;
  * providing the <em>untyped listener</em> API. Typically, widgets will
  * also provide a higher-level <em>typed listener</em> API, that is based
  * on the standard <code>java.util.EventListener</code> pattern.
- * </p> 
+ * </p>
  * <p>
  * Note that, since all internal DWT event dispatching is based on untyped
- * listeners, it is simple to build subsets of DWT for use on memory 
+ * listeners, it is simple to build subsets of DWT for use on memory
  * constrained, small footprint devices, by removing the classes and
  * methods which implement the typed listener API.
  * </p>
@@ -62,21 +62,21 @@ void handleEvent (Event event);
 
 /// Helper class for the dgListener template function
 private class _DgListenerT(Dg,T...) : Listener {
-    
+
     alias ParameterTupleOf!(Dg) DgArgs;
     static assert( is(DgArgs == Tuple!(Event,T)),
                   "Delegate args not correct: delegate args: ("~DgArgs.stringof~") vs. passed args: ("~Tuple!(Event,T).stringof~")" );
-    
+
     Dg dg;
     T  t;
-    
+
     private this( Dg dg, T t ){
         this.dg = dg;
         static if( T.length > 0 ){
             this.t = t;
         }
     }
-    
+
     void handleEvent( Event e ){
         dg(e,t);
     }

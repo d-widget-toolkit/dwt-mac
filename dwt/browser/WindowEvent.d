@@ -31,7 +31,7 @@ import dwt.browser.Browser;
  * <p>
  * The following example shows how <code>WindowEvent</code>'s are typically
  * handled.
- * 
+ *
  * <code><pre>
  *  public static void main(String[] args) {
  *      Display display = new Display();
@@ -97,10 +97,10 @@ import dwt.browser.Browser;
  *      });
  *  }
  * </pre></code>
- * 
+ *
  * The following notifications are emitted when the user selects a hyperlink that targets a new window
- * or as the result of a javascript that executes window.open. 
- * 
+ * or as the result of a javascript that executes window.open.
+ *
  * <p>Main Browser
  * <ul>
  *    <li>User selects a link that opens in a new window or javascript requests a new window</li>
@@ -111,7 +111,7 @@ import dwt.browser.Browser;
  *          <li>Application returns the second Browser as the host for the new window content</li>
  *    </ul>
  * </ul>
- * 
+ *
  * <p>Second Browser
  * <ul>
  *    <li>VisibilityWindowListener.show() notified</li>
@@ -119,48 +119,48 @@ import dwt.browser.Browser;
  *          <li>Application sets navigation tool bar, status bar, menu bar and Shell size
  *          <li>Application makes the Shell hosting the second Browser visible
  *          <li>User now sees the new window
- *    </ul> 
+ *    </ul>
  * </ul>
- * 
+ *
  * @see CloseWindowListener
  * @see OpenWindowListener
  * @see VisibilityWindowListener
- * 
+ *
  * @since 3.0
  */
 public class WindowEvent : TypedEvent {
 
-    /** 
+    /**
      * Specifies whether the platform requires the user to provide a
      * <code>Browser</code> to handle the new window.
-     * 
+     *
      * @since 3.1
      */
     public bool required;
-    
-    
-    /** 
+
+
+    /**
      * <code>Browser</code> provided by the application.
      */
     public Browser browser;
 
-    /** 
+    /**
      * Requested location for the <code>Shell</code> hosting the <code>Browser</code>.
      * It is <code>null</code> if no location has been requested.
      */
     public Point location;
 
-    /** 
-     * Requested <code>Browser</code> size. The client area of the <code>Shell</code> 
-     * hosting the <code>Browser</code> should be large enough to accommodate that size. 
+    /**
+     * Requested <code>Browser</code> size. The client area of the <code>Shell</code>
+     * hosting the <code>Browser</code> should be large enough to accommodate that size.
      * It is <code>null</code> if no size has been requested.
      */
     public Point size;
-    
+
     /**
      * Specifies whether the <code>Shell</code> hosting the <code>Browser</code> should
      * display an address bar.
-     * 
+     *
      * @since 3.1
      */
     public bool addressBar;
@@ -168,29 +168,29 @@ public class WindowEvent : TypedEvent {
     /**
      * Specifies whether the <code>Shell</code> hosting the <code>Browser</code> should
      * display a menu bar.
-     * 
+     *
      * @since 3.1
      */
     public bool menuBar;
-    
+
     /**
      * Specifies whether the <code>Shell</code> hosting the <code>Browser</code> should
      * display a status bar.
-     * 
+     *
      * @since 3.1
      */
     public bool statusBar;
-    
+
     /**
      * Specifies whether the <code>Shell</code> hosting the <code>Browser</code> should
      * display a tool bar.
-     * 
+     *
      * @since 3.1
      */
     public bool toolBar;
-    
+
     static final long serialVersionUID = 3617851997387174969L;
-    
+
 /**
  * Constructs a new instance of this class.
  *
@@ -210,10 +210,10 @@ public this(Widget widget) {
  */
 
 public String toString() {
-    return Format( "{} {required = {}, browser = {}, location = {}, size = {}, addressbar = {}, menubar = {}, statusbar = {}, toolbar = {}}", 
-        super.toString[1 .. $-2], 
-        required, browser, 
-        location, size, addressBar, 
-        menuBar, statusBar, toolBar ); 
+    return Format( "{} {required = {}, browser = {}, location = {}, size = {}, addressbar = {}, menubar = {}, statusbar = {}, toolbar = {}}",
+        super.toString[1 .. $-2],
+        required, browser,
+        location, size, addressBar,
+        menuBar, statusBar, toolBar );
 }
 }

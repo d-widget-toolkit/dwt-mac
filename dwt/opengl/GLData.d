@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -22,7 +22,7 @@ import dwt.dwthelper.utils;
  * @see GLCanvas
  * @see <a href="http://www.eclipse.org/swt/snippets/#opengl">OpenGL snippets</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.2
  */
 
@@ -30,13 +30,13 @@ public class GLData {
     /**
      * Specifies a double-buffered surface.  During context
      * creation, only double-buffered formats are considered
-     * when set to true. 
+     * when set to true.
      */
     public bool doubleBuffer;
 
     /**
      * Specifies a stereo surface.  During context creation,
-     * only stereo formats are considered when set to true. 
+     * only stereo formats are considered when set to true.
      */
     public bool stereo;
 
@@ -126,23 +126,23 @@ public class GLData {
      * are preferred.
      */
     public int samples;
-    
+
     /**
      * Another GLCanvas whose texture namespace and display lists
      * should be shared.
-     * 
+     *
      * @since 3.5
      */
     public GLCanvas shareContext;
-    
+
     /**
      * Another GLCanvas whose texture namespace and display lists
      * should be shared.
-     * 
+     *
      * @since 3.5
      */
     public GLCanvas shareContext;
-    
+
 /**
  * Returns a string containing a concise, human-readable
  * description of the receiver.

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -74,7 +74,7 @@ public this (Shell parent) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -90,7 +90,7 @@ public this (Shell parent) {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the parent</li>
  *    <li>ERROR_INVALID_SUBCLASS - if this class is not an allowed subclass</li>
  * </ul>
- * 
+ *
  * @see DWT#ICON_ERROR
  * @see DWT#ICON_INFORMATION
  * @see DWT#ICON_QUESTION
@@ -167,7 +167,7 @@ public int open () {
     if ((style & DWT.ICON_WARNING) !is 0) alertType = OS.NSWarningAlertStyle;
     if ((style & DWT.ICON_WORKING) !is 0) alertType = OS.NSInformationalAlertStyle;
     alert.setAlertStyle(alertType);
-    
+
     int mask = (DWT.YES | DWT.NO | DWT.OK | DWT.CANCEL | DWT.ABORT | DWT.RETRY | DWT.IGNORE);
     int bits = style & mask;
     NSString title;
@@ -201,7 +201,7 @@ public int open () {
             alert.addButtonWithTitle(title);
 //          no.setKeyEquivalent(NSString.stringWith("\033"));
             break;
-        case DWT.YES | DWT.NO | DWT.CANCEL:             
+        case DWT.YES | DWT.NO | DWT.CANCEL:
             title = NSString.stringWith(DWT.getMessage("DWT_Yes"));
             alert.addButtonWithTitle(title);
             title = NSString.stringWith(DWT.getMessage("DWT_Cancel"));
@@ -300,7 +300,7 @@ public int open () {
                 default:
             }
             break;
-        case DWT.YES | DWT.NO | DWT.CANCEL:             
+        case DWT.YES | DWT.NO | DWT.CANCEL:
             switch (response) {
                 case OS.NSAlertFirstButtonReturn:
                     return DWT.YES;
@@ -360,7 +360,7 @@ void panelDidEnd_returnCode_contextInfo(int /*long*/ id, int /*long*/ sel, int /
  * visible on the dialog while it is open.
  *
  * @param string the message
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the string is null</li>
  * </ul>

@@ -6,8 +6,8 @@ import dwt.internal.mozilla.nsISupports;
 
 const char[] GFXIIMAGEFRAME_IID_STR = "f6d00ee7-defc-4101-b2dc-e72cf4c37c3c";
 
-const nsIID GFXIIMAGEFRAME_IID= 
-  {0xf6d00ee7, 0xdefc, 0x4101, 
+const nsIID GFXIIMAGEFRAME_IID=
+  {0xf6d00ee7, 0xdefc, 0x4101,
     [ 0xb2, 0xdc, 0xe7, 0x2c, 0xf4, 0xc3, 0x7c, 0x3c ]};
 
 interface gfxIImageFrame : nsISupports {

@@ -8,8 +8,8 @@ import dwt.internal.mozilla.nsIDOMWindow;
 
 const char[] NS_IPROMPTSERVICE_IID_STR = "1630c61a-325e-49ca-8759-a31b16c47aa5";
 
-const nsIID NS_IPROMPTSERVICE_IID= 
-  {0x1630c61a, 0x325e, 0x49ca, 
+const nsIID NS_IPROMPTSERVICE_IID=
+  {0x1630c61a, 0x325e, 0x49ca,
     [ 0x87, 0x59, 0xa3, 0x1b, 0x16, 0xc4, 0x7a, 0xa5 ]};
 
 interface nsIPromptService : nsISupports {

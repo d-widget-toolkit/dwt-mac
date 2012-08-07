@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *    Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -25,7 +25,7 @@ public struct NSRect {
     {
         return origin.x;
     }
-    
+
     CGFloat x (CGFloat x)
     {
         return origin.x = x;
@@ -35,7 +35,7 @@ public struct NSRect {
     {
         return origin.y;
     }
-    
+
     CGFloat y (CGFloat y)
     {
         return origin.y = y;
@@ -45,7 +45,7 @@ public struct NSRect {
     {
         return size.width;
     }
-    
+
     CGFloat width (CGFloat width)
     {
         return size.width = width;
@@ -59,7 +59,7 @@ public struct NSRect {
     public String toString() {
         return Format("NSRect{" , x , "," , y , "," , width , "," , height , "}");
     }
-    
+
     NSPoint origin;
     NSSize size;
 }

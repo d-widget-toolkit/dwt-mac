@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -24,7 +24,7 @@ import objc = dwt.internal.objc.runtime;
 
 public class NSAffineTransform : NSObject
 {
-    
+
 public this ()
 {
     super();

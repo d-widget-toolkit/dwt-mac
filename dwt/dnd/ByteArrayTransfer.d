@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -21,23 +21,23 @@ import dwt.dnd.DND;
 import dwt.dnd.Transfer;
 import dwt.dnd.TransferData;
 
- 
+
 /**
- * The class <code>ByteArrayTransfer</code> provides a platform specific 
- * mechanism for converting a java <code>byte[]</code> to a platform 
+ * The class <code>ByteArrayTransfer</code> provides a platform specific
+ * mechanism for converting a java <code>byte[]</code> to a platform
  * specific representation of the byte array and vice versa.
  *
- * <p><code>ByteArrayTransfer</code> is never used directly but is sub-classed 
+ * <p><code>ByteArrayTransfer</code> is never used directly but is sub-classed
  * by transfer agents that convert between data in a java format such as a
  * <code>String</code> and a platform specific byte array.
- * 
- * <p>If the data you are converting <b>does not</b> map to a 
- * <code>byte[]</code>, you should sub-class <code>Transfer</code> directly 
+ *
+ * <p>If the data you are converting <b>does not</b> map to a
+ * <code>byte[]</code>, you should sub-class <code>Transfer</code> directly
  * and do your own mapping to a platform data type.</p>
- * 
+ *
  * <p>The following snippet shows a subclass of ByteArrayTransfer that transfers
  * data defined by the class <code>MyType</code>.</p>
- * 
+ *
  * <pre><code>
  * public class MyType {
  *  public String fileName;
@@ -45,24 +45,24 @@ import dwt.dnd.TransferData;
  *  public long lastModified;
  * }
  * </code></pre>
- * 
+ *
  * <pre><code>
  * public class MyTypeTransfer extends ByteArrayTransfer {
- *  
+ *
  *  private static final String MYTYPENAME = "my_type_name";
  *  private static final int MYTYPEID = registerType(MYTYPENAME);
  *  private static MyTypeTransfer _instance = new MyTypeTransfer();
- * 
+ *
  * private MyTypeTransfer() {}
- * 
+ *
  * public static MyTypeTransfer getInstance () {
  *  return _instance;
  * }
  * public void javaToNative (Object object, TransferData transferData) {
  *  if (object is null || !(object instanceof MyType[])) return;
- *  
+ *
  *  if (isSupportedType(transferData)) {
- *      MyType[] myTypes = (MyType[]) object;   
+ *      MyType[] myTypes = (MyType[]) object;
  *      try {
  *          // write data to a byte array and then ask super to convert to pMedium
  *          ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -76,20 +76,20 @@ import dwt.dnd.TransferData;
  *          }
  *          byte[] buffer = out.toByteArray();
  *          writeOut.close();
- * 
+ *
  *          super.javaToNative(buffer, transferData);
- *          
+ *
  *      } catch (IOException e) {
  *      }
  *  }
  * }
- * public Object nativeToJava(TransferData transferData){   
- * 
+ * public Object nativeToJava(TransferData transferData){
+ *
  *  if (isSupportedType(transferData)) {
- *      
+ *
  *      byte[] buffer = (byte[])super.nativeToJava(transferData);
  *      if (buffer is null) return null;
- *      
+ *
  *      MyType[] myData = new MyType[0];
  *      try {
  *          ByteArrayInputStream in = new ByteArrayInputStream(buffer);
@@ -113,7 +113,7 @@ import dwt.dnd.TransferData;
  *      }
  *      return myData;
  *  }
- * 
+ *
  *  return null;
  * }
  * protected String[] getTypeNames(){
@@ -149,13 +149,13 @@ public bool isSupportedType(TransferData transferData){
 }
 
 /**
- * This implementation of <code>javaToNative</code> converts a java 
+ * This implementation of <code>javaToNative</code> converts a java
  * <code>byte[]</code> to a platform specific representation.
- * 
+ *
  * @param object a java <code>byte[]</code> containing the data to be converted
  * @param transferData an empty <code>TransferData</code> object that will
  *      be filled in on return with the platform specific format of the data
- * 
+ *
  * @see Transfer#nativeToJava
  */
 protected void javaToNative (Object object, TransferData transferData) {
@@ -168,13 +168,13 @@ protected void javaToNative (Object object, TransferData transferData) {
 }
 
 /**
- * This implementation of <code>nativeToJava</code> converts a platform specific 
- * representation of a byte array to a java <code>byte[]</code>.   
- * 
+ * This implementation of <code>nativeToJava</code> converts a platform specific
+ * representation of a byte array to a java <code>byte[]</code>.
+ *
  * @param transferData the platform specific representation of the data to be converted
  * @return a java <code>byte[]</code> containing the converted data if the conversion was
  *      successful; otherwise null
- * 
+ *
  * @see Transfer#javaToNative
  */
 protected Object nativeToJava(TransferData transferData) {

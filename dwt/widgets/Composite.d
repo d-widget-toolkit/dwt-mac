@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -68,18 +68,18 @@ import tango.io.Stdout;
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
 public class Composite : Scrollable {
-    
+
     alias Scrollable.computeSize computeSize;
     alias Scrollable.forceFocus forceFocus;
     alias Scrollable.moveAbove moveAbove;
     alias Scrollable.moveBelow moveBelow;
     alias Scrollable.setBounds setBounds;
     alias Scrollable.translateTraversal translateTraversal;
-    
+
     Layout layout_;
     Control[] tabList;
     int layoutCount, backgroundMode;
-    
+
 this () {
     /* Do nothing */
 }
@@ -90,7 +90,7 @@ this () {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -168,7 +168,7 @@ bool acceptsFirstResponder (objc.id id, objc.SEL sel) {
 }
 
 objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
-    
+
     if (id is view.id) {
         if (accessible !is null) {
             // If there is an accessible, it may provide its own list of attributes if it's a lightweight control.
@@ -177,7 +177,7 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
             if (returnObject !is null) return returnObject.id;
         }
     }
-    
+
     return super.accessibilityAttributeNames(id, sel);
 }
 
@@ -186,7 +186,7 @@ bool accessibilityIsIgnored(objc.id id, objc.SEL sel) {
     if (view !is null && id is view.id) {
         if (accessible !is null) {
             cocoa.id role = accessible.internal_accessibilityAttributeValue(OS.NSAccessibilityRoleAttribute, ACC.CHILDID_SELF);
-            if (role !is null) return false; 
+            if (role !is null) return false;
         }
     }
 
@@ -194,14 +194,14 @@ bool accessibilityIsIgnored(objc.id id, objc.SEL sel) {
 }
 
 /**
- * Clears any data that has been cached by a Layout for all widgets that 
- * are in the parent hierarchy of the changed control up to and including the 
+ * Clears any data that has been cached by a Layout for all widgets that
+ * are in the parent hierarchy of the changed control up to and including the
  * receiver.  If an ancestor does not have a layout, it is skipped.
- * 
+ *
  * @param changed an array of controls that changed state and require a recalculation of size
- * 
+ *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the changed array is null any of its controls are null or have been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the changed array is null any of its controls are null or have been disposed</li>
  *    <li>ERROR_INVALID_PARENT - if any control in changed is not in the widget tree of the receiver</li>
  * </ul>
  * @exception DWTException <ul>
@@ -382,7 +382,7 @@ void fixTabList (Control control) {
  * </ul>
  *
  * @see DWT
- * 
+ *
  * @since 3.2
  */
 public int getBackgroundMode () {
@@ -398,11 +398,11 @@ public int getBackgroundMode () {
  * <p>
  * Note: This is not the actual structure used by the receiver
  * to maintain its list of children, so modifying the array will
- * not affect the receiver. 
+ * not affect the receiver.
  * </p>
  *
  * @return an array of children
- * 
+ *
  * @see Control#moveAbove
  * @see Control#moveBelow
  *
@@ -442,7 +442,7 @@ public Layout getLayout () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #setLayoutDeferred(bool)
  * @see #isLayoutDeferred()
  *
@@ -462,7 +462,7 @@ public bool getLayoutDeferred () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #setTabList
  */
 public Control [] getTabList () {
@@ -499,7 +499,7 @@ void invalidateChildrenVisibleRegion () {
 }
 
 /**
- * Returns <code>true</code> if the receiver or any ancestor 
+ * Returns <code>true</code> if the receiver or any ancestor
  * up to and including the receiver's nearest ancestor shell
  * has deferred the performing of layouts.  Otherwise, <code>false</code>
  * is returned.
@@ -510,10 +510,10 @@ void invalidateChildrenVisibleRegion () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #setLayoutDeferred(bool)
  * @see #getLayoutDeferred()
- * 
+ *
  * @since 3.1
  */
 public bool isLayoutDeferred () {
@@ -561,7 +561,7 @@ void keyDown (objc.id id, objc.SEL sel, objc.id theEvent) {
 
 /**
  * If the receiver has a layout, asks the layout to <em>lay out</em>
- * (that is, set the size and location of) the receiver's children. 
+ * (that is, set the size and location of) the receiver's children.
  * If the receiver does not have a layout, do nothing.
  * <p>
  * This is equivalent to calling <code>layout(true)</code>.
@@ -572,7 +572,7 @@ void keyDown (objc.id id, objc.SEL sel, objc.id theEvent) {
  * exposed, then the parent will paint. If no child is
  * affected, the parent will not paint.
  * </p>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
@@ -585,19 +585,19 @@ public void layout () {
 
 /**
  * If the receiver has a layout, asks the layout to <em>lay out</em>
- * (that is, set the size and location of) the receiver's children. 
+ * (that is, set the size and location of) the receiver's children.
  * If the argument is <code>true</code> the layout must not rely
  * on any information it has cached about the immediate children. If it
  * is <code>false</code> the layout may (potentially) optimize the
- * work it is doing by assuming that none of the receiver's 
+ * work it is doing by assuming that none of the receiver's
  * children has changed state since the last layout.
  * If the receiver does not have a layout, do nothing.
  * <p>
- * If a child is resized as a result of a call to layout, the 
+ * If a child is resized as a result of a call to layout, the
  * resize event will invoke the layout of the child.  The layout
- * will cascade down through all child widgets in the receiver's widget 
- * tree until a child is encountered that does not resize.  Note that 
- * a layout due to a resize will not flush any cached information 
+ * will cascade down through all child widgets in the receiver's widget
+ * tree until a child is encountered that does not resize.  Note that
+ * a layout due to a resize will not flush any cached information
  * (same as <code>layout(false)</code>).
  * </p>
  * <p>
@@ -622,20 +622,20 @@ public void layout (bool changed) {
 
 /**
  * If the receiver has a layout, asks the layout to <em>lay out</em>
- * (that is, set the size and location of) the receiver's children. 
+ * (that is, set the size and location of) the receiver's children.
  * If the changed argument is <code>true</code> the layout must not rely
  * on any information it has cached about its children. If it
  * is <code>false</code> the layout may (potentially) optimize the
- * work it is doing by assuming that none of the receiver's 
+ * work it is doing by assuming that none of the receiver's
  * children has changed state since the last layout.
  * If the all argument is <code>true</code> the layout will cascade down
  * through all child widgets in the receiver's widget tree, regardless of
- * whether the child has changed size.  The changed argument is applied to 
+ * whether the child has changed size.  The changed argument is applied to
  * all layouts.  If the all argument is <code>false</code>, the layout will
- * <em>not</em> cascade down through all child widgets in the receiver's widget 
- * tree.  However, if a child is resized as a result of a call to layout, the 
- * resize event will invoke the layout of the child.  Note that 
- * a layout due to a resize will not flush any cached information 
+ * <em>not</em> cascade down through all child widgets in the receiver's widget
+ * tree.  However, if a child is resized as a result of a call to layout, the
+ * resize event will invoke the layout of the child.  Note that
+ * a layout due to a resize will not flush any cached information
  * (same as <code>layout(false)</code>).
  * </p>
  * <p>
@@ -663,11 +663,11 @@ public void layout (bool changed, bool all) {
 }
 
 /**
- * Forces a lay out (that is, sets the size and location) of all widgets that 
- * are in the parent hierarchy of the changed control up to and including the 
- * receiver.  The layouts in the hierarchy must not rely on any information 
- * cached about the changed control or any of its ancestors.  The layout may 
- * (potentially) optimize the work it is doing by assuming that none of the 
+ * Forces a lay out (that is, sets the size and location) of all widgets that
+ * are in the parent hierarchy of the changed control up to and including the
+ * receiver.  The layouts in the hierarchy must not rely on any information
+ * cached about the changed control or any of its ancestors.  The layout may
+ * (potentially) optimize the work it is doing by assuming that none of the
  * peers of the changed control have changed state since the last layout.
  * If an ancestor does not have a layout, skip it.
  * <p>
@@ -676,11 +676,11 @@ public void layout (bool changed, bool all) {
  * exposed, then the parent will paint. If no child is
  * affected, the parent will not paint.
  * </p>
- * 
+ *
  * @param changed a control that has had a state change which requires a recalculation of its size
- * 
+ *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the changed array is null any of its controls are null or have been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the changed array is null any of its controls are null or have been disposed</li>
  *    <li>ERROR_INVALID_PARENT - if any control in changed is not in the widget tree of the receiver</li>
  * </ul>
  * @exception DWTException <ul>
@@ -825,7 +825,7 @@ void scrollWheel (objc.id id, objc.SEL sel, objc.id theEvent) {
                 int selection = Math.max (0, (int)(0.5f + bar.getSelection () - bar.getIncrement () * delta));
                 bar.setSelection (selection);
                 Event event = new Event ();
-                event.detail = delta > 0 ? DWT.PAGE_UP : DWT.PAGE_DOWN; 
+                event.detail = delta > 0 ? DWT.PAGE_UP : DWT.PAGE_DOWN;
                 bar.sendEvent (DWT.Selection, event);
                 handled = true;
             }
@@ -835,7 +835,7 @@ void scrollWheel (objc.id id, objc.SEL sel, objc.id theEvent) {
                 int selection = Math.max (0, cast(int)(0.5f + bar.getSelection () - bar.getIncrement () * delta));
                 bar.setSelection (selection);
                 Event event = new Event ();
-                event.detail = delta > 0 ? DWT.PAGE_UP : DWT.PAGE_DOWN; 
+                event.detail = delta > 0 ? DWT.PAGE_UP : DWT.PAGE_DOWN;
                 bar.sendEvent (DWT.Selection, event);
                 handled = true;
             }
@@ -862,7 +862,7 @@ void scrollWheel (objc.id id, objc.SEL sel, objc.id theEvent) {
  * </ul>
  *
  * @see DWT
- * 
+ *
  * @since 3.2
  */
 public void setBackgroundMode (int mode) {
@@ -905,7 +905,7 @@ public void setLayout (Layout layout) {
  * No layout of any kind can occur in the receiver or any of its
  * children until the flag is set to false.
  * Layout operations that occurred while the flag was
- * <code>true</code> are remembered and when the flag is set to 
+ * <code>true</code> are remembered and when the flag is set to
  * <code>false</code>, the layout operations are performed in an
  * optimized manner.  Nested calls to this method are stacked.
  *
@@ -915,7 +915,7 @@ public void setLayout (Layout layout) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #layout(bool)
  * @see #layout(Control[])
  *
@@ -962,7 +962,7 @@ bool setTabGroupFocus () {
  * @param tabList the ordered list of controls representing the tab order or null
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if a widget in the tabList is null or has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if a widget in the tabList is null or has been disposed</li>
  *    <li>ERROR_INVALID_PARENT - if widget in the tabList is not in the same widget tree</li>
  * </ul>
  * @exception DWTException <ul>
@@ -982,7 +982,7 @@ public void setTabList (Control [] tabList) {
         Control [] newList = new Control [tabList.length];
         System.arraycopy (tabList, 0, newList, 0, tabList.length);
         tabList = newList;
-    } 
+    }
     this.tabList = tabList;
 }
 

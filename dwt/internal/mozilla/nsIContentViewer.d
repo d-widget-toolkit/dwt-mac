@@ -13,8 +13,8 @@ import dwt.internal.mozilla.nsISHEntry;
 
 const char[] NS_ICONTENTVIEWER_IID_STR = "6a7ddb40-8a9e-4576-8ad1-71c5641d8780";
 
-const nsIID NS_ICONTENTVIEWER_IID= 
-  {0x6a7ddb40, 0x8a9e, 0x4576, 
+const nsIID NS_ICONTENTVIEWER_IID=
+  {0x6a7ddb40, 0x8a9e, 0x4576,
     [ 0x8a, 0xd1, 0x71, 0xc5, 0x64, 0x1d, 0x87, 0x80 ]};
 
 interface nsIContentViewer : nsISupports {
@@ -58,8 +58,8 @@ extern(System):
 
 const char[] NS_ICONTENTVIEWER_MOZILLA_1_8_BRANCH_IID_STR = "51341ed4-a3bf-4fd5-ae17-5fd3ec59dcab";
 
-const nsIID NS_ICONTENTVIEWER_MOZILLA_1_8_BRANCH_IID= 
-  {0x51341ed4, 0xa3bf, 0x4fd5, 
+const nsIID NS_ICONTENTVIEWER_MOZILLA_1_8_BRANCH_IID=
+  {0x51341ed4, 0xa3bf, 0x4fd5,
     [ 0xae, 0x17, 0x5f, 0xd3, 0xec, 0x59, 0xdc, 0xab ]};
 
 interface nsIContentViewer_MOZILLA_1_8_BRANCH : nsISupports {

@@ -10,8 +10,8 @@ typedef PRBool function(nsISupports, void*) nsISupportsArrayEnumFunc;
 
 const char[] NS_ISUPPORTSARRAY_IID_STR = "791eafa0-b9e6-11d1-8031-006008159b5a";
 
-const nsIID NS_ISUPPORTSARRAY_IID= 
-  {0x791eafa0, 0xb9e6, 0x11d1, 
+const nsIID NS_ISUPPORTSARRAY_IID=
+  {0x791eafa0, 0xb9e6, 0x11d1,
     [ 0x80, 0x31, 0x00, 0x60, 0x08, 0x15, 0x9b, 0x5a ]};
 
 interface nsISupportsArray : nsICollection {

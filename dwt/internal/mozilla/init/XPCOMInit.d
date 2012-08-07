@@ -34,7 +34,7 @@ import dwt.internal.Platform;
 /** @jniclass flags=cpp */
 public class XPCOMInit extends Platform {
     public static final int PATH_MAX = 4096;
-    
+
 public static final native int GREVersionRange_sizeof ();
 
 /**

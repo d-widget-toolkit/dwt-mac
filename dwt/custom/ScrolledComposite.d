@@ -154,7 +154,7 @@ public this(Composite parent, int style) {
         hBar.setVisible(false);
         hBar.addListener (DWT.Selection, new class(this) Listener  {
             ScrolledComposite sc;
-            
+
             this (ScrolledComposite sc) {
                 this.sc = sc;
             }
@@ -170,7 +170,7 @@ public this(Composite parent, int style) {
         vBar.setVisible(false);
         vBar.addListener (DWT.Selection, new class(this) Listener {
             ScrolledComposite sc;
-            
+
             this (ScrolledComposite sc) {
                 this.sc = sc;
             }
@@ -183,11 +183,11 @@ public this(Composite parent, int style) {
 
     contentListener = new class(this) Listener {
         ScrolledComposite sc;
-        
+
         this (ScrolledComposite sc) {
             this.sc = sc;
         }
-        
+
         public void handleEvent(Event e) {
             if (e.type !is DWT.Resize) return;
             sc.layout(false);
@@ -196,7 +196,7 @@ public this(Composite parent, int style) {
 
     filter = new class(this) Listener {
             ScrolledComposite sc;
-            
+
             this (ScrolledComposite sc) {
                 this.sc = sc;
             }
@@ -210,11 +210,11 @@ public this(Composite parent, int style) {
 
     addDisposeListener(new class(this) DisposeListener {
         ScrolledComposite sc;
-        
+
         this (ScrolledComposite sc) {
             this.sc = sc;
         }
-        
+
         public void widgetDisposed(DisposeEvent e) {
             sc.getDisplay().removeFilter(DWT.FocusIn, filter);
         }

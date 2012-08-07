@@ -7,7 +7,7 @@
  *
  * Contributors:
  *    IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -27,7 +27,7 @@ import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 
 public class NSBitmapImageRep : NSImageRep {
-    
+
 public this () {
     super();
 }

@@ -15,8 +15,8 @@ import dwt.internal.mozilla.nsStringAPI;
 
 const char[] NS_ITRANSFER_IID_STR = "23c51569-e9a1-4a92-adeb-3723db82ef7c";
 
-const nsIID NS_ITRANSFER_IID= 
-  {0x23c51569, 0xe9a1, 0x4a92, 
+const nsIID NS_ITRANSFER_IID=
+  {0x23c51569, 0xe9a1, 0x4a92,
     [ 0xad, 0xeb, 0x37, 0x23, 0xdb, 0x82, 0xef, 0x7c ]};
 
 interface nsITransfer : nsIWebProgressListener2 {

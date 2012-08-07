@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -45,12 +45,12 @@ import dwt.widgets.Widget;
  * @noextend This class is not intended to be subclassed by clients.
  */
 public abstract class Scrollable : Control {
-    
+
     alias Widget.setInputState setInputState;
-    
+
     NSScrollView scrollView;
     ScrollBar horizontalBar, verticalBar;
-    
+
 this () {
     /* Do nothing */
 }
@@ -61,7 +61,7 @@ this () {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -91,7 +91,7 @@ public this (Composite parent, int style) {
 bool accessibilityIsIgnored(objc.id id, objc.SEL sel) {
     // Always ignore scrollers.
     if (scrollView !is null && id is scrollView.id) return true;
-    return super.accessibilityIsIgnored(id, sel);   
+    return super.accessibilityIsIgnored(id, sel);
 }
 
 /**
@@ -107,7 +107,7 @@ bool accessibilityIsIgnored(objc.id id, objc.SEL sel) {
  * rectangle described by the arguments (relative to the
  * receiver's parent).
  * </p>
- * 
+ *
  * @param x the desired x coordinate of the client area
  * @param y the desired y coordinate of the client area
  * @param width the desired width of the client area
@@ -191,7 +191,7 @@ void deregister () {
  * Returns a rectangle which describes the area of the
  * receiver which is capable of displaying data (that is,
  * not covered by the "trimmings").
- * 
+ *
  * @return the client area
  *
  * @exception DWTException <ul>
@@ -339,7 +339,7 @@ NSView topView () {
 void updateCursorRects (bool enabled) {
     super.updateCursorRects (enabled);
     if (scrollView is null) return;
-    updateCursorRects (enabled, scrollView);    
+    updateCursorRects (enabled, scrollView);
     NSClipView contentView = scrollView.contentView ();
     updateCursorRects (enabled, contentView);
 }

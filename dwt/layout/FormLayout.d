@@ -90,7 +90,7 @@ import dwt.dwthelper.utils;
  * @see FormAttachment
  * @see <a href="http://www.eclipse.org/swt/snippets/#formlayout">FormLayout snippets</a>
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: LayoutExample</a>
- * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a> 
+ * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  *
  * @since 2.0
  */

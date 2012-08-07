@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -58,14 +58,14 @@ public class Sash : Control {
     private final static int INCREMENT = 1;
     private final static int PAGE_INCREMENT = 9;
     NSArray accessibilityAttributes = null;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * and a style value describing its behavior and appearance.
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -114,7 +114,7 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
         ourAttributes.addObject(OS.NSAccessibilityNextContentsAttribute);
         ourAttributes.addObject(OS.NSAccessibilityPreviousContentsAttribute);
         ourAttributes.addObject(OS.NSAccessibilityOrientationAttribute);
-        
+
         if (accessible !is null) {
             // See if the accessible will override or augment the standard list.
             // Help, title, and description can be overridden.
@@ -122,7 +122,7 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
             extraAttributes.addObject(OS.NSAccessibilityHelpAttribute);
             extraAttributes.addObject(OS.NSAccessibilityDescriptionAttribute);
             extraAttributes.addObject(OS.NSAccessibilityTitleAttribute);
-            
+
             for (int i = (int)/*64*/extraAttributes.count() - 1; i >= 0; i--) {
                 NSString attribute = new NSString(extraAttributes.objectAtIndex(i).id);
                 if (accessible.internal_accessibilityAttributeValue(attribute, ACC.CHILDID_SELF) !is null) {
@@ -130,29 +130,29 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
                 }
             }
         }
-        
+
         accessibilityAttributes = ourAttributes;
         accessibilityAttributes.retain();
     }
-    
+
     return accessibilityAttributes.id;
 }
 
 objc.id accessibilityAttributeValue(objc.id id, objc.SEL sel, objc.id arg0) {
     objc.id returnValue = null;
     NSString attributeName = new NSString(arg0);
-    
+
     if (accessible !is null) {
         cocoa.id returnObject = accessible.internal_accessibilityAttributeValue(attributeName, ACC.CHILDID_SELF);
-        
+
         if (returnObject !is null) returnValue = returnObject.id;
     }
-    
+
     if (returnValue !is null) return returnValue;
-    
+
     if (attributeName.isEqualToString (OS.NSAccessibilityRoleAttribute) || attributeName.isEqualToString (OS.NSAccessibilityRoleDescriptionAttribute)) {
         NSString roleText = OS.NSAccessibilitySplitterRole;
-        
+
         if (attributeName.isEqualToString (OS.NSAccessibilityRoleAttribute)) {
             return roleText.id;
         } else { // NSAccessibilityRoleDescriptionAttribute
@@ -186,8 +186,8 @@ objc.id accessibilityAttributeValue(objc.id id, objc.SEL sel, objc.id arg0) {
                 }
             }
         }
-        
-        if (nextView !is null) 
+
+        if (nextView !is null)
             return NSArray.arrayWithObject(nextView.view).id;
         else
             return NSArray.array().id;
@@ -202,18 +202,18 @@ objc.id accessibilityAttributeValue(objc.id id, objc.SEL sel, objc.id arg0) {
                 }
             }
         }
-        
-        if (nextView !is null) 
+
+        if (nextView !is null)
             return NSArray.arrayWithObject(nextView.view).id;
         else
             return NSArray.array().id;
     }
-    
+
     return super.accessibilityAttributeValue(id, sel, arg0);
 }
 
 bool accessibilityIsIgnored(objc.id id, objc.SEL sel) {
-    return false;   
+    return false;
 }
 
 /**
@@ -319,7 +319,7 @@ bool sendKeyEvent(NSEvent nsEvent, int type) {
                     if (keyCode is 123 || keyCode  is 124) break;
                     yChange = keyCode is 126 ? -stepSize : stepSize;
                 }
-                
+
                 Rectangle bounds = getBounds ();
                 int width = bounds.width, height = bounds.height;
                 Rectangle parentBounds = parent.getBounds ();

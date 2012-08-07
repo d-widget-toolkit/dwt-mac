@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -24,7 +24,7 @@ import tango.core.Exception;
 import dwt.dwthelper.utils;
 import dwt.widgets.Display;
 import dwt.widgets.RunnableLock;
- 
+
 /**
  * Instances of this class provide synchronization support
  * for displays. A default instance is created automatically
@@ -35,7 +35,7 @@ import dwt.widgets.RunnableLock;
  * needs to deal with this class. It is provided only to
  * allow applications which require non-standard
  * synchronization behavior to plug in the support they
- * require. <em>Subclasses which override the methods in 
+ * require. <em>Subclasses which override the methods in
  * this class must ensure that the superclass methods are
  * invoked in their implementations</em>
  * </p>
@@ -58,14 +58,14 @@ public class Synchronizer {
 
 /**
  * Constructs a new instance of this class.
- * 
+ *
  * @param display the display to create the synchronizer on
  */
 public this (Display display) {
     this.display = display;
     messageLock = new Object ();
 }
-    
+
 void addLast (RunnableLock lock) {
     bool wake = false;
     synchronized (messageLock) {
@@ -77,14 +77,14 @@ void addLast (RunnableLock lock) {
         }
         messages [messageCount++] = lock;
         wake = messageCount is 1;
-    }   
+    }
     if (wake) display.wakeThread ();
 }
 
 /**
  * Causes the <code>run()</code> method of the runnable to
- * be invoked by the user-interface thread at the next 
- * reasonable opportunity. The caller of this method continues 
+ * be invoked by the user-interface thread at the next
+ * reasonable opportunity. The caller of this method continues
  * to run in parallel, and is not notified when the
  * runnable has completed.
  *
@@ -157,7 +157,7 @@ bool runAsyncMessages (bool all) {
 
 /**
  * Causes the <code>run()</code> method of the runnable to
- * be invoked by the user-interface thread at the next 
+ * be invoked by the user-interface thread at the next
  * reasonable opportunity. The thread which calls this method
  * is suspended until the runnable completes.
  *

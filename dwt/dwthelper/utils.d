@@ -159,7 +159,7 @@ class Integer : ValueWrapperT!(int) {
             implMissing( __FILE__, __LINE__ );
             return null;
         }
-        
+
         return null;
     }
 
@@ -266,7 +266,7 @@ class Float : ValueWrapperT!(float) {
     public static float NEGATIVE_INFINITY = ((-1.0f) / 0.0f);
     public static float NaN = (0.0f / 0.0f);
     public static float MAX_VALUE = 3.4028235e+38f;
-    public static float MIN_VALUE = 1.4e-45f;    
+    public static float MIN_VALUE = 1.4e-45f;
     public static int SIZE = 32;
 
     this( float value ){
@@ -529,12 +529,12 @@ struct Character
     static alias CharacterIsLetterOrDigit isLetterOrDigit;
     static alias CharacterIsSpaceChar isSpaceChar;
     static alias CharacterIsWhitespace isWhitespace;
-    
+
     static char toLowerCase (char c)
     {
         return tango.text.Unicode.toLower([c])[0];
     }
-    
+
     static bool isDigit (dchar c)
     {
         return tango.text.Unicode.isDigit(c);

@@ -18,7 +18,7 @@ import dwt.custom.CTabFolderListener;
 /**
  * This adapter class provides a default implementation for the
  * method described by the <code>CTabFolderListener</code> interface.
- * 
+ *
  * @see CTabFolderListener
  * @see CTabFolderEvent
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>

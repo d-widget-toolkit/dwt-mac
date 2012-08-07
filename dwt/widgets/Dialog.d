@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -35,7 +35,7 @@ import dwt.widgets.Widget;
  * <pre><code>
  * public class MyDialog extends Dialog {
  *  Object result;
- *      
+ *
  *  public MyDialog (Shell parent, int style) {
  *      super (parent, style);
  *  }
@@ -62,7 +62,7 @@ import dwt.widgets.Widget;
  * by every subclass on every platform. If a modality style is
  * not supported, it is "upgraded" to a more restrictive modality
  * style that is supported.  For example, if <code>PRIMARY_MODAL</code>
- * is not supported by a particular dialog, it would be upgraded to 
+ * is not supported by a particular dialog, it would be upgraded to
  * <code>APPLICATION_MODAL</code>. In addition, as is the case
  * for shells, the window manager for the desktop on which the
  * instance is visible has ultimate control over the appearance
@@ -77,7 +77,7 @@ import dwt.widgets.Widget;
  * Note: Only one of the styles APPLICATION_MODAL, PRIMARY_MODAL,
  * and SYSTEM_MODAL may be specified.
  * </p>
- * 
+ *
  * @see Shell
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: ControlExample</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
@@ -111,7 +111,7 @@ public this (Shell parent) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -126,7 +126,7 @@ public this (Shell parent) {
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the parent</li>
  * </ul>
- * 
+ *
  * @see DWT#PRIMARY_MODAL
  * @see DWT#APPLICATION_MODAL
  * @see DWT#SYSTEM_MODAL
@@ -226,7 +226,7 @@ public Shell getParent () {
  * <p>
  * Note that, the value which is returned by this method <em>may
  * not match</em> the value which was provided to the constructor
- * when the receiver was created. 
+ * when the receiver was created.
  * </p>
  *
  * @return the style bits
@@ -243,7 +243,7 @@ public int getStyle () {
 /**
  * Returns the receiver's text, which is the string that the
  * window manager will typically display as the receiver's
- * <em>title</em>. If the text has not previously been set, 
+ * <em>title</em>. If the text has not previously been set,
  * returns an empty string.
  *
  * @return the text
@@ -260,7 +260,7 @@ public String getText () {
 /**
  * Sets the receiver's text, which is the string that the
  * window manager will typically display as the receiver's
- * <em>title</em>, to the argument, which must not be null. 
+ * <em>title</em>, to the argument, which must not be null.
  *
  * @param string the new text
  *

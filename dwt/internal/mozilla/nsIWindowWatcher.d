@@ -5,17 +5,17 @@ import dwt.internal.mozilla.nsID;
 import dwt.internal.mozilla.nsISupports;
 
 import dwt.internal.mozilla.nsIDOMWindow;
-import dwt.internal.mozilla.nsIObserver; 
-import dwt.internal.mozilla.nsIPrompt; 
+import dwt.internal.mozilla.nsIObserver;
+import dwt.internal.mozilla.nsIPrompt;
 import dwt.internal.mozilla.nsIAuthPrompt;
 import dwt.internal.mozilla.nsISimpleEnumerator;
 import dwt.internal.mozilla.nsIWebBrowserChrome;
-import dwt.internal.mozilla.nsIWindowCreator; 
+import dwt.internal.mozilla.nsIWindowCreator;
 
 const char[] NS_IWINDOWWATCHER_IID_STR = "002286a8-494b-43b3-8ddd-49e3fc50622b";
 
-const nsIID NS_IWINDOWWATCHER_IID= 
-  {0x002286a8, 0x494b, 0x43b3, 
+const nsIID NS_IWINDOWWATCHER_IID=
+  {0x002286a8, 0x494b, 0x43b3,
     [ 0x8d, 0xdd, 0x49, 0xe3, 0xfc, 0x50, 0x62, 0x2b ]};
 
 interface nsIWindowWatcher : nsISupports {

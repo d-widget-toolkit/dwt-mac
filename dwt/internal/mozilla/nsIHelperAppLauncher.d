@@ -12,8 +12,8 @@ private import dwt.internal.mozilla.prtime;
 
 const char[] NS_IHELPERAPPLAUNCHER_IID_STR = "9503d0fe-4c9d-11d4-98d0-001083010e9b";
 
-const nsIID NS_IHELPERAPPLAUNCHER_IID= 
-  {0x9503d0fe, 0x4c9d, 0x11d4, 
+const nsIID NS_IHELPERAPPLAUNCHER_IID=
+  {0x9503d0fe, 0x4c9d, 0x11d4,
     [ 0x98, 0xd0, 0x00, 0x10, 0x83, 0x01, 0x0e, 0x9b ]};
 
 interface nsIHelperAppLauncher : nsISupports {

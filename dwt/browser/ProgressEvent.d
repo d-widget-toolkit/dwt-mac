@@ -24,7 +24,7 @@ import dwt.events.*;
  * {@link ProgressListener}'s when a progress is made during the
  * loading of the current URL or when the loading of the current
  * URL has been completed.
- * 
+ *
  * @since 3.0
  */
 public class ProgressEvent : TypedEvent {
@@ -32,7 +32,7 @@ public class ProgressEvent : TypedEvent {
     public int current;
     /** total value */
     public int total;
-    
+
     static final long serialVersionUID = 3977018427045393972L;
 
 /**
@@ -53,7 +53,7 @@ public this(Widget widget) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} {current = {}, total = {}}", 
-        super.toString[1 .. $-2], current, total );  
+    return Format( "{} {current = {}, total = {}}",
+        super.toString[1 .. $-2], current, total );
 }
 }

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -58,46 +58,46 @@ import dwt.graphics.RGB;
  * @see RGB
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
- 
+
 public final class PaletteData {
-    
+
     /**
-     * true if the receiver is a direct palette, 
+     * true if the receiver is a direct palette,
      * and false otherwise
      */
     public bool isDirect;
-    
+
     /**
      * the RGB values for an indexed palette, where the
      * indices of the array correspond to pixel values
      */
     public RGB[] colors;
-    
+
     /**
      * the red mask for a direct palette
      */
     public int redMask;
-    
+
     /**
      * the green mask for a direct palette
      */
     public int greenMask;
-    
+
     /**
      * the blue mask for a direct palette
      */
     public int blueMask;
-    
+
     /**
      * the red shift for a direct palette
      */
     public int redShift;
-    
+
     /**
      * the green shift for a direct palette
      */
     public int greenShift;
-    
+
     /**
      * the blue shift for a direct palette
      */
@@ -140,7 +140,7 @@ public this(int redMask, int greenMask, int blueMask) {
  *
  * @param rgb the RGB to get the pixel value for
  * @return the pixel value for the given RGB
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the argument is null</li>
  *    <li>ERROR_INVALID_ARGUMENT - if the RGB is not found in the palette</li>
@@ -211,7 +211,7 @@ public RGB[] getRGBs() {
  * @see PaletteData
  */
 int shiftForMask(int mask) {
-    for (int i = 31; i >= 0; i--) { 
+    for (int i = 31; i >= 0; i--) {
         if (((mask >> i) & 0x1) !is 0) return 7 - i;
     }
     return 32;

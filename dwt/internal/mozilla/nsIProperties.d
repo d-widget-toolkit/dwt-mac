@@ -6,8 +6,8 @@ import dwt.internal.mozilla.nsISupports;
 
 const char[] NS_IPROPERTIES_IID_STR = "78650582-4e93-4b60-8e85-26ebd3eb14ca";
 
-const nsIID NS_IPROPERTIES_IID= 
-  {0x78650582, 0x4e93, 0x4b60, 
+const nsIID NS_IPROPERTIES_IID=
+  {0x78650582, 0x4e93, 0x4b60,
     [ 0x8e, 0x85, 0x26, 0xeb, 0xd3, 0xeb, 0x14, 0xca ]};
 
 interface nsIProperties : nsISupports {

@@ -45,9 +45,9 @@ extern(System) {
     struct GREProperty {
         char *property;
         char *value;
-    } 
+    }
 }
-  
+
 const int PATH_MAX = 4096;
 
 extern(System):

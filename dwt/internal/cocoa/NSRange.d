@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -17,7 +17,7 @@ import dwt.dwthelper.utils;
 import dwt.internal.objc.cocoa.Cocoa;
 
 alias NSRange* NSRangePointer;
- 
+
 public struct NSRange {
     public NSUInteger location;
     public NSUInteger length;

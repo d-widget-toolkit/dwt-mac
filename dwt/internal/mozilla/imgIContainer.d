@@ -9,8 +9,8 @@ import dwt.internal.mozilla.imgIContainerObserver;
 
 const char[] IMGICONTAINER_IID_STR = "1a6290e6-8285-4e10-963d-d001f8d327b8";
 
-const nsIID IMGICONTAINER_IID= 
-  {0x1a6290e6, 0x8285, 0x4e10, 
+const nsIID IMGICONTAINER_IID=
+  {0x1a6290e6, 0x8285, 0x4e10,
     [ 0x96, 0x3d, 0xd0, 0x01, 0xf8, 0xd3, 0x27, 0xb8 ]};
 
 

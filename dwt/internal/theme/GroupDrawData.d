@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -23,7 +23,7 @@ public class GroupDrawData : DrawData {
     public int headerWidth;
     public int headerHeight;
     public Rectangle headerArea;
-    
+
 public this() {
     state = new int[1];
 }

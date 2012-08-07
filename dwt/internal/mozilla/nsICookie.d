@@ -10,8 +10,8 @@ alias PRInt32 nsCookiePolicy;
 
 const char[] NS_ICOOKIE_IID_STR = "e9fcb9a4-d376-458f-b720-e65e7df593bc";
 
-const nsIID NS_ICOOKIE_IID= 
-  {0xe9fcb9a4, 0xd376, 0x458f, 
+const nsIID NS_ICOOKIE_IID=
+  {0xe9fcb9a4, 0xd376, 0x458f,
     [ 0xb7, 0x20, 0xe6, 0x5e, 0x7d, 0xf5, 0x93, 0xbc ]};
 
 interface nsICookie : nsISupports {

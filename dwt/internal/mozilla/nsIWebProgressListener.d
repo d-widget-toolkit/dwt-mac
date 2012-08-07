@@ -5,13 +5,13 @@ import dwt.internal.mozilla.nsID;
 import dwt.internal.mozilla.nsISupports;
 
 import dwt.internal.mozilla.nsIWebProgress;
-import dwt.internal.mozilla.nsIRequest; 
-import dwt.internal.mozilla.nsIURI; 
+import dwt.internal.mozilla.nsIRequest;
+import dwt.internal.mozilla.nsIURI;
 
 const char[] NS_IWEBPROGRESSLISTENER_IID_STR = "570f39d1-efd0-11d3-b093-00a024ffc08c";
 
-const nsIID NS_IWEBPROGRESSLISTENER_IID= 
-  {0x570f39d1, 0xefd0, 0x11d3, 
+const nsIID NS_IWEBPROGRESSLISTENER_IID=
+  {0x570f39d1, 0xefd0, 0x11d3,
     [ 0xb0, 0x93, 0x00, 0xa0, 0x24, 0xff, 0xc0, 0x8c ]};
 
 interface nsIWebProgressListener : nsISupports {

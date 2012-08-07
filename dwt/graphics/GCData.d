@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -59,7 +59,7 @@ public final class GCData {
     public int textAntialias = DWT.DEFAULT;
     public int fillRule = DWT.FILL_EVEN_ODD;
     public Image image;
-    
+
     public NSColor fg, bg;
     public NSRect* paintRect;
     public NSBezierPath path;
@@ -67,7 +67,7 @@ public final class GCData {
     public NSBezierPath clipPath, visiblePath;
     public int /*long*/ visibleRgn;
     public NSView view;
-    public NSSize* size;    
+    public NSSize* size;
     public Thread thread;
     public NSGraphicsContext flippedContext;
     public bool restoreContext;

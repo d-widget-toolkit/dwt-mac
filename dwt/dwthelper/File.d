@@ -67,7 +67,7 @@ public class File {
         implMissing( __FILE__, __LINE__ );
         return false;
     }
-    
+
     public char[] getAbsolutePath(){
         return mFilePath.absolute(Environment.cwd).toString;
     }

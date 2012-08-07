@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -31,7 +31,7 @@ import dwt.graphics.*;
 
 /**
  * Instances of this class represent a selectable
- * user interface object that displays a text with 
+ * user interface object that displays a text with
  * links.
  * <p>
  * <dl>
@@ -47,7 +47,7 @@ import dwt.graphics.*;
  * @see <a href="http://www.eclipse.org/swt/snippets/#link">Link snippets</a>
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: ControlExample</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.1
  * @noextend This class is not intended to be subclassed by clients.
  */
@@ -59,14 +59,14 @@ public class Link : Control {
     String [] ids;
     int [] mnemonics;
     NSColor linkColor;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * and a style value describing its behavior and appearance.
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -148,13 +148,13 @@ public Point computeSize (int wHint, int hHint, bool changed) {
     int border = getBorderWidth ();
     width += border * 2;
     height += border * 2;
-    
+
     // TODO is this true?  if so, can this rounding be turned off?
     /*
      * Bug in Cocoa.  NSTextStorage.size() seems to return a width
      * value that is rounded down, because its result is never
      * fractional.  The workaround is to increment width by 1
-     * to ensure that it is wide enough to show the full text.  
+     * to ensure that it is wide enough to show the full text.
      */
     width += 1;
     return new Point (width, height);
@@ -166,7 +166,7 @@ void createHandle () {
     scrollWidget.init();
     scrollWidget.setDrawsBackground(false);
     scrollWidget.setBorderType(hasBorder() ? OS.NSBezelBorder : OS.NSNoBorder);
-    
+
     NSTextView widget = cast(NSTextView)(new SWTTextView()).alloc();
     widget.init();
     widget.setEditable(false);
@@ -174,7 +174,7 @@ void createHandle () {
     widget.setDelegate(widget);
     widget.setAutoresizingMask (OS.NSViewWidthSizable | OS.NSViewHeightSizable);
     widget.textContainer().setLineFragmentPadding(0);
-    
+
     scrollView = scrollWidget;
     view = widget;
 }
@@ -197,7 +197,7 @@ void deregister () {
 
 void enableWidget (bool enabled) {
     super.enableWidget (enabled);
-    NSColor nsColor = null; 
+    NSColor nsColor = null;
     if (enabled) {
         if (foreground is null) {
             nsColor = NSColor.textColor ();
@@ -274,7 +274,7 @@ public void removeSelectionListener (SelectionListener listener) {
     if (listener is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (eventTable is null) return;
     eventTable.unhook (DWT.Selection, listener);
-    eventTable.unhook (DWT.DefaultSelection, listener); 
+    eventTable.unhook (DWT.DefaultSelection, listener);
 }
 
 String parse (String string) {
@@ -290,7 +290,7 @@ String parse (String string) {
     while (index < length_) {
         char c = Character.toLowerCase (buffer [index]);
         switch (state) {
-            case 0: 
+            case 0:
                 if (c is '<') {
                     tagStart = index;
                     state++;
@@ -403,7 +403,7 @@ String parse (String string) {
         ids = newIDs;
         int [] newMnemonics = new int [linkIndex + 1];
         System.arraycopy (mnemonics, 0, newMnemonics, 0, linkIndex + 1);
-        mnemonics = newMnemonics;       
+        mnemonics = newMnemonics;
     }
     return result.toString ();
 }
@@ -485,7 +485,7 @@ void setForeground (float /*double*/ [] color) {
  * include the mnemonic character and line delimiters. The only delimiter
  * the HREF attribute supports is the quotation mark (").
  * </p>
- * 
+ *
  * @param string the new text
  *
  * @exception IllegalArgumentException <ul>
@@ -524,7 +524,7 @@ NSView topView () {
 void updateCursorRects (bool enabled) {
     super.updateCursorRects (enabled);
     if (scrollView is null) return;
-    updateCursorRects (enabled, scrollView);    
+    updateCursorRects (enabled, scrollView);
     NSClipView contentView = scrollView.contentView ();
     updateCursorRects (enabled, contentView);
     contentView.setDocumentCursor (enabled ? NSCursor.IBeamCursor () : null);

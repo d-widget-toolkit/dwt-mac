@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -22,7 +22,7 @@ public class SWTScrollView : NSScrollView {
 public this() {
     super(cast(objc.id) null);
 }
-    
+
 public this(objc.id id) {
     super(id);
 }

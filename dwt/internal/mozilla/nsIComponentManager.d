@@ -7,8 +7,8 @@ import dwt.internal.mozilla.nsIFactory;
 
 const char[] NS_ICOMPONENTMANAGER_IID_STR = "a88e5a60-205a-4bb1-94e1-2628daf51eae";
 
-const nsIID NS_ICOMPONENTMANAGER_IID= 
-  {0xa88e5a60, 0x205a, 0x4bb1, 
+const nsIID NS_ICOMPONENTMANAGER_IID=
+  {0xa88e5a60, 0x205a, 0x4bb1,
     [ 0x94, 0xe1, 0x26, 0x28, 0xda, 0xf5, 0x1e, 0xae ]};
 
 interface nsIComponentManager : nsISupports {

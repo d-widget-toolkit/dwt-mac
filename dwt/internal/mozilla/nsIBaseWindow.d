@@ -8,8 +8,8 @@ alias void * nativeWindow;
 
 const char[] NS_IBASEWINDOW_IID_STR = "046bc8a0-8015-11d3-af70-00a024ffc08c";
 
-const nsIID NS_IBASEWINDOW_IID= 
-  {0x046bc8a0, 0x8015, 0x11d3, 
+const nsIID NS_IBASEWINDOW_IID=
+  {0x046bc8a0, 0x8015, 0x11d3,
     [ 0xaf, 0x70, 0x00, 0xa0, 0x24, 0xff, 0xc0, 0x8c ]};
 
 interface nsIBaseWindow : nsISupports {

@@ -3,7 +3,7 @@
  * Authors: Jacob Carlborg
  * Version: Initial created: 2008
  * License: $(LINK2 http://opensource.org/licenses/bsd-license.php, BSD Style)
- * 
+ *
  */
 module dwt.dwthelper.array;
 
@@ -18,13 +18,13 @@ else
 
 /**
  * Appends the specified element to the end of the array.
- * 
+ *
  * Params:
  *     arr = the array to add the element to
  *     element = element to be appended to this list
- *     
+ *
  * Returns: the modified array
- * 
+ *
  */
 T[] add (T) (ref T[] arr, T element)
 {
@@ -33,11 +33,11 @@ T[] add (T) (ref T[] arr, T element)
 
 /**
  * Appends the specified element to the end of the array.
- * 
+ *
  * Params:
  *     arr = the array to add the element to
  *     element = element to be appended to this list
- *     
+ *
  * Returns: the modified array
  *
  */
@@ -45,11 +45,11 @@ alias add addElement;
 
 /**
  * Gets the element at the specified index
- * 
+ *
  * Params:
  *     arr = the array to get the element from
  *     index = the index of the element to get
- *     
+ *
  * Returns: the element at the specified index
  */
 T elementAt (T) (T[] arr, int index)
@@ -64,21 +64,21 @@ body
 
 /**
  * Gets the element at the specified index
- * 
+ *
  * Params:
  *     arr = the array to get the element from
  *     index = the index of the element to get
- *     
+ *
  * Returns: the element at the specified index
  */
 alias elementAt get;
 
 /**
- * Returns the number of elements in the specified array. 
- * 
+ * Returns the number of elements in the specified array.
+ *
  * Params:
  *     arr = the array to get the number of elements from
- *     
+ *
  * Returns: the number of elements in this list
  */
 size_t size (T) (T[] arr)
@@ -90,13 +90,13 @@ size_t size (T) (T[] arr)
  * Removes the element at the specified position in the array
  * if it could find it and returns it.
  * Shifts any subsequent elements to the left.
- * 
+ *
  * Params:
  *     arr = the array to remove the element from
  *     index = the index of the element to be removed
- *     
+ *
  * Returns: the element that was removed or $(D_CODE null)
- * 
+ *
  * Throws: AssertException if the $(D_CODE index) argument is
  *         negative or not less than the length of this array.
  */
@@ -127,9 +127,9 @@ body
         else
             exch(pos, pos - cnt);
     }
-    
+
     arr = arr[0 .. $ - cnt];
-    
+
 	return ret;
 }
 
@@ -137,11 +137,11 @@ body
  * Removes the specified element from the array
  * if it could find it and returns it.
  * Shifts any subsequent elements to the left.
- * 
+ *
  * Params:
  *     arr = the array to remove the element from
  *     element = the element to be removed
- *     
+ *
  * Returns: the element that was removed or $(null null)
  *
  */
@@ -164,13 +164,13 @@ body
  * Removes the specified element from the array
  * if it could find it and returns it.
  * Shifts any subsequent elements to the left.
- * 
+ *
  * Params:
  *     arr = the array to remove the element from
  *     element = the element to be removed
- *     
+ *
  * Returns: the element that was removed or $(null null)
- * 
+ *
  * Throws: AssertException if the length of the array is 0
  */
 alias remove removeElement;
@@ -188,15 +188,15 @@ T[] arrayIndexRemove(T, U = size_t)(T[] arr, U n) {
 
 /**
  * Returns the index of the first occurrence of the specified element
- * in the array, or -1 if the array does not contain the element. 
- * 
+ * in the array, or -1 if the array does not contain the element.
+ *
  * Params:
  *     arr = the array to get the index of the element from
  *     element = the element to find
  *     start = the index of where to start searching from
- *     
+ *
  * Returns: the index of the element or -1 if it's not in the array
- * 
+ *
  * Throws: AssertException if the return value is less than -1 or
  *         greater than the length of the array - 1.
  */
@@ -208,7 +208,7 @@ in
 body
 {
     size_t index = tango.text.Util.locatePattern(arr, match, start);
-    
+
     if (index != arr.length)
         return index;
 
@@ -218,15 +218,15 @@ body
 
 /**
  * Returns the index of the first occurrence of the specified element
- * in the array, or -1 if the array does not contain the element. 
- * 
+ * in the array, or -1 if the array does not contain the element.
+ *
  * Params:
  *     arr = the array to get the index of the element from
  *     element = the element to find
  *     start = the index of where to start searching from
- *     
+ *
  * Returns: the index of the element or -1 if it's not in the array
- * 
+ *
  * Throws: AssertException if the return value is less than -1 or
  *         greater than the length of the array - 1.
  */
@@ -264,15 +264,15 @@ body
             {
                 static if (T.sizeof == 1)
                 {
-                    asm 
+                    asm
                     {
                             mov   EDI, str;
                             mov   ECX, length;
                             movzx EAX, match;
                             mov   ESI, ECX;
-                            and   ESI, ESI;            
-                            jz    end;        
-                        
+                            and   ESI, ESI;
+                            jz    end;
+
                             cld;
                             repnz;
                             scasb;
@@ -291,9 +291,9 @@ body
                             mov   ECX, length;
                             movzx EAX, match;
                             mov   ESI, ECX;
-                            and   ESI, ESI;            
-                            jz    end;        
-                        
+                            and   ESI, ESI;
+                            jz    end;
+
                             cld;
                             repnz;
                             scasw;
@@ -304,7 +304,7 @@ body
                             mov   EAX, ESI;
                     }
                 }
-                
+
                 else static if (T.sizeof == 4)
                 {
                     asm
@@ -313,9 +313,9 @@ body
                             mov   ECX, length;
                             mov   EAX, match;
                             mov   ESI, ECX;
-                            and   ESI, ESI;            
-                            jz    end;        
-                        
+                            and   ESI, ESI;
+                            jz    end;
+
                             cld;
                             repnz;
                             scasd;
@@ -326,27 +326,27 @@ body
                             mov   EAX, ESI;
                     }
                 }
-                
+
                 else
                 {
                     auto len = length;
-                    
+
                     for (auto p = str - 1; len--; )
                         if (*++p is match)
                             return p - str;
-                    
+
                     return length;
                 }
             }
-            
+
             else
             {
                 auto len = length;
-                
+
                 for (auto p = str - 1; len--; )
                     if (*++p is match)
                         return p - str;
-                
+
                 return length;
             }
         }

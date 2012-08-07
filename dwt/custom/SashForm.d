@@ -120,16 +120,16 @@ public int getOrientation() {
     return (sashStyle & DWT.VERTICAL) !is 0 ? DWT.HORIZONTAL : DWT.VERTICAL;
 }
 /**
- * Returns the width of the sashes when the controls in the SashForm are 
+ * Returns the width of the sashes when the controls in the SashForm are
  * laid out.
- * 
+ *
  * @return the width of the sashes
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.4
  */
 public int getSashWidth() {
@@ -382,16 +382,16 @@ public void setMaximizedControl(Control control){
 }
 
 /**
- * Specify the width of the sashes when the controls in the SashForm are 
+ * Specify the width of the sashes when the controls in the SashForm are
  * laid out.
- * 
+ *
  * @param width the width of the sashes
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.4
  */
 public void setSashWidth(int width) {

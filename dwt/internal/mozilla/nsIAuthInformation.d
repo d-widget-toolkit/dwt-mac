@@ -8,7 +8,7 @@ import dwt.internal.mozilla.nsStringAPI;
 const char[] NS_IAUTHINFORMATION_IID_STR =  "0d73639c-2a92-4518-9f92-28f71fea5f20";
 
 const nsIID NS_IAUTHINFORMATION_IID =
-   {0x0d73639c, 0x2a92, 0x4518, 
+   {0x0d73639c, 0x2a92, 0x4518,
     [ 0x9f, 0x92, 0x28, 0xf7, 0x1f, 0xea, 0x5f, 0x20 ] };
 
 interface nsIAuthInformation : nsISupports {

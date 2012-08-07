@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -18,7 +18,7 @@ import dwt.dwthelper.utils;
 
 import dwt.internal.cocoa.*;
 import cocoa = dwt.internal.cocoa.id;
- 
+
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
@@ -53,24 +53,24 @@ import dwt.widgets.ToolItem;
  * @noextend This class is not intended to be subclassed by clients.
  */
 public class ToolBar : Composite {
-    
+
     alias Composite.computeSize computeSize;
     alias Composite.createHandle createHandle;
     alias Composite.forceFocus forceFocus;
     alias Composite.setBounds setBounds;
     alias Composite.setToolTipText setToolTipText;
-    
+
     int itemCount;
     ToolItem [] items;
     NSArray accessibilityAttributes = null;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * and a style value describing its behavior and appearance.
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -99,7 +99,7 @@ public class ToolBar : Composite {
  */
 public this (Composite parent, int style) {
     super (parent, checkStyle (style));
-    
+
     /*
      * Ensure that either of HORIZONTAL or VERTICAL is set.
      * NOTE: HORIZONTAL and VERTICAL have the same values
@@ -116,7 +116,7 @@ public this (Composite parent, int style) {
 }
 
 objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
-    
+
     if (accessibilityAttributes is null) {
         NSMutableArray ourAttributes = NSMutableArray.arrayWithCapacity(10);
         ourAttributes.addObject(OS.NSAccessibilityRoleAttribute);
@@ -130,7 +130,7 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
         ourAttributes.addObject(OS.NSAccessibilityEnabledAttribute);
         ourAttributes.addObject(OS.NSAccessibilityFocusedAttribute);
         ourAttributes.addObject(OS.NSAccessibilityChildrenAttribute);
-        
+
         if (accessible !is null) {
             // See if the accessible will override or augment the standard list.
             // Help, title, and description can be overridden.
@@ -138,7 +138,7 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
             extraAttributes.addObject(OS.NSAccessibilityHelpAttribute);
             extraAttributes.addObject(OS.NSAccessibilityDescriptionAttribute);
             extraAttributes.addObject(OS.NSAccessibilityTitleAttribute);
-            
+
             for (int i = (int)/*64*/extraAttributes.count() - 1; i >= 0; i--) {
                 NSString attribute = new NSString(extraAttributes.objectAtIndex(i).id);
                 if (accessible.internal_accessibilityAttributeValue(attribute, ACC.CHILDID_SELF) !is null) {
@@ -146,25 +146,25 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
                 }
             }
         }
-        
+
         accessibilityAttributes = ourAttributes;
         accessibilityAttributes.retain();
     }
-    
+
     return accessibilityAttributes.id;
 }
 
 objc.id accessibilityAttributeValue (objc.id id, objc.SEL sel, objc.id arg0) {
     NSString nsAttributeName = new NSString(arg0);
-    
+
     if (accessible !is null) {
         cocoa.id returnObject = accessible.internal_accessibilityAttributeValue(nsAttributeName, ACC.CHILDID_SELF);
         if (returnObject !is null) return returnObject.id;
     }
-    
+
     if (nsAttributeName.isEqualToString (OS.NSAccessibilityRoleAttribute) || nsAttributeName.isEqualToString (OS.NSAccessibilityRoleDescriptionAttribute)) {
         NSString role = OS.NSAccessibilityToolbarRole;
-        
+
         if (nsAttributeName.isEqualToString (OS.NSAccessibilityRoleAttribute))
             return role.id;
         else {
@@ -177,13 +177,13 @@ objc.id accessibilityAttributeValue (objc.id id, objc.SEL sel, objc.id arg0) {
         bool focused = (view.id is view.window().firstResponder().id);
         return NSNumber.numberWithBool(focused).id;
     }
-    
+
     return super.accessibilityAttributeValue(id, sel, arg0);
 }
 
 bool accessibilityIsIgnored(objc.id id, objc.SEL sel) {
     // Toolbars aren't ignored.
-    return false;   
+    return false;
 }
 
 static int checkStyle (int style) {
@@ -345,11 +345,11 @@ public int getItemCount () {
 
 /**
  * Returns an array of <code>ToolItem</code>s which are the items
- * in the receiver. 
+ * in the receiver.
  * <p>
  * Note: This is not the actual structure used by the receiver
  * to maintain its list of items, so modifying the array will
- * not affect the receiver. 
+ * not affect the receiver.
  * </p>
  *
  * @return the items in the receiver
@@ -387,7 +387,7 @@ public int getRowCount () {
 
 /**
  * Searches the receiver's list starting at the first item
- * (index 0) until an item is found that is equal to the 
+ * (index 0) until an item is found that is equal to the
  * argument, and returns the index of that item. If no item
  * is found, returns -1.
  *
@@ -446,7 +446,7 @@ int [] layoutHorizontal (int width, int height, bool resize) {
         x += xSpacing + size.x;
         maxX = Math.max (maxX, x);
     }
-    
+
     return [rows, maxX, y + itemHeight];
 }
 
@@ -483,7 +483,7 @@ int [] layoutVertical (int width, int height, bool resize) {
         y += ySpacing + size.y;
         maxY = Math.max (maxY, y);
     }
-    
+
     return [cols, x + itemWidth, maxY];
 }
 

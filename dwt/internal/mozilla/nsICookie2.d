@@ -7,8 +7,8 @@ import dwt.internal.mozilla.nsStringAPI;
 
 const char[] NS_ICOOKIE2_IID_STR = "d3493503-7854-46ed-8284-8af54a847efb";
 
-const nsIID NS_ICOOKIE2_IID= 
-  {0xd3493503, 0x7854, 0x46ed, 
+const nsIID NS_ICOOKIE2_IID=
+  {0xd3493503, 0x7854, 0x46ed,
     [ 0x82, 0x84, 0x8a, 0xf5, 0x4a, 0x84, 0x7e, 0xfb ]};
 
 interface nsICookie2 : nsICookie {

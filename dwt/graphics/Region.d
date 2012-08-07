@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -33,18 +33,18 @@ import objc = dwt.internal.objc.runtime;
  * system that are aggregates of the areas covered by a number
  * of polygons.
  * <p>
- * Application code must explicitly invoke the <code>Region.dispose()</code> 
+ * Application code must explicitly invoke the <code>Region.dispose()</code>
  * method to release the operating system resources managed by each instance
  * when those instances are no longer required.
  * </p>
- * 
+ *
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: GraphicsExample</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
 public final class Region : Resource {
 
     alias Resource.init_ init_;
-    
+
     /**
      * the OS resource for the region
      * (Warning: This field is platform dependent)
@@ -59,7 +59,7 @@ public final class Region : Resource {
 
 /**
  * Constructs a new empty region.
- * 
+ *
  * @exception DWTError <ul>
  *    <li>ERROR_NO_HANDLES if a handle could not be obtained for region creation</li>
  * </ul>
@@ -71,7 +71,7 @@ public this() {
 /**
  * Constructs a new empty region.
  * <p>
- * You must dispose the region when it is no longer required. 
+ * You must dispose the region when it is no longer required.
  * </p>
  *
  * @param device the device on which to allocate the region
@@ -84,7 +84,7 @@ public this() {
  * </ul>
  *
  * @see #dispose
- * 
+ *
  * @since 3.0
  */
 public this(Device device) {
@@ -129,7 +129,7 @@ static Carbon.RgnHandle polyToRgn(int[] poly, int length) {
             x1 = x2;
             y1 = y2;
         }
-        int x2 = poly[0], y2 = poly[1];         
+        int x2 = poly[0], y2 = poly[1];
         if (y1 !is y2 && ((y1 <= y && y < y2) || (y2 <= y && y < y1))) {
             inter[count++] = cast(int)((((y - y1) / cast(float)(y2 - y1)) * (x2 - x1)) + x1 + 0.5f);
         }
@@ -204,7 +204,7 @@ public void add (int[] pointArray) {
         if (pool !is null) pool.release();
     }
 }
-    
+
 void add(int[] pointArray, int count) {
     if (count <= 2) return;
     NSAutoreleasePool pool = null;
@@ -260,7 +260,7 @@ public void add(Rectangle rect) {
  * @exception DWTException <ul>
  *    <li>ERROR_GRAPHIC_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public void add(int x, int y, int width, int height) {
@@ -479,8 +479,8 @@ extern(C) private static Carbon.OSStatus regionToRects(ushort message, Carbon.Rg
 }
 
 /**
- * Returns an integer hash code for the receiver. Any two 
- * objects that return <code>true</code> when passed to 
+ * Returns an integer hash code for the receiver. Any two
+ * objects that return <code>true</code> when passed to
  * <code>equals</code> must return the same value for this
  * method.
  *
@@ -507,7 +507,7 @@ alias toHash hashCode;
  * @exception DWTException <ul>
  *    <li>ERROR_GRAPHIC_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void intersect(Rectangle rect) {
@@ -531,7 +531,7 @@ public void intersect(Rectangle rect) {
  * @exception DWTException <ul>
  *    <li>ERROR_GRAPHIC_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public void intersect(int x, int y, int width, int height) {
@@ -565,7 +565,7 @@ public void intersect(int x, int y, int width, int height) {
  * @exception DWTException <ul>
  *    <li>ERROR_GRAPHIC_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void intersect(Region region) {
@@ -681,7 +681,7 @@ public bool isEmpty() {
  * @exception DWTException <ul>
  *    <li>ERROR_GRAPHIC_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void subtract (int[] pointArray) {
@@ -712,7 +712,7 @@ public void subtract (int[] pointArray) {
  * @exception DWTException <ul>
  *    <li>ERROR_GRAPHIC_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void subtract(Rectangle rect) {
@@ -736,7 +736,7 @@ public void subtract(Rectangle rect) {
  * @exception DWTException <ul>
  *    <li>ERROR_GRAPHIC_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public void subtract(int x, int y, int width, int height) {
@@ -770,7 +770,7 @@ public void subtract(int x, int y, int width, int height) {
  * @exception DWTException <ul>
  *    <li>ERROR_GRAPHIC_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void subtract(Region region) {
@@ -796,7 +796,7 @@ public void subtract(Region region) {
  * @exception DWTException <ul>
  *    <li>ERROR_GRAPHIC_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public void translate (int x, int y) {
@@ -822,7 +822,7 @@ public void translate (int x, int y) {
  * @exception DWTException <ul>
  *    <li>ERROR_GRAPHIC_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public void translate (Point pt) {

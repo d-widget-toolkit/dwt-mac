@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -17,7 +17,7 @@ import dwt.dwthelper.utils;
 import dwt.internal.theme.DrawData;
 
 public class ToolBarDrawData : DrawData {
-    
+
 public this() {
     state = new int[1];
 }

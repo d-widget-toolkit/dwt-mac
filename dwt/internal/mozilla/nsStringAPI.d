@@ -44,7 +44,7 @@ PRUint32    NS_CStringGetData( nsACString *aStr, char **aData, PRBool *aTerminat
 PRUint32    NS_CStringGetMutableData( nsACString *aStr, PRUint32 aDataLength, char **aData );
 char *      NS_CStringCloneData( nsACString *aStr);
 nsresult    NS_CStringSetData( nsACString *aStr, char *aData, PRUint32 aDataLength );
-nsresult    NS_CStringSetDataRange( nsACString *aStr, PRUint32 aCutOffset, 
+nsresult    NS_CStringSetDataRange( nsACString *aStr, PRUint32 aCutOffset,
                                     PRUint32 aCutLength, char *aData, PRUint32 aDataLength );
 nsresult    NS_CStringCopy( nsACString *aDestStr, nsACString *aSrcStr );
 
@@ -89,7 +89,7 @@ struct nsAString
 		uint len = NS_StringGetData(str, &buffer, &terminated);
 		return buffer[0 .. len].dup;
     }
-    
+
     static char[] toString( nsAString* str )
     {
         return Utf.toString( nsAString.toString16( str ) );

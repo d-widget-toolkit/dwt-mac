@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -15,7 +15,7 @@ module dwt.widgets.Menu;
 
 
 import dwt.internal.cocoa.*;
- 
+
 import dwt.*;
 import dwt.events.*;
 import dwt.graphics.*;
@@ -56,7 +56,7 @@ import dwt.widgets.Shell;
  */
 public class Menu : Widget {
     /**
-     * the handle to the OS resource 
+     * the handle to the OS resource
      * (Warning: This field is platform dependent)
      * <p>
      * <b>IMPORTANT:</b> This field is <em>not</em> part of the DWT
@@ -107,7 +107,7 @@ public this (Control parent) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -238,7 +238,7 @@ void _setVisible (bool visible) {
         } else {
             location = window.mouseLocationOutsideOfEventStream();
         }
-    
+
         // Hold on to window in case it is disposed while the popup is open.
         window.retain();
         NSMenu.popUpContextMenu(nsMenu, nsEvent, shell.view);
@@ -306,8 +306,8 @@ void createHandle () {
     NSMenu widget = cast(NSMenu)(new SWTMenu()).alloc();
     widget = widget.initWithTitle(NSString.stringWith(""));
     widget.setAutoenablesItems(false);
-    widget.setDelegate(widget); 
-    nsMenu = widget;    
+    widget.setDelegate(widget);
+    nsMenu = widget;
 }
 
 void createItem (MenuItem item, int index) {
@@ -415,7 +415,7 @@ public MenuItem getDefaultItem () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #isEnabled
  */
 public bool getEnabled () {
@@ -461,11 +461,11 @@ public int getItemCount () {
 
 /**
  * Returns a (possibly empty) array of <code>MenuItem</code>s which
- * are the items in the receiver. 
+ * are the items in the receiver.
  * <p>
  * Note: This is not the actual structure used by the receiver
  * to maintain its list of items, so modifying the array will
- * not affect the receiver. 
+ * not affect the receiver.
  * </p>
  *
  * @return the items in the receiver
@@ -612,7 +612,7 @@ public bool getVisible () {
 
 /**
  * Searches the receiver's list starting at the first item
- * (index 0) until an item is found that is equal to the 
+ * (index 0) until an item is found that is equal to the
  * argument, and returns the index of that item. If no item
  * is found, returns -1.
  *
@@ -648,7 +648,7 @@ public int indexOf (MenuItem item) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #getEnabled
  */
 public bool isEnabled () {
@@ -801,11 +801,11 @@ public void removeMenuListener (MenuListener listener) {
 /**
  * Sets the default menu item to the argument or removes
  * the default emphasis when the argument is <code>null</code>.
- * 
+ *
  * @param item the default menu item or null
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the menu item has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the menu item has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -846,7 +846,7 @@ public void setEnabled (bool enabled) {
             * Feature in the Macintosh.  When a cascade menu
             * item is disabled, rather than disabling the item,
             * the submenu is disabled.
-            * 
+            *
             * There is no fix for this at this time.
             */
             item.nsItem.setEnabled (enabled && item.getEnabled ());
@@ -902,7 +902,7 @@ public void setLocation (int x, int y) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 2.1
  */
 public void setLocation (Point location) {
@@ -913,7 +913,7 @@ public void setLocation (Point location) {
 
 /**
  * Marks the receiver as visible if the argument is <code>true</code>,
- * and marks it invisible otherwise. 
+ * and marks it invisible otherwise.
  * <p>
  * If one of the receiver's ancestors is not visible or some
  * other condition makes the receiver not visible, marking
@@ -936,5 +936,5 @@ public void setVisible (bool visible) {
         display.removePopup (this);
     }
 }
-    
+
 }

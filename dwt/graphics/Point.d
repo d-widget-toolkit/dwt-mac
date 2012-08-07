@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -32,7 +32,7 @@ import dwt.dwthelper.utils;
  * The hashCode() method in this class uses the values of the public
  * fields to compute the hash value. When storing instances of the
  * class in hashed collections, do not modify these fields after the
- * object has been inserted.  
+ * object has been inserted.
  * </p>
  * <p>
  * Application code does <em>not</em> need to explicitly release the
@@ -45,19 +45,19 @@ import dwt.dwthelper.utils;
  */
 
 public final class Point : SerializableCompatibility {
-    
+
     /**
      * the x coordinate of the point
      */
     public int x;
-    
+
     /**
      * the y coordinate of the point
      */
     public int y;
-    
+
     static const long serialVersionUID = 3257002163938146354L;
-    
+
 /**
  * Constructs a new point with the given x and y coordinates.
  *
@@ -89,8 +89,8 @@ public int opEquals (Object object) {
 alias opEquals equals;
 
 /**
- * Returns an integer hash code for the receiver. Any two 
- * objects that return <code>true</code> when passed to 
+ * Returns an integer hash code for the receiver. Any two
+ * objects that return <code>true</code> when passed to
  * <code>equals</code> must return the same value for this
  * method.
  *

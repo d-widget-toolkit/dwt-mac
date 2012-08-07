@@ -6,8 +6,8 @@ import dwt.internal.mozilla.nsISupports;
 
 const char[] NS_IPREFBRANCH_IID_STR = "56c35506-f14b-11d3-99d3-ddbfac2ccf65";
 
-const nsIID NS_IPREFBRANCH_IID= 
-  {0x56c35506, 0xf14b, 0x11d3, 
+const nsIID NS_IPREFBRANCH_IID=
+  {0x56c35506, 0xf14b, 0x11d3,
     [ 0x99, 0xd3, 0xdd, 0xbf, 0xac, 0x2c, 0xcf, 0x65 ]};
 
 interface nsIPrefBranch : nsISupports {

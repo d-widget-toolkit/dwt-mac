@@ -21,16 +21,16 @@ import dwt.widgets.Event;
  * This event is sent when the caret offset changes.
  *
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.5
  */
 public class CaretEvent : TypedEvent {
-    
-    /** 
-     * caret offset 
+
+    /**
+     * caret offset
      */
     public int caretOffset;
-    
+
     static final long serialVersionUID = 3257846571587545489L;
 
 this(StyledTextEvent e) {

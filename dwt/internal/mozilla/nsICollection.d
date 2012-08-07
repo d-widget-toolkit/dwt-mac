@@ -9,8 +9,8 @@ import dwt.internal.mozilla.nsIEnumerator;
 
 const char[] NS_ICOLLECTION_IID_STR = "83b6019c-cbc4-11d2-8cca-0060b0fc14a3";
 
-const nsIID NS_ICOLLECTION_IID= 
-  {0x83b6019c, 0xcbc4, 0x11d2, 
+const nsIID NS_ICOLLECTION_IID=
+  {0x83b6019c, 0xcbc4, 0x11d2,
     [ 0x8c, 0xca, 0x00, 0x60, 0xb0, 0xfc, 0x14, 0xa3 ]};
 
 interface nsICollection : nsISerializable {

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -31,7 +31,7 @@ import dwt.internal.c.Carbon;
  * Instances of this class represent patterns to use while drawing. Patterns
  * can be specified either as bitmaps or gradients.
  * <p>
- * Application code must explicitly invoke the <code>Pattern.dispose()</code> 
+ * Application code must explicitly invoke the <code>Pattern.dispose()</code>
  * method to release the operating system resources managed by each instance
  * when those instances are no longer required.
  * </p>
@@ -39,7 +39,7 @@ import dwt.internal.c.Carbon;
  * This class requires the operating system's advanced graphics subsystem
  * which may not be available on some platforms.
  * </p>
- * 
+ *
  * @see <a href="http://www.eclipse.org/swt/snippets/#path">Path, Pattern snippets</a>
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: GraphicsExample</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
@@ -48,7 +48,7 @@ import dwt.internal.c.Carbon;
  */
 public class Pattern : Resource {
     alias Resource.init_ init_;
-    
+
     NSColor color;
     NSGradient gradient;
     NSPoint pt1, pt2;
@@ -64,10 +64,10 @@ public class Pattern : Resource {
  * graphics subsystem which may not be available on some
  * platforms.
  * </p>
- * 
+ *
  * @param device the device on which to allocate the pattern
  * @param image the image that the pattern will draw
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the device is null and there is no current device, or the image is null</li>
  *    <li>ERROR_INVALID_ARGUMENT - if the image has been disposed</li>
@@ -78,7 +78,7 @@ public class Pattern : Resource {
  * @exception DWTError <ul>
  *    <li>ERROR_NO_HANDLES if a handle for the pattern could not be obtained</li>
  * </ul>
- * 
+ *
  * @see #dispose()
  */
 public this(Device device, Image image) {
@@ -106,7 +106,7 @@ public this(Device device, Image image) {
  * graphics subsystem which may not be available on some
  * platforms.
  * </p>
- * 
+ *
  * @param device the device on which to allocate the pattern
  * @param x1 the x coordinate of the starting corner of the gradient
  * @param y1 the y coordinate of the starting corner of the gradient
@@ -114,9 +114,9 @@ public this(Device device, Image image) {
  * @param y2 the y coordinate of the ending corner of the gradient
  * @param color1 the starting color of the gradient
  * @param color2 the ending color of the gradient
- * 
+ *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_NULL_ARGUMENT - if the device is null and there is no current device, 
+ *    <li>ERROR_NULL_ARGUMENT - if the device is null and there is no current device,
  *                              or if either color1 or color2 is null</li>
  *    <li>ERROR_INVALID_ARGUMENT - if either color1 or color2 has been disposed</li>
  * </ul>
@@ -126,7 +126,7 @@ public this(Device device, Image image) {
  * @exception DWTError <ul>
  *    <li>ERROR_NO_HANDLES if a handle for the pattern could not be obtained</li>
  * </ul>
- * 
+ *
  * @see #dispose()
  */
 public this(Device device, float x1, float y1, float x2, float y2, Color color1, Color color2) {
@@ -141,7 +141,7 @@ public this(Device device, float x1, float y1, float x2, float y2, Color color1,
  * graphics subsystem which may not be available on some
  * platforms.
  * </p>
- * 
+ *
  * @param device the device on which to allocate the pattern
  * @param x1 the x coordinate of the starting corner of the gradient
  * @param y1 the y coordinate of the starting corner of the gradient
@@ -151,9 +151,9 @@ public this(Device device, float x1, float y1, float x2, float y2, Color color1,
  * @param alpha1 the starting alpha value of the gradient
  * @param color2 the ending color of the gradient
  * @param alpha2 the ending alpha value of the gradient
- * 
+ *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_NULL_ARGUMENT - if the device is null and there is no current device, 
+ *    <li>ERROR_NULL_ARGUMENT - if the device is null and there is no current device,
  *                              or if either color1 or color2 is null</li>
  *    <li>ERROR_INVALID_ARGUMENT - if either color1 or color2 has been disposed</li>
  * </ul>
@@ -163,9 +163,9 @@ public this(Device device, float x1, float y1, float x2, float y2, Color color1,
  * @exception DWTError <ul>
  *    <li>ERROR_NO_HANDLES if a handle for the pattern could not be obtained</li>
  * </ul>
- * 
+ *
  * @see #dispose()
- * 
+ *
  * @since 3.2
  */
 public this(Device device, float x1, float y1, float x2, float y2, Color color1, int alpha1, Color color2, int alpha2) {
@@ -229,5 +229,5 @@ public String toString() {
     if (isDisposed()) return "Pattern {*DISPOSED*}";
     return Format("Pattern {{}{}" , (color !is null ? color.id : gradient.id) , "}");
 }
-    
+
 }

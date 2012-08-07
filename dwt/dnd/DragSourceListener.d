@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -26,15 +26,15 @@ import dwt.dnd.DragSourceEvent;
  * must provide the dropped data by implementing <code>dragSetData</code>.  In the dragSetData, the application
  * must support all the data types that were specified in the DragSource#setTransfer method.</p>
  *
- * <p>After the drop has completed successfully or has been aborted, the application which defines the 
- * <code>DragSource</code> is required to take the appropriate cleanup action.  In the case of a successful 
+ * <p>After the drop has completed successfully or has been aborted, the application which defines the
+ * <code>DragSource</code> is required to take the appropriate cleanup action.  In the case of a successful
  * <b>move</b> operation, the application must remove the data that was transferred.</p>
  *
  */
 public interface DragSourceListener : DWTEventListener {
 
 /**
- * The user has begun the actions required to drag the widget. This event gives the application 
+ * The user has begun the actions required to drag the widget. This event gives the application
  * the chance to decide if a drag should be started.
  *
  * <p>The following fields in the DragSourceEvent apply:
@@ -45,7 +45,7 @@ public interface DragSourceListener : DWTEventListener {
  * </ul></p>
  *
  * @param event the information associated with the drag start event
- * 
+ *
  * @see DragSourceEvent
  */
 public void dragStart(DragSourceEvent event);
@@ -63,13 +63,13 @@ public void dragStart(DragSourceEvent event);
  * </ul></p>
  *
  * @param event the information associated with the drag set data event
- * 
+ *
  * @see DragSourceEvent
  */
 public void dragSetData(DragSourceEvent event);
 
 /**
- * The drop has successfully completed(mouse up over a valid target) or has been terminated (such as hitting 
+ * The drop has successfully completed(mouse up over a valid target) or has been terminated (such as hitting
  * the ESC key). Perform cleanup such as removing data from the source side on a successful move operation.
  *
  * <p>The following fields in the DragSourceEvent apply:
@@ -81,7 +81,7 @@ public void dragSetData(DragSourceEvent event);
  * </ul></p>
  *
  * @param event the information associated with the drag finished event
- * 
+ *
  * @see DragSourceEvent
  */
 public void dragFinished(DragSourceEvent event);

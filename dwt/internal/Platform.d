@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -17,10 +17,10 @@ import dwt.dwthelper.utils;
 import dwt.internal.Lock;
 
 public class Platform {
-    
+
 public static const String PLATFORM = "cocoa"; //$NON-NLS-1$
 public static const Lock lock;
-    
+
     static this ()
     {
         lock = new Lock ();

@@ -23,7 +23,7 @@ import dwt.browser.LocationEvent;
  * extend this class and override only the methods which they are
  * interested in.
  * </p>
- * 
+ *
  * @since 3.0
  */
 public abstract class LocationAdapter : LocationListener {

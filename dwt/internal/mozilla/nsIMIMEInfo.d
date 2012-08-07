@@ -13,8 +13,8 @@ alias PRInt32 nsMIMEInfoHandleAction;
 
 const char[] NS_IMIMEINFO_IID_STR = "1448b42f-cf0d-466e-9a15-64e876ebe857";
 
-const nsIID NS_IMIMEINFO_IID= 
-  {0x1448b42f, 0xcf0d, 0x466e, 
+const nsIID NS_IMIMEINFO_IID=
+  {0x1448b42f, 0xcf0d, 0x466e,
     [ 0x9a, 0x15, 0x64, 0xe8, 0x76, 0xeb, 0xe8, 0x57 ]};
 
 interface nsIMIMEInfo : nsISupports {

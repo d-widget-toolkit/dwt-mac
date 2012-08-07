@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -41,7 +41,7 @@ import dwt.internal.DWTEventListener;
  *
  * @see AccessibleControlAdapter
  * @see AccessibleControlEvent
- * 
+ *
  * @since 2.0
  */
 public interface AccessibleControlListener : DWTEventListener {
@@ -80,7 +80,7 @@ public interface AccessibleControlListener : DWTEventListener {
      * </ul>
      */
     public void getLocation(AccessibleControlEvent e);
-    
+
     /**
      * Sent when an accessibility client requests the accessible object
      * for a child of the control.
@@ -97,7 +97,7 @@ public interface AccessibleControlListener : DWTEventListener {
      * </ul>
      */
     public void getChild(AccessibleControlEvent e);
-    
+
     /**
      * Sent when an accessibility client requests the number of
      * children in the control.
@@ -111,7 +111,7 @@ public interface AccessibleControlListener : DWTEventListener {
      * </ul>
      */
     public void getChildCount(AccessibleControlEvent e);
-    
+
     /**
      * Sent when an accessibility client requests the default action
      * of the control, or the default action of a child of the control.
@@ -131,7 +131,7 @@ public interface AccessibleControlListener : DWTEventListener {
      * </ul>
      */
     public void getDefaultAction(AccessibleControlEvent e);
-    
+
     /**
      * Sent when an accessibility client requests the identity of
      * the child or control that has keyboard focus.
@@ -148,7 +148,7 @@ public interface AccessibleControlListener : DWTEventListener {
      * </ul>
      */
     public void getFocus(AccessibleControlEvent e);
-    
+
     /**
      * Sent when an accessibility client requests the role
      * of the control, or the role of a child of the control.
@@ -164,7 +164,7 @@ public interface AccessibleControlListener : DWTEventListener {
      * </ul>
      */
     public void getRole(AccessibleControlEvent e);
-    
+
     /**
      * Sent when an accessibility client requests the identity of
      * the child or control that is currently selected.
@@ -182,7 +182,7 @@ public interface AccessibleControlListener : DWTEventListener {
      * </ul>
      */
     public void getSelection(AccessibleControlEvent e);
-    
+
     /**
      * Sent when an accessibility client requests the state
      * of the control, or the state of a child of the control.
@@ -198,7 +198,7 @@ public interface AccessibleControlListener : DWTEventListener {
      * </ul>
      */
     public void getState(AccessibleControlEvent e);
-    
+
     /**
      * Sent when an accessibility client requests the value
      * of the control, or the value of a child of the control.
@@ -220,7 +220,7 @@ public interface AccessibleControlListener : DWTEventListener {
      * </ul>
      */
     public void getValue(AccessibleControlEvent e);
-    
+
     /**
      * Sent when an accessibility client requests the children of the control.
      * <p>

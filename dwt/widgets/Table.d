@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -31,7 +31,7 @@ import dwt.widgets.TableColumn;
 import dwt.widgets.TableItem;
 import dwt.widgets.TypedListener;
 
-/** 
+/**
  * Instances of this class implement a selectable user interface
  * object that displays a list of images and strings and issues
  * notification when selected.
@@ -56,7 +56,7 @@ import dwt.widgets.TypedListener;
  *          item.setText ("Item " + index);
  *          System.out.println (item.getText ());
  *      }
- *  }); 
+ *  });
  * </pre></code>
  * </p><p>
  * Note that although this class is a subclass of <code>Composite</code>,
@@ -116,7 +116,7 @@ public class Table : Composite {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -149,21 +149,21 @@ public this (Composite parent, int style) {
 }
 
 objc.id accessibilityAttributeValue (objc.id id, objc.SEL sel, objc.id arg0) {
-    
+
     if (accessible !is null) {
         NSString attribute = new NSString(arg0);
         cocoa.id returnValue = accessible.internal_accessibilityAttributeValue(attribute, ACC.CHILDID_SELF);
         if (returnValue !is null) return returnValue.id;
     }
-    
+
     NSString attributeName = new NSString(arg0);
-    
+
     // Accessibility Verifier queries for a title or description.  NSTableView doesn't
     // seem to return either, so we return a default description value here.
     if (attributeName.isEqualToString (OS.NSAccessibilityDescriptionAttribute)) {
         return NSString.stringWith("").id;
     }
-    
+
     return super.accessibilityAttributeValue(id, sel, arg0);
 }
 
@@ -251,11 +251,11 @@ bool canDragRowsWithIndexes_atPoint(int /*long*/ id, int /*long*/ sel, int /*lon
     NSPoint clickPoint = new NSPoint();
     OS.memmove(clickPoint, arg1, NSPoint.sizeof);
     NSTableView table = (NSTableView)view;
-    
+
     // If the current row is not selected and the user is not attempting to modify the selection, select the row first.
     int /*long*/ row = table.rowAtPoint(clickPoint);
     int /*long*/ modifiers = NSApplication.sharedApplication().currentEvent().modifierFlags();
-    
+
     bool drag = (state & DRAG_DETECT) !is 0 && hooks (DWT.DragDetect);
     if (drag) {
         if (!table.isRowSelected(row) && (modifiers & (OS.NSCommandKeyMask | OS.NSShiftKeyMask | OS.NSAlternateKeyMask)) is 0) {
@@ -265,7 +265,7 @@ bool canDragRowsWithIndexes_atPoint(int /*long*/ id, int /*long*/ sel, int /*lon
             set.release();
         }
     }
-    
+
     // The clicked row must be selected to initiate a drag.
     return (table.isRowSelected(row) && drag);
 }
@@ -297,7 +297,7 @@ static int checkStyle (int style) {
      * WS_VSCROLL is not specified, Windows creates
      * trees and tables with scroll bars.  The fix
      * is to set H_SCROLL and V_SCROLL.
-     * 
+     *
      * NOTE: This code appears on all platforms so that
      * applications have consistent scroll bar behavior.
      */
@@ -328,10 +328,10 @@ protected void checkSubclass () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see DWT#VIRTUAL
  * @see DWT#SetData
- * 
+ *
  * @since 3.0
  */
 public void clear (int index) {
@@ -361,10 +361,10 @@ public void clear (int index) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see DWT#VIRTUAL
  * @see DWT#SetData
- * 
+ *
  * @since 3.0
  */
 public void clear (int start, int end) {
@@ -398,10 +398,10 @@ public void clear (int start, int end) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see DWT#VIRTUAL
  * @see DWT#SetData
- * 
+ *
  * @since 3.0
  */
 public void clear (int [] indices) {
@@ -428,10 +428,10 @@ public void clear (int [] indices) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see DWT#VIRTUAL
  * @see DWT#SetData
- * 
+ *
  * @since 3.0
  */
 public void clearAll () {
@@ -449,7 +449,7 @@ public void clearAll () {
 void clearCachedWidth (TableItem[] items) {
     if (items is null) return;
     for (int i = 0; i < items.length; i++) {
-        if (items [i] !is null) items [i].width = -1;       
+        if (items [i] !is null) items [i].width = -1;
     }
 }
 
@@ -530,7 +530,7 @@ void createHandle () {
     scrollWidget.setHasVerticalScroller ((style & DWT.V_SCROLL) !is 0);
     scrollWidget.setAutohidesScrollers(true);
     scrollWidget.setBorderType(hasBorder() ? OS.NSBezelBorder : OS.NSNoBorder);
-    
+
     NSTableView widget = cast(NSTableView)(new SWTTableView()).alloc();
     widget.init();
     widget.setAllowsMultipleSelection((style & DWT.MULTI) !is 0);
@@ -689,7 +689,7 @@ public void deselect (int index) {
 
 /**
  * Deselects the items at the given zero-relative indices in the receiver.
- * If the item at the given zero-relative index in the receiver 
+ * If the item at the given zero-relative index in the receiver
  * is selected, it is deselected.  If the item at the index
  * was not selected, it remains deselected.  The range of the
  * indices is inclusive. Indices that are out of range are ignored.
@@ -722,7 +722,7 @@ public void deselect (int start, int end) {
 
 /**
  * Deselects the items at the given zero-relative indices in the receiver.
- * If the item at the given zero-relative index in the receiver 
+ * If the item at the given zero-relative index in the receiver
  * is selected, it is deselected.  If the item at the index
  * was not selected, it remains deselected. Indices that are out
  * of range and duplicate indices are ignored.
@@ -867,7 +867,7 @@ void destroyItem (TableItem item) {
         if (items [index] is item) break;
         index++;
     }
-    if (index !is itemCount - 1) fixSelection (index, false); 
+    if (index !is itemCount - 1) fixSelection (index, false);
     System.arraycopy (items, index + 1, items, index, --itemCount - index);
     items [itemCount] = null;
     (cast(NSTableView)view).noteNumberOfRowsChanged();
@@ -915,14 +915,14 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect rec
         selectionForeground = Color.cocoa_new(display, hasFocus ? display.alternateSelectedControlTextColor : display.selectedControlTextColor);
         selectionBackground = Color.cocoa_new(display, hasFocus ? display.alternateSelectedControlColor : display.secondarySelectedControlColor);
     }
-    
+
     NSSize contentSize = super.cellSize(id, OS.sel_cellSize);
     NSImage image = cell.image();
     if (image !is null) contentSize.width += imageBounds.width + IMAGE_GAP;
     int contentWidth = (int)Math.ceil (contentSize.width);
     NSSize spacing = widget.intercellSpacing();
     int itemHeight = (int)Math.ceil (widget.rowHeight() + spacing.height);
-    
+
     NSRect cellRect = widget.rectOfColumn (nsColumnIndex);
     cellRect.y = rect.y;
     cellRect.height = rect.height + spacing.height;
@@ -952,7 +952,7 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect rec
     if (hooksMeasure) {
         sendMeasureItem(item, columnIndex, contentSize);
     }
-    
+
     Color userForeground = null;
     if (hooksErase) {
         context.saveGraphicsState();
@@ -988,17 +988,17 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect rec
         event.height = (int)cellRect.height;
         sendEvent (DWT.EraseItem, event);
         if (!event.doit) {
-            drawForeground = drawBackground = drawSelection = false; 
+            drawForeground = drawBackground = drawSelection = false;
         } else {
             drawBackground = drawBackground && (event.detail & DWT.BACKGROUND) !is 0;
             drawForeground = (event.detail & DWT.FOREGROUND) !is 0;
-            drawSelection = drawSelection && (event.detail & DWT.SELECTED) !is 0;           
+            drawSelection = drawSelection && (event.detail & DWT.SELECTED) !is 0;
         }
         if (!drawSelection && isSelected) {
             userForeground = Color.cocoa_new(display, gc.getForeground().handle);
         }
         gc.dispose ();
-        
+
         context.restoreGraphicsState();
 
         if (isDisposed ()) return;
@@ -1073,7 +1073,7 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect rec
                 NSColor nsColor = NSColor.colorWithDeviceRed(color[0], color[1], color[2], color[3]);
                 cell.setTextColor(nsColor);
                 callSuper = true;
-            }           
+            }
         } else {
             callSuper = true;
         }
@@ -1247,7 +1247,7 @@ public Rectangle getClientArea () {
 TableColumn getColumn (cocoa.id id) {
     for (int i = 0; i < columnCount; i++) {
         if (columns[i].nsColumn.id is id.id) {
-            return columns[i]; 
+            return columns[i];
         }
     }
     return null;
@@ -1273,7 +1273,7 @@ TableColumn getColumn (cocoa.id id) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see Table#getColumnOrder()
  * @see Table#setColumnOrder(int[])
  * @see TableColumn#getMoveable()
@@ -1316,7 +1316,7 @@ public int getColumnCount () {
  * </p><p>
  * Note: This is not the actual structure used by the receiver
  * to maintain its list of items, so modifying the array will
- * not affect the receiver. 
+ * not affect the receiver.
  * </p>
  *
  * @return the current visual order of the receiver's items
@@ -1325,12 +1325,12 @@ public int getColumnCount () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see Table#setColumnOrder(int[])
  * @see TableColumn#getMoveable()
  * @see TableColumn#setMoveable(bool)
  * @see DWT#Move
- * 
+ *
  * @since 3.1
  */
 public int [] getColumnOrder () {
@@ -1356,7 +1356,7 @@ public int [] getColumnOrder () {
  * <p>
  * Note: This is not the actual structure used by the receiver
  * to maintain its list of items, so modifying the array will
- * not affect the receiver. 
+ * not affect the receiver.
  * </p>
  *
  * @return the items in the receiver
@@ -1365,7 +1365,7 @@ public int [] getColumnOrder () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see Table#getColumnOrder()
  * @see Table#setColumnOrder(int[])
  * @see TableColumn#getMoveable()
@@ -1383,7 +1383,7 @@ public TableColumn [] getColumns () {
  * Returns the width in pixels of a grid line.
  *
  * @return the width of a grid line in pixels
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
@@ -1395,7 +1395,7 @@ public int getGridLineWidth () {
 }
 
 /**
- * Returns the height of the receiver's header 
+ * Returns the height of the receiver's header
  *
  * @return the height of the header or zero if the header is not visible
  *
@@ -1403,8 +1403,8 @@ public int getGridLineWidth () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
- * @since 2.0 
+ *
+ * @since 2.0
  */
 public int getHeaderHeight () {
     checkWidget ();
@@ -1462,8 +1462,8 @@ public TableItem getItem (int index) {
  * coordinate system of the receiver.
  * <p>
  * The item that is returned represents an item that could be selected by the user.
- * For example, if selection only occurs in items in the first column, then null is 
- * returned if the point is outside of the item. 
+ * For example, if selection only occurs in items in the first column, then null is
+ * returned if the point is outside of the item.
  * Note that the DWT.FULL_SELECTION style hint, which specifies the selection policy,
  * determines the extent of the selection.
  * </p>
@@ -1523,11 +1523,11 @@ public int getItemHeight () {
 
 /**
  * Returns a (possibly empty) array of <code>TableItem</code>s which
- * are the items in the receiver. 
+ * are the items in the receiver.
  * <p>
  * Note: This is not the actual structure used by the receiver
  * to maintain its list of items, so modifying the array will
- * not affect the receiver. 
+ * not affect the receiver.
  * </p>
  *
  * @return the items in the receiver
@@ -1552,7 +1552,7 @@ public TableItem [] getItems () {
 
 /**
  * Returns <code>true</code> if the receiver's lines are visible,
- * and <code>false</code> otherwise. Note that some platforms draw 
+ * and <code>false</code> otherwise. Note that some platforms draw
  * grid lines while others may draw alternating row colors.
  * <p>
  * If one of the receiver's ancestors is not visible or some
@@ -1580,7 +1580,7 @@ public bool getLinesVisible () {
  * <p>
  * Note: This is not the actual structure used by the receiver
  * to maintain its selection, so modifying the array will
- * not affect the receiver. 
+ * not affect the receiver.
  * </p>
  * @return an array representing the selection
  *
@@ -1652,7 +1652,7 @@ public int getSelectionIndex () {
  * <p>
  * Note: This is not the actual structure used by the receiver
  * to maintain its selection, so modifying the array will
- * not affect the receiver. 
+ * not affect the receiver.
  * </p>
  * @return the array of indices of the selected items
  *
@@ -1683,15 +1683,15 @@ public int [] getSelectionIndices () {
  * the receiver. The value may be null if no column shows
  * the sort indicator.
  *
- * @return the sort indicator 
+ * @return the sort indicator
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #setSortColumn(TableColumn)
- * 
+ *
  * @since 3.2
  */
 public TableColumn getSortColumn () {
@@ -1700,8 +1700,8 @@ public TableColumn getSortColumn () {
 }
 
 /**
- * Returns the direction of the sort indicator for the receiver. 
- * The value will be one of <code>UP</code>, <code>DOWN</code> 
+ * Returns the direction of the sort indicator for the receiver.
+ * The value will be one of <code>UP</code>, <code>DOWN</code>
  * or <code>NONE</code>.
  *
  * @return the sort direction
@@ -1710,9 +1710,9 @@ public TableColumn getSortColumn () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #setSortDirection(int)
- * 
+ *
  * @since 3.2
  */
 public int getSortDirection () {
@@ -1754,7 +1754,7 @@ int /*long*/ hitTestForEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ ev
     /*
     * For some reason, the cell class needs to implement hitTestForEvent:inRect:ofView:,
     * otherwise the double action selector is not called properly.
-    */  
+    */
     return callSuper(id, sel, event, rect, controlView);
 }
 
@@ -1780,7 +1780,7 @@ int indexOf (NSTableColumn column) {
 
 /**
  * Searches the receiver's list starting at the first column
- * (index 0) until a column is found that is equal to the 
+ * (index 0) until a column is found that is equal to the
  * argument, and returns the index of that column. If no column
  * is found, returns -1.
  *
@@ -1806,7 +1806,7 @@ public int indexOf (TableColumn column) {
 
 /**
  * Searches the receiver's list starting at the first item
- * (index 0) until an item is found that is equal to the 
+ * (index 0) until an item is found that is equal to the
  * argument, and returns the index of that item. If no item
  * is found, returns -1.
  *
@@ -1869,19 +1869,19 @@ int /*long*/ menuForEvent(int /*long*/ id, int /*long*/ sel, int /*long*/ theEve
     if (id !is headerView.id) {
         /*
          * Feature in Cocoa: Table views do not change the selection when the user
-         * right-clicks or control-clicks on an NSTableView or its subclasses. Fix is to select the 
+         * right-clicks or control-clicks on an NSTableView or its subclasses. Fix is to select the
          * clicked-on row ourselves.
          */
         NSEvent event = new NSEvent(theEvent);
         NSTableView table = (NSTableView)view;
-        
-        // get the current selections for the table view. 
+
+        // get the current selections for the table view.
         NSIndexSet selectedRowIndexes = table.selectedRowIndexes();
-        
+
         // select the row that was clicked before showing the menu for the event
         NSPoint mousePoint = view.convertPoint_fromView_(event.locationInWindow(), null);
         int /*long*/ row = table.rowAtPoint(mousePoint);
-        
+
         // figure out if the row that was just clicked on is currently selected
         if (selectedRowIndexes.containsIndex(row) is false) {
             NSIndexSet set = (NSIndexSet)new NSIndexSet().alloc();
@@ -1913,7 +1913,7 @@ void mouseDown (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
     else if (id is view.id) {
         // Bug/feature in Cocoa:  If the table has a context menu we just set it visible instead of returning
         // it from menuForEvent:.  This has the side effect, however, of sending control-click to the NSTableView,
-        // which is interpreted as a single click that clears the selection.  Fix is to ignore control-click if the 
+        // which is interpreted as a single click that clears the selection.  Fix is to ignore control-click if the
         // view has a context menu.
         NSEvent event = new NSEvent(theEvent);
         if ((event.modifierFlags() & OS.NSControlKeyMask) !is 0) return;
@@ -1924,7 +1924,7 @@ void mouseDown (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
 /*
  * Feature in Cocoa.  If a checkbox is in multi-state mode, nextState cycles
  * from off to mixed to on and back to off again.  This will cause the on state
- * to momentarily appear while clicking on the checkbox.  To avoid this, 
+ * to momentarily appear while clicking on the checkbox.  To avoid this,
  * override [NSCell nextState] to go directly to the desired state.
  */
 int /*long*/ nextState (int /*long*/ id, int /*long*/ sel) {
@@ -1982,7 +1982,7 @@ void releaseHandle () {
     buttonCell = null;
 }
 
-void releaseWidget () { 
+void releaseWidget () {
     super.releaseWidget ();
     currentItem = null;
     sortColumn = null;
@@ -2018,7 +2018,7 @@ public void remove (int index) {
 
 /**
  * Removes the items from the receiver which are
- * between the given zero-relative start and end 
+ * between the given zero-relative start and end
  * indices (inclusive).
  *
  * @param start the start of the range
@@ -2084,7 +2084,7 @@ public void remove (int [] indices) {
 
 /**
  * Removes all of the items from the receiver.
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
@@ -2122,11 +2122,11 @@ public void removeSelectionListener(SelectionListener listener) {
     if (listener is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (eventTable is null) return;
     eventTable.unhook (DWT.Selection, listener);
-    eventTable.unhook (DWT.DefaultSelection,listener);  
+    eventTable.unhook (DWT.DefaultSelection,listener);
 }
 
 /**
- * Selects the item at the given zero-relative index in the receiver. 
+ * Selects the item at the given zero-relative index in the receiver.
  * If the item at the index was already selected, it remains
  * selected. Indices that are out of range are ignored.
  *
@@ -2170,7 +2170,7 @@ public void select (int index) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see Table#setSelection(int,int)
  */
 public void select (int start, int end) {
@@ -2214,7 +2214,7 @@ public void select (int start, int end) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see Table#setSelection(int[])
  */
 public void select (int [] indices) {
@@ -2276,12 +2276,12 @@ void updateBackground () {
         nsColor = NSColor.colorWithPatternImage(backgroundImage.handle);
     } else if (background !is null) {
         nsColor = NSColor.colorWithDeviceRed(background[0], background[1], background[2], background[3]);
-    } 
+    }
     (cast(NSTableView) view).setBackgroundColor (nsColor);
 }
 
 /**
- * Sets the order that the items in the receiver should 
+ * Sets the order that the items in the receiver should
  * be displayed in to the given argument which is described
  * in terms of the zero-relative ordering of when the items
  * were added.
@@ -2296,12 +2296,12 @@ void updateBackground () {
  *    <li>ERROR_NULL_ARGUMENT - if the item order is null</li>
  *    <li>ERROR_INVALID_ARGUMENT - if the item order is not the same length as the number of items</li>
  * </ul>
- * 
+ *
  * @see Table#getColumnOrder()
  * @see TableColumn#getMoveable()
  * @see TableColumn#setMoveable(bool)
  * @see DWT#Move
- * 
+ *
  * @since 3.1
  */
 public void setColumnOrder (int [] order) {
@@ -2362,7 +2362,7 @@ void setFont (NSFont font) {
 
 /**
  * Marks the receiver's header as visible if the argument is <code>true</code>,
- * and marks it invisible otherwise. 
+ * and marks it invisible otherwise.
  * <p>
  * If one of the receiver's ancestors is not visible or some
  * other condition makes the receiver not visible, marking
@@ -2419,7 +2419,7 @@ public void setItemCount (int count) {
                 new TableItem (this, DWT.NONE, i, true);
             }
             return;
-        } 
+        }
     }
     int length = Math.max (4, (count + 3) / 4 * 4);
     TableItem [] newItems = new TableItem [length];
@@ -2545,7 +2545,7 @@ bool setScrollWidth (TableItem [] items, bool set) {
 }
 
 /**
- * Selects the item at the given zero-relative index in the receiver. 
+ * Selects the item at the given zero-relative index in the receiver.
  * The current selection is first cleared, then the new item is selected.
  *
  * @param index the index of the item to select
@@ -2578,7 +2578,7 @@ public void setSelection (int index) {
  * If the receiver is single-select and there is more than one item in the
  * given range, then all indices are ignored.
  * </p>
- * 
+ *
  * @param start the start index of the items to select
  * @param end the end index of the items to select
  *
@@ -2652,7 +2652,7 @@ public void setSelection (int [] indices) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.2
  */
 public void setSelection (TableItem  item) {
@@ -2714,19 +2714,19 @@ void setSmallSize () {
 
 /**
  * Sets the column used by the sort indicator for the receiver. A null
- * value will clear the sort indicator.  The current sort column is cleared 
+ * value will clear the sort indicator.  The current sort column is cleared
  * before the new column is set.
  *
  * @param column the column used by the sort indicator or <code>null</code>
- * 
+ *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the column is disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the column is disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.2
  */
 public void setSortColumn (TableColumn column) {
@@ -2738,16 +2738,16 @@ public void setSortColumn (TableColumn column) {
 }
 
 /**
- * Sets the direction of the sort indicator for the receiver. The value 
+ * Sets the direction of the sort indicator for the receiver. The value
  * can be one of <code>UP</code>, <code>DOWN</code> or <code>NONE</code>.
  *
- * @param direction the direction of the sort indicator 
+ * @param direction the direction of the sort indicator
  *
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.2
  */
 public void setSortDirection  (int direction) {
@@ -2875,7 +2875,7 @@ public void showSelection () {
 
 void sendDoubleSelection() {
     NSTableView tableView = (NSTableView)view;
-    int rowIndex = (int)/*64*/tableView.clickedRow (); 
+    int rowIndex = (int)/*64*/tableView.clickedRow ();
     if (rowIndex !is -1) {
         if ((style & DWT.CHECK) !is 0) {
             NSArray columns = tableView.tableColumns ();
@@ -2972,7 +2972,7 @@ void tableViewColumnDidResize (objc.id id, objc.SEL sel, objc.id aNotification) 
     NSTableView tableView = cast(NSTableView)view;
     int index = indexOf (column.nsColumn);
     if (index is -1) return; /* column was disposed in Resize callback */
-    
+
     NSArray nsColumns = tableView.tableColumns ();
     int columnCount = cast(int)/*64*/tableView.numberOfColumns ();
     for (int i = index + 1; i < columnCount; i++) {

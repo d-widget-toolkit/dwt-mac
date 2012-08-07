@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -23,47 +23,47 @@ import dwt.dnd.DropTargetAdapter;
 
 
 /**
- * This class provides a default drag under effect during a drag and drop. 
+ * This class provides a default drag under effect during a drag and drop.
  * The current implementation does not provide any visual feedback.
- * 
- * <p>The drop target effect has the same API as the 
- * <code>DropTargetAdapter</code> so that it can provide custom visual 
- * feedback when a <code>DropTargetEvent</code> occurs. 
+ *
+ * <p>The drop target effect has the same API as the
+ * <code>DropTargetAdapter</code> so that it can provide custom visual
+ * feedback when a <code>DropTargetEvent</code> occurs.
  * </p>
- * 
+ *
  * <p>Classes that wish to provide their own drag under effect
- * can extend the <code>DropTargetEffect</code> and override any applicable methods 
+ * can extend the <code>DropTargetEffect</code> and override any applicable methods
  * in <code>DropTargetAdapter</code> to display their own drag under effect.</p>
  *
- * <p>The feedback value is either one of the FEEDBACK constants defined in 
- * class <code>DND</code> which is applicable to instances of this class, 
- * or it must be built by <em>bitwise OR</em>'ing together 
+ * <p>The feedback value is either one of the FEEDBACK constants defined in
+ * class <code>DND</code> which is applicable to instances of this class,
+ * or it must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
- * of those <code>DND</code> effect constants. 
+ * of those <code>DND</code> effect constants.
  * </p>
  * <p>
  * <dl>
  * <dt><b>Feedback:</b></dt>
- * <dd>FEEDBACK_EXPAND, FEEDBACK_INSERT_AFTER, FEEDBACK_INSERT_BEFORE, 
+ * <dd>FEEDBACK_EXPAND, FEEDBACK_INSERT_AFTER, FEEDBACK_INSERT_BEFORE,
  * FEEDBACK_NONE, FEEDBACK_SELECT, FEEDBACK_SCROLL</dd>
  * </dl>
  * </p>
- * 
+ *
  * @see DropTargetAdapter
  * @see DropTargetEvent
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.3
  */
 public class DropTargetEffect : DropTargetAdapter {
     Control control;
 
     /**
-     * Creates a new <code>DropTargetEffect</code> to handle the drag under effect on the specified 
+     * Creates a new <code>DropTargetEffect</code> to handle the drag under effect on the specified
      * <code>Control</code>.
-     * 
+     *
      * @param control the <code>Control</code> over which the user positions the cursor to drop the data
-     * 
+     *
      * @exception IllegalArgumentException <ul>
      *    <li>ERROR_NULL_ARGUMENT - if the control is null</li>
      * </ul>
@@ -74,7 +74,7 @@ public class DropTargetEffect : DropTargetAdapter {
     }
 
     /**
-     * Returns the Control which is registered for this DropTargetEffect.  This is the control over which the 
+     * Returns the Control which is registered for this DropTargetEffect.  This is the control over which the
      * user positions the cursor to drop the data.
      *
      * @return the Control which is registered for this DropTargetEffect
@@ -82,7 +82,7 @@ public class DropTargetEffect : DropTargetAdapter {
     public Control getControl() {
         return control;
     }
-    
+
     /**
      * Returns the item at the given x-y coordinate in the receiver
      * or null if no such item exists. The x-y coordinate is in the
@@ -98,10 +98,10 @@ public class DropTargetEffect : DropTargetAdapter {
         }
         if (cast(Tree) control) {
             return getItem(cast(Tree) control, x, y);
-        }           
+        }
         return null;
     }
-    
+
     Widget getItem(Table table, int x, int y) {
         Point coordinates = new Point(x, y);
         coordinates = table.toControl(coordinates);
@@ -120,7 +120,7 @@ public class DropTargetEffect : DropTargetAdapter {
         }
         return null;
     }
-    
+
     Widget getItem(Tree tree, int x, int y) {
         Point point = new Point(x, y);
         point = tree.toControl(point);
@@ -142,7 +142,7 @@ public class DropTargetEffect : DropTargetAdapter {
         }
         return item;
     }
-    
+
     TreeItem nextItem(Tree tree, TreeItem item) {
         if (item is null) return null;
         if (item.getExpanded() && item.getItemCount() > 0) return item.getItem(0);
@@ -159,7 +159,7 @@ public class DropTargetEffect : DropTargetAdapter {
             count = parentItem is null ? tree.getItemCount() : parentItem.getItemCount();
         }
     }
-    
+
     TreeItem previousItem(Tree tree, TreeItem item) {
         if (item is null) return null;
         TreeItem childItem = item;

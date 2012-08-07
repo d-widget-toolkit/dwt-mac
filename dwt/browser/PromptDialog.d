@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.browser.PromptDialog;
 
-import Math = tango.math.Math; 
+import Math = tango.math.Math;
 import dwt.dwthelper.utils;
 
 import dwt.*;
@@ -20,15 +20,15 @@ import dwt.layout.*;
 import dwt.widgets.*;
 
 class PromptDialog : Dialog {
-    
+
     this(Shell parent, int style) {
         super(parent, style);
     }
-    
+
     this(Shell parent) {
         this(parent, 0);
     }
-    
+
     void alertCheck(String title, String text, String check, ref int checkValue) {
         Shell parent = getParent();
         /* final */ Shell shell = new Shell(parent, DWT.DIALOG_TRIM | DWT.APPLICATION_MODAL);
@@ -104,7 +104,7 @@ class PromptDialog : Dialog {
                     }
                 }
                 shell.close();
-            }   
+            }
         };
         if (check !is null) {
             buttons[0] = new Button(shell, DWT.CHECK);
@@ -154,7 +154,7 @@ class PromptDialog : Dialog {
             if (!display.readAndDispatch()) display.sleep();
         }
     }
-    
+
     void prompt(String title, String text, String check, /* final */ref String value, /* final */ ref int checkValue, /* final */ref int result) {
         Shell parent = getParent();
         /* final */ Shell shell = new Shell(parent, DWT.DIALOG_TRIM | DWT.APPLICATION_MODAL);
@@ -171,7 +171,7 @@ class PromptDialog : Dialog {
         data.horizontalAlignment = GridData.FILL;
         data.grabExcessHorizontalSpace = true;
         label.setLayoutData (data);
-                
+
         final Text valueText = new Text(shell, DWT.BORDER);
         if (value !is null) valueText.setText(value);
         data = new GridData();
@@ -188,7 +188,7 @@ class PromptDialog : Dialog {
                 value = valueText.getText();
                 result = event.widget is buttons[1] ? 1 : 0;
                 shell.close();
-            }   
+            }
         };
         if (check !is null) {
             buttons[0] = new Button(shell, DWT.CHECK);
@@ -219,7 +219,7 @@ class PromptDialog : Dialog {
         Display display = parent.getDisplay();
         while (!shell.isDisposed()) {
             if (!display.readAndDispatch()) display.sleep();
-        }   
+        }
     }
 
     void promptUsernameAndPassword(String title, String text, String check, ref String user, ref String pass, ref int checkValue, ref int result) {
@@ -238,7 +238,7 @@ class PromptDialog : Dialog {
         data.horizontalAlignment = GridData.FILL;
         data.grabExcessHorizontalSpace = true;
         label.setLayoutData (data);
-        
+
         Label userLabel = new Label(shell, DWT.NONE);
         //userLabel.setText(DWT.getMessage("SWT_Username")); //$NON-NLS-1$
         userLabel.setText("Username:");
@@ -248,7 +248,7 @@ class PromptDialog : Dialog {
         data.horizontalAlignment = GridData.FILL;
         data.grabExcessHorizontalSpace = true;
         userText.setLayoutData(data);
-        
+
         Label passwordLabel = new Label(shell, DWT.NONE);
         //passwordLabel.setText(DWT.getMessage("SWT_Password")); //$NON-NLS-1$
         passwordLabel.setText("Password:");
@@ -267,7 +267,7 @@ class PromptDialog : Dialog {
                 pass = passwordText.getText();
                 result = event.widget is buttons[1] ? 1 : 0;
                 shell.close();
-            }   
+            }
         };
         if (check !is null) {
             buttons[0] = new Button(shell, DWT.CHECK);

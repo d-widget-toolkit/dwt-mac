@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -36,7 +36,7 @@ import dwt.internal.objc.cocoa.Cocoa;
  * described using lines, rectangles, arcs, cubic or quadratic bezier curves,
  * glyphs, or other paths.
  * <p>
- * Application code must explicitly invoke the <code>Path.dispose()</code> 
+ * Application code must explicitly invoke the <code>Path.dispose()</code>
  * method to release the operating system resources managed by each instance
  * when those instances are no longer required.
  * </p>
@@ -48,13 +48,13 @@ import dwt.internal.objc.cocoa.Cocoa;
  * @see <a href="http://www.eclipse.org/swt/snippets/#path">Path, Pattern snippets</a>
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: GraphicsExample</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.1
  */
 public class Path : Resource {
 
     alias Resource.init_ init_;
-    
+
     /**
      * the OS resource for the Path
      * (Warning: This field is platform dependent)
@@ -74,9 +74,9 @@ public class Path : Resource {
  * graphics subsystem which may not be available on some
  * platforms.
  * </p>
- * 
+ *
  * @param device the device on which to allocate the path
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the device is null and there is no current device</li>
  * </ul>
@@ -86,7 +86,7 @@ public class Path : Resource {
  * @exception DWTError <ul>
  *    <li>ERROR_NO_HANDLES if a handle for the path could not be obtained</li>
  * </ul>
- * 
+ *
  * @see #dispose()
  */
 public this (Device device) {
@@ -115,11 +115,11 @@ public this (Device device) {
  * graphics subsystem which may not be available on some
  * platforms.
  * </p>
- * 
+ *
  * @param device the device on which to allocate the path
  * @param path the path to make a copy
  * @param flatness the flatness value
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the device is null and there is no current device</li>
  *    <li>ERROR_NULL_ARGUMENT - if the path is null</li>
@@ -131,7 +131,7 @@ public this (Device device) {
  * @exception DWTError <ul>
  *    <li>ERROR_NO_HANDLES if a handle for the path could not be obtained</li>
  * </ul>
- * 
+ *
  * @see #dispose()
  * @since 3.4
  */
@@ -150,7 +150,7 @@ public this (Device device, Path path, float flatness) {
             NSBezierPath.setDefaultFlatness(flatness);
             handle = path.handle.bezierPathByFlatteningPath();
             handle.retain();
-            NSBezierPath.setDefaultFlatness(defaultFlatness);       
+            NSBezierPath.setDefaultFlatness(defaultFlatness);
         }
         if (handle is null) DWT.error(DWT.ERROR_NO_HANDLES);
     init_();
@@ -166,10 +166,10 @@ public this (Device device, Path path, float flatness) {
  * graphics subsystem which may not be available on some
  * platforms.
  * </p>
- * 
+ *
  * @param device the device on which to allocate the path
  * @param data the data for the path
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the device is null and there is no current device</li>
  *    <li>ERROR_NULL_ARGUMENT - if the data is null</li>
@@ -180,7 +180,7 @@ public this (Device device, Path path, float flatness) {
  * @exception DWTError <ul>
  *    <li>ERROR_NO_HANDLES if a handle for the path could not be obtained</li>
  * </ul>
- * 
+ *
  * @see #dispose()
  * @since 3.4
  */
@@ -200,15 +200,15 @@ public this (Device device, PathData data) {
  * Adds to the receiver a circular or elliptical arc that lies within
  * the specified rectangular area.
  * <p>
- * The resulting arc begins at <code>startAngle</code> and extends  
+ * The resulting arc begins at <code>startAngle</code> and extends
  * for <code>arcAngle</code> degrees.
  * Angles are interpreted such that 0 degrees is at the 3 o'clock
  * position. A positive value indicates a counter-clockwise rotation
  * while a negative value indicates a clockwise rotation.
  * </p><p>
- * The center of the arc is the center of the rectangle whose origin 
- * is (<code>x</code>, <code>y</code>) and whose size is specified by the 
- * <code>width</code> and <code>height</code> arguments. 
+ * The center of the arc is the center of the rectangle whose origin
+ * is (<code>x</code>, <code>y</code>) and whose size is specified by the
+ * <code>width</code> and <code>height</code> arguments.
  * </p><p>
  * The resulting arc covers an area <code>width + 1</code> pixels wide
  * by <code>height + 1</code> pixels tall.
@@ -241,7 +241,7 @@ public void addArc(float x, float y, float width, float height, float startAngle
         path.transformUsingAffineTransform(transform);
         handle.appendBezierPath(path);
         if (Math.abs(arcAngle) >= 360) handle.closePath();
-    } finally { 
+    } finally {
         if (pool !is null) pool.release();
     }
 }
@@ -338,7 +338,7 @@ public void addString(String stri, float x, float y, Font font) {
         range.length = str.length();
         /*
         * Feature in Cocoa. Adding attributes directly to a NSTextStorage causes
-        * output to the console and eventually a segmentation fault when printing 
+        * output to the console and eventually a segmentation fault when printing
         * on a thread other than the main thread. The fix is to add attributes to
         * a separate NSMutableAttributedString and add it to text storage when done.
         */
@@ -460,8 +460,8 @@ public bool contains(float x, float y, GC gc, bool outline) {
             OS.CGContextStrokePath(context);
             OS.CGContextRelease(context);
             OS.memmove(buffer, pixel, 4);
-            OS.free(pixel); 
-            return buffer[0] !is 0xFFFFFFFF;            
+            OS.free(pixel);
+            return buffer[0] !is 0xFFFFFFFF;
         } else {
             NSPoint point = NSPoint();
             point.x = x;
@@ -518,7 +518,7 @@ void destroy() {
  * receiver (i.e. the bounding box).
  *
  * @param bounds the array to hold the result
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the parameter is null</li>
  *    <li>ERROR_INVALID_ARGUMENT - if the parameter is too small to hold the bounding box</li>
@@ -549,7 +549,7 @@ public void getBounds(float[] bounds) {
  * describe the current point of the path.
  *
  * @param point the array to hold the result
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the parameter is null</li>
  *    <li>ERROR_INVALID_ARGUMENT - if the parameter is too small to hold the end point</li>
@@ -575,13 +575,13 @@ public void getCurrentPoint(float[] point) {
 
 /**
  * Returns a device independent representation of the receiver.
- * 
+ *
  * @return the PathData for the receiver
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_GRAPHIC_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @see PathData
  */
 public PathData getPathData() {

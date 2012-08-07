@@ -8,8 +8,8 @@ import dwt.internal.mozilla.nsIOutputStream;
 
 const char[] NS_IBINARYOUTPUTSTREAM_IID_STR = "204ee610-8765-11d3-90cf-0040056a906e";
 
-const nsIID NS_IBINARYOUTPUTSTREAM_IID= 
-  {0x204ee610, 0x8765, 0x11d3, 
+const nsIID NS_IBINARYOUTPUTSTREAM_IID=
+  {0x204ee610, 0x8765, 0x11d3,
     [ 0x90, 0xcf, 0x00, 0x40, 0x05, 0x6a, 0x90, 0x6e ]};
 
 interface nsIBinaryOutputStream : nsIOutputStream {

@@ -144,7 +144,7 @@ public this (Composite parent, int style) {
     arrow = new Button (this, arrowStyle);
 
     listener = new CComboListener;
-    
+
     filter = new class() Listener {
         public void handleEvent(Event event) {
             if (isDisposed ()) return;

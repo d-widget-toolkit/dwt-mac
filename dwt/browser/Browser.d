@@ -44,7 +44,7 @@ import dwt.browser.VisibilityWindowListener;
  * <p>
  * IMPORTANT: This class is <em>not</em> intended to be subclassed.
  * </p>
- * 
+ *
  * @since 3.0
  * @noextend This class is not intended to be subclassed by clients.
  */
@@ -62,7 +62,7 @@ public class Browser : Composite {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -81,9 +81,9 @@ public class Browser : Composite {
  * @exception DWTError <ul>
  *    <li>ERROR_NO_HANDLES if a handle could not be obtained for browser creation</li>
  * </ul>
- * 
+ *
  * @see Widget#getStyle
- * 
+ *
  * @since 3.0
  */
 public this (Composite parent, int style) {
@@ -119,7 +119,7 @@ static Composite checkParent (Composite parent) {
     /*
     * Note.  Mozilla provides all IM support needed for text input in web pages.
     * If DWT creates another input method context for the widget it will cause
-    * indeterminate results to happen (hangs and crashes). The fix is to prevent 
+    * indeterminate results to happen (hangs and crashes). The fix is to prevent
     * DWT from creating an input method context for the  Browser widget.
     */
     if (parent !is null && !parent.isDisposed ()) {
@@ -159,7 +159,7 @@ protected void checkWidget () {
 
 /**
  * Clears all session cookies from all current Browser instances.
- * 
+ *
  * @since 3.2
  */
 public static void clearSessions () {
@@ -169,16 +169,16 @@ public static void clearSessions () {
 /**
  * Returns the value of a cookie that is associated with a URL.
  * Note that cookies are shared amongst all Browser instances.
- * 
+ *
  * @param name the cookie name
  * @param url the URL that the cookie is associated with
  * @return the cookie value, or <code>null</code> if no such cookie exists
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the name is null</li>
  *    <li>ERROR_NULL_ARGUMENT - if the url is null</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public static String getCookie (String name, String url) {
@@ -189,7 +189,7 @@ public static String getCookie (String name, String url) {
 
 /**
  * Sets a cookie on a URL.  Note that cookies are shared amongst all Browser instances.
- * 
+ *
  * The <code>value</code> parameter must be a cookie header string that
  * complies with <a href="http://www.ietf.org/rfc/rfc2109.txt">RFC 2109</code>.
  * The value is passed through to the native browser unchanged.
@@ -199,16 +199,16 @@ public static String getCookie (String name, String url) {
  * <code>foo=bar; path=/; domain=.eclipse.org</code> (session cookie)
  * <code>foo=bar; expires=Thu, 01-Jan-2030 00:00:01 GMT</code> (persistent cookie)
  * <code>foo=; expires=Thu, 01-Jan-1970 00:00:01 GMT</code> (deletes cookie <code>foo</code>)
- * 
+ *
  * @param value the cookie value
  * @param url the URL to associate the cookie with
  * @return <code>true</code> if the cookie was successfully set and <code>false</code> otherwise
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the value is null</li>
  *    <li>ERROR_NULL_ARGUMENT - if the url is null</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public static bool setCookie (String value, String url) {
@@ -217,7 +217,7 @@ public static bool setCookie (String value, String url) {
     return WebBrowser.SetCookie (value, url);
 }
 
-/**  
+/**
  * Adds the listener to the collection of listeners who will be
  * notified when authentication is required.
  * <p>
@@ -230,7 +230,7 @@ public static bool setCookie (String value, String url) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
@@ -244,7 +244,7 @@ public void addAuthenticationListener (AuthenticationListener listener) {
     webBrowser.addAuthenticationListener (listener);
 }
 
-/**  
+/**
  * Adds the listener to the collection of listeners who will be
  * notified when the window hosting the receiver should be closed.
  * <p>
@@ -257,7 +257,7 @@ public void addAuthenticationListener (AuthenticationListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
@@ -271,7 +271,7 @@ public void addCloseWindowListener (CloseWindowListener listener) {
     webBrowser.addCloseWindowListener (listener);
 }
 
-/**  
+/**
  * Adds the listener to the collection of listeners who will be
  * notified when the current location has changed or is about to change.
  * <p>
@@ -285,7 +285,7 @@ public void addCloseWindowListener (CloseWindowListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
@@ -299,7 +299,7 @@ public void addLocationListener (LocationListener listener) {
     webBrowser.addLocationListener (listener);
 }
 
-/**  
+/**
  * Adds the listener to the collection of listeners who will be
  * notified when a new window needs to be created.
  * <p>
@@ -312,7 +312,7 @@ public void addLocationListener (LocationListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
@@ -326,9 +326,9 @@ public void addOpenWindowListener (OpenWindowListener listener) {
     webBrowser.addOpenWindowListener (listener);
 }
 
-/**  
+/**
  * Adds the listener to the collection of listeners who will be
- * notified when a progress is made during the loading of the current 
+ * notified when a progress is made during the loading of the current
  * URL or when the loading of the current URL has been completed.
  *
  * @param listener the listener which should be notified
@@ -336,7 +336,7 @@ public void addOpenWindowListener (OpenWindowListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
@@ -350,7 +350,7 @@ public void addProgressListener (ProgressListener listener) {
     webBrowser.addProgressListener (listener);
 }
 
-/**  
+/**
  * Adds the listener to the collection of listeners who will be
  * notified when the status text is changed.
  * <p>
@@ -363,7 +363,7 @@ public void addProgressListener (ProgressListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
@@ -377,7 +377,7 @@ public void addStatusTextListener (StatusTextListener listener) {
     webBrowser.addStatusTextListener (listener);
 }
 
-/**  
+/**
  * Adds the listener to the collection of listeners who will be
  * notified when the title of the current document is available
  * or has changed.
@@ -387,7 +387,7 @@ public void addStatusTextListener (StatusTextListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
@@ -401,7 +401,7 @@ public void addTitleListener (TitleListener listener) {
     webBrowser.addTitleListener (listener);
 }
 
-/**  
+/**
  * Adds the listener to the collection of listeners who will be
  * notified when a window hosting the receiver needs to be displayed
  * or hidden.
@@ -411,7 +411,7 @@ public void addTitleListener (TitleListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
@@ -436,7 +436,7 @@ public void addVisibilityWindowListener (VisibilityWindowListener listener) {
  * </ul>
  *
  * @see #forward
- * 
+ *
  * @since 3.0
  */
 public bool back () {
@@ -461,22 +461,22 @@ protected void checkSubclass () {
  * If document-defined functions or properties are accessed by the script then this method
  * should not be invoked until the document has finished loading (<code>ProgressListener.completed()</code>
  * gives notification of this).
- * 
+ *
  * @param script the script with javascript commands
- *  
+ *
  * @return <code>true</code> if the operation was successful and <code>false</code> otherwise
  *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the script is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
  * </ul>
  *
  * @see ProgressListener#completed(ProgressEvent)
- * 
+ *
  * @since 3.1
  */
 public bool execute (String script) {
@@ -510,22 +510,22 @@ public bool execute (String script) {
  * error to be thrown.
  *
  * @param script the script with javascript commands
- *  
+ *
  * @return the return value, if any, of executing the script
  *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the script is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_FAILED_EVALUATE when the script evaluation causes a javascript error to be thrown</li>
  *    <li>ERROR_INVALID_RETURN_VALUE when the script returns a value of unsupported type</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
  * </ul>
- * 
+ *
  * @see ProgressListener#completed(ProgressEvent)
- * 
+ *
  * @since 3.5
  */
 public Object evaluate (String script) throws DWTException {
@@ -543,9 +543,9 @@ public Object evaluate (String script) throws DWTException {
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
  * </ul>
- * 
+ *
  * @see #back
- * 
+ *
  * @since 3.0
  */
 public bool forward () {
@@ -563,9 +563,9 @@ public bool forward () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #setJavascriptEnabled
- * 
+ *
  * @since 3.5
  */
 public bool getJavascriptEnabled () {
@@ -583,9 +583,9 @@ public bool getJavascriptEnabled () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #setJavascriptEnabled
- * 
+ *
  * @since 3.5
  */
 public bool getJavascriptEnabled () {
@@ -630,7 +630,7 @@ public String getText () {
  * </ul>
  *
  * @see #setUrl
- * 
+ *
  * @since 3.0
  */
 public String getUrl () {
@@ -645,10 +645,10 @@ public String getUrl () {
  *    <li>the receiver's style must be <code>DWT.MOZILLA</code></li>
  *    <li>the classes from JavaXPCOM &gt;= 1.8.1.2 must be resolvable at runtime</li>
  *    <li>the version of the underlying XULRunner must be &gt;= 1.8.1.2</li>
- * </ul> 
+ * </ul>
  *
  * @return the receiver's JavaXPCOM <code>nsIWebBrowser</code> or <code>null</code>
- * 
+ *
  * @since 3.3
  */
 public Object getWebBrowser () {
@@ -657,7 +657,7 @@ public Object getWebBrowser () {
 }
 
 /**
- * Returns <code>true</code> if the receiver can navigate to the 
+ * Returns <code>true</code> if the receiver can navigate to the
  * previous session history item, and <code>false</code> otherwise.
  *
  * @return the receiver's back command enabled state
@@ -666,7 +666,7 @@ public Object getWebBrowser () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #back
  */
 public bool isBackEnabled () {
@@ -681,7 +681,7 @@ public bool isFocusControl () {
 }
 
 /**
- * Returns <code>true</code> if the receiver can navigate to the 
+ * Returns <code>true</code> if the receiver can navigate to the
  * next session history item, and <code>false</code> otherwise.
  *
  * @return the receiver's forward command enabled state
@@ -690,7 +690,7 @@ public bool isFocusControl () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #forward
  */
 public bool isForwardEnabled () {
@@ -713,7 +713,7 @@ public void refresh () {
     webBrowser.refresh ();
 }
 
-/**  
+/**
  * Removes the listener from the collection of listeners who will
  * be notified when authentication is required.
  *
@@ -722,12 +722,12 @@ public void refresh () {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public void removeAuthenticationListener (AuthenticationListener listener) {
@@ -736,7 +736,7 @@ public void removeAuthenticationListener (AuthenticationListener listener) {
     webBrowser.removeAuthenticationListener (listener);
 }
 
-/**  
+/**
  * Removes the listener from the collection of listeners who will
  * be notified when the window hosting the receiver should be closed.
  *
@@ -745,12 +745,12 @@ public void removeAuthenticationListener (AuthenticationListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void removeCloseWindowListener (CloseWindowListener listener) {
@@ -759,7 +759,7 @@ public void removeCloseWindowListener (CloseWindowListener listener) {
     webBrowser.removeCloseWindowListener (listener);
 }
 
-/**  
+/**
  * Removes the listener from the collection of listeners who will
  * be notified when the current location is changed or about to be changed.
  *
@@ -768,12 +768,12 @@ public void removeCloseWindowListener (CloseWindowListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void removeLocationListener (LocationListener listener) {
@@ -782,7 +782,7 @@ public void removeLocationListener (LocationListener listener) {
     webBrowser.removeLocationListener (listener);
 }
 
-/**  
+/**
  * Removes the listener from the collection of listeners who will
  * be notified when a new window needs to be created.
  *
@@ -791,12 +791,12 @@ public void removeLocationListener (LocationListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void removeOpenWindowListener (OpenWindowListener listener) {
@@ -805,9 +805,9 @@ public void removeOpenWindowListener (OpenWindowListener listener) {
     webBrowser.removeOpenWindowListener (listener);
 }
 
-/**  
+/**
  * Removes the listener from the collection of listeners who will
- * be notified when a progress is made during the loading of the current 
+ * be notified when a progress is made during the loading of the current
  * URL or when the loading of the current URL has been completed.
  *
  * @param listener the listener which should no longer be notified
@@ -815,12 +815,12 @@ public void removeOpenWindowListener (OpenWindowListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void removeProgressListener (ProgressListener listener) {
@@ -829,7 +829,7 @@ public void removeProgressListener (ProgressListener listener) {
     webBrowser.removeProgressListener (listener);
 }
 
-/**  
+/**
  * Removes the listener from the collection of listeners who will
  * be notified when the status text is changed.
  *
@@ -838,12 +838,12 @@ public void removeProgressListener (ProgressListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void removeStatusTextListener (StatusTextListener listener) {
@@ -852,7 +852,7 @@ public void removeStatusTextListener (StatusTextListener listener) {
     webBrowser.removeStatusTextListener (listener);
 }
 
-/**  
+/**
  * Removes the listener from the collection of listeners who will
  * be notified when the title of the current document is available
  * or has changed.
@@ -862,12 +862,12 @@ public void removeStatusTextListener (StatusTextListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void removeTitleListener (TitleListener listener) {
@@ -876,7 +876,7 @@ public void removeTitleListener (TitleListener listener) {
     webBrowser.removeTitleListener (listener);
 }
 
-/**  
+/**
  * Removes the listener from the collection of listeners who will
  * be notified when a window hosting the receiver needs to be displayed
  * or hidden.
@@ -886,12 +886,12 @@ public void removeTitleListener (TitleListener listener) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public void removeVisibilityWindowListener (VisibilityWindowListener listener) {
@@ -911,7 +911,7 @@ public void removeVisibilityWindowListener (VisibilityWindowListener listener) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.5
  */
 public void setJavascriptEnabled (bool enabled) {
@@ -922,12 +922,12 @@ public void setJavascriptEnabled (bool enabled) {
 
 /**
  * Renders a string containing HTML.  The rendering of the content occurs asynchronously.
- * 
+ *
  * <p>
  * The html parameter is Unicode encoded since it is a java <code>String</code>.
  * As a result, the HTML meta tag charset should not be set. The charset is implied
  * by the <code>String</code> itself.
- * 
+ *
  * @param html the HTML content to be rendered
  *
  * @return true if the operation was successful and false otherwise.
@@ -935,14 +935,14 @@ public void setJavascriptEnabled (bool enabled) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the html is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
  * </ul>
- *  
+ *
  * @see #setUrl
- * 
+ *
  * @since 3.0
  */
 public bool setText (String html) {
@@ -953,7 +953,7 @@ public bool setText (String html) {
 
 /**
  * Begins loading a URL.  The loading of its content occurs asynchronously.
- * 
+ *
  * @param url the URL to be loaded
  *
  * @return true if the operation was successful and false otherwise.
@@ -961,14 +961,14 @@ public bool setText (String html) {
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the url is null</li>
  * </ul>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS when called from the wrong thread</li>
  *    <li>ERROR_WIDGET_DISPOSED when the widget has been disposed</li>
  * </ul>
- *  
+ *
  * @see #getUrl
- * 
+ *
  * @since 3.0
  */
 public bool setUrl (String url) {

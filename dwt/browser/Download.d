@@ -44,7 +44,7 @@ class Download : nsIProgressDialog {
     Shell shell;
     Label status;
     Button cancel;
-    
+
 this () {
 }
 
@@ -57,7 +57,7 @@ nsrefcnt AddRef () {
 extern(System)
 nsresult QueryInterface (nsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
- 
+
     if (*riid == nsISupports.IID) {
         *ppvObject = cast(void*)cast(nsISupports)this;
         AddRef();
@@ -108,9 +108,9 @@ nsresult Init (nsIURI aSource, nsIURI aTarget, nsAString* aDisplayName, nsIMIMEI
     String url = aSpec.toString;
 
     /*
-    * As of mozilla 1.7 the second argument of the nsIDownload interface's 
+    * As of mozilla 1.7 the second argument of the nsIDownload interface's
     * Init function changed from nsILocalFile to nsIURI.  Detect which of
-    * these interfaces the second argument implements and act accordingly.  
+    * these interfaces the second argument implements and act accordingly.
     */
     String filename = null;
     nsISupports supports = cast(nsISupports)aTarget;

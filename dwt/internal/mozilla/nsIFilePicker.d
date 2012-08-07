@@ -4,15 +4,15 @@ import dwt.internal.mozilla.Common;
 import dwt.internal.mozilla.nsID;
 import dwt.internal.mozilla.nsISupports;
 import dwt.internal.mozilla.nsILocalFile;
-import dwt.internal.mozilla.nsIFileURL; 
-import dwt.internal.mozilla.nsIDOMWindow; 
+import dwt.internal.mozilla.nsIFileURL;
+import dwt.internal.mozilla.nsIDOMWindow;
 import dwt.internal.mozilla.nsISimpleEnumerator;
 import dwt.internal.mozilla.nsStringAPI;
 
 const char[] NS_IFILEPICKER_IID_STR = "c47de916-1dd1-11b2-8141-82507fa02b21";
 
-const nsIID NS_IFILEPICKER_IID= 
-  {0xc47de916, 0x1dd1, 0x11b2, 
+const nsIID NS_IFILEPICKER_IID=
+  {0xc47de916, 0x1dd1, 0x11b2,
     [ 0x81, 0x41, 0x82, 0x50, 0x7f, 0xa0, 0x2b, 0x21 ]};
 
 interface nsIFilePicker : nsISupports {

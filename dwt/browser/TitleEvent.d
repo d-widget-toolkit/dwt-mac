@@ -23,13 +23,13 @@ import dwt.events.*;
  * A <code>TitleEvent</code> is sent by a {@link Browser} to
  * {@link TitleListener}'s when the title of the current document
  * is available or when it is modified.
- * 
+ *
  * @since 3.0
  */
 public class TitleEvent : TypedEvent {
     /** the title of the current document */
     public String title;
-    
+
     static final long serialVersionUID = 4121132532906340919L;
 
 /**
@@ -50,7 +50,7 @@ public this(Widget widget) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} {title = {}}", 
-        super.toString[1 .. $-2], title );  
+    return Format( "{} {title = {}}",
+        super.toString[1 .. $-2], title );
 }
 }

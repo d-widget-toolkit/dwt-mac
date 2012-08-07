@@ -1275,7 +1275,7 @@ public class JPEGDecoder {
             return true;
         }
 
-        bool decode_mcu_DC_first (jpeg_decompress_struct cinfo, short[][] MCU_data) {    
+        bool decode_mcu_DC_first (jpeg_decompress_struct cinfo, short[][] MCU_data) {
             phuff_entropy_decoder entropy = this;
             int Al = cinfo.Al;
             int s = 0, r;
@@ -1639,7 +1639,7 @@ public class JPEGDecoder {
 
         /* Variables for Floyd-Steinberg dithering */
 //          FSERRPTR fserrors[MAX_Q_COMPS]; /* accumulated errors */
-        bool on_odd_row;    
+        bool on_odd_row;
 
         void start_pass (jpeg_decompress_struct cinfo, bool is_pre_scan) {
             error();

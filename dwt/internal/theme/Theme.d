@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -23,7 +23,7 @@ import dwt.internal.theme.RangeDrawData;
 
 public class Theme {
     Device device;
-    
+
 public this(Device device) {
     this.device = device;
 }
@@ -42,7 +42,7 @@ public Rectangle computeTrim(GC gc, DrawData data) {
 public void dispose () {
     device = null;
 }
-    
+
 public void drawBackground(GC gc, Rectangle bounds, DrawData data) {
     checkTheme();
     if (gc is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);

@@ -84,7 +84,7 @@ public class OS : C {
         int [1] response;
         OS.Gestalt (OS.gestaltSystemVersion, response.ptr);
         VERSION = response [0] & 0xffff;
-    
+
 		sel_sendSearchSelection = sel_registerName("sendSearchSelection");
 		sel_sendCancelSelection = sel_registerName("sendCancelSelection");
 		sel_sendSelection = sel_registerName("sendSelection");
@@ -118,9 +118,9 @@ public class OS : C {
 		/* These are not generated in order to avoid creating static methods on all classes */
 		sel_isSelectorExcludedFromWebScript_ = sel_registerName("isSelectorExcludedFromWebScript:");
 		sel_webScriptNameForSelector_ = sel_registerName("webScriptNameForSelector:");
-    
 
-        
+
+
         class_DOMDocument = objc_getClass("DOMDocument");
         class_DOMEvent = objc_getClass("DOMEvent");
         class_DOMKeyboardEvent = objc_getClass("DOMKeyboardEvent");
@@ -263,7 +263,7 @@ public class OS : C {
         class_NSURLProtectionSpace = objc_getClass("NSURLProtectionSpace");
         class_WebScriptObject = objc_getClass("WebScriptObject");
         class_WebUndefined = objc_getClass("WebUndefined");
-        
+
         protocol_NSAccessibility = objc_getProtocol("NSAccessibility");
         protocol_NSAccessibilityAdditions = objc_getProtocol("NSAccessibilityAdditions");
         protocol_NSApplicationDelegate = objc_getProtocol("NSApplicationDelegate");
@@ -299,7 +299,7 @@ public class OS : C {
         protocol_WebPolicyDelegate = objc_getProtocol("WebPolicyDelegate");
         protocol_WebResourceLoadDelegate = objc_getProtocol("WebResourceLoadDelegate");
         protocol_WebUIDelegate = objc_getProtocol("WebUIDelegate");
-        
+
         sel_abortEditing = sel_registerName("abortEditing");
         sel_absoluteString = sel_registerName("absoluteString");
         sel_acceptsFirstMouse_ = sel_registerName("acceptsFirstMouse:");
@@ -1528,7 +1528,7 @@ public class OS : C {
         sel_writeToPasteboard_ = sel_registerName("writeToPasteboard:");
         sel_yearOfCommonEra = sel_registerName("yearOfCommonEra");
         sel_zoom_ = sel_registerName("zoom:");
-        
+
         kCFRunLoopCommonModes = new NSString (kCFRunLoopCommonModes_);
         NSAccessibilityButtonRole = new NSString (NSAccessibilityButtonRole_);
         NSAccessibilityCheckBoxRole = new NSString (NSAccessibilityCheckBoxRole_);
@@ -1676,7 +1676,7 @@ public class OS : C {
         NSURLPboardType = new NSString (NSURLPboardType_);
         NSViewGlobalFrameDidChangeNotification = new NSString (NSViewGlobalFrameDidChangeNotification_);
 	}
-	
+
 	public static const int gestaltSystemVersion = ('s'<<24) + ('y'<<16) + ('s'<<8) + 'v';
 	public static const int noErr = 0;
 	public static const int kProcessTransformToForegroundApplication = 1;
@@ -1689,7 +1689,7 @@ public class OS : C {
 	public static const int kUIModeNormal = 0;
 	public static const int kUIModeContentHidden = 2;
 	public static const int kUIModeAllHidden = 3;
-	
+
 	public static const objc.SEL sel_sendSearchSelection;
 	public static const objc.SEL sel_sendCancelSelection;
 	public static const objc.SEL sel_sendSelection;
@@ -1764,13 +1764,13 @@ alias Carbon.SetThemeCursor SetThemeCursor;
 alias Carbon.GetCurrentButtonState GetCurrentButtonState;
 /** @method flags=dynamic */
 alias Carbon.GetDblTime GetDblTime;
-/** @method flags=dynamic 
+/** @method flags=dynamic
     @param  cast=(CGContextRef) */
 alias Cocoa.CGContextCopyPath CGContextCopyPath;
 /** @method flags=dynamic */
 alias Carbon.TISCopyCurrentKeyboardInputSource TISCopyCurrentKeyboardInputSource;
-/** @method flags=dynamic 
-    @param  cast=(TISInputSourceRef) 
+/** @method flags=dynamic
+    @param  cast=(TISInputSourceRef)
     @param  cast=(CFStringRef) */
 alias Carbon.TISGetInputSourceProperty TISGetInputSourceProperty;
 /** @method flags=no_gen */
@@ -1816,7 +1816,7 @@ public static const int kThemeCopyArrowCursor = 1;
 public static const int kThemeNotAllowedCursor = 18;
 public static const int kThemeAliasArrowCursor = 2;
 
-/** @method flags=dynamic 
+/** @method flags=dynamic
  * @param iFile cast=(const FSRef *)
  * @param iContext cast=(ATSFontContext)
  * @param iFormat cast=(ATSFontFormat)
@@ -1830,7 +1830,7 @@ public static const int kATSFontContextLocal = 2;
 public static const int kATSOptionFlagsDefault = 0;
 public static const int kATSFontFormatUnspecified = 0;
 
-/** @method flags=dynamic 
+/** @method flags=dynamic
  * @param path cast=(const UInt8 *)
  * @param ref cast=(FSRef *)
  * @param isDirectory cast=(Boolean *)
@@ -1845,7 +1845,7 @@ alias Carbon.AcquireRootMenu AcquireRootMenu;
 /** @method flags=dynamic */
 alias Carbon.CancelMenuTracking CancelMenuTracking;
 
-/** @method flags=dynamic 
+/** @method flags=dynamic
  * @param iFile cast=(const FSRef *)
  * @param iContext cast=(ATSFontContext)
  * @param iFormat cast=(ATSFontFormat)
@@ -1859,7 +1859,7 @@ public static final int kATSFontContextLocal = 2;
 public static final int kATSOptionFlagsDefault = 0;
 public static final int kATSFontFormatUnspecified = 0;
 
-/** @method flags=dynamic 
+/** @method flags=dynamic
  * @param path cast=(const UInt8 *)
  * @param ref cast=(FSRef *)
  * @param isDirectory cast=(Boolean *)
@@ -1887,10 +1887,10 @@ void call (objc.IMP func, objc.id id, objc.SEL sel)
 /** @method flags=no_gen */
 version (BigEndian)
 	public static const bool __BIG_ENDIAN__ = true;
-	
+
 else
 	public static const bool __BIG_ENDIAN__ = false;
-	
+
 public static const int kCGBitmapByteOrderDefault = 0 << 12;
 public static const int kCGBitmapByteOrder16Little = 1 << 12;
 public static const int kCGBitmapByteOrder32Little = 2 << 12;
@@ -2082,7 +2082,7 @@ alias objc.object_getInstanceVariable object_getInstanceVariable;
 alias objc.object_setInstanceVariable object_setInstanceVariable;
 /**
  * @param obj cast=(id)
- * @param clazz cast=(Class) 
+ * @param clazz cast=(Class)
  */
 alias objc.object_setClass object_setClass;
 alias objc.sel_registerName sel_registerName;
@@ -2337,7 +2337,7 @@ public static const objc.Protocol* protocol_WebPolicyDelegate;
 public static const objc.Protocol* protocol_WebResourceLoadDelegate;
 public static const objc.Protocol* protocol_WebUIDelegate;
 
-/** Selectors */    
+/** Selectors */
 public static const objc.SEL sel_abortEditing;
 public static const objc.SEL sel_absoluteString;
 public static const objc.SEL sel_acceptsFirstMouse_;
@@ -3871,7 +3871,7 @@ public static const int NSPortraitOrientation = 0;
 alias Cocoa.NSPrintPanelOptions.NSPrintPanelShowsPageSetupAccessory NSPrintPanelShowsPageSetupAccessory;
 public static const int NSProgressIndicatorPreferredThickness = 14;
 alias Cocoa.NSButtonType.NSPushOnPushOffButton NSPushOnPushOffButton;
-alias Cocoa.NSButtonType.NSRadioButton NSRadioButton; 
+alias Cocoa.NSButtonType.NSRadioButton NSRadioButton;
 public static const int NSRegularControlSize = 0;
 public static const int NSResizableWindowMask = 8;
 alias Cocoa.NSEventType.NSRightMouseDown NSRightMouseDown;

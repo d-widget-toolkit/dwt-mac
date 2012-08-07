@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Frank Benoit <benoit@tionex.de>
  *     Jacob Carlborg <jacob.carlborg@gmail.com>
@@ -32,9 +32,9 @@ class RunnableLock : Mutex {
     Runnable runnable;
     Thread thread;
     Throwable throwable;
-    
+
     Condition cond;
-    
+
 this (Runnable runnable) {
     this.runnable = runnable;
     this.cond = new Condition(this);
@@ -48,7 +48,7 @@ void run () {
     if (runnable !is null) runnable.run ();
     runnable = null;
 }
-    
+
 void notifyAll(){
     cond.notifyAll();
 }

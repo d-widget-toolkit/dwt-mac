@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -78,12 +78,12 @@ import dwt.widgets.Widget;
  * <code>Widget</code> and its subclasses), may only be called
  * from the thread. (To support multi-threaded user-interface
  * applications, class <code>Display</code> provides inter-thread
- * communication methods which allow threads other than the 
+ * communication methods which allow threads other than the
  * user-interface thread to request that it perform operations
  * on their behalf.)
  * </li>
  * <li>
- * The thread is not allowed to construct other 
+ * The thread is not allowed to construct other
  * <code>Display</code>s until that display has been disposed.
  * (Note that, this is in addition to the restriction mentioned
  * above concerning platform support for multiple displays. Thus,
@@ -92,8 +92,8 @@ import dwt.widgets.Widget;
  * </li>
  * </ul>
  * Enforcing these attributes allows DWT to be implemented directly
- * on the underlying operating system's event model. This has 
- * numerous benefits including smaller footprint, better use of 
+ * on the underlying operating system's event model. This has
+ * numerous benefits including smaller footprint, better use of
  * resources, safer memory management, clearer program logic,
  * better performance, and fewer overall operating system threads
  * required. The down side however, is that care must be taken
@@ -126,7 +126,7 @@ import dwt.widgets.Widget;
  * @noextend This class is not intended to be subclassed by clients.
  */
 public class Display : Device {
-    
+
     /* Windows and Events */
     Event [] eventQueue;
     EventTable eventTable, filterTable;
@@ -137,24 +137,24 @@ public class Display : Device {
     int [] deadKeyState = new int[1];
     int currentKeyboardUCHRdata;
     bool eventSourceDelaySet;
-    
+
     /* Sync/Async Widget Communication */
     Synchronizer synchronizer;
     Thread thread;
     bool allowTimers, runAsyncMessages_;
-    
+
     GCData[] contexts;
-    
+
     Caret currentCaret;
-    
+
     bool sendEvent;
     Control currentControl, trackingControl, tooltipControl;
     Widget tooltipTarget;
-    
+
     NSMutableArray isPainting, needsDisplay, needsDisplayInRect;
-    
+
     NSDictionary markedAttributes;
-    
+
     /* Fonts */
     bool smallFonts;
     NSFont buttonFont, popUpButtonFont, textFieldFont, secureTextFieldFont;
@@ -163,20 +163,20 @@ public class Display : Device {
     NSFont boxFont, tabViewFont, progressIndicatorFont;
 
     Shell [] modalShells;
-    
+
     Menu menuBar;
     Menu[] menus, popups;
-    
+
     NSApplication application;
     objc.Class applicationClass;
     NSImage dockImage;
     bool isEmbedded;
     static bool launched = false;
-    
+
     /* Focus */
     Control focusControl, currentFocusControl;
     int focusEvent;
-    
+
     NSWindow screenWindow, keyWindow;
 
     NSAutoreleasePool[] pools;
@@ -184,28 +184,28 @@ public class Display : Device {
 
     int[] screenID = new int[32];
     NSPoint[] screenCascade = new NSPoint[32];
-    
+
     Carbon.CFRunLoopObserverRef runLoopObserver;
-    
+
     bool lockCursor = true;
     objc.IMP oldCursorSetProc;
     int /*long*/ oldCursorSetProc;
     Callback cursorSetCallback;
 
 
-    
+
     /* Display Shutdown */
     Runnable [] disposeList;
-    
+
     /* System Tray */
     Tray tray;
     TrayItem currentTrayItem;
     Menu trayItemMenu;
-    
+
     /* System Resources */
     Image errorImage, infoImage, warningImage;
     Cursor [] cursors;
-    
+
     /* System Colors */
     CGFloat [][] colors;
     CGFloat [] alternateSelectedControlTextColor, selectedControlTextColor;
@@ -218,17 +218,17 @@ public class Display : Device {
 
     /* Key Mappings. */
     static int [] [] KeyTable = [
-                                 
+
                                  /* Keyboard and Mouse Masks */
                                  [58,    DWT.ALT],
                                  [56,    DWT.SHIFT],
                                  [59,    DWT.CONTROL],
-                                 [55,    DWT.COMMAND],       
+                                 [55,    DWT.COMMAND],
                                  [61,    DWT.ALT],
                                  [62,    DWT.CONTROL],
                                  [60,    DWT.SHIFT],
                                  [54,    DWT.COMMAND],
-                                 
+
                                  /* Non-Numeric Keypad Keys */
                                  [126, DWT.ARROW_UP],
                                  [125, DWT.ARROW_DOWN],
@@ -239,15 +239,15 @@ public class Display : Device {
                                  [115, DWT.HOME],
                                  [119, DWT.END],
                                  //   [??,    DWT.INSERT],
-                                 
+
                                  /* Virtual and Ascii Keys */
                                  [51,    DWT.BS],
                                  [36,    DWT.CR],
                                  [117,   DWT.DEL],
                                  [53,    DWT.ESC],
                                  [76,    DWT.LF],
-                                 [48,    DWT.TAB],   
-                                 
+                                 [48,    DWT.TAB],
+
                                  /* Functions Keys */
                                  [122, DWT.F1],
                                  [120, DWT.F2],
@@ -264,7 +264,7 @@ public class Display : Device {
                                  [105, DWT.F13],
                                  [107, DWT.F14],
                                  [113, DWT.F15],
-                                 
+
                                  /* Numeric Keypad Keys */
                                  [67, DWT.KEYPAD_MULTIPLY],
                                  [69, DWT.KEYPAD_ADD],
@@ -283,7 +283,7 @@ public class Display : Device {
                                  [91, DWT.KEYPAD_8],
                                  [92, DWT.KEYPAD_9],
                                  [81, DWT.KEYPAD_EQUAL],
-                                 
+
                                  /* Other keys */
                                  [57,    DWT.CAPS_LOCK],
                                  [71,    DWT.NUM_LOCK],
@@ -292,23 +292,23 @@ public class Display : Device {
                                  //       [??,    DWT.BREAK],
                                  //       [??,    DWT.PRINT_SCREEN],
                                  [114, DWT.HELP],
-                                 
+
                                  ];
-    
+
     static String APP_NAME;
     static const String ADD_WIDGET_KEY = "dwt.internal.addWidget";
     static const char[] SWT_OBJECT = ['S', 'W', 'T', '_', 'O', 'B', 'J', 'E', 'C', 'T', '\0'];
     static const char[] SWT_IMAGE = ['S', 'W', 'T', '_', 'I', 'M', 'A', 'G', 'E', '\0'];
     static const char[] SWT_ROW = ['S', 'W', 'T', '_', 'R', 'O', 'W', '\0'];
     static const char[] SWT_COLUMN = ['S', 'W', 'T', '_', 'C', 'O', 'L', 'U', 'M', 'N', '\0'];
-    
+
     /* Multiple Displays. */
     static Display Default;
     static Display [] Displays;
-    
+
     /* Package Name */
     static const String PACKAGE_PREFIX = "dwt.widgets.";
-    
+
     /* Timer */
     Runnable timerList [];
     NSTimer nsTimers [];
@@ -320,7 +320,7 @@ public class Display : Device {
     SWTWindowDelegate settingsDelegate;
 
     static final int DEFAULT_BUTTON_INTERVAL = 30;
-    
+
     /* Display Data */
     Object data;
     String [] keys;
@@ -343,7 +343,7 @@ public class Display : Device {
             }
         };
     }
-    
+
 /*
  * TEMPORARY CODE.
  */
@@ -376,7 +376,7 @@ static int untranslateKey (int key) {
     }
     return 0;
 }
-    
+
 void addContext (GCData context) {
     if (contexts is null) contexts = new GCData [12];
     for (int i=0; i<contexts.length; i++) {
@@ -408,7 +408,7 @@ void addContext (GCData context) {
  * powerful and dangerous. They should generally be avoided for
  * performance, debugging and code maintenance reasons.
  * </p>
- * 
+ *
  * @param eventType the type of event to listen for
  * @param listener the listener which should be notified when the event occurs
  *
@@ -424,8 +424,8 @@ void addContext (GCData context) {
  * @see DWT
  * @see #removeFilter
  * @see #removeListener
- * 
- * @since 3.0 
+ *
+ * @since 3.0
  */
 public void addFilter (int eventType, Listener listener) {
     checkDevice ();
@@ -455,8 +455,8 @@ public void addFilter (int eventType, Listener listener) {
  * @see Listener
  * @see DWT
  * @see #removeListener
- * 
- * @since 2.0 
+ *
+ * @since 2.0
  */
 public void addListener (int eventType, Listener listener) {
     checkDevice ();
@@ -478,7 +478,7 @@ void addMenu (Menu menu) {
     System.arraycopy (menus, 0, newMenus, 0, menus.length);
     menus = newMenus;
 }
-    
+
 void addPool () {
     addPool (cast(NSAutoreleasePool)(new NSAutoreleasePool()).alloc().init());
 }
@@ -523,13 +523,13 @@ void addWidget (NSObject view, Widget widget) {
 
 /**
  * Causes the <code>run()</code> method of the runnable to
- * be invoked by the user-interface thread at the next 
- * reasonable opportunity. The caller of this method continues 
+ * be invoked by the user-interface thread at the next
+ * reasonable opportunity. The caller of this method continues
  * to run in parallel, and is not notified when the
  * runnable has completed.  Specifying <code>null</code> as the
  * runnable simply wakes the user-interface thread when run.
  * <p>
- * Note that at the time the runnable is invoked, widgets 
+ * Note that at the time the runnable is invoked, widgets
  * that have the receiver as their display may have been
  * disposed. Therefore, it is necessary to check for this
  * case inside the runnable before accessing the widget.
@@ -540,7 +540,7 @@ void addWidget (NSObject view, Widget widget) {
  * @exception DWTException <ul>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @see #syncExec
  */
 public void asyncExec (Runnable runnable) {
@@ -553,7 +553,7 @@ public void asyncExec (Runnable runnable) {
 /**
  * Causes the system hardware to emit a short sound
  * (if it supports this capability).
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
@@ -585,7 +585,7 @@ protected void checkDevice () {
     if (thread !is Thread.getThis ()) error (DWT.ERROR_THREAD_INVALID_ACCESS);
     if (isDisposed ()) error (DWT.ERROR_DEVICE_DISPOSED);
 }
-    
+
 void checkEnterExit (Control control, NSEvent nsEvent, bool send) {
     if (control !is currentControl) {
         if (currentControl !is null && !currentControl.isDisposed()) {
@@ -635,7 +635,7 @@ protected void checkSubclass () {
  * Constructs a new instance of this class.
  * <p>
  * Note: The resulting display is marked as the <em>current</em>
- * display. If this is the first display which has been 
+ * display. If this is the first display which has been
  * constructed since the application started, it is also
  * marked as the <em>default</em> display.
  * </p>
@@ -656,7 +656,7 @@ public this () {
 
 /**
  * Constructs a new instance of this class using the parameter.
- * 
+ *
  * @param data the device data
  */
 public this (DeviceData data) {
@@ -665,7 +665,7 @@ public this (DeviceData data) {
     screenCascade = new NSPoint[32];
     cursors = new Cursor [DWT.CURSOR_HAND + 1];
     timerDelegate = cast(SWTWindowDelegate)(new SWTWindowDelegate()).alloc().init();
-    
+
     caretTimer = new CaretTimer;
     hoverTimer = new HoverTimer;
     defaultButtonTimer = new DefaultButtonTimer;
@@ -687,14 +687,14 @@ static String convertToLf(String text) {
     char Lf = '\n';
     int length = text.length ();
     if (length is 0) return text;
-    
-    /* Check for an LF or CR/LF.  Assume the rest of the string 
-     * is formated that way.  This will not work if the string 
+
+    /* Check for an LF or CR/LF.  Assume the rest of the string
+     * is formated that way.  This will not work if the string
      * contains mixed delimiters. */
     int i = text.indexOf (Lf, 0);
     if (i is -1 || i is 0) return text;
     if (text.charAt (i - 1) !is Cr) return text;
-    
+
     /* The string is formatted with CR/LF.
      * Create a new string with the LF line delimiter. */
     i = 0;
@@ -725,7 +725,7 @@ void clearModal (Shell shell) {
     Shell [] shells = getShells ();
     for (int i=0; i<shells.length; i++) shells [i].updateModal ();
 }
-    
+
 void clearPool () {
     if (sendEventCount is 0 && loopCount is poolCount - 1 && Callback.getEntryCount () is 0) {
         removePool ();
@@ -743,7 +743,7 @@ void clearPool () {
  * </ul>
  *
  * @see Device#dispose
- * 
+ *
  * @since 2.0
  */
 public void close () {
@@ -780,19 +780,19 @@ void createDisplay (DeviceData data) {
         System.out_.println ("***WARNING: Detected: {}{}{}{}{}" , Integer.toHexString((OS.VERSION & 0xFF00) >> 8) , "." , Integer.toHexString((OS.VERSION & 0xF0) >> 4) , "." , Integer.toHexString(OS.VERSION & 0xF)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         error(DWT.ERROR_NOT_IMPLEMENTED);
     }
-    
+
     NSThread nsthread = NSThread.currentThread();
     NSMutableDictionary dictionary = nsthread.threadDictionary();
     NSString key = NSString.stringWith("SWT_NSAutoreleasePool");
     NSNumber id = new NSNumber(dictionary.objectForKey(key));
     addPool(new NSAutoreleasePool(id.integerValue()));
-    
+
     application = NSApplication.sharedApplication();
-    
+
     /*
      * TODO: If an NSApplication is already running we don't want to create another NSApplication.
      * But if we don't we won't get mouse events, since we currently need to subclass NSApplication and intercept sendEvent to
-     * deliver mouse events correctly to widgets.   
+     * deliver mouse events correctly to widgets.
      */
     if (!application.isRunning()) {
         /*
@@ -801,7 +801,7 @@ void createDisplay (DeviceData data) {
          * the current process to be the front process in order for
          * windows to come to the front by default.  The fix is call
          * both GetCurrentProcess() and SetFrontProcess().
-         * 
+         *
          * NOTE: It is not actually necessary to use the process
          * serial number returned by GetCurrentProcess() in the
          * call to SetFrontProcess() (ie. kCurrentProcess can be
@@ -824,7 +824,7 @@ void createDisplay (DeviceData data) {
                 application.setApplicationIconImage(image);
             }
         }
-        
+
         String className = "SWTApplication";
         objc.Class cls;
         if ((cls = cast(objc.Class) OS.objc_lookUpClass (className)) is null) {
@@ -833,18 +833,18 @@ void createDisplay (DeviceData data) {
             objc.IMP proc6 = cast(objc.IMP) &applicationProc6;
             cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSApplication, className, 0);
             OS.class_addMethod(cls, OS.sel_registerName("sendEvent:"), proc3, "@:@");
-            
+
             static if ((void*).sizeof > int.sizeof) // 64bit target
                 OS.class_addMethod(cls, OS.sel_nextEventMatchingMask_untilDate_inMode_dequeue_, proc6, "@:Q@@B");
             else
                 OS.class_addMethod(cls, OS.sel_nextEventMatchingMask_untilDate_inMode_dequeue_, proc6, "@:I@@B");
-            
+
             OS.class_addMethod(cls, OS.sel_isRunning, proc2, "@:");
             OS.class_addMethod(cls, OS.sel_finishLaunching, proc2, "@:");
             OS.objc_registerClassPair(cls);
-        }        
+        }
         applicationClass = OS.object_setClass(application.id, cls);
-    
+
     className = "SWTApplicationDelegate";
     if (OS.objc_lookUpClass (className) is 0) {
         int /*long*/ appProc3 = applicationCallback3.getAddress();
@@ -875,56 +875,56 @@ void createMainMenu () {
     NSString emptyStr = NSString.stringWith("");
     NSMenu mainMenu = cast(NSMenu)(new NSMenu()).alloc();
     mainMenu.initWithTitle(emptyStr);
-    
+
     NSMenuItem menuItem;
     NSMenu appleMenu;
     NSString format = NSString.stringWith("%@ %@"), title;
-    
+
     NSMenuItem appItem = menuItem = mainMenu.addItemWithTitle(emptyStr, 0, emptyStr);
     appleMenu = cast(NSMenu)(new NSMenu()).alloc();
-    appleMenu.initWithTitle(emptyStr);  
+    appleMenu.initWithTitle(emptyStr);
     OS.objc_msgSend(application.id, OS.sel_registerName("setAppleMenu:"), appleMenu.id);
-    
+
     title = new NSString(OS.objc_msgSend(OS.class_NSString, OS.sel_stringWithFormat_, format.id, NSString.stringWith(DWT.getMessage("About")).id, appName.id));
     menuItem = appleMenu.addItemWithTitle(title, OS.sel_orderFrontStandardAboutPanel_, emptyStr);
     menuItem.setTarget(applicationDelegate);
-    
+
     appleMenu.addItem(NSMenuItem.separatorItem());
-    
+
     title = NSString.stringWith(DWT.getMessage("Preferences..."));
     menuItem = appleMenu.addItemWithTitle(title, 0, NSString.stringWith(","));
-    
+
     appleMenu.addItem(NSMenuItem.separatorItem());
-    
+
     title = NSString.stringWith(DWT.getMessage("Services"));
     menuItem = appleMenu.addItemWithTitle(title, 0, emptyStr);
     NSMenu servicesMenu = cast(NSMenu)(new NSMenu()).alloc();
     servicesMenu.initWithTitle(emptyStr);
     appleMenu.setSubmenu(servicesMenu, menuItem);
-    servicesMenu.release(); 
+    servicesMenu.release();
     application.setServicesMenu(servicesMenu);
-    
+
     appleMenu.addItem(NSMenuItem.separatorItem());
-    
+
     title = new NSString(OS.objc_msgSend(OS.class_NSString, OS.sel_stringWithFormat_, format.id, NSString.stringWith(DWT.getMessage("Hide")).id, appName.id));
     menuItem = appleMenu.addItemWithTitle(title, OS.sel_hide_, NSString.stringWith("h"));
     menuItem.setTarget(applicationDelegate);
-    
+
     title = NSString.stringWith(DWT.getMessage("Hide Others"));
     menuItem = appleMenu.addItemWithTitle(title, OS.sel_hideOtherApplications_, NSString.stringWith("h"));
     menuItem.setKeyEquivalentModifierMask(OS.NSCommandKeyMask | OS.NSAlternateKeyMask);
     menuItem.setTarget(applicationDelegate);
-    
+
     title = NSString.stringWith(DWT.getMessage("Show All"));
     menuItem = appleMenu.addItemWithTitle(title, OS.sel_unhideAllApplications_, emptyStr);
     menuItem.setTarget(applicationDelegate);
-    
+
     appleMenu.addItem(NSMenuItem.separatorItem());
-    
+
     title = new NSString(OS.objc_msgSend(OS.class_NSString, OS.sel_stringWithFormat_, format.id, NSString.stringWith(DWT.getMessage("Quit")).id, appName.id));
     menuItem = appleMenu.addItemWithTitle(title, OS.sel_quitRequested_, NSString.stringWith("q"));
     menuItem.setTarget(applicationDelegate);
-    
+
     mainMenu.setSubmenu(appleMenu, appItem);
     appleMenu.release();
     application.setMainMenu(mainMenu);
@@ -941,7 +941,7 @@ objc.id cursorSetProc (objc.id id, objc.SEL sel) {
     OS.call (oldCursorSetProc, id, sel);
     return null;
 }
-    
+
 static void deregister (Display display) {
     synchronized (Device.classinfo) {
         for (int i=0; i<Displays.length; i++) {
@@ -977,7 +977,7 @@ void destroyDisplay () {
  * is ignored.
  *
  * @param runnable code to run at dispose time.
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
@@ -1054,7 +1054,7 @@ public Widget findWidget (objc.id handle) {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.1
  */
 public Widget findWidget (objc.id handle, int id) {
@@ -1076,7 +1076,7 @@ public Widget findWidget (objc.id handle, int id) {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.3
  */
 public Widget findWidget (Widget widget, int id) {
@@ -1089,7 +1089,7 @@ public Widget findWidget (Widget widget, int id) {
  * user-interface thread for, or null if the given thread
  * is not a user-interface thread for any display.  Specifying
  * <code>null</code> as the thread will return <code>null</code>
- * for the display. 
+ * for the display.
  *
  * @param thread the user-interface thread
  * @return the display for the given thread
@@ -1187,7 +1187,7 @@ int getCaretBlinkTime () {
 /**
  * Returns a rectangle which describes the area of the
  * receiver which is capable of displaying data.
- * 
+ *
  * @return the client area
  *
  * @exception DWTException <ul>
@@ -1252,7 +1252,7 @@ public Point getCursorLocation () {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public Point [] getCursorSizes () {
@@ -1313,7 +1313,7 @@ public Object getData (String key) {
  * Returns the application defined, display specific data
  * associated with the receiver, or null if it has not been
  * set. The <em>display specific data</em> is a single,
- * unnamed field that is stored with every display. 
+ * unnamed field that is stored with every display.
  * <p>
  * Applications may put arbitrary objects in this field. If
  * the object stored in the display specific data needs to
@@ -1351,7 +1351,7 @@ public Object getData () {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 2.1
  */
 public int getDismissalAlignment () {
@@ -1373,7 +1373,7 @@ public int getDismissalAlignment () {
  */
 public int getDoubleClickTime () {
     checkDevice ();
-    return OS.GetDblTime () * 1000 / 60; 
+    return OS.GetDblTime () * 1000 / 60;
 }
 
 /**
@@ -1397,7 +1397,7 @@ public Control getFocusControl () {
     NSWindow window = keyWindow !is null ? keyWindow : application.keyWindow();
     return _getFocusControl(window);
 }
-    
+
 Control _getFocusControl (NSWindow window) {
     if (window !is null) {
         NSResponder responder = window.firstResponder();
@@ -1417,7 +1417,7 @@ Control _getFocusControl (NSWindow window) {
     }
     return null;
 }
-    
+
 /**
  * Returns true when the high contrast mode is enabled.
  * Otherwise, false is returned.
@@ -1432,7 +1432,7 @@ Control _getFocusControl (NSWindow window) {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.0
  */
 public bool getHighContrast () {
@@ -1450,7 +1450,7 @@ public bool getHighContrast () {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @see Device#getDepth
  */
 public int getIconDepth () {
@@ -1466,16 +1466,16 @@ public int getIconDepth () {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @see Decorations#setImages(Image[])
- * 
+ *
  * @since 3.0
  */
 public Point [] getIconSizes () {
     checkDevice ();
-    return [ 
-            new Point (16, 16), new Point (32, 32), 
-            new Point (64, 64), new Point (128, 128)];  
+    return [
+            new Point (16, 16), new Point (32, 32),
+            new Point (64, 64), new Point (128, 128)];
 }
 
 int getLastEventTime () {
@@ -1507,9 +1507,9 @@ int getMessageCount () {
 
 /**
  * Returns an array of monitors attached to the device.
- * 
+ *
  * @return the array of monitors
- * 
+ *
  * @since 3.0
  */
 public dwt.widgets.Monitor.Monitor [] getMonitors () {
@@ -1543,9 +1543,9 @@ NSRect getPrimaryFrame () {
 
 /**
  * Returns the primary monitor for that device.
- * 
+ *
  * @return the primary monitor
- * 
+ *
  * @since 3.0
  */
 public dwt.widgets.Monitor.Monitor getPrimaryMonitor () {
@@ -1594,7 +1594,7 @@ public Shell [] getShells () {
     System.arraycopy (result, 0, newResult, 0, index);
     return newResult;
 }
-    
+
 static bool getSheetEnabled () {
     return !"false".equals(System.getProperty("dwt.sheet"));
 }
@@ -1603,12 +1603,12 @@ static bool getSheetEnabled () {
  * Gets the synchronizer used by the display.
  *
  * @return the receiver's synchronizer
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 3.4
  */
 public Synchronizer getSynchronizer () {
@@ -1626,7 +1626,7 @@ public Synchronizer getSynchronizer () {
  * </p>
  *
  * @return the receiver's sync-interface thread
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
@@ -1661,7 +1661,7 @@ public Color getSystemColor (int id) {
        checkDevice ();
     Color color = getWidgetColor (id);
     if (color !is null) return color;
-    return super.getSystemColor (id);   
+    return super.getSystemColor (id);
 }
 
 Color getWidgetColor (int id) {
@@ -1705,7 +1705,7 @@ CGFloat [] getWidgetColorRGB (NSColor color) {
         color.getComponents(components.ptr);
     return new CGFloat [][components[0], components[1], components[2], components[3]];
     }
-    
+
 /**
  * Returns the matching standard platform cursor for the given
  * constant, which should be one of the cursor constants
@@ -1713,7 +1713,7 @@ CGFloat [] getWidgetColorRGB (NSColor color) {
  * not be free'd because it was allocated by the system,
  * not the application.  A value of <code>null</code> will
  * be returned if the supplied constant is not an DWT cursor
- * constant. 
+ * constant.
  *
  * @param id the DWT cursor constant
  * @return the corresponding cursor or <code>null</code>
@@ -1745,7 +1745,7 @@ CGFloat [] getWidgetColorRGB (NSColor color) {
  * @see DWT#CURSOR_IBEAM
  * @see DWT#CURSOR_NO
  * @see DWT#CURSOR_HAND
- * 
+ *
  * @since 3.0
  */
 public Cursor getSystemCursor (int id) {
@@ -1765,7 +1765,7 @@ public Cursor getSystemCursor (int id) {
  * not the application.  A value of <code>null</code> will
  * be returned either if the supplied constant is not an
  * DWT icon constant or if the platform does not define an
- * image that corresponds to the constant. 
+ * image that corresponds to the constant.
  *
  * @param id the DWT icon constant
  * @return the corresponding image or <code>null</code>
@@ -1780,13 +1780,13 @@ public Cursor getSystemCursor (int id) {
  * @see DWT#ICON_QUESTION
  * @see DWT#ICON_WARNING
  * @see DWT#ICON_WORKING
- * 
+ *
  * @since 3.0
  */
 public Image getSystemImage (int id) {
     checkDevice ();
     switch(id) {
-        case DWT.ICON_ERROR: {  
+        case DWT.ICON_ERROR: {
             if (errorImage !is null) return errorImage;
             NSImage nsImage = NSWorkspace.sharedWorkspace ().iconForFileType (new NSString (OS.NSFileTypeForHFSTypeCode (OS.kAlertStopIcon)));
             if (nsImage is null) return null;
@@ -1809,7 +1809,7 @@ public Image getSystemImage (int id) {
             nsImage.retain ();
             return warningImage = Image.cocoa_new (this, DWT.ICON, nsImage);
         }
-            
+
         default:
     }
     return null;
@@ -1820,7 +1820,7 @@ public Image getSystemImage (int id) {
  * when there is no system tray available for the platform.
  *
  * @return the system tray or <code>null</code>
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
@@ -1837,7 +1837,7 @@ public Tray getSystemTray () {
  * Returns the user-interface thread for the receiver.
  *
  * @return the receiver's user-interface thread
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
@@ -1871,7 +1871,7 @@ Widget getWidget (NSView view) {
     if (view is null) return null;
     return getWidget(view.id);
 }
-    
+
 bool hasDefaultButton () {
     NSArray windows = application.windows();
     int /*long*/ count = windows.count();
@@ -1890,7 +1890,7 @@ bool hasDefaultButton () {
  * <p>
  * This method is called after <code>create</code>.
  * </p>
- * 
+ *
  * @see #create
  */
 protected void init_ () {
@@ -1898,18 +1898,18 @@ protected void init_ () {
     initClasses ();
     initColors ();
     initFonts ();
-        
+
     if (!isEmbedded) {
         /*
          * Feature in Cocoa:  NSApplication.finishLaunching() adds an apple menu to the menu bar that isn't accessible via NSMenu.
          * If Display objects are created and disposed of multiple times in a single process, another apple menu is added to the menu bar.
          * It must be called or the dock icon will continue to bounce. So, it should only be called once per process, not just once per
-         * creation of a Display.  Use a static so creation of additional Display objects won't affect the menu bar. 
+         * creation of a Display.  Use a static so creation of additional Display objects won't affect the menu bar.
          */
         if (!Display.launched) {
             application.finishLaunching();
             Display.launched = true;
-            
+
             /* only add the shutdown hook once */
             Runtime.getRuntime().addShutdownHook(new class() Thread {
                 public void run() {
@@ -1918,7 +1918,7 @@ protected void init_ () {
             });
         }
     }
-    
+
     objc.IMP observerProc = cast(objc.IMP) &observerProc;
     int activities = OS.kCFRunLoopBeforeWaiting;
     runLoopObserver = OS.CFRunLoopObserverCreate (0, activities, true, 0, observerProc, 0);
@@ -1926,33 +1926,33 @@ protected void init_ () {
     OS.CFRunLoopAddObserver (OS.CFRunLoopGetCurrent (), runLoopObserver, OS.kCFRunLoopCommonModes_);
     if (runLoopObserver is 0) error (DWT.ERROR_NO_HANDLES);
     OS.CFRunLoopAddObserver (OS.CFRunLoopGetCurrent (), runLoopObserver, OS.kCFRunLoopCommonModes ());
-    
+
     cursorSetCallback = new Callback(this, "cursorSetProc", 2);
     int /*long*/ cursorSetProc = cursorSetCallback.getAddress();
     if (cursorSetProc is 0) error (DWT.ERROR_NO_MORE_CALLBACKS);
     int /*long*/ method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
     if (method !is 0) oldCursorSetProc = OS.method_setImplementation(method, cursorSetProc);
-        
+
 
     objc.IMP cursorSetProc = cast(objc.IMP) &cursorSetProc;
     objc.Method method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
     if (method !is null) oldCursorSetProc = OS.method_setImplementation(method, cursorSetProc);
-        
-    
+
+
     settingsDelegate = cast(SWTWindowDelegate)(new SWTWindowDelegate()).alloc().init();
     NSNotificationCenter defaultCenter = NSNotificationCenter.defaultCenter();
     defaultCenter.addObserver(settingsDelegate, OS.sel_systemSettingsChanged_, OS.NSSystemColorsDidChangeNotification, null);
     defaultCenter.addObserver(settingsDelegate, OS.sel_systemSettingsChanged_, OS.NSApplicationDidChangeScreenParametersNotification, null);
-    
+
     textView.init ();
      markedAttributes = textView.markedTextAttributes ();
      markedAttributes.retain ();
      textView.release ();
-    
+
     isPainting = cast(NSMutableArray)(new NSMutableArray()).alloc();
     isPainting = isPainting.initWithCapacity(12);
 }
-    
+
 void addEventMethods (objc.Class cls, objc.IMP proc2, objc.IMP proc3, objc.IMP drawRectProc, objc.IMP hitTestProc, objc.IMP needsDisplayInRectProc) {
     if (proc3 !is null) {
         OS.class_addMethod(cls, OS.sel_mouseDown_, proc3, "@:@");
@@ -1990,13 +1990,13 @@ void addEventMethods (objc.Class cls, objc.IMP proc2, objc.IMP proc3, objc.IMP d
         OS.class_addMethod(cls, OS.sel_drawRect_, drawRectProc, "@:{NSRect}");
     }
     if (hitTestProc !is null) {
-        OS.class_addMethod(cls, OS.sel_hitTest_, hitTestProc, "@:{NSPoint}");       
+        OS.class_addMethod(cls, OS.sel_hitTest_, hitTestProc, "@:{NSPoint}");
     }
 }
-    
+
 void addFrameMethods(objc.Class cls, objc.IMP setFrameOriginProc, objc.IMP setFrameSizeProc) {
-    OS.class_addMethod(cls, OS.sel_setFrameOrigin_, setFrameOriginProc, "@:{NSPoint}"); 
-    OS.class_addMethod(cls, OS.sel_setFrameSize_, setFrameSizeProc, "@:{NSSize}");  
+    OS.class_addMethod(cls, OS.sel_setFrameOrigin_, setFrameOriginProc, "@:{NSPoint}");
+    OS.class_addMethod(cls, OS.sel_setFrameSize_, setFrameSizeProc, "@:{NSSize}");
 }
 
 void addAccessibilityMethods(objc.Class cls, objc.IMP proc2, objc.IMP proc3, objc.IMP proc4, objc.IMP accessibilityHitTestProc) {
@@ -2007,22 +2007,22 @@ void addAccessibilityMethods(objc.Class cls, objc.IMP proc2, objc.IMP proc3, obj
     OS.class_addMethod(cls, OS.sel_accessibilityIsIgnored, proc2, "@:");
     OS.class_addMethod(cls, OS.sel_accessibilityAttributeValue_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_accessibilityHitTest_, accessibilityHitTestProc, "@:{NSPoint}");
-    OS.class_addMethod(cls, OS.sel_accessibilityAttributeValue_forParameter_, proc4, "@:@@");   
-    OS.class_addMethod(cls, OS.sel_accessibilityPerformAction_, proc3, "@:@");  
-    OS.class_addMethod(cls, OS.sel_accessibilityActionDescription_, proc3, "@:@");  
+    OS.class_addMethod(cls, OS.sel_accessibilityAttributeValue_forParameter_, proc4, "@:@@");
+    OS.class_addMethod(cls, OS.sel_accessibilityPerformAction_, proc3, "@:@");
+    OS.class_addMethod(cls, OS.sel_accessibilityActionDescription_, proc3, "@:@");
 }
-    
+
 objc.Class registerCellSubclass(objc.Class cellClass, int size, int align_, char[] types) {
     String cellClassName = OS.class_getName(cellClass);
-    objc.Class cls = OS.objc_allocateClassPair(cellClass, "SWTAccessible" + cellClassName, 0);    
+    objc.Class cls = OS.objc_allocateClassPair(cellClass, "SWTAccessible" + cellClassName, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     OS.objc_registerClassPair(cls);
     return cls;
 }
-    
+
 void initClasses () {
     if (OS.objc_lookUpClass ("SWTView") !is null) return;
-    
+
     Class clazz = this.classinfo;
     objc.IMP dialogProc3 = cast(objc.IMP) &dialogProc3;
     objc.IMP dialogProc4 = cast(objc.IMP) &dialogProc4;
@@ -2041,7 +2041,7 @@ void initClasses () {
     fieldEditorCallback4 = new Callback(clazz, "fieldEditorProc", 4);
     int /*long*/ fieldEditorProc4 = fieldEditorCallback4.getAddress();
     if (fieldEditorProc4 is 0) error (DWT.ERROR_NO_MORE_CALLBACKS);
-        
+
     objc.IMP isFlippedProc = OS.isFlipped_CALLBACK();
     objc.IMP drawRectProc = OS.CALLBACK_drawRect_(proc3);
     objc.IMP drawInteriorWithFrameInViewProc = OS.CALLBACK_drawInteriorWithFrame_inView_ (proc4);
@@ -2060,7 +2060,7 @@ void initClasses () {
     objc.IMP setMarkedText_selectedRangeProc = OS.CALLBACK_setMarkedText_selectedRange_(proc4);
     objc.IMP attributedSubstringFromRangeProc = OS.CALLBACK_attributedSubstringFromRange_(proc3);
     objc.IMP characterIndexForPointProc = OS.CALLBACK_characterIndexForPoint_(proc3);
-    objc.IMP firstRectForCharacterRangeProc = OS.CALLBACK_firstRectForCharacterRange_(proc3);   
+    objc.IMP firstRectForCharacterRangeProc = OS.CALLBACK_firstRectForCharacterRange_(proc3);
     objc.IMP textWillChangeSelectionProc = OS.CALLBACK_textView_willChangeSelectionFromCharacterRange_toCharacterRange_(proc5);
     objc.IMP accessibilityHitTestProc = OS.CALLBACK_accessibilityHitTest_(proc3);
     objc.IMP shouldChangeTextInRange_replacementString_Proc = OS.CALLBACK_shouldChangeTextInRange_replacementString_(fieldEditorProc4);
@@ -2069,20 +2069,20 @@ void initClasses () {
     objc.IMP canDragRowsWithIndexes_atPoint_Proc = OS.CALLBACK_canDragRowsWithIndexes_atPoint_(proc4);
     objc.IMP setNeedsDisplayInRectProc = OS.CALLBACK_setNeedsDisplayInRect_(proc3);
     objc.IMP expansionFrameWithFrameProc = OS.CALLBACK_expansionFrameWithFrame_inView_ (proc4);
-        
+
     char[] types = ['*','\0'];
     size_t size = C.PTR_SIZEOF, align_ = C.PTR_SIZEOF is 4 ? 2 : 3;
-        
+
     String className;
     objc.Class cls;
-    
+
     className = "SWTBox";
     cls = OS.objc_allocateClassPair(OS.class_NSBox, className, 0);
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.objc_registerClassPair(cls);
-        
+
     className = "SWTButton";
     cls = OS.objc_allocateClassPair(OS.class_NSButton, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2090,22 +2090,22 @@ void initClasses () {
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     OS.objc_registerClassPair(cls);
-        
+
     cls = registerCellSubclass(NSButton.cellClass(), size, align_, types);
-    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);    
+    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.class_addMethod(cls, OS.sel_nextState, proc2, "@:");
     NSButton.setCellClass(cls);
 
     className = "SWTButtonCell";
     cls = OS.objc_allocateClassPair (OS.class_NSButtonCell, className, 0);
     OS.class_addIvar (cls, SWT_OBJECT, size, cast(byte)align_, types);
-    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);    
+    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.class_addMethod (cls, OS.sel_drawImage_withFrame_inView_, drawImageWithFrameInViewProc, "@:@{NSFrame}@");
     OS.class_addMethod(cls, OS.sel_cellSize, cellSizeProc, "@:");
     OS.class_addMethod(cls, OS.sel_drawInteriorWithFrame_inView_, drawInteriorWithFrameInViewProc, "@:{NSRect}@");
     OS.class_addMethod(cls, OS.sel_titleRectForBounds_, titleRectForBoundsProc, "@:{NSRect}");
     OS.objc_registerClassPair (cls);
-        
+
     className = "SWTCanvasView";
     cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2144,9 +2144,9 @@ void initClasses () {
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.objc_registerClassPair(cls);
-        
+
     cls = registerCellSubclass(NSComboBox.cellClass(), size, align_, types);
-    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);    
+    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     NSComboBox.setCellClass(cls);
 
     className = "SWTDatePicker";
@@ -2158,16 +2158,16 @@ void initClasses () {
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.objc_registerClassPair(cls);
-        
+
     className = "SWTEditorView";
     cls = OS.objc_allocateClassPair(OS.class_NSTextView, className, 0);
-    //TODO hitTestProc and drawRectProc should be set Control.setRegion()? 
+    //TODO hitTestProc and drawRectProc should be set Control.setRegion()?
     addEventMethods(cls, null, fieldEditorProc3, null, null, null);
     OS.class_addMethod(cls, OS.sel_insertText_, fieldEditorProc3, "@:@");
     OS.class_addMethod(cls, OS.sel_doCommandBySelector_, fieldEditorProc3, "@::");
     OS.class_addMethod(cls, OS.sel_shouldChangeTextInRange_replacementString_, shouldChangeTextInRange_replacementString_fieldEditorProc, "@:{NSRange}@");
     OS.objc_registerClassPair(cls);
-        
+
     className = "SWTImageView";
     cls = OS.objc_allocateClassPair(OS.class_NSImageView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2176,9 +2176,9 @@ void initClasses () {
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.objc_registerClassPair(cls);
-        
+
     cls = registerCellSubclass(NSImageView.cellClass(), size, align_, types);
-    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);    
+    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     NSImageView.setCellClass(cls);
 
     className = "SWTImageTextCell";
@@ -2197,7 +2197,7 @@ void initClasses () {
     OS.class_addMethod (cls, OS.sel_setImage_, proc3, "@:@");
     OS.class_addMethod (cls, OS.sel_expansionFrameWithFrame_inView_, expansionFrameWithFrameProc, "@:{NSRect}@");
     OS.objc_registerClassPair (cls);
-        
+
     className = "SWTMenu";
     cls = OS.objc_allocateClassPair(OS.class_NSMenu, className, 0);
     OS.class_addIvar (cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2206,13 +2206,13 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_menu_willHighlightItem_, proc4, "@:@@");
     OS.class_addMethod(cls, OS.sel_menuNeedsUpdate_, proc3, "@:@");
     OS.objc_registerClassPair(cls);
-    
+
     className = "SWTMenuItem";
     cls = OS.objc_allocateClassPair(OS.class_NSMenuItem, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     OS.class_addMethod(cls, OS.sel_sendSelection, proc2, "@:");
     OS.objc_registerClassPair(cls);
-        
+
     className = "SWTOutlineView";
     cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSOutlineView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2236,7 +2236,7 @@ void initClasses () {
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.objc_registerClassPair(cls);
-        
+
     className = "SWTPanelDelegate";
     cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSObject, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2247,7 +2247,7 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_panel_shouldShowFilename_, dialogProc4, "@:@@");
     OS.class_addMethod(cls, OS.sel_panelDidEnd_returnCode_contextInfo_, dialogProc5, "@:@i@");
     OS.objc_registerClassPair(cls);
-        
+
     className = "SWTPopUpButton";
     cls = OS.objc_allocateClassPair(OS.class_NSPopUpButton, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2256,11 +2256,11 @@ void initClasses () {
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.objc_registerClassPair(cls);
-        
+
     cls = registerCellSubclass(NSPopUpButton.cellClass(), size, align_, types);
-    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);    
+    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     NSPopUpButton.setCellClass(cls);
-        
+
     className = "SWTProgressIndicator";
     cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSProgressIndicator, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2269,8 +2269,8 @@ void initClasses () {
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
-    OS.objc_registerClassPair(cls); 
-        
+    OS.objc_registerClassPair(cls);
+
     className = "SWTScroller";
     cls = OS.objc_allocateClassPair(OS.class_NSScroller, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2279,7 +2279,7 @@ void initClasses () {
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.objc_registerClassPair(cls);
-        
+
     className = "SWTScrollView";
     cls = OS.objc_allocateClassPair(OS.class_NSScrollView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2309,11 +2309,11 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_sendSearchSelection, proc2, "@:");
     OS.class_addMethod(cls, OS.sel_sendCancelSelection, proc2, "@:");
     OS.objc_registerClassPair(cls);
-        
+
     cls = registerCellSubclass(NSSearchField.cellClass(), size, align_, types);
-    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);    
+    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     NSSearchField.setCellClass(cls);
-        
+
     // Don't subclass NSSecureTextFieldCell -- you'll get an NSException from [NSSecureTextField setCellClass:]!
     className = "SWTSecureTextField";
     cls = OS.objc_allocateClassPair(OS.class_NSSecureTextField, className, 0);
@@ -2324,7 +2324,7 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_textViewDidChangeSelection_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_textView_willChangeSelectionFromCharacterRange_toCharacterRange_, textWillChangeSelectionProc, "@:@{NSRange}{NSRange}");
     OS.objc_registerClassPair(cls);
-        
+
     className = "SWTSlider";
     cls = OS.objc_allocateClassPair(OS.class_NSSlider, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2332,12 +2332,12 @@ void initClasses () {
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
-    OS.objc_registerClassPair(cls); 
-    
+    OS.objc_registerClassPair(cls);
+
     cls = registerCellSubclass(NSSlider.cellClass(), size, align_, types);
-    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);    
+    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     NSSlider.setCellClass(cls);
-        
+
     className = "SWTStepper";
     cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSStepper, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2346,11 +2346,11 @@ void initClasses () {
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.objc_registerClassPair(cls);
-    
+
     cls = registerCellSubclass(NSStepper.cellClass(), size, align_, types);
-    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);    
+    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     NSStepper.setCellClass(cls);
-        
+
     className = "SWTTableHeaderCell";
     cls = OS.objc_allocateClassPair (OS.class_NSTableHeaderCell, className, 0);
     OS.class_addIvar (cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2364,7 +2364,7 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_resetCursorRects, proc2, "@:");
     OS.class_addMethod(cls, OS.sel_updateTrackingAreas, proc2, "@:");
     OS.class_addMethod(cls, OS.sel_menuForEvent_, proc3, "@:@");
-    //TODO hitTestProc and drawRectProc should be set Control.setRegion()? 
+    //TODO hitTestProc and drawRectProc should be set Control.setRegion()?
     OS.objc_registerClassPair(cls);
 
     className = "SWTTableView";
@@ -2382,7 +2382,7 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_tableViewColumnDidResize_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_tableView_didClickTableColumn_, proc4, "@:@");
     OS.class_addMethod(cls, OS.sel_canDragRowsWithIndexes_atPoint_, canDragRowsWithIndexes_atPoint_Proc, "@:@{NSPoint=ff}");
-    OS.class_addMethod(cls, OS.sel_tableView_writeRowsWithIndexes_toPasteboard_, proc5, "@:@@@");   
+    OS.class_addMethod(cls, OS.sel_tableView_writeRowsWithIndexes_toPasteboard_, proc5, "@:@@@");
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
@@ -2397,7 +2397,7 @@ void initClasses () {
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.objc_registerClassPair(cls);
-        
+
     className = "SWTTextView";
     cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSTextView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2411,7 +2411,7 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_dragSelectionWithEvent_offset_slideBack_, proc5, "@:@@@");
     OS.class_addMethod(cls, OS.sel_shouldChangeTextInRange_replacementString_, shouldChangeTextInRange_replacementString_Proc, "@:{NSRange}@");
     OS.objc_registerClassPair(cls);
-    
+
     className = "SWTTextField";
     cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSTextField, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2424,11 +2424,11 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_textViewDidChangeSelection_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_textView_willChangeSelectionFromCharacterRange_toCharacterRange_, textWillChangeSelectionProc, "@:@{NSRange}{NSRange}");
     OS.objc_registerClassPair(cls);
-        
+
     cls = registerCellSubclass(NSTextField.cellClass(), size, align_, types);
-    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);    
+    addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     NSTextField.setCellClass(cls);
-        
+
     className = "SWTTreeItem";
     cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2449,7 +2449,7 @@ void initClasses () {
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.objc_registerClassPair(cls);
-    
+
     className = "SWTWindow";
     cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSWindow, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2462,7 +2462,7 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_view_stringForToolTip_point_userData_, view_stringForToolTip_point_userDataProc, "@:@i{NSPoint}@");
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.objc_registerClassPair(cls);
-    
+
     className = "SWTWindowDelegate";
     cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -2474,7 +2474,7 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_windowDidBecomeKey_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_timerProc_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_systemSettingsChanged_, proc3, "@:@");
-    OS.objc_registerClassPair(cls); 
+    OS.objc_registerClassPair(cls);
 }
 
 NSFont getFont (objc.id cls, objc.SEL sel) {
@@ -2489,7 +2489,7 @@ NSFont getFont (objc.id cls, objc.SEL sel) {
     } else {
         result = NSFont.systemFontOfSize (NSFont.systemFontSizeForControlSize (OS.NSRegularControlSize));
     }
-    result.retain ();   
+    result.retain ();
     OS.objc_msgSend (widget, OS.sel_release);
     return result;
 }
@@ -2540,8 +2540,8 @@ void initFonts () {
     tabViewFont = getFont (OS.class_NSTabView, OS.sel_font);
     progressIndicatorFont = getFont (OS.class_NSProgressIndicator, OS.sel_font);
     }
-    
-/**  
+
+/**
  * Invokes platform specific functionality to allocate a new GC handle.
  * <p>
  * <b>IMPORTANT:</b> This method is <em>not</em> part of the public
@@ -2551,9 +2551,9 @@ void initFonts () {
  * application code.
  * </p>
  *
- * @param data the platform specific GC data 
+ * @param data the platform specific GC data
  * @return the platform specific GC handle
- * 
+ *
  * @exception DWTException <ul>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
@@ -2589,7 +2589,7 @@ public objc.id internal_new_GC (GCData data) {
     return context.id;
 }
 
-/**  
+/**
  * Invokes platform specific functionality to dispose a GC handle.
  * <p>
  * <b>IMPORTANT:</b> This method is <em>not</em> part of the public
@@ -2600,11 +2600,11 @@ public objc.id internal_new_GC (GCData data) {
  * </p>
  *
  * @param hDC the platform specific GC handle
- * @param data the platform specific GC data 
+ * @param data the platform specific GC data
  */
 public void internal_dispose_GC (objc.id context, GCData data) {
     if (isDisposed()) DWT.error(DWT.ERROR_DEVICE_DISPOSED);
-    
+
 }
 
 static bool isValidClass (ClassInfo clazz) {
@@ -2621,7 +2621,7 @@ bool isValidThread () {
 
 /**
  * Generate a low level system event.
- * 
+ *
  * <code>post</code> is used to generate low level keyboard
  * and mouse events. The intent is to enable automated UI
  * testing by simulating the input from the user.  Most
@@ -2664,11 +2664,11 @@ bool isValidThread () {
  * <li>(in) count the number of lines or pages to scroll
  * </ul>
  * </dl>
- * 
+ *
  * @param event the event to be generated
- * 
+ *
  * @return true if the event was generated or false otherwise
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the event is null</li>
  * </ul>
@@ -2677,7 +2677,7 @@ bool isValidThread () {
  * </ul>
  *
  * @since 3.0
- * 
+ *
  */
 public bool post(Event event) {
     synchronized (Device.classinfo) {
@@ -2702,7 +2702,7 @@ public bool post(Event event) {
                 ubyte* uchrPtr = null;
                 Carbon.TISInputSourceRef currentKbd = OS.TISCopyCurrentKeyboardInputSource();
                 Carbon.CFDataRef uchrCFData = cast(Carbon.CFDataRef) OS.TISGetInputSourceProperty(currentKbd, OS.kTISPropertyUnicodeKeyLayoutData);
-                
+
                 if (uchrCFData is null) return false;
                 uchrPtr = OS.CFDataGetBytePtr(uchrCFData);
                 if (uchrPtr is null) return false;
@@ -2737,13 +2737,13 @@ public bool post(Event event) {
             if (vKey is -1 && event.character is 0) {
                 vKey = 127;
             }
-            
+
             if (vKey is -1) return false;
-            
+
             return OS.CGPostKeyboardEvent((short)0, vKey, type is DWT.KeyDown) is 0;
         }
         case DWT.MouseDown:
-        case DWT.MouseMove: 
+        case DWT.MouseMove:
         case DWT.MouseUp: {
             CGPoint mouseCursorPosition = new CGPoint ();
             int chord = OS.GetCurrentButtonState ();
@@ -2799,7 +2799,7 @@ public bool post(Event event) {
                     }
                     default:
                 }
-                
+
                 NSPoint nsCursorPosition = NSEvent.mouseLocation();
                 NSRect primaryFrame = getPrimaryFrame();
                 mouseCursorPosition.x = nsCursorPosition.x;
@@ -2810,9 +2810,9 @@ public bool post(Event event) {
         case DWT.MouseWheel: {
             return OS.CGPostScrollWheelEvent(1, event.count) is 0;
         }
-        
+
         default:
-    } 
+    }
         return false;
     }
 }
@@ -2848,7 +2848,7 @@ void postEvent (Event event) {
  * systems are mirrored, special care needs to be taken
  * when mapping coordinates from one control to another
  * to ensure the result is correctly mirrored.
- * 
+ *
  * Mapping a point that is the origin of a rectangle and
  * then adding the width and height is not equivalent to
  * mapping the rectangle.  When one control is mirrored
@@ -2858,26 +2858,26 @@ void postEvent (Event event) {
  * instead of just one point causes both the origin and
  * the corner of the rectangle to be mapped.
  * </p>
- * 
+ *
  * @param from the source <code>Control</code> or <code>null</code>
  * @param to the destination <code>Control</code> or <code>null</code>
- * @param point to be mapped 
- * @return point with mapped coordinates 
- * 
+ * @param point to be mapped
+ * @return point with mapped coordinates
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the point is null</li>
- *    <li>ERROR_INVALID_ARGUMENT - if the Control from or the Control to have been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the Control from or the Control to have been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 2.1.2
  */
 public Point map (Control from, Control to, Point point) {
     checkDevice ();
-    if (point is null) error (DWT.ERROR_NULL_ARGUMENT); 
+    if (point is null) error (DWT.ERROR_NULL_ARGUMENT);
     return map (from, to, point.x, point.y);
 }
 
@@ -2890,7 +2890,7 @@ public Point map (Control from, Control to, Point point) {
  * systems are mirrored, special care needs to be taken
  * when mapping coordinates from one control to another
  * to ensure the result is correctly mirrored.
- * 
+ *
  * Mapping a point that is the origin of a rectangle and
  * then adding the width and height is not equivalent to
  * mapping the rectangle.  When one control is mirrored
@@ -2900,21 +2900,21 @@ public Point map (Control from, Control to, Point point) {
  * instead of just one point causes both the origin and
  * the corner of the rectangle to be mapped.
  * </p>
- * 
+ *
  * @param from the source <code>Control</code> or <code>null</code>
  * @param to the destination <code>Control</code> or <code>null</code>
  * @param x coordinates to be mapped
  * @param y coordinates to be mapped
  * @return point with mapped coordinates
- * 
+ *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the Control from or the Control to have been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the Control from or the Control to have been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 2.1.2
  */
 public Point map (Control from, Control to, int x, int y) {
@@ -2972,7 +2972,7 @@ public Point map (Control from, Control to, int x, int y) {
  * systems are mirrored, special care needs to be taken
  * when mapping coordinates from one control to another
  * to ensure the result is correctly mirrored.
- * 
+ *
  * Mapping a point that is the origin of a rectangle and
  * then adding the width and height is not equivalent to
  * mapping the rectangle.  When one control is mirrored
@@ -2982,26 +2982,26 @@ public Point map (Control from, Control to, int x, int y) {
  * instead of just one point causes both the origin and
  * the corner of the rectangle to be mapped.
  * </p>
- * 
+ *
  * @param from the source <code>Control</code> or <code>null</code>
  * @param to the destination <code>Control</code> or <code>null</code>
  * @param rectangle to be mapped
  * @return rectangle with mapped coordinates
- * 
+ *
  * @exception IllegalArgumentException <ul>
  *    <li>ERROR_NULL_ARGUMENT - if the rectangle is null</li>
- *    <li>ERROR_INVALID_ARGUMENT - if the Control from or the Control to have been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the Control from or the Control to have been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 2.1.2
  */
 public Rectangle map (Control from, Control to, Rectangle rectangle) {
     checkDevice ();
-    if (rectangle is null) error (DWT.ERROR_NULL_ARGUMENT); 
+    if (rectangle is null) error (DWT.ERROR_NULL_ARGUMENT);
     return map (from, to, rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 }
 
@@ -3014,7 +3014,7 @@ public Rectangle map (Control from, Control to, Rectangle rectangle) {
  * systems are mirrored, special care needs to be taken
  * when mapping coordinates from one control to another
  * to ensure the result is correctly mirrored.
- * 
+ *
  * Mapping a point that is the origin of a rectangle and
  * then adding the width and height is not equivalent to
  * mapping the rectangle.  When one control is mirrored
@@ -3024,7 +3024,7 @@ public Rectangle map (Control from, Control to, Rectangle rectangle) {
  * instead of just one point causes both the origin and
  * the corner of the rectangle to be mapped.
  * </p>
- * 
+ *
  * @param from the source <code>Control</code> or <code>null</code>
  * @param to the destination <code>Control</code> or <code>null</code>
  * @param x coordinates to be mapped
@@ -3032,15 +3032,15 @@ public Rectangle map (Control from, Control to, Rectangle rectangle) {
  * @param width coordinates to be mapped
  * @param height coordinates to be mapped
  * @return rectangle with mapped coordinates
- * 
+ *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the Control from or the Control to have been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the Control from or the Control to have been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
  * </ul>
- * 
+ *
  * @since 2.1.2
  */
 public Rectangle map (Control from, Control to, int x, int y, int width, int height) {
@@ -3088,7 +3088,7 @@ public Rectangle map (Control from, Control to, int x, int y, int width, int hei
     rectangle.y = cast(int)pt.y;
     return rectangle;
 }
-    
+
 int /*long*/ observerProc (int /*long*/ observer, int /*long*/ activity, int /*long*/ info) {
     switch ((int)/*64*/activity) {
         case OS.kCFRunLoopBeforeWaiting:
@@ -3154,7 +3154,7 @@ public bool readAndDispatch () {
     }
     return events;
 }
-    
+
 static void register (Display display) {
     synchronized (Device.classinfo) {
         for (int i=0; i<Displays.length; i++) {
@@ -3174,7 +3174,7 @@ static void register (Display display) {
  * Releases any internal resources back to the operating
  * system and clears all fields except the device handle.
  * <p>
- * Disposes all shells which are currently open on the display. 
+ * Disposes all shells which are currently open on the display.
  * After this method has been invoked, all related related shells
  * will answer <code>true</code> when sent the message
  * <code>isDisposed()</code>.
@@ -3190,7 +3190,7 @@ static void register (Display display) {
  * The handle is needed by <code>destroy</code>.
  * </p>
  * This method is called before <code>destroy</code>.
- * 
+ *
  * @see Device#dispose
  * @see #destroy
  */
@@ -3216,16 +3216,16 @@ protected void release () {
     releaseDisplay ();
     super.release ();
 }
-    
-void releaseDisplay () {    
+
+void releaseDisplay () {
     /* Release the System Images */
     if (errorImage != null) errorImage.dispose ();
     if (infoImage != null) infoImage.dispose ();
     if (warningImage != null) warningImage.dispose ();
     errorImage = infoImage = warningImage = null;
-    
+
     currentCaret = null;
-    
+
     /* Release Timers */
     if (hoverTimer != null) timerExec(-1, hoverTimer);
     hoverTimer = null;
@@ -3242,13 +3242,13 @@ void releaseDisplay () {
     nsTimers = null;
     if (timerDelegate != null) timerDelegate.release();
     timerDelegate = null;
-    
+
     /* Release the System Cursors */
     for (int i = 0; i < cursors.length; i++) {
         if (cursors [i] != null) cursors [i].dispose ();
     }
     cursors = null;
-    
+
     /* Release default fonts */
     if (buttonFont !is null) buttonFont.release ();
     if (popUpButtonFont !is null) popUpButtonFont.release ();
@@ -3269,26 +3269,26 @@ void releaseDisplay () {
     searchFieldFont = comboBoxFont = sliderFont = scrollerFont;
     textViewFont = tableViewFont = outlineViewFont = datePickerFont = null;
     boxFont = tabViewFont = progressIndicatorFont = null;
-    
+
     /* Release Dock image */
     if (dockImage != null) dockImage.release();
     dockImage = null;
 
     if (screenWindow != null) screenWindow.release();
     screenWindow = null;
-    
+
     if (needsDisplay !is null) needsDisplay.release();
     if (needsDisplayInRect !is null) needsDisplayInRect.release();
     if (isPainting !is null) isPainting.release();
     needsDisplay = needsDisplayInRect = isPainting = null;
-    
+
     modalShells = null;
     menuBar = null;
     menus = null;
-    
+
     if (markedAttributes != null) markedAttributes.release();
     markedAttributes = null;
-    
+
     if (oldCursorSetProc !is 0) {
         int /*long*/ method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
         OS.method_setImplementation(method, oldCursorSetProc);
@@ -3303,7 +3303,7 @@ void releaseDisplay () {
         settingsDelegate.release();
     }
     settingsDelegate = null;
-    
+
     // Clear the menu bar if we created it.
     if (!isEmbedded) {
         //remove all existing menu items except the application menu
@@ -3314,7 +3314,7 @@ void releaseDisplay () {
             count--;
         }
     }
-    
+
     // The autorelease pool is cleaned up when we call NSApplication.terminate().
 
     deadKeyState = null;
@@ -3324,7 +3324,7 @@ void releaseDisplay () {
         settingsDelegate.release();
     }
     settingsDelegate = null;
-    
+
     // Clear the menu bar if we created it.
     if (!isEmbedded) {
         //remove all existing menu items except the application menu
@@ -3335,7 +3335,7 @@ void releaseDisplay () {
             count--;
         }
     }
-    
+
     // The autorelease pool is cleaned up when we call NSApplication.terminate().
 
     if (application != null && applicationClass != 0) {
@@ -3343,7 +3343,7 @@ void releaseDisplay () {
     }
     application = null;
     applicationClass = 0;
-    
+
     if (runLoopObserver !is 0) {
         OS.CFRunLoopObserverInvalidate (runLoopObserver);
         OS.CFRelease (runLoopObserver);
@@ -3352,7 +3352,7 @@ void releaseDisplay () {
     if (observerCallback !is null) observerCallback.dispose();
     observerCallback = null;
 }
-    
+
 void removeContext (GCData context) {
     if (contexts is null) return;
     int count = 0;
@@ -3388,7 +3388,7 @@ void removeContext (GCData context) {
  * @see DWT
  * @see #addFilter
  * @see #addListener
- * 
+ *
  * @since 3.0
  */
 public void removeFilter (int eventType, Listener listener) {
@@ -3418,8 +3418,8 @@ public void removeFilter (int eventType, Listener listener) {
  * @see Listener
  * @see DWT
  * @see #addListener
- * 
- * @since 2.0 
+ *
+ * @since 2.0
  */
 public void removeListener (int eventType, Listener listener) {
     checkDevice ();
@@ -3447,7 +3447,7 @@ void removeMenu (Menu menu) {
         }
     }
 }
-    
+
 void removePool () {
     NSAutoreleasePool pool = pools [poolCount - 1];
     pools [--poolCount] = null;
@@ -3482,7 +3482,7 @@ bool runContexts () {
     }
     return false;
 }
-    
+
 bool runDeferredEvents () {
     bool run = false;
         /*
@@ -3491,14 +3491,14 @@ bool runDeferredEvents () {
          * be re-enterant need not be synchronized.
          */
         while (eventQueue !is null) {
-            
+
             /* Take an event off the queue */
             Event event = eventQueue [0];
             if (event is null) break;
             int length_ = eventQueue.length;
             System.arraycopy (eventQueue, 1, eventQueue, 0, --length_);
             eventQueue [length_] = null;
-            
+
             /* Run the event */
             Widget widget = event.widget;
             if (widget !is null && !widget.isDisposed ()) {
@@ -3508,14 +3508,14 @@ bool runDeferredEvents () {
                     widget.notifyListeners (event.type, event);
                 }
             }
-            
+
             /*
              * At this point, the event queue could
              * be null due to a recursive invokation
              * when running the event.
              */
         }
-        
+
         /* Clear the queue */
         eventQueue = null;
     return run;
@@ -3542,7 +3542,7 @@ bool runPaint () {
     }
         return true;
     }
-    
+
     bool runPopups () {
         if (popups is null) return false;
         bool result = false;
@@ -3558,7 +3558,7 @@ bool runPaint () {
         popups = null;
         return result;
     }
-    
+
 bool runSettings () {
     if (!runSettings) return false;
     runSettings = false;
@@ -3590,7 +3590,7 @@ bool runTimers () {
     }
     return result;
 }
-    
+
 void sendEvent (int eventType, Event event) {
     if (eventTable == null && filterTable == null) {
         return;
@@ -3728,7 +3728,7 @@ void setCursor (Control control) {
     cursor.handle.set ();
     lockCursor = true;
 }
-    
+
     /**
      * Sets the location of the on-screen pointer relative to the top left corner
      * of the screen.  <b>Note: It is typically considered bad practice for a
@@ -3736,12 +3736,12 @@ void setCursor (Control control) {
      *
      * @param x the new x coordinate for the cursor
      * @param y the new y coordinate for the cursor
-     * 
+     *
      * @exception DWTException <ul>
      *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
      *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
      * </ul>
-     * 
+     *
      * @since 2.1
      */
     public void setCursorLocation (int x, int y) {
@@ -3750,20 +3750,20 @@ void setCursor (Control control) {
         pt.x = x;  pt.y = y;
         OS.CGWarpMouseCursorPosition (pt);
     }
-    
+
     /**
      * Sets the location of the on-screen pointer relative to the top left corner
      * of the screen.  <b>Note: It is typically considered bad practice for a
      * program to move the on-screen pointer location.</b>
      *
      * @param point new position
-     * 
+     *
      * @exception DWTException <ul>
      *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
      *    <li>ERROR_NULL_ARGUMENT - if the point is null
      *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
      * </ul>
-     * 
+     *
      * @since 2.0
      */
     public void setCursorLocation (Point point) {
@@ -3771,7 +3771,7 @@ void setCursor (Control control) {
         if (point is null) error (DWT.ERROR_NULL_ARGUMENT);
         setCursorLocation (point.x, point.y);
     }
-    
+
     /**
      * Sets the application defined property of the receiver
      * with the specified name to the given argument.
@@ -3799,14 +3799,14 @@ void setCursor (Control control) {
      */
     public void setData (String key, Object value) {
         checkDevice ();
-        //if (key is null) error (DWT.ERROR_NULL_ARGUMENT);    
-        
+        //if (key is null) error (DWT.ERROR_NULL_ARGUMENT);
+
         if (key.equals (ADD_WIDGET_KEY)) {
             auto wrap = cast(ArrayWrapperObject) value;
-            
+
             if (wrap is null)
                 DWT.error(DWT.ERROR_INVALID_ARGUMENT, null, " []");
-            
+
             Object [] data = wrap.array;
             NSObject object = cast(NSObject)data [0];
             Widget widget = cast(Widget)data [1];
@@ -3816,7 +3816,7 @@ void setCursor (Control control) {
                 addWidget (object, widget);
             }
         }
-        
+
         /* Remove the key/value pair */
         if (value is null) {
             if (keys is null) return;
@@ -3838,7 +3838,7 @@ void setCursor (Control control) {
             }
             return;
         }
-        
+
         /* Add the key/value pair */
         if (keys is null) {
             keys = [key];
@@ -3860,7 +3860,7 @@ void setCursor (Control control) {
         keys = newKeys;
         values = newValues;
     }
-    
+
     void setMenuBar (Menu menu) {
         if (menu is menuBar) return;
         menuBar = menu;
@@ -3885,12 +3885,12 @@ void setCursor (Control control) {
             NSMenuItem nsItem = item.nsItem;
             nsItem.setMenu(null);
             menubar.addItem(nsItem);
-            
+
             /*
             * Bug in Cocoa: Calling NSMenuItem.setEnabled() for menu item of a menu bar only
             * works when the menu bar is the current menu bar.  The underline OS menu does get
             * enabled/disable when that menu is set later on.  The fix is to toggle the
-            * item enabled state to force the underline menu to be updated.  
+            * item enabled state to force the underline menu to be updated.
             */
             bool enabled = menu.getEnabled () && item.getEnabled ();
             nsItem.setEnabled(!enabled);
@@ -3898,7 +3898,7 @@ void setCursor (Control control) {
             }
         }
     }
-    
+
     void setModalShell (Shell shell) {
         if (modalShells is null) modalShells = new Shell [4];
         int index = 0, length = modalShells.length;
@@ -3916,12 +3916,12 @@ void setCursor (Control control) {
         Shell [] shells = getShells ();
         for (int i=0; i<shells.length; i++) shells [i].updateModal ();
     }
-    
+
     /**
      * Sets the application defined, display specific data
      * associated with the receiver, to the argument.
      * The <em>display specific data</em> is a single,
-     * unnamed field that is stored with every display. 
+     * unnamed field that is stored with every display.
      * <p>
      * Applications may put arbitrary objects in this field. If
      * the object stored in the display specific data needs to
@@ -3944,7 +3944,7 @@ void setCursor (Control control) {
         checkDevice ();
         this.data = data;
     }
-    
+
     /**
      * Sets the synchronizer used by the display to be
      * the argument, which can not be null.
@@ -3973,7 +3973,7 @@ void setCursor (Control control) {
             oldSynchronizer.runAsyncMessages(true);
         }
     }
-    
+
     /**
      * Causes the user-interface thread to <em>sleep</em> (that is,
      * to be put in a state where it does not consume CPU cycles)
@@ -4001,24 +4001,24 @@ void setCursor (Control control) {
     }
         return true;
     }
-    
+
     int sourceProc (int info) {
         return 0;
     }
-    
+
     /**
      * Causes the <code>run()</code> method of the runnable to
-     * be invoked by the user-interface thread at the next 
+     * be invoked by the user-interface thread at the next
      * reasonable opportunity. The thread which calls this method
      * is suspended until the runnable completes.  Specifying <code>null</code>
      * as the runnable simply wakes the user-interface thread.
      * <p>
-     * Note that at the time the runnable is invoked, widgets 
+     * Note that at the time the runnable is invoked, widgets
      * that have the receiver as their display may have been
      * disposed. Therefore, it is necessary to check for this
      * case inside the runnable before accessing the widget.
      * </p>
-     * 
+     *
      * @param runnable code to run on the user-interface thread or <code>null</code>
      *
      * @exception DWTException <ul>
@@ -4036,14 +4036,14 @@ void setCursor (Control control) {
         }
         synchronizer.syncExec (runnable);
     }
-    
+
     /**
      * Causes the <code>run()</code> method of the runnable to
      * be invoked by the user-interface thread after the specified
      * number of milliseconds have elapsed. If milliseconds is less
      * than zero, the runnable is not executed.
      * <p>
-     * Note that at the time the runnable is invoked, widgets 
+     * Note that at the time the runnable is invoked, widgets
      * that have the receiver as their display may have been
      * disposed. Therefore, it is necessary to check for this
      * case inside the runnable before accessing the widget.
@@ -4088,7 +4088,7 @@ void setCursor (Control control) {
                 }
                 return;
             }
-        } 
+        }
         if (milliseconds < 0) return;
         index = 0;
         while (index < timerList.length) {
@@ -4112,7 +4112,7 @@ void setCursor (Control control) {
             timerList [index] = runnable;
         }
     }
-    
+
     objc.id timerProc (objc.id id, objc.SEL sel, objc.id timerID) {
         NSTimer timer = new NSTimer (timerID);
         NSNumber number = new NSNumber(timer.userInfo());
@@ -4133,7 +4133,7 @@ void setCursor (Control control) {
         timer.release();
         return null;
     }
-    
+
     /**
      * Forces all outstanding paint requests for the display
      * to be processed before this method returns.
@@ -4142,11 +4142,11 @@ void setCursor (Control control) {
      *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
      *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
      * </ul>
-     * 
+     *
      * @see Control#update()
      */
     public void update () {
-        checkDevice (); 
+        checkDevice ();
     Shell [] shells = getShells ();
     for (int i=0; i<shells.length; i++) {
         Shell shell = shells [i];
@@ -4169,7 +4169,7 @@ void updateQuitMenu () {
             break;
         }
     }
-    
+
     NSMenu mainmenu = application.mainMenu();
     NSMenuItem appitem = mainmenu.itemAtIndex(0);
     if (appitem !is null) {
@@ -4177,7 +4177,7 @@ void updateQuitMenu () {
 
         // Normally this would be sel_terminate_ but we changed it so terminate: doesn't kill the app.
         int /*long*/ quitIndex = sm.indexOfItemWithTarget(applicationDelegate, OS.sel_quitRequested_);
-        
+
         if (quitIndex !is -1) {
             NSMenuItem quitItem = sm.itemAtIndex(quitIndex);
             quitItem.setEnabled(enabled);
@@ -4188,16 +4188,16 @@ void updateQuitMenu () {
     }
 }
 
-    
+
     /**
-     * If the receiver's user-interface thread was <code>sleep</code>ing, 
+     * If the receiver's user-interface thread was <code>sleep</code>ing,
      * causes it to be awakened and start running again. Note that this
      * method may be called from any thread.
-     * 
+     *
      * @exception DWTException <ul>
      *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
      * </ul>
-     * 
+     *
      * @see #sleep
      */
     public void wake () {
@@ -4207,12 +4207,12 @@ void updateQuitMenu () {
             wakeThread ();
         }
     }
-    
+
     void wakeThread () {
     //new pool?
         object.performSelectorOnMainThread(OS.sel_release, null, false);
     }
-    
+
 Control findControl (bool checkTrim) {
     return findControl(checkTrim, null);
 }
@@ -4250,9 +4250,9 @@ Control findControl (bool checkTrim, NSView[] hitView) {
     if (control !is null && hitView !is null) hitView[0] = view;
         return control;
     }
-    
+
 void finishLaunching (int /*long*/ id, int /*long*/ sel) {
-    /* 
+    /*
     * [NSApplication finishLaunching] cannot run multiple times otherwise
     * multiple main menus are added.
     */
@@ -4302,7 +4302,7 @@ void applicationDidResignActive (int /*long*/ id, int /*long*/ sel, int /*long*/
         }
         return result;
     }
-    
+
 void applicationSendTrackingEvent (NSEvent nsEvent, Control trackingControl) {
         NSEventType type = nsEvent.type();
         switch (type) {
@@ -4329,7 +4329,7 @@ void applicationSendTrackingEvent (NSEvent nsEvent, Control trackingControl) {
                 break;
     }
             default:
-    
+
     void applicationSendEvent (objc.id id, objc.SEL sel, objc.id event) {
         NSEvent nsEvent = new NSEvent(event);
     NSWindow window = nsEvent.window ();
@@ -4373,7 +4373,7 @@ void applicationSendTrackingEvent (NSEvent nsEvent, Control trackingControl) {
                         return;
                     }
     sendEvent = true;
-    
+
     /*
      * Feature in Cocoa. The help key triggers context-sensitive help but doesn't get forwarded to the window as a key event.
      * If the event is destined for the key window, is the help key, and is an NSKeyDown, send it directly to the window first.
@@ -4423,9 +4423,9 @@ void applicationWillFinishLaunching (int /*long*/ id, int /*long*/ sel, int /*lo
             ni.setTitle(title);
         }
     sendEvent = true;
-    
+
         int /*long*/ quitIndex = sm.indexOfItemWithTarget(applicationDelegate, OS.sel_terminate_);
-        
+
         if (quitIndex !is -1) {
             NSMenuItem quitItem = sm.itemAtIndex(quitIndex);
             quitItem.setAction(OS.sel_quitRequested_);
@@ -4446,7 +4446,7 @@ void applicationWillFinishLaunching (int /*long*/ id, int /*long*/ sel, int /*lo
     }
     sendEvent = false;
     }
-    
+
 void applicationWillFinishLaunching (int /*long*/ id, int /*long*/ sel, int /*long*/ notification) {
     bool loaded = false;
     NSBundle bundle = NSBundle.bundleWithIdentifier(NSString.stringWith("com.apple.JavaVM"));
@@ -4467,15 +4467,15 @@ void applicationWillFinishLaunching (int /*long*/ id, int /*long*/ sel, int /*lo
         NSString name = getAppName();
         NSString match = NSString.stringWith("%@");
         appitem.setTitle(name);
-    
+
         int /*long*/ quitIndex = sm.indexOfItemWithTarget(applicationDelegate, OS.sel_terminate_);
-        
+
         if (quitIndex !is -1) {
             NSMenuItem quitItem = sm.itemAtIndex(quitIndex);
             quitItem.setAction(OS.sel_quitRequested_);
         }
         }
-    
+
 static int /*long*/ applicationProc(int /*long*/ id, int /*long*/ sel) {
         //TODO optimize getting the display
         Display display = getCurrent ();
@@ -4489,7 +4489,7 @@ static int /*long*/ applicationProc(int /*long*/ id, int /*long*/ sel) {
         }
         return null;
     }
-    
+
 static int /*long*/ applicationProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0) {
         //TODO optimize getting the display
         Display display = getCurrent ();
@@ -4547,8 +4547,8 @@ static int /*long*/ applicationProc(int /*long*/ id, int /*long*/sel, int /*long
         }
         return null;
     }
-    
-    static objc.id dialogProc(objc.id id, objc.SEL sel, objc.id arg0) { 
+
+    static objc.id dialogProc(objc.id id, objc.SEL sel, objc.id arg0) {
         void* jniRef;
         OS.object_getInstanceVariable(id, SWT_OBJECT, jniRef);
         if (jniRef is null) return null;
@@ -4574,7 +4574,7 @@ static int /*long*/ applicationProc(int /*long*/ id, int /*long*/sel, int /*long
         }
         return null;
     }
-	
+
 static int /*long*/ dialogProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1) {
     int /*long*/ [] jniRef = new int /*long*/ [1];
     OS.object_getInstanceVariable(id, SWT_OBJECT, jniRef);
@@ -4846,7 +4846,7 @@ static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel) {
         }
         return null;
     }
-    
+
 static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0) {
     /*
     * Feature in Cocoa.  In Cocoa, the default button animation is done
@@ -5041,7 +5041,7 @@ static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel, int /*long*/ a
         }
         return null;
     }
-    
+
 static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1) {
         Widget widget = GetWidget(id);
         if (widget is null) return null;
@@ -5090,7 +5090,7 @@ static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel, int /*long*/ a
         }
         return null;
     }
-    
+
 static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1, int /*long*/ arg2) {
         Widget widget = GetWidget(id);
         if (widget is null) return null;
@@ -5129,7 +5129,7 @@ static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel, int /*long*/ a
         }
         return null;
     }
-    
+
 static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1, int /*long*/ arg2, int /*long*/ arg3) {
         Widget widget = GetWidget(id);
         if (widget is null) return null;

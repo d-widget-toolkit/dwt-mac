@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -18,7 +18,7 @@ import dwt.internal.theme.DrawData;
 import dwt.internal.theme.TabFolderDrawData;
 
 public class TabItemDrawData : DrawData {
-    
+
     public TabFolderDrawData parent;
     public int position;
 

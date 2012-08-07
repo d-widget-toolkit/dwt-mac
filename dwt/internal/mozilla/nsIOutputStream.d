@@ -15,8 +15,8 @@ typedef nsresult function(nsIOutputStream aOutStream,
 
 const char[] NS_IOUTPUTSTREAM_IID_STR = "0d0acd2a-61b4-11d4-9877-00c04fa0cf4a";
 
-const nsIID NS_IOUTPUTSTREAM_IID= 
-  {0x0d0acd2a, 0x61b4, 0x11d4, 
+const nsIID NS_IOUTPUTSTREAM_IID=
+  {0x0d0acd2a, 0x61b4, 0x11d4,
     [ 0x98, 0x77, 0x00, 0xc0, 0x4f, 0xa0, 0xcf, 0x4a ]};
 
 interface nsIOutputStream : nsISupports {

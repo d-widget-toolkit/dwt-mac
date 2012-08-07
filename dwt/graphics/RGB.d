@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -32,7 +32,7 @@ import dwt.dwthelper.utils;
  * The hashCode() method in this class uses the values of the public
  * fields to compute the hash value. When storing instances of the
  * class in hashed collections, do not modify these fields after the
- * object has been inserted.  
+ * object has been inserted.
  * </p>
  * <p>
  * Application code does <em>not</em> need to explicitly release the
@@ -46,24 +46,24 @@ import dwt.dwthelper.utils;
  */
 
 public final class RGB : SerializableCompatibility {
-    
+
     /**
      * the red component of the RGB
      */
     public int red;
-    
+
     /**
      * the green component of the RGB
      */
     public int green;
-    
+
     /**
      * the blue component of the RGB
      */
     public int blue;
-    
+
     static const long serialVersionUID = 3258415023461249074L;
-    
+
 /**
  * Constructs an instance of this class with the given
  * red, green and blue values.
@@ -98,20 +98,20 @@ public this(int red, int green, int blue) {
 *    <li>ERROR_INVALID_ARGUMENT - if the hue is not between 0 and 360 or
 *    the saturation or brightness is not between 0 and 1</li>
 * </ul>
-* 
+*
 * @since 3.2
 */
 public this(float hue, float saturation, float brightness) {
-    if (hue < 0 || hue > 360 || saturation < 0 || saturation > 1 || 
+    if (hue < 0 || hue > 360 || saturation < 0 || saturation > 1 ||
         brightness < 0 || brightness > 1) {
         DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     }
     float r, g, b;
     if (saturation is 0) {
-        r = g = b = brightness; 
+        r = g = b = brightness;
     } else {
         if (hue is 360) hue = 0;
-        hue /= 60;  
+        hue /= 60;
         int i = cast(int)hue;
         float f = hue - i;
         float p = brightness * (1 - saturation);
@@ -153,17 +153,17 @@ public this(float hue, float saturation, float brightness) {
     }
     red = cast(int)(r * 255 + 0.5);
     green = cast(int)(g * 255 + 0.5);
-    blue = cast(int)(b * 255 + 0.5);    
+    blue = cast(int)(b * 255 + 0.5);
 }
 
 /**
  * Returns the hue, saturation, and brightness of the color.
- * 
+ *
  * @return color space values in float format (hue, saturation, brightness)
  *
  * @since 3.2
  */
-public float[] getHSB() {   
+public float[] getHSB() {
     float r = red / 255f;
     float g = green / 255f;
     float b = blue / 255f;
@@ -178,7 +178,7 @@ public float[] getHSB() {
             hue = (g  - b) / delta;
         } else {
             if (g is max) {
-                hue = 2 + (b - r) / delta;  
+                hue = 2 + (b - r) / delta;
             } else {
                 hue = 4 + (r - g) / delta;
             }
@@ -187,7 +187,7 @@ public float[] getHSB() {
         if (hue < 0) hue += 360;
     }
     return [hue, saturation, brightness];
-}   
+}
 
 /**
  * Compares the argument to the receiver, and returns true
@@ -209,8 +209,8 @@ public int opEquals(Object object) {
 alias opEquals equals;
 
 /**
- * Returns an integer hash code for the receiver. Any two 
- * objects that return <code>true</code> when passed to 
+ * Returns an integer hash code for the receiver. Any two
+ * objects that return <code>true</code> when passed to
  * <code>equals</code> must return the same value for this
  * method.
  *

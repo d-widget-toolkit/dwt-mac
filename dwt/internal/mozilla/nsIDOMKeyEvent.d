@@ -9,8 +9,8 @@ import dwt.internal.mozilla.nsStringAPI;
 
 const char[] NS_IDOMKEYEVENT_IID_STR = "028e0e6e-8b01-11d3-aae7-0010838a3123";
 
-const nsIID NS_IDOMKEYEVENT_IID= 
-  {0x028e0e6e, 0x8b01, 0x11d3, 
+const nsIID NS_IDOMKEYEVENT_IID=
+  {0x028e0e6e, 0x8b01, 0x11d3,
     [ 0xaa, 0xe7, 0x00, 0x10, 0x83, 0x8a, 0x31, 0x23 ]};
 
 interface nsIDOMKeyEvent : nsIDOMUIEvent {

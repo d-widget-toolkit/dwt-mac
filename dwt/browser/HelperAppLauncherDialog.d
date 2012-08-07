@@ -30,7 +30,7 @@ import dwt.browser.Mozilla;
  * This class implements the HelperAppLauncherDialog interface for mozilla
  * versions 1.4 - 1.8.x.  For mozilla versions >= 1.9 this interface is
  * implemented by class HelperAppLauncherDialog_1_9.  HelperAppLauncherDialogFactory
- * determines at runtime which of these classes to instantiate. 
+ * determines at runtime which of these classes to instantiate.
  */
 
 class HelperAppLauncherDialog : nsIHelperAppLauncherDialog {
@@ -48,7 +48,7 @@ nsrefcnt AddRef () {
 extern(System)
 nsresult QueryInterface (nsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
-    
+
     if (*riid == nsISupports.IID) {
         *ppvObject = cast(void*)cast(nsISupports)this;
         AddRef ();
@@ -59,7 +59,7 @@ nsresult QueryInterface (nsID* riid, void** ppvObject) {
         AddRef ();
         return XPCOM.NS_OK;
     }
-    
+
     *ppvObject = null;
     return XPCOM.NS_ERROR_NO_INTERFACE;
 }
@@ -85,7 +85,7 @@ nsresult Show(nsIHelperAppLauncher aLauncher, nsISupports aContext, PRUint32 aRe
      /*
      * The interface for nsIHelperAppLauncher changed as of mozilla 1.8.  Query the received
      * nsIHelperAppLauncher for the new interface, and if it is not found then fall back to
-     * the old interface. 
+     * the old interface.
      */
 
     nsISupports supports = cast(nsISupports)aLauncher;
@@ -109,19 +109,19 @@ nsresult PromptForSaveToFile (nsIHelperAppLauncher aLauncher, nsISupports aWindo
     /*
     * The interface for nsIHelperAppLauncherDialog changed as of mozilla 1.5 when an
     * extra argument was added to the PromptForSaveToFile method (this resulted in all
-    * subsequent arguments shifting right).  The workaround is to provide an XPCOMObject 
+    * subsequent arguments shifting right).  The workaround is to provide an XPCOMObject
     * that fits the newer API, and to use the first argument's type to infer whether
     * the old or new nsIHelperAppLauncherDialog interface is being used (and by extension
     * the ordering of the arguments).  In mozilla >= 1.5 the first argument is an
-    * nsIHelperAppLauncher. 
+    * nsIHelperAppLauncher.
     */
     /*
      * The interface for nsIHelperAppLauncher changed as of mozilla 1.8, so the first
-     * argument must be queried for both the old and new nsIHelperAppLauncher interfaces. 
+     * argument must be queried for both the old and new nsIHelperAppLauncher interfaces.
      */
     bool using_1_8 = false;
-    nsISupports support = cast(nsISupports)aLauncher; 
-    
+    nsISupports support = cast(nsISupports)aLauncher;
+
     if (aLauncher is null)
         assert(0);
 
@@ -146,7 +146,7 @@ nsresult PromptForSaveToFile (nsIHelperAppLauncher aLauncher, nsISupports aWindo
         aDefaultFile = arg2;
         aSuggestedFileExtension = arg3;
         _retval = arg4;
-    } else {            /* 1.4 */  
+    } else {            /* 1.4 */
     // This call conversion probablywon't work for non-Java
     // and shouldn't get called; fix it later. -JJR
         aDefaultFile = arg1;
@@ -167,7 +167,7 @@ nsresult PromptForSaveToFile (nsIHelperAppLauncher aLauncher, nsISupports aWindo
     FileDialog fileDialog = new FileDialog (shell, DWT.SAVE);
     fileDialog.setFileName (defaultFile);
     String[] tmp;
-    tmp ~= suggestedFileExtension; 
+    tmp ~= suggestedFileExtension;
     fileDialog.setFilterExtensions (tmp);
     String name = fileDialog.open ();
     shell.close ();
@@ -178,7 +178,7 @@ nsresult PromptForSaveToFile (nsIHelperAppLauncher aLauncher, nsISupports aWindo
             } else {
                 rc = aLauncher.Cancel ();
             }
-            if (rc !is XPCOM.NS_OK) Mozilla.error (rc,__FILE__,__LINE__); 
+            if (rc !is XPCOM.NS_OK) Mozilla.error (rc,__FILE__,__LINE__);
             return XPCOM.NS_OK;
         }
         return XPCOM.NS_ERROR_FAILURE;
@@ -190,8 +190,8 @@ nsresult PromptForSaveToFile (nsIHelperAppLauncher aLauncher, nsISupports aWindo
     if (rc !is XPCOM.NS_OK) Mozilla.error (rc,__FILE__,__LINE__);
     if (localFile is null) Mozilla.error (XPCOM.NS_ERROR_NULL_POINTER,__FILE__,__LINE__);
     /* Our own nsIDownload has been registered during the Browser initialization. It will be invoked by Mozilla. */
-    *_retval = localFile; 
-    //XPCOM.memmove (_retval, result, C.PTR_SIZEOF);  
+    *_retval = localFile;
+    //XPCOM.memmove (_retval, result, C.PTR_SIZEOF);
     return XPCOM.NS_OK;
 }
 }

@@ -137,7 +137,7 @@ import dwt.events.*;
  * @since 2.0
  *
  * @see <a href="http://www.eclipse.org/swt/snippets/#tablecursor">TableCursor snippets</a>
- * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a> 
+ * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
 public class TableCursor : Canvas {
 
@@ -191,11 +191,11 @@ public this(Table parent, int style) {
 
     Listener listener = new class(this) Listener {
         TableCursor tc;
-        
+
         this (TableCursor tc) {
             this.tc = tc;
         }
-        
+
         public void handleEvent(Event event) {
             switch (event.type) {
                 case DWT.Dispose :
@@ -234,11 +234,11 @@ public this(Table parent, int style) {
 
     tableListener = new class(this) Listener {
         TableCursor tc;
-        
+
         this (TableCursor tc) {
             this.tc = tc;
         }
-        
+
         public void handleEvent(Event event) {
             switch (event.type) {
                 case DWT.MouseDown :
@@ -256,11 +256,11 @@ public this(Table parent, int style) {
 
     disposeItemListener = new class(this) Listener {
         TableCursor tc;
-        
+
         this (TableCursor tc) {
             this.tc = tc;
         }
-        
+
         public void handleEvent(Event event) {
             tc.unhookRowColumnListeners();
             tc.row = null;
@@ -270,11 +270,11 @@ public this(Table parent, int style) {
     };
     disposeColumnListener = new class(this) Listener {
         TableCursor tc;
-        
+
         this (TableCursor tc) {
             this.tc = tc;
         }
-        
+
         public void handleEvent(Event event) {
             tc.unhookRowColumnListeners();
             tc.row = null;
@@ -284,11 +284,11 @@ public this(Table parent, int style) {
     };
     resizeListener = new class(this) Listener {
         TableCursor tc;
-        
+
         this (TableCursor tc) {
             this.tc = tc;
         }
-        
+
         public void handleEvent(Event event) {
             tc._resize();
         }
@@ -723,7 +723,7 @@ public TableItem getRow() {
  * @param color the new color (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -745,7 +745,7 @@ public override void setBackground (Color color) {
  * @param color the new color (or null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the argument has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>

@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -39,7 +39,7 @@ import dwt.widgets.TypedListener;
  * <dd>Selection</dd>
  * </dl>
  * <p>
- * Note: Only one of the styles CHECK, PUSH, RADIO, SEPARATOR and DROP_DOWN 
+ * Note: Only one of the styles CHECK, PUSH, RADIO, SEPARATOR and DROP_DOWN
  * may be specified.
  * </p><p>
  * IMPORTANT: This class is <em>not</em> intended to be subclassed.
@@ -58,13 +58,13 @@ public class ToolItem : Item {
     String toolTipText;
     Control control;
     bool selection;
-    
+
     static const int DEFAULT_WIDTH = 24;
     static const int DEFAULT_HEIGHT = 22;
     static const int DEFAULT_SEPARATOR_WIDTH = 6;
     static const int INSET = 3;
     static const int ARROW_WIDTH = 5;
-    
+
 /**
  * Constructs a new instance of this class given its parent
  * (which must be a <code>ToolBar</code>) and a style value
@@ -73,7 +73,7 @@ public class ToolItem : Item {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -113,7 +113,7 @@ public this (ToolBar parent, int style) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -149,7 +149,7 @@ public this (ToolBar parent, int style, int index) {
 
 objc.id accessibilityAttributeValue(objc.id id, objc.SEL sel, objc.id arg0) {
     NSString nsAttributeName = new NSString(arg0);
-    
+
     if (nsAttributeName.isEqualToString (OS.NSAccessibilityRoleAttribute) || nsAttributeName.isEqualToString (OS.NSAccessibilityRoleDescriptionAttribute)) {
         NSString roleText = ((style & DWT.PUSH) !is 0) ? OS.NSAccessibilityButtonRole
         : ((style & DWT.RADIO) !is 0) ? OS.NSAccessibilityRadioButtonRole
@@ -179,7 +179,7 @@ objc.id accessibilityAttributeValue(objc.id id, objc.SEL sel, objc.id arg0) {
         NSNumber value = NSNumber.numberWithInt(getEnabled() ? 1 : 0);
         return value.id;
     }
-    
+
     return super.accessibilityAttributeValue(id, sel, arg0);
 }
 
@@ -272,7 +272,7 @@ void createHandle () {
         /*
         * Feature in Cocoa.  NSButtons without borders do not leave any margin
         * between their edge and their image.  The workaround is to provide a
-        * custom cell that displays the image in a better position. 
+        * custom cell that displays the image in a better position.
         */
         NSButtonCell cell = (NSButtonCell)new SWTButtonCell ().alloc ().init ();
         button.setCell (cell);
@@ -301,7 +301,7 @@ NSAttributedString createString() {
 void deregister () {
     super.deregister ();
     display.removeWidget(view);
-    
+
     if (button !is null) {
         display.removeWidget (button);
         display.removeWidget (button.cell());
@@ -318,7 +318,7 @@ void drawImageWithFrameInView (int /*long*/ id, int /*long*/ sel, int /*long*/ i
         if ((parent.style & DWT.RIGHT) !is 0) {
             rect.x += 3;
         } else {
-            rect.y += 3;            
+            rect.y += 3;
         }
     }
     callSuper (id, sel, image, rect, view);
@@ -441,7 +441,7 @@ bool getDrawing () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #isEnabled
  */
 public bool getEnabled () {
@@ -548,7 +548,7 @@ public int getWidth () {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @see #getEnabled
  */
 public bool isEnabled () {
@@ -622,7 +622,7 @@ void otherMouseDragged(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent)
 void register () {
     super.register ();
     display.addWidget (view, this);
-    
+
     if (button !is null) {
         display.addWidget (button, this);
         display.addWidget (button.cell(), this);
@@ -651,7 +651,7 @@ public void removeSelectionListener(SelectionListener listener) {
     if (listener is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (eventTable is null) return;
     eventTable.unhook(DWT.Selection, listener);
-    eventTable.unhook(DWT.DefaultSelection,listener);   
+    eventTable.unhook(DWT.DefaultSelection,listener);
 }
 
 void releaseParent () {
@@ -671,7 +671,7 @@ void releaseWidget () {
     super.releaseWidget ();
     control = null;
     toolTipText = null;
-    image = disabledImage = hotImage = null; 
+    image = disabledImage = hotImage = null;
 }
 
 void selectRadio () {
@@ -719,7 +719,7 @@ void setBounds (int x, int y, int width, int height) {
  * @param control the new control
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the control has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the control has been disposed</li>
  *    <li>ERROR_INVALID_PARENT - if the control is not in the same widget tree</li>
  * </ul>
  * @exception DWTException <ul>
@@ -769,7 +769,7 @@ public void setEnabled (bool enabled) {
     checkWidget();
     if ((state & DISABLED) is 0 && enabled) return;
     if (enabled) {
-        state &= ~DISABLED;     
+        state &= ~DISABLED;
     } else {
         state |= DISABLED;
     }
@@ -786,7 +786,7 @@ public void setEnabled (bool enabled) {
  * @param image the disabled image to display on the receiver (may be null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the image has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the image has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -811,7 +811,7 @@ public void setDisabledImage (Image image) {
  * @param image the hot image to display on the receiver (may be null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_INVALID_ARGUMENT - if the image has been disposed</li> 
+ *    <li>ERROR_INVALID_ARGUMENT - if the image has been disposed</li>
  * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
@@ -879,7 +879,7 @@ public void setSelection (bool selected) {
  * escaped by doubling it in the string, causing a single
  * '&amp;' to be displayed.
  * </p>
- * 
+ *
  * @param string the new text
  *
  * @exception IllegalArgumentException <ul>
@@ -901,7 +901,7 @@ public void setText (String string) {
         if ((parent.style & DWT.RIGHT) !is 0) {
             widget.setImagePosition(OS.NSImageLeft);
         } else {
-            widget.setImagePosition(OS.NSImageAbove);       
+            widget.setImagePosition(OS.NSImageAbove);
         }
     } else {
         widget.setImagePosition(text.length() !is 0 ? OS.NSNoImage : OS.NSImageOnly);
@@ -911,17 +911,17 @@ public void setText (String string) {
 
 /**
  * Sets the receiver's tool tip text to the argument, which
- * may be null indicating that the default tool tip for the 
+ * may be null indicating that the default tool tip for the
  * control will be shown. For a control that has a default
  * tool tip, such as the Tree control on Windows, setting
  * the tool tip text to an empty string replaces the default,
  * causing no tool tip text to be shown.
  * <p>
  * The mnemonic indicator (character '&amp;') is not displayed in a tool tip.
- * To display a single '&amp;' in the tool tip, the character '&amp;' can be 
+ * To display a single '&amp;' in the tool tip, the character '&amp;' can be
  * escaped by doubling it in the string.
  * </p>
- * 
+ *
  * @param string the new tool tip text (or null)
  *
  * @exception DWTException <ul>
@@ -994,10 +994,10 @@ void updateImage (bool layout) {
         if ((parent.style & DWT.RIGHT) !is 0) {
             widget.setImagePosition(OS.NSImageLeft);
         } else {
-            (cast(NSButton)button).setImagePosition(OS.NSImageAbove);       
+            (cast(NSButton)button).setImagePosition(OS.NSImageAbove);
         }
-    } else {    
-        widget.setImagePosition(text.length() !is 0 ? OS.NSNoImage : OS.NSImageOnly);       
+    } else {
+        widget.setImagePosition(text.length() !is 0 ? OS.NSNoImage : OS.NSImageOnly);
     }
     parent.relayout();
 }

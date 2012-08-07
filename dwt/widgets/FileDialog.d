@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -39,7 +39,7 @@ import dwt.widgets.Shell;
  * IMPORTANT: This class is intended to be subclassed <em>only</em>
  * within the DWT implementation.
  * </p>
- * 
+ *
  * @see <a href="http://www.eclipse.org/swt/snippets/#filedialog">FileDialog snippets</a>
  * @see <a href="http://www.eclipse.org/swt/examples.php">DWT Example: ControlExample, Dialog tab</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
@@ -53,7 +53,7 @@ public class FileDialog : Dialog {
     int filterIndex = -1;
     bool overwrite = false;
     static final char EXTENSION_SEPARATOR = ';';
-    
+
 /**
  * Constructs a new instance of this class given only its parent.
  *
@@ -77,7 +77,7 @@ public this (Shell parent) {
  * <p>
  * The style value is either one of the style constants defined in
  * class <code>DWT</code> which is applicable to instances of this
- * class, or must be built by <em>bitwise OR</em>'ing together 
+ * class, or must be built by <em>bitwise OR</em>'ing together
  * (that is, using the <code>int</code> "|" operator) two or more
  * of those <code>DWT</code> style constants. The class description
  * lists the style constants that are applicable to the class.
@@ -94,7 +94,7 @@ public this (Shell parent) {
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the parent</li>
  *    <li>ERROR_INVALID_SUBCLASS - if this class is not an allowed subclass</li>
  * </ul>
- * 
+ *
  * @see DWT#SAVE
  * @see DWT#OPEN
  * @see DWT#MULTI
@@ -105,7 +105,7 @@ public this (Shell parent, int style) {
         if (parent !is null && (style & DWT.SHEET) !is 0) this.style |= DWT.SHEET;
     }
     checkSubclass ();
-    
+
     filterNames = new String [0];
     filterExtensions = new String [0];
     fileNames = new String [0];
@@ -115,7 +115,7 @@ public this (Shell parent, int style) {
  * Returns the path of the first file that was
  * selected in the dialog relative to the filter path, or an
  * empty string if no such file has been selected.
- * 
+ *
  * @return the relative path of the file
  */
 public String getFileName () {
@@ -125,7 +125,7 @@ public String getFileName () {
 /**
  * Returns a (possibly empty) array with the paths of all files
  * that were selected in the dialog relative to the filter path.
- * 
+ *
  * @return the relative paths of the files
  */
 public String [] getFileNames () {
@@ -152,10 +152,10 @@ public String [] getFilterExtensions () {
  * </p>
  *
  * @return index the file extension filter index
- * 
+ *
  * @see #getFilterExtensions
  * @see #getFilterNames
- * 
+ *
  * @since 3.4
  */
 public int getFilterIndex () {
@@ -178,7 +178,7 @@ public String [] getFilterNames () {
  * in the dialog, filtered according to the filter extensions.
  *
  * @return the directory path string
- * 
+ *
  * @see #setFilterExtensions
  */
 public String getFilterPath () {
@@ -191,7 +191,7 @@ public String getFilterPath () {
  * overwrite if the selected file already exists.
  *
  * @return true if the dialog will prompt for file overwrite, false otherwise
- * 
+ *
  * @since 3.4
  */
 public bool getOverwrite () {
@@ -283,19 +283,19 @@ public String open () {
             NSArray filenames = (cast(NSOpenPanel)panel).filenames();
             NSUInteger count = filenames.count();
             fileNames = new String[count];
-            
+
             for (NSUInteger i = 0; i < count; i++) {
                 filename = new NSString(filenames.objectAtIndex(i));
                 NSString filenameOnly = filename.lastPathComponent();
                 NSString pathOnly = filename.stringByDeletingLastPathComponent();
-                
+
                 if (i is 0) {
                     /* Filter path */
                     filterPath = pathOnly.getString();
-                    
+
                     /* File name */
                     fileName = fileNames [0] = filenameOnly.getString();
-                } else {                                    
+                } else {
                     if (pathOnly.getString().equals (filterPath)) {
                         fileNames [i] = filenameOnly.getString();
                     } else {
@@ -318,7 +318,7 @@ public String open () {
     }
     if (jniRef !is 0) OS.DeleteGlobalRef(jniRef);
     panel = null;
-    return fullPath;    
+    return fullPath;
 }
 
 int /*long*/ _overwriteExistingFileCheck (int /*long*/ id, int /*long*/ sel, int /*long*/ str) {
@@ -370,7 +370,7 @@ void sendSelection (int /*long*/ id, int /*long*/ sel, int /*long*/ arg) {
  * select by default when opened to the argument,
  * which may be null.  The name will be prefixed with
  * the filter path when one is supplied.
- * 
+ *
  * @param string the file name
  */
 public void setFileName (String string) {
@@ -390,7 +390,7 @@ public void setFileName (String string) {
  * </p>
  *
  * @param extensions the file extension filter
- * 
+ *
  * @see #setFilterNames to specify the user-friendly
  * names corresponding to the extensions
  */
@@ -408,10 +408,10 @@ public void setFilterExtensions (String [] extensions) {
  * </p>
  *
  * @param index the file extension filter index
- * 
+ *
  * @see #setFilterExtensions
  * @see #setFilterNames
- * 
+ *
  * @since 3.4
  */
 public void setFilterIndex (int index) {
@@ -429,7 +429,7 @@ public void setFilterIndex (int index) {
  * </p>
  *
  * @param names the list of filter names, or null for no filter names
- * 
+ *
  * @see #setFilterExtensions
  */
 public void setFilterNames (String [] names) {
@@ -450,7 +450,7 @@ public void setFilterNames (String [] names) {
  * </p>
  *
  * @param string the directory path
- * 
+ *
  * @see #setFilterExtensions
  */
 public void setFilterPath (String string) {
@@ -463,7 +463,7 @@ public void setFilterPath (String string) {
  * overwrite if the selected file already exists.
  *
  * @param overwrite true if the dialog will prompt for file overwrite, false otherwise
- * 
+ *
  * @since 3.4
  */
 public void setOverwrite (bool overwrite) {

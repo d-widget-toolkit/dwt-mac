@@ -12,8 +12,8 @@ import tango.stdc.stdio : FILE;
 
 const char[] NS_ILOCALFILE_IID_STR = "aa610f20-a889-11d3-8c81-000064657374";
 
-const nsIID NS_ILOCALFILE_IID= 
-  {0xaa610f20, 0xa889, 0x11d3, 
+const nsIID NS_ILOCALFILE_IID=
+  {0xaa610f20, 0xa889, 0x11d3,
     [ 0x8c, 0x81, 0x00, 0x00, 0x64, 0x65, 0x73, 0x74 ]};
 
 interface nsILocalFile : nsIFile {

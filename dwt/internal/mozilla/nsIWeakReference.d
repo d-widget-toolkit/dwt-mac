@@ -10,8 +10,8 @@ import dwt.internal.mozilla.nsISupports;
 
 const char[] NS_IWEAKREFERENCE_IID_STR = "9188bc85-f92e-11d2-81ef-0060083a0bcf";
 
-const nsIID NS_IWEAKREFERENCE_IID= 
-  {0x9188bc85, 0xf92e, 0x11d2, 
+const nsIID NS_IWEAKREFERENCE_IID=
+  {0x9188bc85, 0xf92e, 0x11d2,
     [ 0x81, 0xef, 0x00, 0x60, 0x08, 0x3a, 0x0b, 0xcf ]};
 
 interface nsIWeakReference : nsISupports {
@@ -30,8 +30,8 @@ extern(System):
 
 const char[] NS_ISUPPORTSWEAKREFERENCE_IID_STR = "9188bc86-f92e-11d2-81ef-0060083a0bcf";
 
-const nsIID NS_ISUPPORTSWEAKREFERENCE_IID= 
-  {0x9188bc86, 0xf92e, 0x11d2, 
+const nsIID NS_ISUPPORTSWEAKREFERENCE_IID=
+  {0x9188bc86, 0xf92e, 0x11d2,
     [ 0x81, 0xef, 0x00, 0x60, 0x08, 0x3a, 0x0b, 0xcf ]};
 
 interface nsISupportsWeakReference : nsISupports {

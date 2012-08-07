@@ -9,8 +9,8 @@ import dwt.internal.mozilla.gfxIImageFrame;
 
 const char[] IMGICONTAINEROBSERVER_IID_STR = "53102f15-0f53-4939-957e-aea353ad2700";
 
-const nsIID IMGICONTAINEROBSERVER_IID= 
-  {0x53102f15, 0x0f53, 0x4939, 
+const nsIID IMGICONTAINEROBSERVER_IID=
+  {0x53102f15, 0x0f53, 0x4939,
     [ 0x95, 0x7e, 0xae, 0xa3, 0x53, 0xad, 0x27, 0x00 ]};
 
 interface imgIContainerObserver : nsISupports {

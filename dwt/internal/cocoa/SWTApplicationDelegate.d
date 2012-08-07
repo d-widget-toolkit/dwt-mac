@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -18,11 +18,11 @@ import dwt.internal.cocoa.NSObject;
 import objc = dwt.internal.objc.runtime;
 
 public class SWTApplicationDelegate : NSObject {
-    
+
 public this() {
     super(cast(objc.id) null);
 }
-    
+
 public this(objc.id id) {
     super(id);
 }

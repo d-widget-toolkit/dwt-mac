@@ -6,8 +6,8 @@ import dwt.internal.mozilla.nsISupports;
 
 const char[] NS_IPREFLOCALIZEDSTRING_IID_STR = "ae419e24-1dd1-11b2-b39a-d3e5e7073802";
 
-const nsIID NS_IPREFLOCALIZEDSTRING_IID= 
-  {0xae419e24, 0x1dd1, 0x11b2, 
+const nsIID NS_IPREFLOCALIZEDSTRING_IID=
+  {0xae419e24, 0x1dd1, 0x11b2,
     [ 0xb3, 0x9a, 0xd3, 0xe5, 0xe7, 0x07, 0x38, 0x02 ]};
 
 interface nsIPrefLocalizedString : nsISupports {

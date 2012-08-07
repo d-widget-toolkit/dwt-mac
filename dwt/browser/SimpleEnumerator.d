@@ -79,6 +79,6 @@ nsresult GetNext (nsISupports* _retval) {
     value.AddRef ();
     *_retval = value;
     return XPCOM.NS_OK;
-}       
+}
 }
 

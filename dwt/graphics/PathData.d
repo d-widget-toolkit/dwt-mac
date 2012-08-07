@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
- *     
+ *
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
@@ -19,16 +19,16 @@ module dwt.graphics.PathData;
  *
  * @see Path
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.1
  */
 public final class PathData {
-    
+
     /**
-     * The type of each point. 
+     * The type of each point.
      */
     public byte[] types;
-    
+
     /**
      * The points of a path.
      */
