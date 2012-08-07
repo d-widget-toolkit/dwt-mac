@@ -38,13 +38,13 @@ import dwt.dwthelper.utils;
  * @since 2.0
  */
 public class AccessibleControlEvent : DWTEventObject {
-    public int childID; // IN/OUT
-    public Accessible accessible; // OUT
-    public int x, y; // IN/OUT
-    public int width, height; // OUT
-    public int detail; // IN/OUT
-    public String result; // OUT
-    public Object children[]; // [OUT]
+    public int childID;         // IN/OUT
+    public Accessible accessible;   // OUT
+    public int x, y;                // IN/OUT
+    public int width, height;       // OUT
+    public int detail;          // IN/OUT
+    public String result;           // OUT
+    public Object children[];       // [OUT]
     
     static final long serialVersionUID = 3257281444169529141L;
     
@@ -53,7 +53,7 @@ public class AccessibleControlEvent : DWTEventObject {
  *
  * @param source the object that fired the event
  */
-public this (Object source) {
+public this(Object source) {
     super(source);
 }
 
@@ -65,13 +65,13 @@ public this (Object source) {
  */
 public String toString () {
     return Format("AccessibleControlEvent {childID={}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}" , childID , //$NON-NLS-1$
-                  " accessible=" , accessible , //$NON-NLS-1$
-                  " x=" , x , //$NON-NLS-1$
-                  " y=" , y , //$NON-NLS-1$
-                  " width=" , width , //$NON-NLS-1$
-                  " height=" , height , //$NON-NLS-1$
-                  " detail=" , detail , //$NON-NLS-1$
-                  " result=" , result , //$NON-NLS-1$
-                  "}"); //$NON-NLS-1$
-}
+        " accessible=" , accessible , //$NON-NLS-1$
+        " x=" , x , //$NON-NLS-1$
+        " y=" , y , //$NON-NLS-1$
+        " width=" , width , //$NON-NLS-1$
+        " height=" , height , //$NON-NLS-1$
+        " detail=" , detail , //$NON-NLS-1$
+        " result=" , result , //$NON-NLS-1$
+        "}"); //$NON-NLS-1$
+}   
 }
