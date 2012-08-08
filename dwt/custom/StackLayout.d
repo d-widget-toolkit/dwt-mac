@@ -15,9 +15,12 @@ module dwt.custom.StackLayout;
 import dwt.dwthelper.utils;
 
 
-
-
-
+import dwt.SWT;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Layout;
 
 import tango.util.Convert;
 static import tango.text.Util;
@@ -132,9 +135,9 @@ protected override void layout(Composite composite, bool flushCache) {
 
 String getName () {
     String string = this.classinfo.name;
-    int index = tango.text.Util.locatePrior( string ,'.');
-    if (index is string.length ) return string;
-    return string[ index + 1 .. $ ];
+    int index = string.lastIndexOf('.');
+    if (index is -1) return string;
+    return string[index + 1 .. $];
 }
 
 /**
