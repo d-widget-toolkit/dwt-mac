@@ -12,18 +12,43 @@
  *******************************************************************************/
 module dwt.custom.CTabFolder;
 
+import dwt.dwthelper.utils;
 
-
-
-
-
+import dwt.SWT;
+import dwt.SWTException;
+import dwt.accessibility.ACC;
+import dwt.accessibility.Accessible;
+import dwt.accessibility.AccessibleAdapter;
+import dwt.accessibility.AccessibleControlAdapter;
+import dwt.accessibility.AccessibleControlEvent;
+import dwt.accessibility.AccessibleEvent;
 import dwt.custom.CTabItem;
 import dwt.custom.CTabFolder2Listener;
 import dwt.custom.CTabFolderListener;
 import dwt.custom.CTabFolderLayout;
 import dwt.custom.CTabFolderEvent;
+import dwt.events.SelectionAdapter;
+import dwt.events.SelectionEvent;
+import dwt.events.SelectionListener;
+import dwt.graphics.Color;
+import dwt.graphics.Font;
+import dwt.graphics.FontData;
+import dwt.graphics.GC;
+import dwt.graphics.Image;
+import dwt.graphics.Point;
+import dwt.graphics.RGB;
+import dwt.graphics.Rectangle;
+import dwt.graphics.Region;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Display;
+import dwt.widgets.Event;
+import dwt.widgets.Layout;
+import dwt.widgets.Listener;
+import dwt.widgets.Menu;
+import dwt.widgets.MenuItem;
+import dwt.widgets.TypedListener;
 
-import dwt.dwthelper.utils;
 import tango.util.Convert;
 static import tango.text.convert.Utf;
 
@@ -301,11 +326,16 @@ static this(){
  * @see #getStyle()
  */
 public this(Composite parent, int style) {
+	super(parent, checkStyle (parent, style));
+	init(style);
+}
+
+void init(int style) {
     chevronRect = new Rectangle(0, 0, 0, 0);
     minRect = new Rectangle(0, 0, 0, 0);
     maxRect = new Rectangle(0, 0, 0, 0);
     topRightRect = new Rectangle(0, 0, 0, 0);
-    super(parent, checkStyle (parent, style));
+
     super.setLayout(new CTabFolderLayout());
     int style2 = super.getStyle();
     oldFont = getFont();
@@ -581,6 +611,17 @@ void antialias (int[] shape, RGB lineRGB, RGB innerRGB, RGB outerRGB, GC gc){
         color.dispose();
     }
 }
+/*
+* This class was not intended to be subclassed but this restriction
+* cannot be enforced without breaking backward compatibility.
+*/
+//protected void checkSubclass () {
+//  String name = getClass ().getName ();
+//  int index = name.lastIndexOf ('.');
+//  if (!name.substring (0, index + 1).equals ("dwt.custom.")) {
+//      DWT.error (DWT.ERROR_INVALID_SUBCLASS);
+//  }
+//}
 public override Rectangle computeTrim (int x, int y, int width, int height) {
     checkWidget();
     int trimX = x - marginWidth - highlight_margin - borderLeft;
@@ -1301,22 +1342,22 @@ public CTabItem [] getItems() {
 dchar _findMnemonic (String string) {
     if (string is null) return '\0';
     int index = 0;
-    int length_ = string.length;
+    int length_ = string.length ();
     do {
-        while (index < length_ && string[index] !is '&') index++;
+        while (index < length_ && string.charAt(index) !is '&') index++;
         if (++index >= length_) return '\0';
-        if (string[index] !is '&') return CharacterFirstToLower(string[index..$]);
+        if (string.charAt(index) !is '&') return CharacterFirstToLower(string[index..$]);
         index++;
     } while (index < length_);
     return '\0';
 }
 String stripMnemonic (String string) {
     int index = 0;
-    int length_ = string.length;
+    int length_ = string.length ();
     do {
-        while ((index < length_) && (string[index] !is '&')) index++;
+        while ((index < length_) && (string.charAt(index) !is '&')) index++;
         if (++index >= length_) return string;
-        if (string[index] !is '&') {
+        if (string.charAt(index) !is '&') {
             return string.substring(0, index-1) ~ string.substring(index, length_);
         }
         index++;
@@ -2395,11 +2436,6 @@ void onTraverse (Event event) {
     switch (event.detail) {
         case DWT.TRAVERSE_MNEMONIC:
             onMnemonic(event, true);
-            event.detail = DWT.TRAVERSE_NONE;
-            break;
-        case DWT.TRAVERSE_PAGE_NEXT:
-        case DWT.TRAVERSE_PAGE_PREVIOUS:
-            onPageTraversal(event);
             event.detail = DWT.TRAVERSE_NONE;
             break;
         case DWT.TRAVERSE_PAGE_NEXT:
