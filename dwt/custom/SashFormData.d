@@ -23,9 +23,9 @@ class SashFormData {
 
 String getName () {
     String string = this.classinfo.name;
-    int index = tango.text.Util.locatePrior( string ,'.' );
-    if (index is string.length ) return string;
-    return string[ index + 1 .. $ ];
+    int index = string.lastIndexOf('.');
+    if (index is -1) return string;
+    return string[index + 1 .. $];
 }
 
 /**
