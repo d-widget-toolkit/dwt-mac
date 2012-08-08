@@ -16,7 +16,8 @@ import dwt.dwthelper.utils;
 
 
 
-
+import dwt.events.TypedEvent;
+import dwt.widgets.Widget;
 
 import tango.util.Convert;
 
