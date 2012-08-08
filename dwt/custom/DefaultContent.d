@@ -12,14 +12,17 @@
  *******************************************************************************/
 module dwt.custom.DefaultContent;
 
-import dwt.internal.Compatibility;
+import dwt.dwthelper.utils;
 
+import dwt.SWT;
+import dwt.SWTException;
+import dwt.custom.StyledText;
 import dwt.custom.StyledTextContent;
-import dwt.custom.TextChangeListener;
 import dwt.custom.StyledTextEvent;
 import dwt.custom.StyledTextListener;
-import dwt.custom.StyledText;
-import dwt.dwthelper.utils;
+import dwt.custom.TextChangeListener;
+import dwt.internal.Compatibility;
+import dwt.widgets.TypedListener;
 
 static import tango.io.model.IFile;
 static import tango.text.Text;
@@ -48,6 +51,7 @@ class DefaultContent : StyledTextContent {
  */
 this() {
     lines = new int[][]( 50, 2 );
+    super();
     setText("");
 }
 /**
@@ -110,7 +114,7 @@ int[][] addLineIndex(int start, int length, int[][] linesArray, int count) {
 public void addTextChangeListener(TextChangeListener listener) {
     if (listener is null) error(DWT.ERROR_NULL_ARGUMENT);
     StyledTextListener typedListener = new StyledTextListener(listener);
-    textListeners ~= typedListener;
+    textListeners.addElement(typedListener);
 }
 /**
  * Adjusts the gap to accommodate a text change that is occurring.
@@ -190,26 +194,26 @@ protected bool isValidReplace(int start, int replaceLength, String newText){
         // inserting text, see if the \r\n line delimiter is being split
         if (start is 0) return true;
         if (start is getCharCount()) return true;
-        char before = getTextRange(start - 1, 1)[0];
+        char before = getTextRange(start - 1, 1).charAt(0);
         if (before is '\r') {
-            char after = getTextRange(start, 1)[0];
+            char after = getTextRange(start, 1).charAt(0);
             if (after is '\n') return false;
         }
     } else {
         // deleting text, see if part of a \r\n line delimiter is being deleted
-        char startChar = getTextRange(start, 1)[0];
+        char startChar = getTextRange(start, 1).charAt(0);
         if (startChar is '\n') {
             // see if char before delete position is \r
             if (start !is 0) {
-                char before = getTextRange(start - 1, 1)[0];
+                char before = getTextRange(start - 1, 1).charAt(0);
                 if (before is '\r') return false;
             }
         }
-        char endChar = getTextRange(start + replaceLength - 1, 1)[0];
+        char endChar = getTextRange(start + replaceLength - 1, 1).charAt(0);
         if (endChar is '\r') {
             // see if char after delete position is \n
             if (start + replaceLength !is getCharCount()) {
-                char after = getTextRange(start + replaceLength, 1)[0];
+                char after = getTextRange(start + replaceLength, 1).charAt(0);
                 if (after is '\n') return false;
             }
         }
@@ -271,10 +275,10 @@ int[][] indexLines(int offset, int length, int numLines){
  * @param text the text to insert
  */
 void insert(int position, String text) {
-    if (text.length is 0) return;
+    if (text.length() is 0) return;
 
     int startLine = getLineAtOffset(position);
-    int change = text.length;
+    int change = text.length();
     bool endInsert = position is getCharCount();
     adjustGap(position, change, startLine);
 
@@ -289,8 +293,8 @@ void insert(int position, String text) {
     if (change > 0) {
         // shrink gap
         gapStart += (change);
-        for (int i = 0; i < text.length; i++) {
-            textStore[position + i]= text[i];
+        for (int i = 0; i < text.length(); i++) {
+            textStore[position + i]= text.charAt(i);
         }
     }
 
@@ -506,7 +510,7 @@ public String getLine(int index) {
         while ((length_ - 1 >=0) && isDelimiter(buf.slice[length_ - 1])) {
             length_--;
         }
-        return buf.toString()[ 0 .. length_ ].dup;
+        return buf.toString().substring(0, length_);
     }
 }
 /**
@@ -739,10 +743,10 @@ public String getTextRange(int start, int length_) {
  */
 public void removeTextChangeListener(TextChangeListener listener){
     if (listener is null) error(DWT.ERROR_NULL_ARGUMENT);
-    for (int i = 0; i < textListeners.length; i++) {
-        TypedListener typedListener = cast(TypedListener) textListeners[i];
+    for (int i = 0; i < textListeners.size(); i++) {
+        TypedListener typedListener = cast(TypedListener) textListeners.elementAt(i);
         if (typedListener.getEventListener () is listener) {
-            textListeners = textListeners[ 0 .. i ] ~ textListeners[ i+1 .. $ ];
+            textListeners.removeElementAt(i);
             break;
         }
     }
@@ -757,9 +761,9 @@ public void removeTextChangeListener(TextChangeListener listener){
  * the number of lines that are going to be deleted, based on the change
  * that occurs visually.  For example:
  * <ul>
- * <li>(replaceText,newText) is> (replaceLineCount,newLineCount)
- * <li>("","\n") is> (0,1)
- * <li>("\n\n","a") is> (2,0)
+ * <li>(replaceText,newText) is > (replaceLineCount,newLineCount)
+ * <li>("","\n") is > (0,1)
+ * <li>("\n\n","a") is > (2,0)
  * </ul>
  * </p>
  *
@@ -786,7 +790,7 @@ public void replaceTextRange(int start, int replaceLength, String newText){
     event.text = newText;
     event.newLineCount = lineCount(newText);
     event.replaceCharCount = replaceLength;
-    event.newCharCount = newText.length;
+    event.newCharCount = newText.length();
     sendTextEvent(event);
 
     // first delete the text to be replaced
@@ -802,8 +806,8 @@ public void replaceTextRange(int start, int replaceLength, String newText){
  * Sends the text listeners the TextChanged event.
  */
 void sendTextEvent(StyledTextEvent event) {
-    for (int i = 0; i < textListeners.length; i++) {
-        (cast(StyledTextListener)textListeners[i]).handleEvent(event);
+    for (int i = 0; i < textListeners.size(); i++) {
+        (cast(StyledTextListener)textListeners.elementAt(i)).handleEvent(event);
     }
 }
 /**
@@ -842,7 +846,7 @@ void delete_(int position, int length_, int numLines) {
     bool splittingDelimiter = false;
     if (position + length_ < getCharCount()) {
         endText = getTextRange(position + length_ - 1, 2);
-        if ((endText[0] is DWT.CR) && (endText[1] is DWT.LF)) {
+        if ((endText.charAt(0) is DWT.CR) && (endText.charAt(1) is DWT.LF)) {
             splittingDelimiter = true;
         }
     }
@@ -916,6 +920,4 @@ int utf8AdjustOffset( int offset ){
     }
     return offset;
 }
-
-
 }
