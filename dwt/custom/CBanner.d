@@ -12,11 +12,9 @@
  *******************************************************************************/
 module dwt.custom.CBanner;
 
+import dwt.dwthelper.utils;
 
 
-import dwt.graphics.*;
-import dwt.widgets.*;
-import dwt.*;
 import dwt.custom.CBannerLayout;
 
 import Math = tango.math.Math;

@@ -12,14 +12,11 @@
  *******************************************************************************/
 module dwt.custom.CBannerLayout;
 
+import Math = tango.math.Math;
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
+import dwt.dwthelper.utils;
 import dwt.custom.CBanner;
 import dwt.custom.CLayoutData;
-
-import Math = tango.math.Math;
 
 /**
  * This class provides the layout for CBanner
