@@ -15,10 +15,21 @@ module dwt.custom.CTabItem;
 import dwt.dwthelper.utils;
 
 
-
-
-
+import dwt.SWT;
+import dwt.SWTException;
 import dwt.custom.CTabFolder;
+import dwt.graphics.Color;
+import dwt.graphics.Font;
+import dwt.graphics.GC;
+import dwt.graphics.Image;
+import dwt.graphics.Point;
+import dwt.graphics.RGB;
+import dwt.graphics.Rectangle;
+import dwt.graphics.TextLayout;
+import dwt.widgets.Control;
+import dwt.widgets.Display;
+import dwt.widgets.Item;
+import dwt.widgets.Widget;
 
 /**
  * Instances of this class represent a selectable user interface object
@@ -149,7 +160,7 @@ String shortenText(GC gc, String text, int width) {
 String shortenText(GC gc, String text, int width, String ellipses) {
     if (gc.textExtent(text, FLAGS).x <= width) return text;
     int ellipseWidth = gc.textExtent(ellipses, FLAGS).x;
-    int length = text.length;
+    int length = text.length();
     TextLayout layout = new TextLayout(getDisplay());
     layout.setText(text);
     int end = layout.getPreviousOffset(length, DWT.MOVEMENT_CLUSTER);
@@ -788,7 +799,7 @@ public String getToolTipText () {
     checkWidget();
     if (toolTipText is null && shortenedText !is null) {
         String text = getText();
-        if (shortenedText!=text) return text;
+        if (!shortenedText.equals(text)) return text;
     }
     return toolTipText;
 }
@@ -843,9 +854,9 @@ int preferredWidth(GC gc, bool isSelected, bool minimum) {
     if (minimum) {
         int minChars = parent.minChars;
         text = minChars is 0 ? null : getText();
-        if (text !is null && text.length > minChars) {
+        if (text !is null && text.length() > minChars) {
             if (useEllipses()) {
-                int end = minChars < ELLIPSIS.length + 1 ? minChars : minChars - ELLIPSIS.length;
+                int end = minChars < ELLIPSIS.length() + 1 ? minChars : minChars - ELLIPSIS.length();
                 text = text[ 0 .. end ];
                 if (minChars > ELLIPSIS.length + 1) text ~= ELLIPSIS;
             } else {
