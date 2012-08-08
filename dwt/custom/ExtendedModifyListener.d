@@ -12,6 +12,8 @@
  *******************************************************************************/
 module dwt.custom.ExtendedModifyListener;
 
+import dwt.dwthelper.utils;
+
 import dwt.internal.DWTEventListener;
 import dwt.custom.ExtendedModifyEvent;
 

@@ -15,8 +15,9 @@ module dwt.custom.LineBackgroundEvent;
 import dwt.dwthelper.utils;
 
 
-
 import dwt.custom.StyledTextEvent;
+import dwt.events.TypedEvent;
+import dwt.graphics.Color;
 import dwt.widgets.Event;
 
 /**
