@@ -11,6 +11,9 @@
  *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
 module dwt.custom.CTabFolder2Adapter;
+
+import dwt.dwthelper.utils;
+
 import dwt.custom.CTabFolder2Listener;
 import dwt.custom.CTabFolderEvent;
 
