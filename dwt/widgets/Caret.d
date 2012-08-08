@@ -15,10 +15,10 @@ module dwt.widgets.Caret;
 
 
 
-import dwt.internal.cocoa.*;
 
-import dwt.*;
-import dwt.graphics.*;
+
+
+
 
 import dwt.dwthelper.utils;
 import dwt.widgets.Canvas;

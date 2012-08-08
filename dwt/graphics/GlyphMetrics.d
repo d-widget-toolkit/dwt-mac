@@ -13,7 +13,7 @@
  *******************************************************************************/
 module dwt.graphics.GlyphMetrics;
 
-import dwt.*;
+
 
 import tango.text.convert.Format;
 

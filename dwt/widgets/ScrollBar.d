@@ -14,11 +14,11 @@
 module dwt.widgets.ScrollBar;
 
 
-import dwt.internal.cocoa.*;
 
-import dwt.*;
-import dwt.events.*;
-import dwt.graphics.*;
+
+
+
+
 
 import dwt.dwthelper.utils;
 import Carbon = dwt.internal.c.Carbon;

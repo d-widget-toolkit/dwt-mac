@@ -12,11 +12,11 @@
  *******************************************************************************/
 module dwt.custom.CTabFolder;
 
-import dwt.*;
-import dwt.accessibility.*;
-import dwt.events.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
+
+
+
 import dwt.custom.CTabItem;
 import dwt.custom.CTabFolder2Listener;
 import dwt.custom.CTabFolderListener;

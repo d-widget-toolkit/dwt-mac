@@ -15,8 +15,8 @@ module dwt.internal.theme.TabFolderDrawData;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.graphics.*;
+
+
 
 import dwt.internal.theme.DrawData;
 

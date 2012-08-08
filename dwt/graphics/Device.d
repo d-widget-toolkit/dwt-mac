@@ -13,9 +13,9 @@
  *******************************************************************************/
 module dwt.graphics.Device;
 
-import dwt.*;
+
 import dwt.internal.Compatibility;
-import dwt.internal.cocoa.*;
+
 import cocoa = dwt.internal.cocoa.id;
 
 import dwt.dwthelper.System;

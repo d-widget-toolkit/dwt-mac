@@ -16,8 +16,8 @@ import dwt.dwthelper.utils;
 
 
 
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
 
 import tango.util.Convert;
 static import tango.text.Util;

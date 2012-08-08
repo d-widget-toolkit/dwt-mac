@@ -15,7 +15,7 @@ module dwt.dnd.TransferData;
 
 import dwt.dwthelper.utils;
 
-import dwt.internal.cocoa.*;
+
 
 
 /**

@@ -17,9 +17,9 @@ module dwt.dnd.ImageTransfer;
 import dwt.dwthelper.utils;
 
 import dwt.DWT;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
-import dwt.widgets.*;
+
+
+
 
 import dwt.dnd.DND;
 import dwt.dnd.ByteArrayTransfer;

@@ -14,9 +14,9 @@
 module dwt.widgets.ToolTip;
 
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.events.*;
+
+
+
 
 import dwt.dwthelper.utils;
 import dwt.graphics.Device;

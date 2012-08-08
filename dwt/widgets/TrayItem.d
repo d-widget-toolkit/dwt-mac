@@ -14,10 +14,10 @@
 module dwt.widgets.TrayItem;
 
 
-import dwt.*;
-import dwt.events.*;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
+
+
+
+
 
 import dwt.dwthelper.utils;
 import dwt.internal.cocoa.NSView;

@@ -15,8 +15,8 @@ module dwt.graphics.TextLayout;
 
 import dwt.internal.C;
 import dwt.internal.Compatibility;
-import dwt.internal.cocoa.*;
-import dwt.*;
+
+
 
 import tango.text.convert.Format;
 

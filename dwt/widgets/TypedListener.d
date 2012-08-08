@@ -17,8 +17,8 @@ import dwt.dwthelper.utils;
 
 
 import dwt.internal.DWTEventListener;
-import dwt.*;
-import dwt.events.*;
+
+
 
 import dwt.widgets.Event;
 import dwt.widgets.Listener;

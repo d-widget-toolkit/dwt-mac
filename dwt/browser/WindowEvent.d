@@ -16,9 +16,9 @@ import tango.text.convert.Format;
 
 import dwt.dwthelper.utils;
 
-import dwt.widgets.*;
-import dwt.events.*;
-import dwt.graphics.*;
+
+
+
 import dwt.browser.Browser;
 
 /**

@@ -13,7 +13,7 @@
 module dwt.internal.image.PngIendChunk;
 
 
-import dwt.*;
+
 import dwt.internal.image.PngFileReadState;
 import dwt.internal.image.PngIhdrChunk;
 import dwt.internal.image.PngChunk;

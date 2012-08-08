@@ -12,8 +12,8 @@
  *******************************************************************************/
 module dwt.internal.image.PNGFileFormat;
 
-import dwt.graphics.*;
-import dwt.internal.*;
+
+
 import dwt.graphics.ImageLoader;
 import dwt.internal.image.FileFormat;
 import dwt.internal.image.PngIhdrChunk;

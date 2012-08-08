@@ -15,7 +15,7 @@ module dwt.graphics.Rectangle;
 
 
 import dwt.internal.SerializableCompatibility;
-import dwt.*;
+
 
 import tango.text.convert.Format;
 

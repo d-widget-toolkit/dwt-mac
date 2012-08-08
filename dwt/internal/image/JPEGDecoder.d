@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.internal.image.JPEGDecoder;
 
-import dwt.*;
+
 import dwt.dwthelper.InputStream;
 import dwt.internal.image.LEDataInputStream;
 import dwt.dwthelper.utils;

@@ -13,7 +13,7 @@
 module dwt.events.TraverseEvent;
 
 
-import dwt.widgets.*;
+
 import dwt.events.KeyEvent;
 
 import tango.text.convert.Format;

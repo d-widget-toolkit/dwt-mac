@@ -15,9 +15,9 @@ module dwt.dnd.DropTargetEffect;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
+
 
 import dwt.dnd.DropTargetAdapter;
 

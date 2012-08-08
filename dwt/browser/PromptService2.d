@@ -17,12 +17,12 @@ import tango.text.convert.Format;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
+
 import dwt.internal.C;
 import dwt.internal.Compatibility;
 import dwt.internal.mozilla.XPCOM;
 
-import dwt.internal.mozilla.*;
+
 
 import XPCOM = dwt.internal.mozilla.XPCOM;
 

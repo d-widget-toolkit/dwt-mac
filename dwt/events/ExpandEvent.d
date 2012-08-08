@@ -13,7 +13,7 @@
 module dwt.events.ExpandEvent;
 
 
-import dwt.widgets.*;
+
 import dwt.events.SelectionEvent;
 
 /**

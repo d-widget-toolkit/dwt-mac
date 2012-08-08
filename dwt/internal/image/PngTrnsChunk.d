@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.internal.image.PngTrnsChunk;
 
-import dwt.*;
+
 import dwt.graphics.PaletteData;
 import dwt.internal.image.PngChunk;
 import dwt.internal.image.PNGFileFormat;

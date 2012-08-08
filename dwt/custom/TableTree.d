@@ -14,10 +14,10 @@ module dwt.custom.TableTree;
 
 
 
-import dwt.*;
-import dwt.events.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
+
+
 import dwt.custom.TableTreeItem;
 import dwt.dwthelper.utils;
 

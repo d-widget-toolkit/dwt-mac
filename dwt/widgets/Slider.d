@@ -16,11 +16,11 @@ module dwt.widgets.Slider;
 import dwt.dwthelper.utils;
 
 
-import dwt.internal.cocoa.*;
 
-import dwt.*;
-import dwt.events.*;
-import dwt.graphics.*;
+
+
+
+
 
 import Carbon = dwt.internal.c.Carbon;
 import dwt.widgets.Composite;

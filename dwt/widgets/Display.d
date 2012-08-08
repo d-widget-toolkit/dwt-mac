@@ -13,10 +13,10 @@
  *******************************************************************************/
 module dwt.widgets.Display;
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.internal.*;
-import dwt.internal.cocoa.*;
+
+
+
+
 import dwt.internal.cocoa.NSFont;
 import dwt.internal.cocoa.NSMutableArray;
 import cocoa = dwt.internal.cocoa.id;

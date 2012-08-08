@@ -16,10 +16,10 @@ module dwt.widgets.ProgressBar;
 import dwt.dwthelper.utils;
 
 
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
 
-import dwt.*;
+
+
+
 
 import dwt.widgets.Composite;
 import dwt.widgets.Control;

@@ -14,8 +14,8 @@
 module dwt.widgets.IME;
 
 import dwt.DWT;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
+
+
 
 import dwt.dwthelper.utils;
 import dwt.internal.c.Carbon;

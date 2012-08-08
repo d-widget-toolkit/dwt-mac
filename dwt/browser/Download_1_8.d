@@ -13,10 +13,10 @@ module dwt.browser.Download_1_8;
 import dwt.dwthelper.utils;
 
 import dwt.DWT;
-import dwt.internal.*;
-import dwt.internal.mozilla.*;
-import dwt.layout.*;
-import dwt.widgets.*;
+
+
+
+
 import dwt.internal.C;
 import dwt.internal.Compatibility;
 import dwt.internal.mozilla.XPCOM;

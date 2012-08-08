@@ -15,9 +15,9 @@ module dwt.widgets.ExpandBar;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.events.*;
+
+
+
 
 import dwt.widgets.Composite;
 import dwt.widgets.Control;

@@ -14,7 +14,7 @@ module dwt.custom.ExtendedModifyEvent;
 
 import dwt.dwthelper.utils;
 
-import dwt.events.*;
+
 import dwt.custom.StyledTextEvent;
 import dwt.widgets.Event;
 

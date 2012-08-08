@@ -13,8 +13,8 @@ module dwt.internal.mozilla.XPCOMObject;
 import dwt.dwthelper.utils;
 
 import java.util.*;
-import dwt.*;
-import dwt.internal.*;
+
+
 
 public class XPCOMObject {
     static bool IsSolaris;

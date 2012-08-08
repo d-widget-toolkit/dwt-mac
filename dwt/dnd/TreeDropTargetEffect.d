@@ -15,7 +15,7 @@ module dwt.dnd.TreeDropTargetEffect;
 
 import dwt.dwthelper.utils;
 
-import dwt.widgets.*;
+
 
 import dwt.dnd.DND;
 import dwt.dnd.DropTarget;

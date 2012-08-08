@@ -16,7 +16,7 @@ module dwt.dnd.DragSourceEvent;
 import dwt.dwthelper.utils;
 
 import dwt.events.TypedEvent;
-import dwt.graphics.*;
+
 
 import dwt.dnd.DNDEvent;
 import dwt.dnd.TransferData;

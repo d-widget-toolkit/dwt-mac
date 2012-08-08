@@ -13,9 +13,9 @@
 module dwt.layout.GridLayout;
 
 import dwt.layout.GridData;
-import dwt.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
+
 
 import dwt.dwthelper.System;
 

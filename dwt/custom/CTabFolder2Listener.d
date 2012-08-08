@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.custom.CTabFolder2Listener;
 
-import dwt.internal.*;
+
 import dwt.custom.CTabFolderEvent;
 
 import tango.core.Traits;

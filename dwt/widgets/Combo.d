@@ -16,10 +16,10 @@ module dwt.widgets.Combo;
 import dwt.dwthelper.utils;
 
 
-import dwt.*;
-import dwt.events.*;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
+
+
+
+
 
 import Carbon = dwt.internal.c.Carbon;
 import objc = dwt.internal.objc.runtime;

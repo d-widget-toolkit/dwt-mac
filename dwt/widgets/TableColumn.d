@@ -16,11 +16,11 @@ module dwt.widgets.TableColumn;
 import dwt.dwthelper.utils;
 
 
-import dwt.internal.cocoa.*;
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.events.*;
+
+
+
+
 
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;

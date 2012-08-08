@@ -15,8 +15,8 @@ module dwt.custom.StyledTextRenderer;
 
 
 import dwt.DWT;
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
 import dwt.custom.StyledText;
 import dwt.custom.Bullet;
 import dwt.custom.StyleRange;

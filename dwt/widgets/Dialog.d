@@ -14,7 +14,7 @@
 module dwt.widgets.Dialog;
 
 
-import dwt.*;
+
 
 import dwt.dwthelper.utils;
 import dwt.widgets.Display;

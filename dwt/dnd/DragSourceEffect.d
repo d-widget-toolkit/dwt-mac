@@ -15,8 +15,8 @@ module dwt.dnd.DragSourceEffect;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.widgets.*;
+
+
 
 import dwt.dnd.DragSourceAdapter;
 

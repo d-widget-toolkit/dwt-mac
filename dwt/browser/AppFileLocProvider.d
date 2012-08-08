@@ -20,7 +20,7 @@ import dwt.browser.Mozilla;
 import dwt.browser.SimpleEnumerator;
 
 import dwt.internal.C;
-import dwt.internal.mozilla.*;
+
 
 import XPCOM = dwt.internal.mozilla.XPCOM;
 

@@ -20,7 +20,7 @@ import dwt.DWT;
 import dwt.browser.Browser;
 import dwt.browser.Mozilla;
 import objc = dwt.internal.objc.runtime;
-import dwt.widgets.*;
+
 
 class MozillaDelegate {
     Browser browser;

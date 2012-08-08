@@ -15,9 +15,9 @@ module dwt.printing.Printer;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
+
+
+
 
 import Carbon = dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;

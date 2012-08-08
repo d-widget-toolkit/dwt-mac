@@ -12,9 +12,9 @@
  *******************************************************************************/
 module dwt.layout.FillData;
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
+
 
 class FillData {
 

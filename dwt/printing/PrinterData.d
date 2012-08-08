@@ -16,7 +16,7 @@ module dwt.printing.PrinterData;
 import dwt.dwthelper.utils;
 
 
-import dwt.graphics.*;
+
 
 /**
  * Instances of this class are descriptions of a print job

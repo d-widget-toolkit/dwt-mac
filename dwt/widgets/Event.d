@@ -14,7 +14,7 @@
 module dwt.widgets.Event;
 
 
-import dwt.graphics.*;
+
 
 import tango.text.convert.Format;
 

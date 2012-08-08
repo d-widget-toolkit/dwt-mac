@@ -16,9 +16,9 @@ module dwt.dnd.DropTarget;
 import dwt.dwthelper.utils;
 
 import java.util.ArrayList;
-import dwt.graphics.*;
-import dwt.internal.*;
-import dwt.widgets.*;
+
+
+
 
 import tango.core.Thread;
 

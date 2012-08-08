@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.internal.image.TIFFModifiedHuffmanCodec;
 
-import dwt.*;
+
 
 /*
 * Decoder for

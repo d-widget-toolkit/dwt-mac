@@ -14,7 +14,7 @@
 module dwt.graphics.Color;
 
 
-import dwt.*;
+
 
 import tango.text.convert.Format;
 

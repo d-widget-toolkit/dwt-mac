@@ -14,11 +14,11 @@
 module dwt.widgets.Menu;
 
 
-import dwt.internal.cocoa.*;
 
-import dwt.*;
-import dwt.events.*;
-import dwt.graphics.*;
+
+
+
+
 
 import dwt.dwthelper.System;
 import dwt.dwthelper.utils;

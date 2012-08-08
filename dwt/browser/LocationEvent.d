@@ -14,8 +14,8 @@ module dwt.browser.LocationEvent;
 
 import tango.text.convert.Format;
 
-import dwt.widgets.*;
-import dwt.events.*;
+
+
 import dwt.dwthelper.utils;
 
 /**

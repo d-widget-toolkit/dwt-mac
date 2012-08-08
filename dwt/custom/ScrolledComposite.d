@@ -15,9 +15,9 @@ module dwt.custom.ScrolledComposite;
 import dwt.dwthelper.utils;
 
 
-import dwt.events.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
+
 import dwt.custom.ScrolledCompositeLayout;
 
 /**

@@ -16,11 +16,11 @@ module dwt.widgets.TabFolder;
 import dwt.dwthelper.utils;
 
 
-import dwt.internal.cocoa.*;
 
-import dwt.*;
-import dwt.events.*;
-import dwt.graphics.*;
+
+
+
+
 
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Composite;

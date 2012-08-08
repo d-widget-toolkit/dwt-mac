@@ -17,8 +17,8 @@ import dwt.dwthelper.utils;
 
 
 import dwt.DWT;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
+
+
 
 import dwt.widgets.Composite;
 

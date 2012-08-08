@@ -16,10 +16,10 @@ module dwt.widgets.TreeItem;
 import dwt.dwthelper.utils;
 
 
-import dwt.internal.cocoa.*;
 
-import dwt.*;
-import dwt.graphics.*;
+
+
+
 
 import dwt.internal.objc.cocoa.Cocoa;
 import dwt.widgets.Event;

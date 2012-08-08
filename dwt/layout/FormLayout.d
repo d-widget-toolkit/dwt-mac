@@ -14,9 +14,9 @@ module dwt.layout.FormLayout;
 
 import dwt.layout.FormAttachment;
 import dwt.layout.FormData;
-import dwt.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
+
 
 import tango.util.Convert;
 import Math = tango.math.Math;

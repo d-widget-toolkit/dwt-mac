@@ -15,9 +15,9 @@ module dwt.browser.PromptDialog;
 import Math = tango.math.Math;
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.layout.*;
-import dwt.widgets.*;
+
+
+
 
 class PromptDialog : Dialog {
 

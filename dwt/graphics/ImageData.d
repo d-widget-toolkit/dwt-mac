@@ -14,7 +14,7 @@
  *******************************************************************************/
 module dwt.graphics.ImageData;
 
-import dwt.*;
+
 import dwt.internal.CloneableCompatibility;
 
 public import dwt.dwthelper.InputStream;

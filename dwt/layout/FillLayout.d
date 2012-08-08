@@ -12,9 +12,9 @@
  *******************************************************************************/
 module dwt.layout.FillLayout;
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
+
 import dwt.layout.FillData;
 
 import tango.util.Convert;

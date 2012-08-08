@@ -14,7 +14,7 @@ module dwt.custom.MovementEvent;
 
 import dwt.dwthelper.utils;
 
-import dwt.events.*;
+
 import dwt.custom.StyledTextEvent;
 import dwt.widgets.Event;
 

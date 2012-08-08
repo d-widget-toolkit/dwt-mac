@@ -14,7 +14,7 @@ module dwt.custom.LineStyleEvent;
 
 import dwt.dwthelper.utils;
 
-import dwt.events.*;
+
 import dwt.custom.StyleRange;
 import dwt.custom.Bullet;
 import dwt.custom.StyledTextEvent;

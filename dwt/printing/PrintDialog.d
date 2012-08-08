@@ -15,13 +15,13 @@ module dwt.printing.PrintDialog;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
+
 
 import dwt.printing.Printer;
 import dwt.printing.PrinterData;
-import dwt.widgets.*;
-import dwt.internal.*;
-import dwt.internal.cocoa.*;
+
+
+
 
 /**
  * Instances of this class allow the user to select

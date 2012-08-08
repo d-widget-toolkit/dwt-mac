@@ -13,7 +13,7 @@
  *******************************************************************************/
 module dwt.graphics.TextStyle;
 
-import dwt.*;
+
 
 import dwt.dwthelper.utils;
 import dwt.graphics.Color;

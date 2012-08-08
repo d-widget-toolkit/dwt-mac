@@ -15,7 +15,7 @@ module dwt.dnd.TableDropTargetEffect;
 
 import dwt.dwthelper.utils;
 
-import dwt.widgets.*;
+
 
 import dwt.dnd.DND;
 import dwt.dnd.DropTarget;

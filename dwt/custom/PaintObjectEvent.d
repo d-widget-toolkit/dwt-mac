@@ -13,8 +13,8 @@
 module dwt.custom.PaintObjectEvent;
 
 
-import dwt.events.*;
-import dwt.graphics.*;
+
+
 import dwt.custom.StyleRange;
 import dwt.custom.Bullet;
 import dwt.custom.StyledTextEvent;

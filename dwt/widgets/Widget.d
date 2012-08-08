@@ -13,10 +13,10 @@
  *******************************************************************************/
 module dwt.widgets.Widget;
 
-import dwt.internal.*;
-import dwt.internal.cocoa.*;
-import dwt.*;
-import dwt.events.*;
+
+
+
+
 import dwt.internal.cocoa.NSMutableArray;
 import dwt.internal.cocoa.NSValue;
 import dwt.internal.cocoa.NSView;

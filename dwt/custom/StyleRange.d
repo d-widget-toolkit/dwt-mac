@@ -14,8 +14,8 @@ module dwt.custom.StyleRange;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.graphics.*;
+
+
 import dwt.internal.CloneableCompatibility;
 import dwt.custom.StyleRange;
 import dwt.custom.TextChangedEvent;

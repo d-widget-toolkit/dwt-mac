@@ -16,9 +16,9 @@ module dwt.widgets.TabItem;
 import dwt.dwthelper.utils;
 
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
+
+
+
 
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Control;

@@ -12,8 +12,8 @@
  *******************************************************************************/
 module dwt.layout.FormAttachment;
 
-import dwt.*;
-import dwt.widgets.*;
+
+
 import dwt.layout.FormLayout;
 import dwt.layout.FormData;
 

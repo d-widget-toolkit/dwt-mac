@@ -15,11 +15,11 @@ module dwt.graphics.Image;
 
 
 import dwt.dwthelper.InputStream;
-import dwt.*;
+
 import java.io.*;
 
 import tango.text.convert.Format;
-import dwt.*;
+
 import dwt.dwthelper.utils;
 import dwt.graphics.Color;
 import dwt.graphics.Device;

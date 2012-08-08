@@ -15,9 +15,9 @@ module dwt.opengl.GLCanvas;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.widgets.*;
-import dwt.internal.cocoa.*;
+
+
+
 
 import dwt.internal.objc.cocoa.Cocoa;
 import dwt.opengl.GLData;

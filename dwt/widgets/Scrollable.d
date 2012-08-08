@@ -14,10 +14,10 @@
 module dwt.widgets.Scrollable;
 
 
-import dwt.internal.cocoa.*;
 
-import dwt.*;
-import dwt.graphics.*;
+
+
+
 
 import dwt.dwthelper.utils;
 import objc = dwt.internal.objc.runtime;

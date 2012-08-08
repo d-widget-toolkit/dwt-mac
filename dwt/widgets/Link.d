@@ -15,7 +15,7 @@ module dwt.widgets.Link;
 
 import dwt.dwthelper.utils;
 
-import dwt.internal.cocoa.*;
+
 
 static import tango.text.Text;
 
@@ -25,9 +25,9 @@ import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.TypedListener;
 
-import dwt.*;
-import dwt.events.*;
-import dwt.graphics.*;
+
+
+
 
 /**
  * Instances of this class represent a selectable

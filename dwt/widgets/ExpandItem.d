@@ -15,8 +15,8 @@ module dwt.widgets.ExpandItem;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.graphics.*;
+
+
 
 import dwt.widgets.Control;
 import dwt.widgets.Display;

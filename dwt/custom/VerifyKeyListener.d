@@ -13,7 +13,7 @@
 module dwt.custom.VerifyKeyListener;
 
 
-import dwt.events.*;
+
 import dwt.internal.DWTEventListener;
 
 /**

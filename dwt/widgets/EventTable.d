@@ -15,7 +15,7 @@ module dwt.widgets.EventTable;
 
 
 
-import dwt.*;
+
 import dwt.internal.DWTEventListener;
 
 import dwt.dwthelper.System;

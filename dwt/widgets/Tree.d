@@ -15,11 +15,11 @@ module dwt.widgets.Tree;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.accessibility.*;
-import dwt.events.*;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
+
+
+
+
+
 import cocoa = dwt.internal.cocoa.id;
 
 import Carbon = dwt.internal.c.Carbon;

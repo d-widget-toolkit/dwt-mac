@@ -12,8 +12,8 @@ module dwt.browser.AuthenticationEvent;
 
 import dwt.dwthelper.utils;
 
-import dwt.widgets.*;
-import dwt.events.*;
+
+
 
 /**
  * An <code>AuthenticationEvent</code> is sent by a {@link Browser}

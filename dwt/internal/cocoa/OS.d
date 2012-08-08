@@ -36,7 +36,7 @@ enum NSBorderType
 
 import dwt.dwthelper.utils;
 
-import dwt.internal.*;
+
 
 import tango.core.Memory;
 import unistd = tango.stdc.posix.unistd;

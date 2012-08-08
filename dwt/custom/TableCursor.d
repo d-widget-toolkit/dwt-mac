@@ -15,10 +15,10 @@ module dwt.custom.TableCursor;
 import dwt.dwthelper.utils;
 
 
-import dwt.graphics.*;
-import dwt.widgets.*;
-import dwt.accessibility.*;
-import dwt.events.*;
+
+
+
+
 
 /**
  * A TableCursor provides a way for the user to navigate around a Table

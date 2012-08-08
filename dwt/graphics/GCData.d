@@ -14,8 +14,8 @@
 module dwt.graphics.GCData;
 
 
-import dwt.*;
-import dwt.internal.cocoa.*;
+
+
 
 import tango.core.Thread;
 

@@ -15,8 +15,8 @@ module dwt.custom.CTabFolderEvent;
 import dwt.dwthelper.utils;
 
 
-import dwt.events.*;
-import dwt.widgets.*;
+
+
 
 import tango.util.Convert;
 

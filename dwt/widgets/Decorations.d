@@ -14,9 +14,9 @@
 module dwt.widgets.Decorations;
 
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
+
+
+
 
 import dwt.dwthelper.utils;
 import dwt.widgets.Button;

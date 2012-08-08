@@ -15,7 +15,7 @@ module dwt.dnd.ByteArrayTransfer;
 
 import dwt.dwthelper.utils;
 
-import dwt.internal.cocoa.*;
+
 
 import dwt.dnd.DND;
 import dwt.dnd.Transfer;

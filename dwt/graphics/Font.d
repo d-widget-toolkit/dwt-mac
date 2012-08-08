@@ -14,8 +14,8 @@
 module dwt.graphics.Font;
 
 
-import dwt.internal.cocoa.*;
-import dwt.*;
+
+
 
 import tango.stdc.stringz;
 import tango.text.convert.Format;

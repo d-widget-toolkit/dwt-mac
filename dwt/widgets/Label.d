@@ -15,10 +15,10 @@ module dwt.widgets.Label;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.accessibility.*;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
+
+
+
+
 import cocoa = dwt.internal.cocoa.id;
 import Carbon = dwt.internal.c.Carbon;
 import objc = dwt.internal.objc.runtime;

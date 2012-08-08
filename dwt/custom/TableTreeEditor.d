@@ -15,10 +15,10 @@ module dwt.custom.TableTreeEditor;
 import dwt.dwthelper.utils;
 
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
-import dwt.events.*;
+
+
+
+
 import dwt.custom.ControlEditor;
 import dwt.custom.TableTree;
 import dwt.custom.TableTreeItem;

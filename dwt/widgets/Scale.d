@@ -16,11 +16,11 @@ module dwt.widgets.Scale;
 import dwt.dwthelper.utils;
 
 
-import dwt.internal.cocoa.*;
 
-import dwt.*;
-import dwt.events.*;
-import dwt.graphics.*;
+
+
+
+
 
 import dwt.widgets.Composite;
 import dwt.widgets.Control;

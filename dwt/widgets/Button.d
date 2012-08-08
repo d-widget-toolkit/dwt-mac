@@ -14,11 +14,11 @@
 module dwt.widgets.Button;
 
 
-import dwt.*;
-import dwt.accessibility.*;
-import dwt.events.*;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
+
+
+
+
+
 import dwt.internal.cocoa.NSSize;
 import cocoa = dwt.internal.cocoa.id;
 

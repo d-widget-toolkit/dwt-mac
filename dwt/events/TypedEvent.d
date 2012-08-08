@@ -13,7 +13,7 @@
 module dwt.events.TypedEvent;
 
 
-import dwt.widgets.*;
+
 import dwt.widgets.Display;
 import dwt.internal.DWTEventObject;
 

@@ -14,8 +14,8 @@
 module dwt.graphics.Cursor;
 
 
-import dwt.internal.cocoa.*;
-import dwt.*;
+
+
 
 import tango.text.convert.Format;
 

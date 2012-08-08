@@ -15,7 +15,7 @@ module dwt.internal.theme.DrawData;
 
 import dwt.dwthelper.utils;
 
-import dwt.graphics.*;
+
 
 import dwt.internal.theme.Theme;
 

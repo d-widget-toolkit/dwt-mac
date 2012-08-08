@@ -16,9 +16,9 @@ module dwt.dnd.Clipboard;
 import dwt.dwthelper.utils;
 
 
-import dwt.*;
-import dwt.widgets.*;
-import dwt.internal.cocoa.*;
+
+
+
 
 import tango.core.Thread;
 

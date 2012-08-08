@@ -16,8 +16,8 @@ module dwt.widgets.DirectoryDialog;
 import dwt.dwthelper.utils;
 
 
-import dwt.internal.cocoa.*;
-import dwt.*;
+
+
 
 import dwt.internal.objc.cocoa.Cocoa;
 import dwt.widgets.Dialog;

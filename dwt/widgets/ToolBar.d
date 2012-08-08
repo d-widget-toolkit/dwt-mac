@@ -16,7 +16,7 @@ module dwt.widgets.ToolBar;
 import dwt.dwthelper.utils;
 
 
-import dwt.internal.cocoa.*;
+
 import cocoa = dwt.internal.cocoa.id;
 
 import objc = dwt.internal.objc.runtime;

@@ -15,8 +15,8 @@ module dwt.graphics.Pattern;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.internal.cocoa.*;
+
+
 
 import tango.text.convert.Format;
 

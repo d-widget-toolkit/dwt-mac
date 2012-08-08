@@ -16,7 +16,7 @@ module dwt.dnd.DND;
 import dwt.dwthelper.utils;
 
 
-import dwt.*;
+
 
 /**
  *

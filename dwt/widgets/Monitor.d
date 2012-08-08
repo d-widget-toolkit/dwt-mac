@@ -15,7 +15,7 @@ module dwt.widgets.Monitor;
 
 import dwt.dwthelper.utils;
 
-import dwt.graphics.*;
+
 
 /**
  * Instances of this class are descriptions of monitors.

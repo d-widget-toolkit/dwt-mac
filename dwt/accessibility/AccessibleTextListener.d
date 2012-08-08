@@ -15,7 +15,7 @@ module dwt.accessibility.AccessibleTextListener;
 
 import dwt.accessibility.AccessibleTextEvent;
 import dwt.dwthelper.utils;
-import dwt.internal.*;
+
 
 /**
  * Classes that implement this interface provide methods

@@ -13,13 +13,13 @@
  *******************************************************************************/
 module dwt.graphics.ImageLoader;
 
-import dwt.*;
+
 import dwt.internal.Compatibility;
-import dwt.internal.image.*;
+
 
 import tango.core.Exception;
 import tango.core.Array;
-import dwt.*;
+
 import dwt.dwthelper.utils;
 public import dwt.graphics.ImageData;
 public import dwt.graphics.ImageLoaderEvent;

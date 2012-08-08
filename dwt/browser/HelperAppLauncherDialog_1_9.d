@@ -15,7 +15,7 @@ module dwt.browser.HelperAppLauncherDialog_1_9;
 import tango.text.convert.Utf;
 import dwt.dwthelper.utils;
 
-import dwt.*;
+
 import dwt.internal.mozilla.XPCOM;
 import dwt.internal.mozilla.XPCOMObject;
 

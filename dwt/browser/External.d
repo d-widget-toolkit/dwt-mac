@@ -12,9 +12,9 @@ module dwt.browser.External;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.internal.*;
-import dwt.internal.mozilla.*;
+
+
+
 
 class External {
     public static final String EXTERNAL_IID_STR =

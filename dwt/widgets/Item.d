@@ -14,8 +14,8 @@
 module dwt.widgets.Item;
 
 
-import dwt.*;
-import dwt.graphics.*;
+
+
 
 import dwt.dwthelper.utils;
 import dwt.widgets.Widget;

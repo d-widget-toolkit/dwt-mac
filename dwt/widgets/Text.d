@@ -15,11 +15,11 @@ module dwt.widgets.Text;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.events.*;
-import dwt.graphics.*;
-import dwt.internal.*;
-import dwt.internal.cocoa.*;
+
+
+
+
+
 
 import Carbon = dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;

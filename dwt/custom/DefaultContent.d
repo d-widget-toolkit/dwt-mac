@@ -13,7 +13,7 @@
 module dwt.custom.DefaultContent;
 
 import dwt.internal.Compatibility;
-import dwt.widgets.*;
+
 import dwt.custom.StyledTextContent;
 import dwt.custom.TextChangeListener;
 import dwt.custom.StyledTextEvent;

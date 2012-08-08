@@ -15,7 +15,7 @@ module dwt.custom.TextChangingEvent;
 import dwt.dwthelper.utils;
 
 
-import dwt.events.*;
+
 import dwt.custom.StyledTextContent;
 import dwt.custom.StyledTextEvent;
 

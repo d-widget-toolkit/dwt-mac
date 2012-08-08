@@ -13,7 +13,7 @@
 module dwt.events.SelectionEvent;
 
 
-import dwt.widgets.*;
+
 import dwt.events.TypedEvent;
 
 import tango.text.convert.Format;

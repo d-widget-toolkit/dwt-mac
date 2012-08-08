@@ -15,10 +15,10 @@ module dwt.dnd.TableDragSourceEffect;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
+
 
 import dwt.dnd.DragSourceEffect;
-import dwt.widgets.*;
+
 
 /**
  * This class provides default implementations to display a source image

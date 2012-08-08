@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.custom.TextChangedEvent;
 
-import dwt.events.*;
+
 import dwt.custom.StyledTextContent;
 
 /**

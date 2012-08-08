@@ -16,8 +16,8 @@ module dwt.dnd.DNDEvent;
 import dwt.dwthelper.utils;
 
 
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
 
 import dwt.dnd.TransferData;
 

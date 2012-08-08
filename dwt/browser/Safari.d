@@ -24,11 +24,11 @@ import dwt.internal.Compatibility;
 import dwt.internal.cocoa.DOMDocument;
 import dwt.internal.cocoa.DOMKeyboardEvent;
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
-import dwt.layout.*;
-import dwt.widgets.*;
+
+
+
+
+
 
 import dwt.browser.Browser;
 import dwt.browser.LocationEvent;

@@ -17,9 +17,9 @@ import dwt.dwthelper.utils;
 
 
 import dwt.internal.C;
-import dwt.internal.cocoa.*;
-import dwt.*;
-import dwt.graphics.*;
+
+
+
 import cocoa = dwt.internal.cocoa.id;
 
 import dwt.internal.c.Carbon;

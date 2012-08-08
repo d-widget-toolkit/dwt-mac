@@ -13,8 +13,8 @@
  *******************************************************************************/
 module dwt.graphics.Transform;
 
-import dwt.*;
-import dwt.internal.cocoa.*;
+
+
 
 import tango.text.convert.Format;
 

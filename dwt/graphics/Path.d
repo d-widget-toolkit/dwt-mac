@@ -14,8 +14,8 @@
 module dwt.graphics.Path;
 
 
-import dwt.*;
-import dwt.internal.cocoa.*;
+
+
 
 import tango.text.convert.Format;
 

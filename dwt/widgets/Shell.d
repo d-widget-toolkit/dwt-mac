@@ -14,9 +14,9 @@
 module dwt.widgets.Shell;
 
 import dwt.DWT;
-import dwt.events.*;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
+
+
+
 
 import dwt.dwthelper.utils;
 import Carbon = dwt.internal.c.Carbon;

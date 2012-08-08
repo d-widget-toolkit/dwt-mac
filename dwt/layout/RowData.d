@@ -12,8 +12,8 @@
  *******************************************************************************/
 module dwt.layout.RowData;
 
-import dwt.*;
-import dwt.graphics.*;
+
+
 import dwt.widgets.Control;
 
 import tango.util.Convert;

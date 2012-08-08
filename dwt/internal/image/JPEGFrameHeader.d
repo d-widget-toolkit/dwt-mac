@@ -13,7 +13,7 @@
 module dwt.internal.image.JPEGFrameHeader;
 
 
-import dwt.*;
+
 import dwt.internal.image.JPEGVariableSizeSegment;
 import dwt.internal.image.JPEGFileFormat;
 import dwt.internal.image.LEDataInputStream;

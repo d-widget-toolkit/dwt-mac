@@ -14,9 +14,9 @@ module dwt.custom.TableTreeItem;
 
 
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
+
 import dwt.custom.TableTree;
 import dwt.dwthelper.utils;
 

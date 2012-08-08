@@ -14,10 +14,10 @@
 module dwt.widgets.Composite;
 
 
-import dwt.*;
-import dwt.accessibility.*;
-import dwt.graphics.*;
-import dwt.internal.cocoa.*;
+
+
+
+
 import cocoa = dwt.internal.cocoa.id;
 
 import dwt.dwthelper.utils;

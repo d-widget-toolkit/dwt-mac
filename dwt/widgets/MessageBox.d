@@ -16,8 +16,8 @@ module dwt.widgets.MessageBox;
 import dwt.dwthelper.utils;
 
 
-import dwt.*;
-import dwt.internal.cocoa.*;
+
+
 
 import dwt.internal.objc.cocoa.Cocoa;
 import dwt.widgets.Dialog;

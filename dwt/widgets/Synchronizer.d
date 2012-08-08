@@ -14,8 +14,8 @@
 module dwt.widgets.Synchronizer;
 
 
-import dwt.*;
-import dwt.graphics.*;
+
+
 import dwt.internal.Compatibility;
 
 import tango.core.Thread;

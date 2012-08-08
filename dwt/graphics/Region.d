@@ -14,9 +14,9 @@
 module dwt.graphics.Region;
 
 
-import dwt.internal.*;
-import dwt.internal.cocoa.*;
-import dwt.*;
+
+
+
 
 import tango.text.convert.Format;
 

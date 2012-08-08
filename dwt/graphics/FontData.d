@@ -14,7 +14,7 @@
 module dwt.graphics.FontData;
 
 
-import dwt.*;
+
 
 import dwt.dwthelper.utils;
 

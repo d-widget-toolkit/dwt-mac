@@ -16,8 +16,8 @@ import dwt.dwthelper.utils;
 
 
 
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
 import dwt.custom.CTabFolder;
 
 /**

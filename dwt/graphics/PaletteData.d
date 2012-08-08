@@ -14,7 +14,7 @@
 module dwt.graphics.PaletteData;
 
 
-import dwt.*;
+
 
 import dwt.dwthelper.utils;
 import dwt.graphics.RGB;

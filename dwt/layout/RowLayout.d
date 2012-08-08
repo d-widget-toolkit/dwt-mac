@@ -12,9 +12,9 @@
  *******************************************************************************/
 module dwt.layout.RowLayout;
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
+
 import dwt.layout.RowData;
 import tango.util.Convert;
 import Math = tango.math.Math;

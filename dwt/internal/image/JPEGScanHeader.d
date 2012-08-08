@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.internal.image.JPEGScanHeader;
 
-import dwt.*;
+
 import dwt.internal.image.JPEGVariableSizeSegment;
 import dwt.internal.image.LEDataInputStream;
 import dwt.internal.image.JPEGFileFormat;

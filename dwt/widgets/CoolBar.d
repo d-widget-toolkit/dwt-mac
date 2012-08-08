@@ -16,8 +16,8 @@ module dwt.widgets.CoolBar;
 import dwt.dwthelper.utils;
 
 
-import dwt.*;
-import dwt.graphics.*;
+
+
 
 import dwt.widgets.CoolItem;
 import dwt.widgets.Composite;

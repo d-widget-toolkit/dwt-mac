@@ -13,10 +13,10 @@
 module dwt.custom.StyledTextDropTargetEffect;
 
 
-import dwt.*;
-import dwt.dnd.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
+
+
 import dwt.custom.StyledText;
 import dwt.custom.StyledTextContent;
 

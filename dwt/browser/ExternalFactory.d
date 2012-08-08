@@ -12,8 +12,8 @@ module dwt.browser.ExternalFactory;
 
 import dwt.dwthelper.utils;
 
-import dwt.internal.*;
-import dwt.internal.mozilla.*;
+
+
 
 class ExternalFactory {
     XPCOMObject supports;

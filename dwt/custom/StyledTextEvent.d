@@ -13,8 +13,8 @@
 module dwt.custom.StyledTextEvent;
 
 
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
 import dwt.custom.StyleRange;
 import dwt.custom.Bullet;
 import dwt.custom.StyledTextContent;

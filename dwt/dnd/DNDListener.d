@@ -15,8 +15,8 @@ module dwt.dnd.DNDListener;
 
 import dwt.dwthelper.utils;
 
-import dwt.internal.*;
-import dwt.widgets.*;
+
+
 
 import dwt.dnd.DND;
 import dwt.dnd.DNDEvent;

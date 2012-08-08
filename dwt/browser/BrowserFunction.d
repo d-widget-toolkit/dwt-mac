@@ -12,7 +12,7 @@ module dwt.browser.BrowserFunction;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
+
 
 /**
  * Instances of this class represent java-side "functions" that

@@ -16,11 +16,11 @@ module dwt.dnd.DragSource;
 import dwt.dwthelper.utils;
 
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.internal.*;
-import dwt.internal.cocoa.*;
-import dwt.widgets.*;
+
+
+
+
+
 
 import tango.core.Thread;
 

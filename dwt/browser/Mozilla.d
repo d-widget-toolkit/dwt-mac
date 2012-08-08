@@ -27,11 +27,11 @@ version (linux)
 else version (darwin)
     import objc = dwt.internal.objc.runtime;
 
-import dwt.*;
-import dwt.widgets.*;
-import dwt.graphics.*;
-import dwt.internal.*;
-import dwt.internal.mozilla.*;
+
+
+
+
+
 
 import dwt.browser.Browser;
 import dwt.browser.WebBrowser;

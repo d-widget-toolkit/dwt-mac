@@ -13,7 +13,7 @@
  *******************************************************************************/
 module dwt.graphics.Resource;
 
-import dwt.*;
+
 
 import dwt.dwthelper.utils;
 import dwt.graphics.Device;

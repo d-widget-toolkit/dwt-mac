@@ -15,8 +15,8 @@ module dwt.internal.image.PngPlteChunk;
 import dwt.dwthelper.utils;
 
 
-import dwt.*;
-import dwt.graphics.*;
+
+
 import dwt.internal.image.PngChunk;
 import dwt.internal.image.PngFileReadState;
 import dwt.internal.image.PngIhdrChunk;

@@ -13,9 +13,9 @@
 module dwt.layout.GridData;
 
 
-import dwt.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
+
+
+
 
 import tango.util.Convert;
 import dwt.dwthelper.utils;

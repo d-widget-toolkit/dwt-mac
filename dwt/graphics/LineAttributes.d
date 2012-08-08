@@ -13,7 +13,7 @@
  *******************************************************************************/
 module dwt.graphics.LineAttributes;
 
-import dwt.*;
+
 
 import dwt.dwthelper.utils;
 import dwt.internal.c.Carbon;

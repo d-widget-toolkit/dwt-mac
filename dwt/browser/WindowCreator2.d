@@ -14,14 +14,14 @@ module dwt.browser.WindowCreator2;
 
 import dwt.dwthelper.utils;
 
-import dwt.*;
-import dwt.graphics.*;
+
+
 import dwt.internal.C;
 import dwt.internal.Platform;
 import dwt.internal.mozilla.XPCOM;
 import dwt.internal.mozilla.XPCOMObject;
 
-import dwt.internal.mozilla.*;
+
 import dwt.internal.mozilla.Common;
 
 import XPCOM = dwt.internal.mozilla.XPCOM;

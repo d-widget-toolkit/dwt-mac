@@ -13,14 +13,14 @@
 module dwt.custom.StyledText;
 
 
-import dwt.*;
-import dwt.accessibility.*;
-import dwt.dnd.*;
-import dwt.events.*;
-import dwt.graphics.*;
-import dwt.internal.*;
-import dwt.printing.*;
-import dwt.widgets.*;
+
+
+
+
+
+
+
+
 import dwt.graphics.Device;
 import dwt.custom.StyledTextContent;
 import dwt.custom.TextChangeListener;
