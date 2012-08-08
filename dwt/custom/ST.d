@@ -75,6 +75,15 @@ public class ST {
     public static const int TOGGLE_OVERWRITE = 16777225; // binding = DWT.INSERT;
 
     /**
+     * TEMPORARY CODE - API SUBJECT TO CHANGE
+     *
+     * Toggle block selection mode
+     *
+     * @since 3.5
+     */
+    public static final int TOGGLE_BLOCKSELECTION = 16777226;
+
+    /**
      *  Bullet style dot.
      *
      *  @see Bullet
