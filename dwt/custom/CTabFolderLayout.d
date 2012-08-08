@@ -15,10 +15,14 @@ module dwt.custom.CTabFolderLayout;
 import dwt.dwthelper.utils;
 
 
-
-
+import dwt.DWT;
 import dwt.custom.CTabFolder;
 import dwt.custom.CTabItem;
+import dwt.graphics.GC;
+import dwt.graphics.Point;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Layout;
 
 /**
  * This class provides the layout for CTabFolder
