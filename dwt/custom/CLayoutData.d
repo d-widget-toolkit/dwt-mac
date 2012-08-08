@@ -12,11 +12,6 @@
  *******************************************************************************/
 module dwt.custom.CLayoutData;
 
-
-import dwt.*;
-import dwt.graphics.*;
-import dwt.widgets.*;
-
 class CLayoutData {
 
     int defaultWidth = -1, defaultHeight = -1;
