@@ -569,7 +569,7 @@ public String toUpperCase( String str ){
     return tango.text.Unicode.toUpper( str );
 }
 
-/*public int indexOf( String str, char searched ){
+public int indexOf( String str, char searched ){
     int res = tango.text.Util.locate( str, searched );
     if( res is str.length ) res = -1;
     return res;
@@ -589,7 +589,7 @@ public int indexOf(String str, String ch, int start){
     int res = tango.text.Util.locatePattern( str, ch, start );
     if( res is str.length ) res = -1;
     return res;
-}*/
+}
 
 public int lastIndexOf(String str, char ch){
     return lastIndexOf( str, ch, str.length );

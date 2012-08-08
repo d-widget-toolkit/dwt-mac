@@ -13,11 +13,6 @@
 module dwt.custom.CLabel;
 
 
-import dwt.*;
-import dwt.widgets.*;
-import dwt.graphics.*;
-import dwt.events.*;
-import dwt.accessibility.*;
 import dwt.events.DisposeEvent;
 import dwt.events.DisposeListener;
 import dwt.dwthelper.utils;
@@ -82,6 +77,7 @@ public class CLabel : Canvas {
     private int[] gradientPercents;
     private bool gradientVertical;
     private Color background;
+    private Listener disposeListener;
 
     private static int DRAW_FLAGS = DWT.DRAW_MNEMONIC | DWT.DRAW_TAB | DWT.DRAW_TRANSPARENT | DWT.DRAW_DELIMITER;
 
@@ -129,12 +125,6 @@ public this(Composite parent, int style) {
         }
     });
 
-    addDisposeListener(new class() DisposeListener{
-        public void widgetDisposed(DisposeEvent event) {
-            onDispose(event);
-        }
-    });
-
     addTraverseListener(new class() TraverseListener {
         public void keyTraversed(TraverseEvent event) {
             if (event.detail is DWT.TRAVERSE_MNEMONIC) {
@@ -142,6 +132,12 @@ public this(Composite parent, int style) {
             }
         }
     });
+
+    disposeListener = new class() Listener {
+        public void handleEvent(Event event) {
+            onDispose(event);
+        }
+    };
 
     initAccessible();
 
@@ -199,11 +195,11 @@ private void drawBevelRect(GC gc, int x, int y, int w, int h, Color topleft, Col
 dchar _findMnemonic (String string) {
     if (string is null) return '\0';
     int index = 0;
-    int length = string.length;
+    int length = string.length ();
     do {
         while (index < length && string[index] !is '&') index++;
         if (++index >= length) return '\0';
-        if (string[index] !is '&') {
+        if (string.charAt(index) !is '&') {
             dchar[1] tmp; uint ate;
             dchar[] tmp2 = tango.text.convert.Utf.toString32( string[index .. Math.min( index + 4, string.length ) ], tmp, &ate );
             assert( tmp2.length == 1 );
@@ -245,7 +241,7 @@ private Point getTotalSize(Image image, String text) {
     }
 
     GC gc = new GC(this);
-    if (text !is null && text.length > 0) {
+    if (text !is null && text.length() > 0) {
         Point e = gc.textExtent(text, DRAW_FLAGS);
         size.x += e.x;
         size.y = Math.max(size.y, e.y);
@@ -328,7 +324,11 @@ private void initAccessible() {
         }
     });
 }
-void onDispose(DisposeEvent event) {
+void onDispose(Event event) {
+    removeListener(DWT.Dispose, disposeListener);
+    notifyListeners(DWT.Dispose, event);
+    event.type = DWT.None;
+
     gradientColors = null;
     gradientPercents = null;
     backgroundImage = null;
@@ -744,7 +744,17 @@ public void setImage(Image image) {
 /**
  * Set the label's text.
  * The value <code>null</code> clears it.
- *
+ * <p>
+ * Mnemonics are indicated by an '&amp;' that causes the next
+ * character to be the mnemonic.  When the user presses a
+ * key sequence that matches the mnemonic, focus is assigned
+ * to the control that follows the label. On most platforms,
+ * the mnemonic appears underlined but may be emphasised in a
+ * platform specific manner.  The mnemonic indicator character
+ * '&amp;' can be escaped by doubling it in the string, causing
+ * a single '&amp;' to be displayed.
+ * </p>
+ * 
  * @param text the text to be displayed in the label or null
  *
  * @exception DWTException <ul>
@@ -779,7 +789,7 @@ protected String shortenText(GC gc, String t, int width) {
     if (t is null) return null;
     int w = gc.textExtent(ELLIPSIS, DRAW_FLAGS).x;
     if (width<=w) return t;
-    int l = t.length;
+    int l = t.length();
     int max = l/2;
     int min = 0;
     int mid = (max+min)/2 - 1;
@@ -788,7 +798,7 @@ protected String shortenText(GC gc, String t, int width) {
     layout.setText(t);
     mid = validateOffset(layout, mid);
     while (min < mid && mid < max) {
-        String s1 = t[0 .. mid].dup;
+        String s1 = t.substring(0, mid);
         String s2 = t.substring(validateOffset(layout, l-mid), l);
         int l1 = gc.textExtent(s1, DRAW_FLAGS).x;
         int l2 = gc.textExtent(s2, DRAW_FLAGS).x;
@@ -815,18 +825,18 @@ private String[] splitString(String text) {
     String[] lines = new String[1];
     int start = 0, pos;
     do {
-        pos = tango.text.Util.locate( text, '\n', start);
-        if (pos is text.length ) {
+        pos = text.indexOf('\n', start);
+        if (pos is -1 ) {
             lines[lines.length - 1] = text[start .. $ ];
         } else {
-            bool crlf = (pos > 0) && (text[ pos - 1 ] is '\r');
+            bool crlf = (pos > 0) && (text.charAt(pos - 1) is '\r');
             lines[lines.length - 1] = text[ start .. pos - (crlf ? 1 : 0)];
             start = pos + 1;
             String[] newLines = new String[lines.length+1];
             System.arraycopy(lines, 0, newLines, 0, lines.length);
             lines = newLines;
         }
-    } while (pos !is text.length);
+    } while (pos !is -1);
     return lines;
 }
 }
