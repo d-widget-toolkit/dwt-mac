@@ -12,19 +12,12 @@
  *******************************************************************************/
 module dwt.custom.CCombo;
 
-
-
-import dwt.*;
-import dwt.graphics.*;
-import dwt.events.*;
-import dwt.widgets.*;
-import dwt.accessibility.*;
+import dwt.dwthelper.utils;
+import dwt.dwthelper.Runnable;
 
 static import tango.text.convert.Utf;
 static import tango.text.Unicode;
 static import tango.text.convert.Format;
-import dwt.dwthelper.utils;
-import dwt.dwthelper.Runnable;
 
 /**
  * The CCombo class represents a selectable user interface object
@@ -69,39 +62,7 @@ public final class CCombo : Composite {
     Font font;
     Shell _shell;
 
-    private class CComboListener : Listener
-    {
-        public void handleEvent (Event event) {
-            if (popup is event.widget) {
-                popupEvent (event);
-                return;
-            }
-            if (text is event.widget) {
-                textEvent (event);
-                return;
-            }
-            if (list is event.widget) {
-                listEvent (event);
-                return;
-            }
-            if (arrow is event.widget) {
-                arrowEvent (event);
-                return;
-            }
-            if (this.outer is event.widget) {
-                comboEvent (event);
-                return;
-            }
-            if (getShell () is event.widget) {
-                getDisplay().asyncExec(new class() Runnable {
-                    public void run() {
-                        if (isDisposed()) return;
-                        handleFocus (DWT.FocusOut);
-                    }
-                });
-            }
-        }
-    }
+    static const String PACKAGE_PREFIX = "dwt.custom."; //$NON-NLS-1$
 
 /**
  * Constructs a new instance of this class given its parent
@@ -143,11 +104,42 @@ public this (Composite parent, int style) {
     if ((style & DWT.FLAT) !is 0) arrowStyle |= DWT.FLAT;
     arrow = new Button (this, arrowStyle);
 
-    listener = new CComboListener;
+    listener = new class () Listener {
+        public void handleEvent (Event event) {
+             if (isDisposed ()) return;
+             if (popup is event.widget) {
+                 popupEvent (event);
+                 return;
+             }
+             if (text is event.widget) {
+                 textEvent (event);
+                 return;
+             }
+             if (list is event.widget) {
+                 listEvent (event);
+                 return;
+             }
+             if (arrow is event.widget) {
+                 arrowEvent (event);
+                 return;
+             }
+             if (CCombo.this is event.widget) {
+                 comboEvent (event);
+                 return;
+             }
+             if (getShell () is event.widget) {
+                 getDisplay().asyncExec(new Runnable() {
+                     public void run() {
+                         if (isDisposed ()) return;
+                         handleFocus (DWT.FocusOut);
+                     }
+                 });
+             }
+         }
+    };
 
     filter = new class() Listener {
         public void handleEvent(Event event) {
-            if (isDisposed ()) return;
             if (isDisposed ()) return;
             Shell shell = (cast(Control)event.widget).getShell ();
             if (shell is this.outer.getShell ()) {
@@ -338,6 +330,13 @@ void arrowEvent (Event event) {
         default:
     }
 }
+protected void checkSubclass () {
+    String name = this.classinfo.name ();
+    int index = name.lastIndexOf ('.');
+    if (!name.substring (0, index + 1).equals (PACKAGE_PREFIX)) {
+        DWT.error (DWT.ERROR_INVALID_SUBCLASS);
+    }
+}
 /**
  * Sets the selection in the receiver's text field to an empty
  * selection starting just before the first character. If the
@@ -363,6 +362,10 @@ public void clearSelection () {
 void comboEvent (Event event) {
     switch (event.type) {
         case DWT.Dispose:
+            removeListener(DWT.Dispose, listener);
+            notifyListeners(DWT.Dispose, event);
+            event.type = DWT.None;
+
             if (popup !is null && !popup.isDisposed ()) {
                 list.removeListener (DWT.Dispose, listener);
                 popup.dispose ();
@@ -570,7 +573,7 @@ dchar _findMnemonic (String string) {
     do {
         while (index < length && string[index] !is '&') index++;
         if (++index >= length) return '\0';
-        if (string[index] !is '&') {
+        if (string.charAt(index) !is '&') {
             dchar[1] d; uint ate;
             auto d2 = tango.text.convert.Utf.toString32( string[ index .. Math.min( index +4, string.length )], d, &ate );
             auto d3 = tango.text.Unicode.toLower( d2, d2 );
@@ -754,6 +757,7 @@ public Shell getShell () {
     }
     return _shell;
 }
+public int getStyle () {
     int style = super.getStyle ();
     style &= ~DWT.READ_ONLY;
     if (!text.getEditable()) style |= DWT.READ_ONLY;
@@ -1595,11 +1599,11 @@ public void setVisibleItemCount (int count) {
 }
 String stripMnemonic (String string) {
     int index = 0;
-    int length_ = string.length;
+    int length_ = string.length ();
     do {
-        while ((index < length_) && (string[index] !is '&')) index++;
+        while ((index < length_) && (string.charAt(index) !is '&')) index++;
         if (++index >= length_) return string;
-        if (string[index] !is '&') {
+        if (string.charAt(index) !is '&') {
             return string[0 .. index-1] ~ string[index .. length_];
         }
         index++;
