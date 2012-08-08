@@ -12,8 +12,10 @@
  *******************************************************************************/
 module dwt.custom.CTabFolder2Listener;
 
+import dwt.dwthelper.utils;
 
 import dwt.custom.CTabFolderEvent;
+import dwt.internal.SWTEventListener;
 
 import tango.core.Traits;
 import tango.core.Tuple;
