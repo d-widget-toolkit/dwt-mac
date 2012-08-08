@@ -27,6 +27,26 @@ import dwt.accessibility.AccessibleControlListener;
 import dwt.accessibility.AccessibleTextEvent;
 import dwt.accessibility.AccessibleTextListener;
 import dwt.accessibility.SWTAccessibleDelegate;
+import dwt.SWT;
+import dwt.SWTException;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSMutableArray;
+import dwt.internal.cocoa.NSNumber;
+import dwt.internal.cocoa.NSObject;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSRange;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSValue;
+import dwt.internal.cocoa.OS;
+import dwt.internal.cocoa.id;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Display;
+import dwt.widgets.Monitor;
+import dwt.widgets.Shell;
 import dwt.dwthelper.associativearray;
 
 /**

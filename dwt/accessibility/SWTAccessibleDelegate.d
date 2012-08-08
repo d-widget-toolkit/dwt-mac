@@ -15,10 +15,16 @@ module dwt.accessibility.SWTAccessibleDelegate;
 
 import dwt.dwthelper.utils;
 
-import dwt.internal.cocoa.NSPoint;
-import cocoa = dwt.internal.cocoa.id;
-
 import dwt.accessibility.Accessible;
+import dwt.SWT;
+import dwt.internal.C;
+import dwt.internal.Callback;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSObject;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.OS;
+import cocoa = dwt.internal.cocoa.id;
 import objc = dwt.internal.objc.runtime;
 
 class SWTAccessibleDelegate : NSObject {

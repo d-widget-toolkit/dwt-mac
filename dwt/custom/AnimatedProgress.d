@@ -14,6 +14,22 @@ module dwt.custom.AnimatedProgress;
 
 import dwt.dwthelper.utils;
 
+import dwt.SWT;
+import dwt.SWTException;
+import dwt.events.ControlAdapter;
+import dwt.events.ControlEvent;
+import dwt.events.DisposeEvent;
+import dwt.events.DisposeListener;
+import dwt.events.PaintEvent;
+import dwt.events.PaintListener;
+import dwt.graphics.Color;
+import dwt.graphics.GC;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Canvas;
+import dwt.widgets.Composite;
+import dwt.widgets.Display;
+
 /**
  * A control for showing progress feedback for a long running operation.
  *

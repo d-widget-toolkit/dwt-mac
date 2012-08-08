@@ -12,6 +12,10 @@
  *******************************************************************************/
 module dwt.custom.CLayoutData;
 
+import dwt.SWT;
+import dwt.graphics.Point;
+import dwt.widgets.Control;
+
 class CLayoutData {
 
     int defaultWidth = -1, defaultHeight = -1;

@@ -15,7 +15,20 @@ module dwt.custom.CBanner;
 import dwt.dwthelper.utils;
 
 
+import dwt.SWT;
+import dwt.SWTException;
 import dwt.custom.CBannerLayout;
+import dwt.graphics.Color;
+import dwt.graphics.Cursor;
+import dwt.graphics.GC;
+import dwt.graphics.Point;
+import dwt.graphics.RGB;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Event;
+import dwt.widgets.Layout;
+import dwt.widgets.Listener;
 
 import Math = tango.math.Math;
 

@@ -13,6 +13,39 @@
 module dwt.custom.CCombo;
 
 import dwt.dwthelper.utils;
+
+import dwt.SWT;
+import dwt.SWTException;
+import dwt.accessibility.ACC;
+import dwt.accessibility.AccessibleAdapter;
+import dwt.accessibility.AccessibleControlAdapter;
+import dwt.accessibility.AccessibleControlEvent;
+import dwt.accessibility.AccessibleEvent;
+import dwt.accessibility.AccessibleTextAdapter;
+import dwt.accessibility.AccessibleTextEvent;
+import dwt.events.ModifyListener;
+import dwt.events.SelectionEvent;
+import dwt.events.SelectionListener;
+import dwt.events.VerifyListener;
+import dwt.graphics.Color;
+import dwt.graphics.Font;
+import dwt.graphics.GC;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Button;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Display;
+import dwt.widgets.Event;
+import dwt.widgets.Label;
+import dwt.widgets.Layout;
+import dwt.widgets.List;
+import dwt.widgets.Listener;
+import dwt.widgets.Menu;
+import dwt.widgets.Shell;
+import dwt.widgets.Text;
+import dwt.widgets.TypedListener;
+import dwt.widgets.Widget;
 import dwt.dwthelper.Runnable;
 
 static import tango.text.convert.Utf;

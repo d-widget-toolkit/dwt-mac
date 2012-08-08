@@ -14,6 +14,15 @@ module dwt.custom.ControlEditor;
 
 import dwt.dwthelper.utils;
 
+
+import dwt.SWT;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Event;
+import dwt.widgets.Listener;
+import dwt.widgets.ScrollBar;
+
 /**
 *
 * A ControlEditor is a manager for a Control that appears above a composite and tracks with the

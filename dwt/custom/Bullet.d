@@ -14,6 +14,7 @@ module dwt.custom.Bullet;
 
 import dwt.dwthelper.utils;
 
+import dwt.DWT;
 import dwt.custom.StyleRange;
 import dwt.custom.ST;
 import dwt.dwthelper.System;

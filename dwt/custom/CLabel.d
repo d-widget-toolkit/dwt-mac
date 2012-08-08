@@ -12,10 +12,34 @@
  *******************************************************************************/
 module dwt.custom.CLabel;
 
-
-import dwt.events.DisposeEvent;
-import dwt.events.DisposeListener;
 import dwt.dwthelper.utils;
+
+
+import dwt.SWT;
+import dwt.SWTException;
+import dwt.accessibility.ACC;
+import dwt.accessibility.Accessible;
+import dwt.accessibility.AccessibleAdapter;
+import dwt.accessibility.AccessibleControlAdapter;
+import dwt.accessibility.AccessibleControlEvent;
+import dwt.accessibility.AccessibleEvent;
+import dwt.events.PaintEvent;
+import dwt.events.PaintListener;
+import dwt.events.TraverseEvent;
+import dwt.events.TraverseListener;
+import dwt.graphics.Color;
+import dwt.graphics.Font;
+import dwt.graphics.GC;
+import dwt.graphics.Image;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.graphics.TextLayout;
+import dwt.widgets.Canvas;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Display;
+import dwt.widgets.Event;
+import dwt.widgets.Listener;
 
 static import tango.text.Unicode;
 static import tango.text.convert.Utf;

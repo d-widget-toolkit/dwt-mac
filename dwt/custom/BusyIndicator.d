@@ -15,6 +15,11 @@ module dwt.custom.BusyIndicator;
 import dwt.dwthelper.utils;
 
 
+import dwt.SWT;
+import dwt.graphics.Cursor;
+import dwt.widgets.Display;
+import dwt.widgets.Shell;
+
 /**
  * Support for showing a Busy Cursor during a long running process.
  *

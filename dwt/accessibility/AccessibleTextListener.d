@@ -14,6 +14,7 @@
 module dwt.accessibility.AccessibleTextListener;
 
 import dwt.accessibility.AccessibleTextEvent;
+import dwt.internal.SWTEventObject;
 import dwt.dwthelper.utils;
 
 
