@@ -14,10 +14,22 @@ module dwt.custom.PopupList;
 
 import dwt.dwthelper.utils;
 
-
-
-
-
+import dwt.SWT;
+import dwt.SWTException;
+import dwt.events.ControlEvent;
+import dwt.events.ControlListener;
+import dwt.events.KeyEvent;
+import dwt.events.KeyListener;
+import dwt.events.MouseEvent;
+import dwt.events.MouseListener;
+import dwt.graphics.Font;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Display;
+import dwt.widgets.Event;
+import dwt.widgets.List;
+import dwt.widgets.Listener;
+import dwt.widgets.Shell;
 
 import tango.text.Util;
 
@@ -217,7 +229,7 @@ public void select(String string) {
     // specified string
     if (string !is null){
         for (int i = 0; i < items.length; i++) {
-            if ( tango.text.Util.locatePattern( items[i], string) is 0 ){
+            if (items[i].startsWith(string)){
                 int index = list.indexOf(items[i]);
                 list.select(index);
                 break;
