@@ -12,15 +12,16 @@
  *******************************************************************************/
 module dwt.custom.ScrolledCompositeLayout;
 
+import dwt.dwthelper.utils;
 
 import dwt.DWT;
+import dwt.custom.ScrolledComposite;
 import dwt.graphics.Point;
 import dwt.graphics.Rectangle;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.Layout;
 import dwt.widgets.ScrollBar;
-import dwt.custom.ScrolledComposite;
 
 import Math = tango.math.Math;
 
