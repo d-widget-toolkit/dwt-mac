@@ -12,14 +12,21 @@
  *******************************************************************************/
 module dwt.custom.SashForm;
 
+import dwt.dwthelper.utils;
 
 
-
-
-
+import dwt.SWT;
+import dwt.SWTException;
 import dwt.custom.SashFormLayout;
 import dwt.custom.SashFormData;
-import dwt.dwthelper.utils;
+import dwt.graphics.Color;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Event;
+import dwt.widgets.Layout;
+import dwt.widgets.Listener;
+import dwt.widgets.Sash;
 
 /**
  * The SashForm is a composite control that lays out its children in a
@@ -399,12 +406,6 @@ public void setSashWidth(int width) {
     if (SASH_WIDTH is width) return;
     SASH_WIDTH = width;
     layout(false);
-}
-public void setToolTipText(String string) {
-    super.setToolTipText(string);
-    for (int i = 0; i < sashes.length; i++) {
-        sashes[i].setToolTipText(string);
-    }
 }
 public void setToolTipText(String string) {
     super.setToolTipText(string);
