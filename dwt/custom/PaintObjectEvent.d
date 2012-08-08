@@ -12,12 +12,13 @@
  *******************************************************************************/
 module dwt.custom.PaintObjectEvent;
 
-
-
+import dwt.dwthelper.utils;
 
 import dwt.custom.StyleRange;
 import dwt.custom.Bullet;
 import dwt.custom.StyledTextEvent;
+import dwt.events.TypedEvent;
+import dwt.graphics.GC;
 import dwt.widgets.Event;
 
 /**

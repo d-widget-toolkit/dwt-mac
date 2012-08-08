@@ -16,6 +16,7 @@ import dwt.dwthelper.utils;
 
 
 import dwt.custom.StyledTextEvent;
+import dwt.events.TypedEvent;
 import dwt.widgets.Event;
 
 /**
