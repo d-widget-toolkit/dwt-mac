@@ -16,7 +16,9 @@ module dwt.dnd.DND;
 import dwt.dwthelper.utils;
 
 
-
+import dwt.SWT;
+import dwt.SWTError;
+import dwt.SWTException;
 
 /**
  *
