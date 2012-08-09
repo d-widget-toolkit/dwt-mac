@@ -15,11 +15,10 @@ module dwt.dnd.DropTargetEvent;
 
 import dwt.dwthelper.utils;
 
-import dwt.events.TypedEvent;
-import dwt.widgets.Widget;
-
 import dwt.dnd.DNDEvent;
 import dwt.dnd.TransferData;
+import dwt.events.TypedEvent;
+import dwt.widgets.Widget;
 import dwt.widgets.Event;
 
 /**
