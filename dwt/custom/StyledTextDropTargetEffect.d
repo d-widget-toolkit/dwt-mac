@@ -12,16 +12,23 @@
  *******************************************************************************/
 module dwt.custom.StyledTextDropTargetEffect;
 
+import dwt.dwthelper.utils;
 
-
-
-
-
+import dwt.SWT;
 import dwt.custom.StyledText;
 import dwt.custom.StyledTextContent;
+import dwt.dnd.DND;
+import dwt.dnd.DropTargetAdapter;
+import dwt.dnd.DropTargetEffect;
+import dwt.dnd.DropTargetEvent;
+import dwt.graphics.FontMetrics;
+import dwt.graphics.GC;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Event;
+import dwt.widgets.Listener;
 
 static import tango.core.Exception;
-import dwt.dwthelper.utils;
 
 /**
  * This adapter class provides a default drag under effect (eg. select and scroll)
