@@ -16,10 +16,9 @@ module dwt.dnd.DNDEvent;
 import dwt.dwthelper.utils;
 
 
-
-
-
 import dwt.dnd.TransferData;
+import dwt.graphics.Image;
+import dwt.widgets.Event;
 
 class DNDEvent : Event {
     public TransferData dataType;
