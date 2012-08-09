@@ -15,10 +15,19 @@ module dwt.custom.ViewForm;
 import dwt.dwthelper.utils;
 
 
-
-
-
+import dwt.SWT;
+import dwt.SWTException;
 import dwt.custom.ViewFormLayout;
+import dwt.graphics.Color;
+import dwt.graphics.GC;
+import dwt.graphics.Point;
+import dwt.graphics.RGB;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Event;
+import dwt.widgets.Layout;
+import dwt.widgets.Listener;
 
 /**
  * Instances of this class implement a Composite that positions and sizes
@@ -122,6 +131,7 @@ public class ViewForm : Composite {
     Point oldSize;
 
     Color selectionBackground;
+    Listener listener;
 
     static final int OFFSCREEN = -200;
     static final int BORDER1_COLOR = DWT.COLOR_WIDGET_NORMAL_SHADOW;
@@ -166,10 +176,10 @@ public this(Composite parent, int style) {
 
     setBorderVisible((style & DWT.BORDER) !is 0);
 
-    Listener listener = new class() Listener {
+    listener = new class() Listener {
         public void handleEvent(Event e) {
             switch (e.type) {
-                case DWT.Dispose: onDispose(); break;
+                case DWT.Dispose: onDispose(e); break;
                 case DWT.Paint: onPaint(e.gc); break;
                 case DWT.Resize: onResize(); break;
                 default:
@@ -253,7 +263,11 @@ public Control getTopRight() {
     //checkWidget();
     return topRight;
 }
-void onDispose() {
+void onDispose(Event event) {
+    removeListener(DWT.Dispose, listener);
+    notifyListeners(DWT.Dispose, event);
+    event.type = DWT.None;
+
     topLeft = null;
     topCenter = null;
     topRight = null;
@@ -456,7 +470,7 @@ public void setBorderVisible(bool show) {
     showBorder = show;
     if (showBorder) {
         borderLeft = borderTop = borderRight = borderBottom = 1;
-        if ((getStyle() & DWT.FLAT)is 0) highlight = 2;
+        if ((getStyle() & DWT.FLAT) is 0) highlight = 2;
     } else {
         borderBottom = borderTop = borderLeft = borderRight = 0;
         highlight = 0;
