@@ -15,11 +15,10 @@ module dwt.dnd.ByteArrayTransfer;
 
 import dwt.dwthelper.utils;
 
-
-
 import dwt.dnd.DND;
 import dwt.dnd.Transfer;
 import dwt.dnd.TransferData;
+import dwt.internal.cocoa.NSData;
 
 
 /**
