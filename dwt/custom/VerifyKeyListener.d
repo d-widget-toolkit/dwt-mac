@@ -12,8 +12,9 @@
  *******************************************************************************/
 module dwt.custom.VerifyKeyListener;
 
+import dwt.dwthelper.utils;
 
-
+import dwt.events.VerifyEvent;
 import dwt.internal.DWTEventListener;
 
 /**
