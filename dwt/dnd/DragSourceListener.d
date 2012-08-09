@@ -15,9 +15,8 @@ module dwt.dnd.DragSourceListener;
 
 import dwt.dwthelper.utils;
 
-import dwt.internal.DWTEventListener;
-
 import dwt.dnd.DragSourceEvent;
+import dwt.internal.DWTEventListener;
 
 /**
  * The <code>DragSourceListener</code> class provides event notification to the application for DragSource events.
