@@ -12,6 +12,8 @@
  *******************************************************************************/
 module dwt.custom.TextChangeListener;
 
+import dwt.dwthelper.utils;
+
 
 import dwt.internal.DWTEventListener;
 import dwt.custom.TextChangingEvent;
