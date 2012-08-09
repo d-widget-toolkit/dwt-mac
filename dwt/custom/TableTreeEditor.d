@@ -15,13 +15,18 @@ module dwt.custom.TableTreeEditor;
 import dwt.dwthelper.utils;
 
 
-
-
-
-
+import dwt.SWT;
 import dwt.custom.ControlEditor;
 import dwt.custom.TableTree;
 import dwt.custom.TableTreeItem;
+import dwt.events.ControlEvent;
+import dwt.events.ControlListener;
+import dwt.events.TreeEvent;
+import dwt.events.TreeListener;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Control;
+import dwt.widgets.Table;
+import dwt.widgets.TableColumn;
 
 /**
 *
@@ -143,7 +148,6 @@ public this (TableTree tableTree) {
     // To be consistent with older versions of DWT, grabVertical defaults to true
     grabVertical = true;
 }
-
 override Rectangle computeBounds () {
     if (item is null || column is -1 || item.isDisposed() || item.tableItem is null) return new Rectangle(0, 0, 0, 0);
     Rectangle cell = item.getBounds(column);
@@ -256,7 +260,6 @@ public void setItem (TableTreeItem item) {
 * @param item the TableItem for the row of the cell being tracked by this editor
 * @param column the zero based index of the column of the cell being tracked by this editor
 */
-alias ControlEditor.setEditor setEditor;
 public void setEditor (Control editor, TableTreeItem item, int column) {
     setItem(item);
     setColumn(column);
