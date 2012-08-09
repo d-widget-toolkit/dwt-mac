@@ -14,11 +14,15 @@ module dwt.custom.ViewFormLayout;
 
 import dwt.dwthelper.utils;
 
-
-
-
+import org.eclipse.swt.SWT;
 import dwt.custom.ViewForm;
 import dwt.custom.CLayoutData;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.Scrollable;
 
 /**
  * This class provides the layout for ViewForm
