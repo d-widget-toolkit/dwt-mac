@@ -15,11 +15,16 @@ module dwt.dnd.DropTargetEffect;
 
 import dwt.dwthelper.utils;
 
-
-
-
-
+import dwt.SWT;
 import dwt.dnd.DropTargetAdapter;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Control;
+import dwt.widgets.Table;
+import dwt.widgets.TableItem;
+import dwt.widgets.Tree;
+import dwt.widgets.TreeItem;
+import dwt.widgets.Widget;
 
 
 /**
@@ -93,11 +98,11 @@ public class DropTargetEffect : DropTargetAdapter {
      * @return the item at the given x-y coordinate, or null if the coordinate is not in a selectable item
      */
     public Widget getItem(int x, int y) {
-        if (cast(Table) control) {
-            return getItem(cast(Table) control, x, y);
+        if (auto c = cast(Table) control) {
+            return getItem(c, x, y);
         }
-        if (cast(Tree) control) {
-            return getItem(cast(Tree) control, x, y);
+        if (auto c = cast(Tree) control) {
+            return getItem(c, x, y);
         }
         return null;
     }
