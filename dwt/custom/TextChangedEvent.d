@@ -12,6 +12,7 @@
  *******************************************************************************/
 module dwt.custom.TextChangedEvent;
 
+import dwt.dwthelper.utils;
 
 import dwt.custom.StyledTextContent;
 
@@ -22,6 +23,8 @@ import dwt.custom.StyledTextContent;
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
 public class TextChangedEvent : TypedEvent {
+
+    static const long serialVersionUID = 3258696524257835065L;
 
 /**
  * Create the TextChangedEvent to be used by the StyledTextContent implementor.
