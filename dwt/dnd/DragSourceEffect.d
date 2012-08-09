@@ -15,10 +15,9 @@ module dwt.dnd.DragSourceEffect;
 
 import dwt.dwthelper.utils;
 
-
-
-
+import dwt.SWT;
 import dwt.dnd.DragSourceAdapter;
+import dwt.widgets.Control;
 
 /**
  * This class provides default implementations to display a drag source
