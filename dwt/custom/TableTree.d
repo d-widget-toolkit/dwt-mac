@@ -12,14 +12,31 @@
  *******************************************************************************/
 module dwt.custom.TableTree;
 
-
-
-
-
-
-
-import dwt.custom.TableTreeItem;
 import dwt.dwthelper.utils;
+
+
+import dwt.SWT;
+import dwt.SWTException;
+import dwt.custom.TableTreeItem;
+import dwt.events.SelectionEvent;
+import dwt.events.SelectionListener;
+import dwt.events.TreeListener;
+import dwt.graphics.Color;
+import dwt.graphics.Font;
+import dwt.graphics.GC;
+import dwt.graphics.Image;
+import dwt.graphics.ImageData;
+import dwt.graphics.PaletteData;
+import dwt.graphics.Point;
+import dwt.graphics.RGB;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Composite;
+import dwt.widgets.Event;
+import dwt.widgets.Listener;
+import dwt.widgets.Menu;
+import dwt.widgets.Table;
+import dwt.widgets.TableItem;
+import dwt.widgets.TypedListener;
 
 /**
  * A TableTree is a selectable user interface object
@@ -66,10 +83,10 @@ public class TableTree : Composite {
     */
     bool inDispose = false;
 
-    static final TableTreeItem[] EMPTY_ITEMS;
-    static final String[] EMPTY_TEXTS;
-    static final Image[] EMPTY_IMAGES;
-    static final String ITEMID = "TableTreeItemID"; //$NON-NLS-1$
+    static const TableTreeItem[] EMPTY_ITEMS;
+    static const String[] EMPTY_TEXTS;
+    static const Image[] EMPTY_IMAGES;
+    static const String ITEMID = "TableTreeItemID"; //$NON-NLS-1$
 
 /**
  * Constructs a new instance of this class given its parent
@@ -449,6 +466,9 @@ public int indexOf (TableTreeItem item) {
 }
 
 void onDispose(Event e) {
+    removeListener(DWT.Dispose, listener);
+    notifyListeners(DWT.Dispose, e);
+    e.type = DWT.None;
     /*
      * Usually when an item is disposed, destroyItem will change the size of the items array
      * and dispose of the underlying table items.
