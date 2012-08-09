@@ -15,11 +15,18 @@ module dwt.custom.TreeEditor;
 import dwt.dwthelper.utils;
 
 
-
-
-
-
+import dwt.SWT;
 import dwt.custom.ControlEditor;
+import dwt.events.ControlEvent;
+import dwt.events.ControlListener;
+import dwt.events.TreeEvent;
+import dwt.events.TreeListener;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Control;
+import dwt.widgets.Display;
+import dwt.widgets.Tree;
+import dwt.widgets.TreeColumn;
+import dwt.widgets.TreeItem;
 
 /**
 *
@@ -176,7 +183,7 @@ override Rectangle computeBounds () {
     } else { // default is CENTER
         editorRect.x += (cell.width - editorRect.width)/2;
     }
-    // don't let the editor overlap with the + / - of the tree
+    // don't let the editor overlap with the +/- of the tree
     editorRect.x = Math.max(cell.x, editorRect.x);
 
     if (verticalAlignment is DWT.BOTTOM) {
@@ -329,5 +336,4 @@ public override void layout () {
     if (columnCount > 0 && (column < 0 || column >= columnCount)) return;
     super.layout();
 }
-
 }
