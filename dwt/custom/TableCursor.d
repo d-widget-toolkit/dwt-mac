@@ -14,11 +14,30 @@ module dwt.custom.TableCursor;
 
 import dwt.dwthelper.utils;
 
-
-
-
-
-
+import dwt.SWT;
+import dwt.SWTException;
+import dwt.accessibility.ACC;
+import dwt.accessibility.AccessibleAdapter;
+import dwt.accessibility.AccessibleControlAdapter;
+import dwt.accessibility.AccessibleControlEvent;
+import dwt.accessibility.AccessibleEvent;
+import dwt.events.SelectionEvent;
+import dwt.events.SelectionListener;
+import dwt.graphics.Color;
+import dwt.graphics.GC;
+import dwt.graphics.Image;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Canvas;
+import dwt.widgets.Display;
+import dwt.widgets.Event;
+import dwt.widgets.Listener;
+import dwt.widgets.ScrollBar;
+import dwt.widgets.Table;
+import dwt.widgets.TableColumn;
+import dwt.widgets.TableItem;
+import dwt.widgets.TypedListener;
+import dwt.widgets.Widget;
 
 /**
  * A TableCursor provides a way for the user to navigate around a Table
@@ -146,7 +165,7 @@ public class TableCursor : Canvas {
     Table table;
     TableItem row = null;
     TableColumn column = null;
-    Listener tableListener, resizeListener, disposeItemListener, disposeColumnListener;
+    Listener listener, tableListener, resizeListener, disposeItemListener, disposeColumnListener;
 
     Color background = null;
     Color foreground = null;
@@ -352,7 +371,11 @@ public void addSelectionListener(SelectionListener listener) {
     addListener(DWT.DefaultSelection, typedListener);
 }
 
-void dispose(Event event) {
+void onDispose(Event event) {
+    removeListener(DWT.Dispose, listener);
+    notifyListeners(DWT.Dispose, event);
+    event.type = DWT.None;
+
     table.removeListener(DWT.FocusIn, tableListener);
     table.removeListener(DWT.MouseDown, tableListener);
     unhookRowColumnListeners();
@@ -466,12 +489,12 @@ void paint(Event event) {
         x += imageSize.width;
     }
     String text = row.getText(columnIndex);
-    if (text.length > 0) {
+    if (text.length() > 0) {
         Rectangle bounds = row.getBounds(columnIndex);
         Point extent = gc.stringExtent(text);
         // Temporary code - need a better way to determine table trim
         String platform = DWT.getPlatform();
-        if ("win32"==platform) { //$NON-NLS-1$
+        if ("win32" == platform) { //$NON-NLS-1$
             if (table.getColumnCount() is 0 || columnIndex is 0) {
                 x += 2;
             } else {
