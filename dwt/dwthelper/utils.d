@@ -37,6 +37,7 @@ alias Exception Throwable;
 alias ClassInfo Class;
 
 public import dwt.dwthelper.array;
+public import dwt.dwthelper.associativearray;
 
 void implMissing( String file, uint line ){
     Stderr.formatln( "implementation missing in file {} line {}", file, line );
@@ -618,15 +619,6 @@ public int lastIndexOf(String str, String ch, int start ){
     return res;
 }
 
-public size_t length(T)(T arr){
-    return arr.length;
-}
-
-size_t size (T) (T[] arr)
-{
-    return arr.length;
-}
-
 public String replace( String str, char from, char to ){
     return tango.text.Util.replace( str.dup, from, to );
 }
@@ -731,26 +723,6 @@ public char* toStringzValidPtr( String src ){
         static const String nullPtr = "\0";
         return nullPtr.ptr;
     }
-}
-
-void addElement (T) (ref T[] arr, T element)
-{
-	arr ~= element;
-}
-
-void removeElementAt (T) (ref T[] arr, size_t index)
-{
-    arr = arr[0 .. index] ~ arr[index + 1 .. $];
-}
-
-void put (K, V) (K[V] aa, K k, V v)
-{
-    aa[k] = v;
-}
-
-void clear (K, V) (ref K[V] aa)
-{
-    aa = null;
 }
 
 public alias tango.stdc.stringz.toStringz toStringz;

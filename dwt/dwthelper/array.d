@@ -352,3 +352,13 @@ body
         }
     }
 }
+
+public size_t length (T) (T arr)
+{
+    return arr.length;
+}
+
+void removeElementAt (T) (ref T[] arr, size_t index)
+{
+    arr = arr[0 .. index] ~ arr[index + 1 .. $];
+}

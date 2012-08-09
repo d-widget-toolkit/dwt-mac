@@ -12,11 +12,10 @@
  *******************************************************************************/
 module dwt.custom.StyledTextRenderer;
 
+import dwt.dwthelper.utils;
 
 
 import dwt.DWT;
-
-
 import dwt.custom.StyledText;
 import dwt.custom.Bullet;
 import dwt.custom.StyleRange;
@@ -25,8 +24,20 @@ import dwt.custom.StyledTextContent;
 import dwt.custom.TextChangingEvent;
 import dwt.custom.ST;
 import dwt.custom.StyledTextEvent;
-
-import dwt.dwthelper.utils;
+import dwt.graphics.Color;
+import dwt.graphics.Device;
+import dwt.graphics.Font;
+import dwt.graphics.FontData;
+import dwt.graphics.FontMetrics;
+import dwt.graphics.GC;
+import dwt.graphics.GlyphMetrics;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.graphics.TextLayout;
+import dwt.graphics.TextStyle;
+import dwt.widgets.Display;
+import dwt.widgets.IME;
+import dwt.widgets.ScrollBar;
 
 static import tango.text.Text;
 static import tango.text.Util;
@@ -374,15 +385,17 @@ int drawLine(int lineIndex, int paintX, int paintY, GC gc, Color widgetBackgroun
     TextLayout layout = getTextLayout(lineIndex);
     String line = content.getLine(lineIndex);
     int lineOffset = content.getOffsetAtLine(lineIndex);
-    int lineLength = line.length;
+    int lineLength = line.length();
     Point selection = styledText.getSelection();
     int selectionStart = selection.x - lineOffset;
     int selectionEnd = selection.y - lineOffset;
+    if (styledText.getBlockSelection()) {
+		selectionStart = selectionEnd = 0;
+	}
     Rectangle client = styledText.getClientArea();
     Color lineBackground = getLineBackground(lineIndex, null);
     StyledTextEvent event = styledText.getLineBackgroundData(lineOffset, line);
     if (event !is null && event.lineBackground !is null) lineBackground = event.lineBackground;
-
     int height = layout.getBounds().height;
     if (lineBackground !is null) {
         gc.setBackground(lineBackground);
@@ -494,7 +507,7 @@ int getHeight () {
         int height = lineHeight[i];
         if (height is -1) {
             if (width > 0) {
-                int length = content.getLine(i).length;
+                int length = content.getLine(i).length();
                 height = ((length * averageCharWidth / width) + 1) * defaultLineHeight;
             } else {
                 height = defaultLineHeight;
@@ -627,82 +640,84 @@ int getRangeIndex(int offset, int low, int high) {
     return high;
 }
 int[] getRanges(int start, int length) {
-    int[] newRanges;
-    int end = start + length - 1;
-    if (ranges !is null) {
-        int rangeCount = styleCount << 1;
-        int rangeStart = getRangeIndex(start, -1, rangeCount);
-        if (rangeStart >= rangeCount) return null;
-        if (ranges[rangeStart] > end) return null;
-        int rangeEnd = Math.min(rangeCount - 2, getRangeIndex(end, rangeStart - 1, rangeCount) + 1);
-        newRanges = new int[rangeEnd - rangeStart + 2];
-        System.arraycopy(ranges, rangeStart, newRanges, 0, newRanges.length);
-    } else {
-        int rangeStart = getRangeIndex(start, -1, styleCount);
-        if (rangeStart >= styleCount) return null;
-        if (styles[rangeStart].start > end) return null;
-        int rangeEnd = Math.min(styleCount - 1, getRangeIndex(end, rangeStart - 1, styleCount));
-        newRanges = new int[(rangeEnd - rangeStart + 1) << 1];
-        for (int i = rangeStart, j = 0; i <= rangeEnd; i++, j += 2) {
-            StyleRange style = styles[i];
-            newRanges[j] = style.start;
-            newRanges[j + 1] = style.length;
-        }
-    }
-    if (start > newRanges[0]) {
-        newRanges[1] = newRanges[0] + newRanges[1] - start;
-        newRanges[0] = start;
-    }
-    if (end < newRanges[newRanges.length - 2] + newRanges[newRanges.length - 1] - 1) {
-        newRanges[newRanges.length - 1] = end - newRanges[newRanges.length - 2] + 1;
-    }
-    return newRanges;
+	if (length == 0) return null;
+	int[] newRanges;
+	int end = start + length - 1;
+	if (ranges != null) {
+		int rangeCount = styleCount << 1;
+		int rangeStart = getRangeIndex(start, -1, rangeCount);
+		if (rangeStart >= rangeCount) return null;
+		if (ranges[rangeStart] > end) return null;
+		int rangeEnd = Math.min(rangeCount - 2, getRangeIndex(end, rangeStart - 1, rangeCount));
+		if (ranges[rangeEnd] > end) rangeEnd = Math.max(rangeStart, rangeEnd - 2);
+		newRanges = new int[rangeEnd - rangeStart + 2];
+		System.arraycopy(ranges, rangeStart, newRanges, 0, newRanges.length);
+	} else {
+		int rangeStart = getRangeIndex(start, -1, styleCount);
+		if (rangeStart >= styleCount) return null;
+		if (styles[rangeStart].start > end) return null;
+		int rangeEnd = Math.min(styleCount - 1, getRangeIndex(end, rangeStart - 1, styleCount));
+		if (styles[rangeEnd].start > end) rangeEnd = Math.max(rangeStart, rangeEnd - 1);
+		newRanges = new int[(rangeEnd - rangeStart + 1) << 1];
+		for (int i = rangeStart, j = 0; i <= rangeEnd; i++, j += 2) {
+			StyleRange style = styles[i];
+			newRanges[j] = style.start;
+			newRanges[j + 1] = style.length;
+		}
+	}
+	if (start > newRanges[0]) {
+		newRanges[1] = newRanges[0] + newRanges[1] - start;
+		newRanges[0] = start;
+	}
+	if (end < newRanges[newRanges.length - 2] + newRanges[newRanges.length - 1] - 1) {
+		newRanges[newRanges.length - 1] = end - newRanges[newRanges.length - 2] + 1;
+	}
+	return newRanges;
 }
-StyleRange[] getStyleRanges(int start, int length, bool includeRanges) {
-    StyleRange[] newStyles;
-    int end = start + length - 1;
-    if (ranges !is null) {
-        int rangeCount = styleCount << 1;
-        int rangeStart = getRangeIndex(start, -1, rangeCount);
-        if (rangeStart >= rangeCount) return null;
-        if (ranges[rangeStart] > end) return null;
-        int rangeEnd = Math.min(rangeCount - 2, getRangeIndex(end, rangeStart - 1, rangeCount) + 1);
-        newStyles = new StyleRange[((rangeEnd - rangeStart) >> 1) + 1];
-        if (includeRanges) {
-            for (int i = rangeStart, j = 0; i <= rangeEnd; i += 2, j++) {
-                newStyles[j] = cast(StyleRange)styles[i >> 1].clone();
-                newStyles[j].start = ranges[i];
-                newStyles[j].length = ranges[i + 1];
-            }
-        } else {
-            System.arraycopy(styles, rangeStart >> 1, newStyles, 0, newStyles.length);
-        }
-    } else {
-        int rangeStart = getRangeIndex(start, -1, styleCount);
-        if (rangeStart >= styleCount) return null;
-        if (styles[rangeStart].start > end) return null;
-        int rangeEnd = Math.min(styleCount - 1, getRangeIndex(end, rangeStart - 1, styleCount));
-        newStyles = new StyleRange[rangeEnd - rangeStart + 1];
-        System.arraycopy(styles, rangeStart, newStyles, 0, newStyles.length);
-    }
-    StyleRange style = newStyles[0];
-    if (start > style.start) {
-        if (!includeRanges || ranges is null) newStyles[0] = style = cast(StyleRange)style.clone();
-        style.length = style.start + style.length - start;
-        style.start = start;
-    }
-    style = newStyles[newStyles.length - 1];
-    if (end < style.start + style.length - 1) {
-        if (end < style.start) {
-            StyleRange[] tmp = new StyleRange[newStyles.length - 1];
-            System.arraycopy(newStyles, 0, tmp, 0, newStyles.length - 1);
-            newStyles = tmp;
-        } else {
-            if (!includeRanges || ranges is null) newStyles[newStyles.length - 1] = style = cast(StyleRange)style.clone();
-            style.length = end - style.start + 1;
-        }
-    }
-    return newStyles;
+StyleRange[] getStyleRanges(int start, int length, boolean includeRanges) {
+	if (length is 0) return null;
+	StyleRange[] newStyles;
+	int end = start + length - 1;
+	if (ranges !is null) {
+		int rangeCount = styleCount << 1;
+		int rangeStart = getRangeIndex(start, -1, rangeCount);
+		if (rangeStart >= rangeCount) return null;
+		if (ranges[rangeStart] > end) return null;
+		int rangeEnd = Math.min(rangeCount - 2, getRangeIndex(end, rangeStart - 1, rangeCount));
+		if (ranges[rangeEnd] > end) rangeEnd = Math.max(rangeStart, rangeEnd - 2);
+		newStyles = new StyleRange[((rangeEnd - rangeStart) >> 1) + 1];
+		if (includeRanges) {
+			for (int i = rangeStart, j = 0; i <= rangeEnd; i += 2, j++) {
+				newStyles[j] = cast(StyleRange)styles[i >> 1].clone();
+				newStyles[j].start = ranges[i];
+				newStyles[j].length = ranges[i + 1];
+			}
+		} else {
+			System.arraycopy(styles, rangeStart >> 1, newStyles, 0, newStyles.length);
+		}
+	} else {
+		int rangeStart = getRangeIndex(start, -1, styleCount);
+		if (rangeStart >= styleCount) return null;
+		if (styles[rangeStart].start > end) return null;
+		int rangeEnd = Math.min(styleCount - 1, getRangeIndex(end, rangeStart - 1, styleCount));
+		if (styles[rangeEnd].start > end) rangeEnd = Math.max(rangeStart, rangeEnd - 1);
+		newStyles = new StyleRange[rangeEnd - rangeStart + 1];
+		System.arraycopy(styles, rangeStart, newStyles, 0, newStyles.length);
+	}
+	if (includeRanges || ranges == null) {
+		StyleRange style = newStyles[0];
+		if (start > style.start) {
+			newStyles[0] = style = cast(StyleRange)style.clone();
+			style.length = style.start + style.length - start;
+			style.start = start;
+		}
+		style = newStyles[newStyles.length - 1];
+		if (end < style.start + style.length - 1) {
+			newStyles[newStyles.length - 1] = style = cast(StyleRange)style.clone();
+			style.length = end - style.start + 1;
+		}
+	}
+	return newStyles;
 }
 StyleRange getStyleRange(StyleRange style) {
     if (style.underline && style.underlineStyle is DWT.UNDERLINE_LINK) hasLinks = true;
@@ -865,7 +880,7 @@ TextLayout getTextLayout(int lineIndex, int orientation, int width, int lineSpac
     layout.setJustify(justify);
 
     int lastOffset = 0;
-    int length = line.length;
+    int length = line.length();
     if (styles !is null) {
         if (ranges !is null) {
             int rangeCount = styleCount << 1;
@@ -910,7 +925,7 @@ TextLayout getTextLayout(int lineIndex, int orientation, int width, int lineSpac
         int compositionOffset = ime.getCompositionOffset();
         if (compositionOffset !is -1) {
             int commitCount = ime.getCommitCount();
-            int compositionLength = ime.getText().length;
+            int compositionLength = ime.getText().length();
             if (compositionLength !is commitCount) {
                 int compositionLine = content.getLineAtOffset(compositionOffset);
                 if (compositionLine is lineIndex) {
