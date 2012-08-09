@@ -15,9 +15,6 @@ module dwt.dnd.DNDListener;
 
 import dwt.dwthelper.utils;
 
-
-
-
 import dwt.dnd.DND;
 import dwt.dnd.DNDEvent;
 import dwt.dnd.DragSource;
@@ -28,6 +25,11 @@ import dwt.dnd.DropTarget;
 import dwt.dnd.DropTargetEffect;
 import dwt.dnd.DropTargetEvent;
 import dwt.dnd.DropTargetListener;
+import dwt.internal.SWTEventListener;
+import dwt.widgets.Event;
+import dwt.widgets.TypedListener;
+import dwt.widgets.Widget;
+
 
 class DNDListener : TypedListener {
     Widget dndWidget;
