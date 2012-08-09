@@ -15,6 +15,7 @@ module dwt.custom.StyledTextContent;
 import dwt.dwthelper.utils;
 
 import dwt.custom.TextChangeListener;
+
 /**
  * Clients may implement the StyledTextContent interface to provide a
  * custom store for the StyledText widget content. The StyledText widget
@@ -85,11 +86,11 @@ public int getLineAtOffset(int offset);
  *
  * @return the number of lines.  For example:
  * <ul>
- * <li> text value is> getLineCount
- * <li> null is> 1
- * <li> "" is> 1
- * <li> "a\n" is> 2
- * <li> "\n\n" is> 3
+ * <li> text value is > getLineCount
+ * <li> null is > 1
+ * <li> "" is > 1
+ * <li> "a\n" is > 2
+ * <li> "\n\n" is > 3
  * </ul>
  */
 public int getLineCount();
@@ -180,11 +181,11 @@ public void removeTextChangeListener(TextChangeListener listener);
  * is the number of deleted lines based on the change that occurs visually.
  * For example:
  * <ul>
- * <li>(replaceText, newText) is> (replaceLineCount, newLineCount)
- * <li>("", "\n") is> (0, 1)
- * <li>("\n\n", "a") is> (2, 0)
- * <li>("a", "\n\n") is> (0, 2)
- * <li>("\n", "") is> (1, 0)
+ * <li>(replaceText, newText) is > (replaceLineCount, newLineCount)
+ * <li>("", "\n") is > (0, 1)
+ * <li>("\n\n", "a") is > (2, 0)
+ * <li>("a", "\n\n") is > (0, 2)
+ * <li>("\n", "") is > (1, 0)
  * </ul>
  * </p>
  *
