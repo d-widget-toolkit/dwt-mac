@@ -16,16 +16,24 @@ module dwt.dnd.Clipboard;
 import dwt.dwthelper.utils;
 
 
-
-
-
-
-import tango.core.Thread;
-
+import dwt.SWT;
+import dwt.SWTError;
+import dwt.SWTException;
 import dwt.dnd.DND;
 import dwt.dnd.Transfer;
 import dwt.dnd.TransferData;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSData;
+import dwt.internal.cocoa.NSMutableArray;
+import dwt.internal.cocoa.NSObject;
+import dwt.internal.cocoa.NSPasteboard;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSURL;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
+import dwt.widgets.Display;
+
+import tango.core.Thread;
 
 /**
  * The <code>Clipboard</code> provides a mechanism for transferring data from one
@@ -559,9 +567,9 @@ public String[] getAvailableTypeNames() {
     checkWidget();
     NSPasteboard pasteboard = NSPasteboard.generalPasteboard();
     NSArray types = pasteboard.types();
-    int count = cast(int)/*64*/types.count();
+    NSUInteger count = types.count();
     String[] result = new String[count];
-    for (int i = 0; i < count; i++) {
+    for (NSUInteger i = 0; i < count; i++) {
         result[i] = (new NSString(types.objectAtIndex(i))).getString();
     }
     return result;
