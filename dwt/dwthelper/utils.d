@@ -529,6 +529,7 @@ struct Character
     static alias CharacterIsLetterOrDigit isLetterOrDigit;
     static alias CharacterIsSpaceChar isSpaceChar;
     static alias CharacterIsWhitespace isWhitespace;
+    static alias CharacterToUpper toUpperCase;
 
     static char toLowerCase (char c)
     {
@@ -589,6 +590,15 @@ public int indexOf(String str, String ch, int start){
     int res = tango.text.Util.locatePattern( str, ch, start );
     if( res is str.length ) res = -1;
     return res;
+}
+
+int indexOf (T) (T[] arr, T element)
+{
+    foreach (i, e ; arr)
+        if (e == element)
+            return i;
+
+    return -1;
 }
 
 public int lastIndexOf(String str, char ch){
@@ -731,6 +741,16 @@ void addElement (T) (ref T[] arr, T element)
 void removeElementAt (T) (ref T[] arr, size_t index)
 {
     arr = arr[0 .. index] ~ arr[index + 1 .. $];
+}
+
+void put (K, V) (K[V] aa, K k, V v)
+{
+    aa[k] = v;
+}
+
+void clear (K, V) (ref K[V] aa)
+{
+    aa = null;
 }
 
 public alias tango.stdc.stringz.toStringz toStringz;
