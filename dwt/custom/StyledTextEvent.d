@@ -12,12 +12,11 @@
  *******************************************************************************/
 module dwt.custom.StyledTextEvent;
 
-
-
-
 import dwt.custom.StyleRange;
 import dwt.custom.Bullet;
 import dwt.custom.StyledTextContent;
+import dwt.graphics.Color;
+import dwt.widgets.Event;
 
 /**
  *
