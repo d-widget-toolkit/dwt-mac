@@ -14,12 +14,13 @@ module dwt.custom.StyleRange;
 
 import dwt.dwthelper.utils;
 
-
-
-import dwt.internal.CloneableCompatibility;
+import dwt.SWT;
 import dwt.custom.StyleRange;
 import dwt.custom.TextChangedEvent;
 import dwt.custom.TextChangingEvent;
+import dwt.graphics.Color;
+import dwt.graphics.TextStyle;
+import dwt.internal.CloneableCompatibility;
 
 static import tango.text.Text;
 alias tango.text.Text.Text!(char) StringBuffer;
@@ -218,10 +219,10 @@ public override String toString() {
             buffer.format("{}", "normal");
     }
     String str = super.toString();
-    int index = tango.text.Util.locate( str, '{');
+    int index = str.indexOf('{');
     if( index is str.length ) index = -1;
     str = str[ index + 1 .. $ ];
-    if (str.length > 1) buffer.format("{}", ", ");
+    if (str.length() > 1) buffer.format("{}", ", ");
     buffer.format("{}", str);
     return buffer.toString();
 }
