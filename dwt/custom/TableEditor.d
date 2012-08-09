@@ -15,11 +15,16 @@ module dwt.custom.TableEditor;
 import dwt.dwthelper.utils;
 
 
-
-
-
-
+import dwt.SWT;
 import dwt.custom.ControlEditor;
+import dwt.events.ControlEvent;
+import dwt.events.ControlListener;
+import dwt.graphics.Rectangle;
+import dwt.widgets.Control;
+import dwt.widgets.Display;
+import dwt.widgets.Table;
+import dwt.widgets.TableColumn;
+import dwt.widgets.TableItem;
 
 /**
 *
