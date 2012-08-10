@@ -15,10 +15,11 @@ module dwt.graphics.DeviceData;
 
 import dwt.dwthelper.utils;
 
+
 public class DeviceData {
     /*
     * Debug fields - may not be honoured
-    * on some DWT platforms.
+    * on some SWT platforms.
     */
     public bool debug_;
     public bool tracking;
