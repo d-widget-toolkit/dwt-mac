@@ -15,10 +15,16 @@ module dwt.dnd.TreeDragSourceEffect;
 
 import dwt.dwthelper.utils;
 
-
-
+import dwt.SWT;
 import dwt.dnd.DragSourceEffect;
-
+import dwt.graphics.Image;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSImage;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSTableView;
+import dwt.internal.cocoa.OS;
+import dwt.widgets.Tree;
 
 /**
  * This class provides default implementations to display a source image
@@ -83,10 +89,10 @@ public class TreeDragSourceEffect : DragSourceEffect {
         if (dragSourceImage !is null) dragSourceImage.dispose();
         dragSourceImage = null;
         NSPoint point = new NSPoint();
-        int /*long*/ ptr = OS.malloc(NSPoint.sizeof);
+        void* ptr = OS.malloc(NSPoint.sizeof);
         OS.memmove(ptr, point, NSPoint.sizeof);
         NSEvent nsEvent = NSApplication.sharedApplication().currentEvent();
-        NSTableView widget = (NSTableView)control.view;
+        NSTableView widget = cast(NSTableView)control.view;
         NSImage nsImage = widget.dragImageForRowsWithIndexes(widget.selectedRowIndexes(), widget.tableColumns(), nsEvent, ptr);
         OS.memmove(point, ptr, NSPoint.sizeof);
         OS.free(ptr);
@@ -94,8 +100,8 @@ public class TreeDragSourceEffect : DragSourceEffect {
         Image image = Image.cocoa_new(control.getDisplay(), DWT.BITMAP, nsImage);
         dragSourceImage = image;
         nsImage.retain();
-        event.offsetX = (int)point.x;
-        event.offsetY = (int)point.y;
+        event.offsetX = cast(int)point.x;
+        event.offsetY = cast(int)point.y;
         return image;
     }
 }
