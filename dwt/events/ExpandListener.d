@@ -12,9 +12,11 @@
  *******************************************************************************/
 module dwt.events.ExpandListener;
 
+import dwt.dwthelper.utils;
 
-public import dwt.internal.DWTEventListener;
-public import dwt.events.ExpandEvent;
+
+import dwt.events.ExpandEvent;
+import dwt.internal.SWTEventListener;
 
 /**
  * Classes which implement this interface provide methods
