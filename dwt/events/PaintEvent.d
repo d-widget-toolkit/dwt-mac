@@ -12,14 +12,14 @@
  *******************************************************************************/
 module dwt.events.PaintEvent;
 
+import dwt.dwthelper.utils;
 
-import dwt.widgets.Event;
-import dwt.graphics.GC;
 
 import dwt.events.TypedEvent;
+import dwt.graphics.GC;
+import dwt.widgets.Event;
 
 import tango.text.convert.Format;
-import dwt.dwthelper.utils;
 
 /**
  * Instances of this class are sent as a result of
@@ -95,14 +95,15 @@ public this(Event e) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} gc={} x={} y={} width={} height={} count={}}",
-        super.toString[ 0 .. $-1 ],
-        gc is null ? "null" : gc.toString,
-        x,
-        y,
-        width,
-        height,
-        count );
+	String string = super.toString ();
+    return Format("{}{}{}{}{}{}{}{}{}{}{}{}{}{}", string[0 .. string.length() - 1], // remove trailing '}'
+    	, " gc=" , gc
+    	, " x=" , x
+    	, " y=" , y
+    	, " width=" , width
+    	, " height=" , height
+    	, " count=" , count
+    	, "}");
 }
 }
 
