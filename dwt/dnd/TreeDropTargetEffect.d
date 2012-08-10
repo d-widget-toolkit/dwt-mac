@@ -15,12 +15,11 @@ module dwt.dnd.TreeDropTargetEffect;
 
 import dwt.dwthelper.utils;
 
-
-
 import dwt.dnd.DND;
 import dwt.dnd.DropTarget;
 import dwt.dnd.DropTargetEffect;
 import dwt.dnd.DropTargetEvent;
+import dwt.widgets.Tree;
 
 /**
  * This class provides a default drag under effect (eg. select, insert, scroll and expand)
