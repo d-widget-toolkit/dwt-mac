@@ -15,11 +15,11 @@ module dwt.dnd.RTFTransfer;
 
 import dwt.dwthelper.utils;
 
-
-
 import dwt.dnd.ByteArrayTransfer;
 import dwt.dnd.DND;
 import dwt.dnd.TransferData;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.OS;
 
 /**
  * The class <code>RTFTransfer</code> provides a platform specific mechanism
@@ -73,7 +73,7 @@ public void javaToNative (Object object, TransferData transferData){
     if (!checkRTF(object) || !isSupportedType(transferData)) {
         DND.error(DND.ERROR_INVALID_DATA);
     }
-    transferData.data = NSString.stringWith((cast(ArrayWrapperString) object).array);
+    transferData.data = NSString.stringWith(stringcast(object));
 }
 
 /**
@@ -89,7 +89,7 @@ public void javaToNative (Object object, TransferData transferData){
 public Object nativeToJava(TransferData transferData){
     if (!isSupportedType(transferData) || transferData.data is null) return null;
     NSString string = cast(NSString) transferData.data;
-    return new ArrayWrapperString(string.getString());
+    return stringcast(string.getString());
 }
 
 protected int[] getTypeIds() {
@@ -101,7 +101,8 @@ protected String[] getTypeNames() {
 }
 
 bool checkRTF(Object object) {
-    return (object !is null && cast(ArrayWrapperString) object && (cast(ArrayWrapperString) object).array.length() > 0);
+    auto o = stringcast(object);
+    return (object !is null && o && o.length() > 0);
 }
 
 protected bool validate(Object object) {
