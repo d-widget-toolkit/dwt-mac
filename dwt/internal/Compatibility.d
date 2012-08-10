@@ -22,9 +22,9 @@ import java.util.zip.DeflaterOutputStream;
 +/
 
 import dwt.DWT;
-public import dwt.dwthelper.FileInputStream;
-public import dwt.dwthelper.FileOutputStream;
-public import dwt.dwthelper.InflaterInputStream;
+import dwt.dwthelper.FileInputStream;
+import dwt.dwthelper.FileOutputStream;
+import dwt.dwthelper.InflaterInputStream;
 import dwt.dwthelper.BufferedInputStream;
 import dwt.dwthelper.ResourceBundle;
 

@@ -13,8 +13,8 @@
 module dwt.events.TraverseListener;
 
 
-public import dwt.internal.SWTEventListener;
-public import dwt.events.TraverseEvent;
+import dwt.internal.SWTEventListener;
+import dwt.events.TraverseEvent;
 
 /**
  * Classes which implement this interface provide a method

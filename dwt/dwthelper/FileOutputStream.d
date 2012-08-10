@@ -3,8 +3,8 @@
  */
 module dwt.dwthelper.FileOutputStream;
 
-public import dwt.dwthelper.File;
-public import dwt.dwthelper.OutputStream;
+import dwt.dwthelper.File;
+import dwt.dwthelper.OutputStream;
 
 import dwt.dwthelper.utils;
 

@@ -13,8 +13,8 @@
 module dwt.events.VerifyListener;
 
 
-public import dwt.internal.SWTEventListener;
-public import dwt.events.VerifyEvent;
+import dwt.internal.SWTEventListener;
+import dwt.events.VerifyEvent;
 
 /**
  * Classes which implement this interface provide a method

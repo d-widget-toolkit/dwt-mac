@@ -17,7 +17,7 @@ module dwt.graphics.ImageData;
 
 import dwt.internal.CloneableCompatibility;
 
-public import dwt.dwthelper.InputStream;
+import dwt.dwthelper.InputStream;
 import dwt.dwthelper.utils;
 import dwt.graphics.Device;
 import dwt.graphics.GC;

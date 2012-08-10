@@ -3,22 +3,22 @@
  */
 module dwt.dwthelper.utils;
 
-public import dwt.dwthelper.System;
-public import dwt.dwthelper.Runnable;
-public import Math = tango.math.Math;
+import dwt.dwthelper.System;
+import dwt.dwthelper.Runnable;
+import Math = tango.math.Math;
 
-public import tango.core.Exception : IllegalArgumentException, IOException, PlatformException;
+import tango.core.Exception : IllegalArgumentException, IOException, PlatformException;
 
 import tango.io.Stdout;
 import tango.io.stream.FormatStream;
 
-public import tango.text.convert.Format;
+import tango.text.convert.Format;
 
 import tango.stdc.stringz;
 static import tango.text.Util;
 static import tango.text.Text;
 import tango.text.Unicode;
-public import Utf = tango.text.convert.Utf;
+import Utf = tango.text.convert.Utf;
 import tango.text.convert.Utf;
 import tango.core.Exception;
 import tango.stdc.stdlib : exit;
@@ -36,8 +36,8 @@ alias Exception Throwable;
 
 alias ClassInfo Class;
 
-public import dwt.dwthelper.array;
-public import dwt.dwthelper.associativearray;
+import dwt.dwthelper.array;
+import dwt.dwthelper.associativearray;
 
 void implMissing( String file, uint line ){
     Stderr.formatln( "implementation missing in file {} line {}", file, line );

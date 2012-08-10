@@ -12,8 +12,8 @@
  *******************************************************************************/
 module dwt.internal.image.GIFFileFormat;
 
-public import dwt.internal.image.FileFormat;
-public import dwt.graphics.PaletteData;
+import dwt.internal.image.FileFormat;
+import dwt.graphics.PaletteData;
 import dwt.internal.image.LEDataInputStream;
 import dwt.internal.image.LZWCodec;
 import dwt.graphics.RGB;

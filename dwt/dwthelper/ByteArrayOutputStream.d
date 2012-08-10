@@ -3,7 +3,7 @@
  */
 module dwt.dwthelper.ByteArrayOutputStream;
 
-public import dwt.dwthelper.OutputStream;
+import dwt.dwthelper.OutputStream;
 import dwt.dwthelper.utils;
 
 public class ByteArrayOutputStream : dwt.dwthelper.OutputStream.OutputStream {

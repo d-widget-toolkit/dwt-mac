@@ -13,8 +13,8 @@
 module dwt.events.MouseWheelListener;
 
 
-public import dwt.internal.SWTEventListener;
-public import dwt.events.MouseEvent;
+import dwt.internal.SWTEventListener;
+import dwt.events.MouseEvent;
 
 /**
  * Classes which implement this interface provide a method

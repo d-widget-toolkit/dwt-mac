@@ -13,8 +13,8 @@
 module dwt.events.HelpListener;
 
 
-public import dwt.internal.SWTEventListener;
-public import dwt.events.HelpEvent;
+import dwt.internal.SWTEventListener;
+import dwt.events.HelpEvent;
 
 /**
  * Classes which implement this interface provide a method

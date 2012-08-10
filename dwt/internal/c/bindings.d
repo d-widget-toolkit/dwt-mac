@@ -9,7 +9,7 @@ module dwt.internal.c.bindings;
 
 import dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;
-public import dwt.internal.cocoa.CGPoint;
+import dwt.internal.cocoa.CGPoint;
 
 extern (C):
 

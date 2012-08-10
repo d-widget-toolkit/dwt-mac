@@ -3,7 +3,7 @@
  */
 module dwt.dwthelper.InflaterInputStream;
 
-public import dwt.dwthelper.InputStream;
+import dwt.dwthelper.InputStream;
 import dwt.dwthelper.utils;
 
 public class InflaterInputStream : dwt.dwthelper.InputStream.InputStream {

@@ -14,14 +14,14 @@ module dwt.internal.image.FileFormat;
 
 import dwt.dwthelper.utils;
 
-public import dwt.graphics.ImageLoader;
-public import dwt.graphics.ImageData;
-public import dwt.internal.image.LEDataInputStream;
-public import dwt.internal.image.LEDataOutputStream;
+import dwt.graphics.ImageLoader;
+import dwt.graphics.ImageData;
+import dwt.internal.image.LEDataInputStream;
+import dwt.internal.image.LEDataOutputStream;
 
 
-public import dwt.dwthelper.InputStream;
-public import dwt.dwthelper.OutputStream;
+import dwt.dwthelper.InputStream;
+import dwt.dwthelper.OutputStream;
 import dwt.internal.image.GIFFileFormat;
 import dwt.internal.image.WinBMPFileFormat;
 import dwt.internal.image.WinICOFileFormat;

@@ -13,8 +13,8 @@
 module dwt.events.PaintListener;
 
 
-public import dwt.internal.SWTEventListener;
-public import dwt.events.PaintEvent;
+import dwt.internal.SWTEventListener;
+import dwt.events.PaintEvent;
 
 /**
  * Classes which implement this interface provide methods

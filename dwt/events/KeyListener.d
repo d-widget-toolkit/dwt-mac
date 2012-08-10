@@ -13,8 +13,8 @@
 module dwt.events.KeyListener;
 
 
-public import dwt.internal.SWTEventListener;
-public import dwt.events.KeyEvent;
+import dwt.internal.SWTEventListener;
+import dwt.events.KeyEvent;
 
 /**
  * Classes which implement this interface provide methods

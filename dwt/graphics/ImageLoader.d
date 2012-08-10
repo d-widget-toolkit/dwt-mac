@@ -21,9 +21,9 @@ import tango.core.Exception;
 import tango.core.Array;
 
 import dwt.dwthelper.utils;
-public import dwt.graphics.ImageData;
-public import dwt.graphics.ImageLoaderEvent;
-public import dwt.graphics.ImageLoaderListener;
+import dwt.graphics.ImageData;
+import dwt.graphics.ImageLoaderEvent;
+import dwt.graphics.ImageLoaderListener;
 
 /**
  * Instances of this class are used to load images from,

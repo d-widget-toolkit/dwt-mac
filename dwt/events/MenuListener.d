@@ -13,8 +13,8 @@
 module dwt.events.MenuListener;
 
 
-public import dwt.internal.SWTEventListener;
-public import dwt.events.MenuEvent;
+import dwt.internal.SWTEventListener;
+import dwt.events.MenuEvent;
 
 /**
  * Classes which implement this interface provide methods

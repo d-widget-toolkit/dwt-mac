@@ -13,8 +13,8 @@
 module dwt.events.SelectionListener;
 
 
-public import dwt.internal.SWTEventListener;
-public import dwt.events.SelectionEvent;
+import dwt.internal.SWTEventListener;
+import dwt.events.SelectionEvent;
 
 import tango.core.Traits;
 import tango.core.Tuple;
