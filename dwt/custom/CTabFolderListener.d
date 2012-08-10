@@ -23,7 +23,7 @@ import tango.core.Tuple;
  * Classes which implement this interface provide a method
  * that deals with events generated in the CTabFolder.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a CTabFolder using the
  * <code>addCTabFolderListener</code> method and removed using
  * the <code>removeCTabFolderListener</code> method. When a

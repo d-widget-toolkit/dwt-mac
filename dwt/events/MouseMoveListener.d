@@ -21,7 +21,7 @@ import dwt.events.MouseEvent;
  * that deals with the events that are generated as the mouse
  * pointer moves.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a control using the
  * <code>addMouseMoveListener</code> method and removed using
  * the <code>removeMouseMoveListener</code> method. As the

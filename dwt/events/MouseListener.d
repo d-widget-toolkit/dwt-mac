@@ -21,7 +21,7 @@ import dwt.events.MouseEvent;
  * that deal with the events that are generated as mouse buttons
  * are pressed.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a control using the
  * <code>addMouseListener</code> method and removed using
  * the <code>removeMouseListener</code> method. When a

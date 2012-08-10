@@ -21,7 +21,7 @@ import dwt.events.ModifyEvent;
  * that deals with the events that are generated when text
  * is modified.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a text widget using the
  * <code>addModifyListener</code> method and removed using
  * the <code>removeModifyListener</code> method. When the

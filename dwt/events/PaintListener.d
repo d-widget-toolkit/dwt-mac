@@ -21,7 +21,7 @@ import dwt.events.PaintEvent;
  * that deal with the events that are generated when the
  * control needs to be painted.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a control using the
  * <code>addPaintListener</code> method and removed using
  * the <code>removePaintListener</code> method. When a

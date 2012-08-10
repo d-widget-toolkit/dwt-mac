@@ -23,7 +23,7 @@ import dwt.internal.SWTEventListener;
  * that deal with the expanding and collapsing of <code>ExpandItem</code>s.
  *
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a <code>ExpandBar</code>
  * control using the <code>addExpandListener</code> method and
  * removed using the <code>removeExpandListener</code> method.

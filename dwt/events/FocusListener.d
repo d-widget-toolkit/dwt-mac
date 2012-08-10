@@ -23,7 +23,7 @@ import dwt.internal.SWTEventListener;
  * that deal with the events that are generated as controls
  * gain and lose focus.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a control using the
  * <code>addFocusListener</code> method and removed using
  * the <code>removeFocusListener</code> method. When a

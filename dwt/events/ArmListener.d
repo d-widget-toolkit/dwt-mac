@@ -23,7 +23,7 @@ import dwt.internal.SWTEventListener;
  * that deals with the event that is generated when a widget,
  * such as a menu item, is armed.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a widget using the
  * <code>addArmListener</code> method and removed using
  * the <code>removeArmListener</code> method. When the

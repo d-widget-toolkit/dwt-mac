@@ -20,7 +20,7 @@ import dwt.events.ShellEvent;
  * Classes which implement this interface provide methods
  * that deal with changes in state of <code>Shell</code>s.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a shell using the
  * <code>addShellListener</code> method and removed using
  * the <code>removeShellListener</code> method. When the

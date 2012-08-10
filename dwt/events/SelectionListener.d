@@ -24,7 +24,7 @@ import tango.core.Tuple;
  * that deal with the events that are generated when selection
  * occurs in a control.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a control using the
  * <code>addSelectionListener</code> method and removed using
  * the <code>removeSelectionListener</code> method. When

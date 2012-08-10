@@ -21,7 +21,7 @@ import dwt.events.VerifyEvent;
  * that deals with the events that are generated when text
  * is about to be modified.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a text control using the
  * <code>addVerifyListener</code> method and removed using
  * the <code>removeVerifyListener</code> method. When the

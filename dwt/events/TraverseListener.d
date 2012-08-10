@@ -21,7 +21,7 @@ import dwt.events.TraverseEvent;
  * that deals with the events that are generated when a
  * traverse event occurs in a control.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a control using the
  * <code>addTraverseListener</code> method and removed using
  * the <code>removeTraverseListener</code> method. When a

@@ -21,7 +21,7 @@ import dwt.events.MouseEvent;
  * that deals with the event that is generated as the mouse
  * wheel is scrolled.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a control using the
  * <code>addMouseWheelListener</code> method and removed using
  * the <code>removeMouseWheelListener</code> method. When the

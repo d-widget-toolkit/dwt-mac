@@ -21,7 +21,7 @@ import dwt.events.TreeEvent;
  * that deal with the expanding and collapsing of tree
  * branches.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a tree control using the
  * <code>addTreeListener</code> method and removed using
  * the <code>removeTreeListener</code> method. When a branch
