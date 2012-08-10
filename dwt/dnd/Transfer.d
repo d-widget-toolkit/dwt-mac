@@ -17,7 +17,6 @@ import dwt.dwthelper.utils;
 
 import dwt.dnd.TransferData;
 
-
 /**
  * <code>Transfer</code> provides a mechanism for converting between a java
  * representation of data and a platform specific representation of data and
@@ -73,7 +72,7 @@ abstract public bool isSupportedType(TransferData transferData);
  * @return the platform specific ids of the data types that can be converted using
  * this transfer agent
  */
-abstract public int[] getTypeIds();
+abstract protected int[] getTypeIds();
 
 /**
  * Returns the platform specific names of the  data types that can be converted
@@ -82,7 +81,7 @@ abstract public int[] getTypeIds();
  * @return the platform specific names of the data types that can be converted
  * using this transfer agent.
  */
-abstract public String[] getTypeNames();
+abstract protected String[] getTypeNames();
 
 /**
  * Converts a java representation of data to a platform specific representation of
@@ -115,7 +114,7 @@ abstract public String[] getTypeNames();
  *    <li>ERROR_INVALID_DATA - if object does not contain data in a valid format or is <code>null</code></li>
  * </ul>
  */
-abstract public void javaToNative (Object object, TransferData transferData);
+abstract protected void javaToNative (Object object, TransferData transferData);
 
 /**
  * Converts a platform specific representation of data to a java representation.
@@ -128,7 +127,7 @@ abstract public void javaToNative (Object object, TransferData transferData);
  * <code>null</code> is returned.  The type of Object that is returned is
  * dependent on the <code>Transfer</code> subclass.
  */
-abstract public Object nativeToJava(TransferData transferData);
+abstract protected Object nativeToJava(TransferData transferData);
 
 /**
  * Registers a name for a data type and returns the associated unique identifier.
@@ -172,7 +171,7 @@ public static int registerType(String formatName) {
  *
  * @since 3.1
  */
-/*protected */bool validate(Object object) {
+protected bool validate(Object object) {
     return true;
 }
 }
