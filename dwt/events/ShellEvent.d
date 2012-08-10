@@ -12,12 +12,13 @@
  *******************************************************************************/
 module dwt.events.ShellEvent;
 
+import dwt.dwthelper.utils;
 
-import dwt.widgets.Event;
+
 import dwt.events.TypedEvent;
+import dwt.widgets.Event;
 
 import tango.text.convert.Format;
-import dwt.dwthelper.utils;
 
 /**
  * Instances of this class are sent as a result of
@@ -55,7 +56,10 @@ public this(Event e) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} doit={}}", super.toString[ 0 .. $-2 ], doit );
+	String string = super.toString ();
+	return Format("{}{}{}{}", string[0 .. string.length() - 1], // remove trailing '}'
+		, " doit=" , doit
+		, "}");
 }
 }
 
