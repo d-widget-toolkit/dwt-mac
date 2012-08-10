@@ -13,10 +13,10 @@
  *******************************************************************************/
 module dwt.graphics.FontData;
 
-
-
-
 import dwt.dwthelper.utils;
+
+
+import dwt.DWT;
 
 /**
  * Instances of this class describe operating system fonts.
@@ -117,18 +117,17 @@ public this () {
  * @param str the string representation of a <code>FontData</code> (must not be null)
  *
  * @exception IllegalArgumentException <ul>
- *    <li>ERROR_NULL_ARGUMENT - if the argument is null</li>
  *    <li>ERROR_INVALID_ARGUMENT - if the argument does not represent a valid description</li>
  * </ul>
  *
  * @see #toString
  */
-public this(String str) {
-    //if (str is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
+public this(String string) {
+    //if (string is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     int start = 0;
-    int end = str.indexOf('|');
+    int end = string.indexOf('|');
     if (end is -1) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
-    String version1 = str.substring(start, end);
+    String version1 = string.substring(start, end);
     try {
         if (Integer.parseInt(version1) !is 1) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     } catch (NumberFormatException e) {
@@ -136,47 +135,47 @@ public this(String str) {
     }
 
     start = end + 1;
-    end = str.indexOf('|', start);
+    end = string.indexOf('|', start);
     if (end is -1) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
-    String name = str.substring(start, end);
+    String name = string.substring(start, end);
 
     start = end + 1;
-    end = str.indexOf('|', start);
+    end = string.indexOf('|', start);
     if (end is -1) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     float height = 0;
     try {
-        height = Float.parseFloat(str.substring(start, end));
+        height = Float.parseFloat(string.substring(start, end));
     } catch (NumberFormatException e) {
         DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     }
 
     start = end + 1;
-    end = str.indexOf('|', start);
+    end = string.indexOf('|', start);
     if (end is -1) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     int style = 0;
     try {
-        style = Integer.parseInt(str.substring(start, end));
+        style = Integer.parseInt(string.substring(start, end));
     } catch (NumberFormatException e) {
         DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     }
 
     start = end + 1;
-    end = str.indexOf('|', start);
+    end = string.indexOf('|', start);
     setName(name);
     setHeight(height);
     setStyle(style);
     if (end is -1) return;
-    String platform = str.substring(start, end);
+    String platform = string.substring(start, end);
 
     start = end + 1;
-    end = str.indexOf('|', start);
+    end = string.indexOf('|', start);
     if (end is -1) return;
-    String version2 = str.substring(start, end);
+    String version2 = string.substring(start, end);
 
     if (platform.equals("COCOA") && version2.equals("1")) {
         start = end + 1;
-        end = str.length();
-        if (start < end) nsName = str.substring(start, end);
+        end = string.length();
+        if (start < end) nsName = string.substring(start, end);
     }
 }
 
@@ -216,14 +215,14 @@ public this(String name, int height, int style) {
  *
  * @see #hashCode
  */
-public int opEquals (Object object) {
+public bool opEquals (Object object) {
     if (object is this) return true;
     if (!( null !is cast(FontData)object )) return false;
     FontData data = cast(FontData)object;
     return name.equals(data.name) && height is data.height && style is data.style;
 }
 
-//alias opEquals equals;
+alias opEquals equals;
 
 /**
  * Returns the height of the receiver in points.
