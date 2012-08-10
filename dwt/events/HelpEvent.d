@@ -12,9 +12,11 @@
  *******************************************************************************/
 module dwt.events.HelpEvent;
 
+import dwt.dwthelper.utils;
 
-import dwt.widgets.Event;
+
 import dwt.events.TypedEvent;
+import dwt.widgets.Event;
 
 /**
  * Instances of this class are sent as a result of
@@ -26,7 +28,7 @@ import dwt.events.TypedEvent;
 
 public final class HelpEvent : TypedEvent {
 
-    //static final long serialVersionUID = 3257001038606251315L;
+    static const long serialVersionUID = 3257001038606251315L;
 
 /**
  * Constructs a new instance of this class based on the
