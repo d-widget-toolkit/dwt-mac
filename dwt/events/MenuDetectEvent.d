@@ -12,12 +12,13 @@
  *******************************************************************************/
 module dwt.events.MenuDetectEvent;
 
+import dwt.dwthelper.utils;
 
-import dwt.widgets.Event;
+
 import dwt.events.TypedEvent;
+import dwt.widgets.Event;
 
 import tango.text.convert.Format;
-import dwt.dwthelper.utils;
 
 /**
  * Instances of this class are sent whenever the platform-
@@ -49,7 +50,7 @@ public final class MenuDetectEvent : TypedEvent {
      */
     public bool doit;
 
-    //private static final long serialVersionUID = -3061660596590828941L;
+    private static const long serialVersionUID = -3061660596590828941L;
 
 /**
  * Constructs a new instance of this class based on the
@@ -71,6 +72,11 @@ public this(Event e) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} x={} y={} doit={}}", super.toString[ 0 .. $-2 ], x, y, doit );
+    String string = super.toString ();
+    return Format("{}{}{}{}{}{}{}{}", string[0 .. string.length() - 1) // remove trailing '}'
+    	, " x=" , x
+    	, " y=" , y
+    	, " doit=" , doit
+    	, "}");
 }
 }
