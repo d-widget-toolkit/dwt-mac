@@ -16,12 +16,14 @@ module dwt.dnd.FileTransfer;
 
 import dwt.dwthelper.utils;
 
-
-
 import dwt.dnd.ByteArrayTransfer;
 import dwt.dnd.DND;
 import dwt.dnd.TransferData;
 import dwt.internal.objc.cocoa.Cocoa;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSMutableArray;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.OS;
 
 /**
  * The class <code>FileTransfer</code> provides a platform specific mechanism
@@ -126,8 +128,9 @@ protected String[] getTypeNames(){
 }
 
 bool checkFile(Object object) {
-    if (object is null || !(cast(ArrayWrapperString2)object) || (cast(ArrayWrapperString2)object).array.length is 0) return false;
-    String[] strings = (cast(ArrayWrapperString2)object).array;
+    auto o = cast(ArrayWrapperString2) object;
+    if (object is null || !o || o.array.length is 0) return false;
+    String[] strings = o.array;
     for (int i = 0; i < strings.length; i++) {
         if (strings[i] is null || strings[i].length() is 0) return false;
     }
