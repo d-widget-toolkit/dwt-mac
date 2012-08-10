@@ -12,12 +12,13 @@
  *******************************************************************************/
 module dwt.events.KeyEvent;
 
+import dwt.dwthelper.utils;
 
-import dwt.widgets.Event;
+
 import dwt.events.TypedEvent;
+import dwt.widgets.Event;
 
 import tango.text.convert.Format;
-import dwt.dwthelper.utils;
 
 /**
  * Instances of this class are sent as a result of
@@ -50,7 +51,7 @@ public class KeyEvent : TypedEvent {
      * character value based on a stateMask (such as DWT.CTRL) or the resulting
      * character will not be correct.
      */
-    public wchar character = '\0';
+    public wchar character = 0;
 
     /**
      * the key code of the key that was typed,
@@ -79,7 +80,7 @@ public class KeyEvent : TypedEvent {
      */
     public bool doit;
 
-    static final long serialVersionUID = 3256442491011412789L;
+    static const long serialVersionUID = 3256442491011412789L;
 
 /**
  * Constructs a new instance of this class based on the
@@ -102,8 +103,12 @@ public this(Event e) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} character={} keyCode={} stateMask={} doit={}}",
-        super.toString[ 0 .. $-2 ],
-        character, keyCode, stateMask, doit );
+    String string = super.toString ();
+    return Format("{}{}{}{}{}{}{}{}{}{}", string[0 .. $ - 1], // remove trailing '}'
+        , " character='" , ((character is 0) ? "\\0" : "" , character) , "'"
+        , " keyCode=" , keyCode
+        , " stateMask=" , stateMask
+        , " doit=" , doit
+        , "}";
 }
 }
