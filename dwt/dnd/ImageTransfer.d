@@ -17,13 +17,15 @@ module dwt.dnd.ImageTransfer;
 import dwt.dwthelper.utils;
 
 import dwt.DWT;
-
-
-
-
 import dwt.dnd.DND;
 import dwt.dnd.ByteArrayTransfer;
 import dwt.dnd.TransferData;
+import dwt.graphics.Image;
+import dwt.graphics.ImageData;
+import dwt.internal.cocoa.NSData;
+import dwt.internal.cocoa.NSImage;
+import dwt.internal.cocoa.OS;
+import dwt.widgets.Display;
 
 /**
  * The class <code>ImageTransfer</code> provides a platform specific mechanism
