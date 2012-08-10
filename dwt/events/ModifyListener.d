@@ -12,9 +12,11 @@
  *******************************************************************************/
 module dwt.events.ModifyListener;
 
+import dwt.dwthelper.utils;
 
-import dwt.internal.SWTEventListener;
+
 import dwt.events.ModifyEvent;
+import dwt.internal.SWTEventListener;
 
 /**
  * Classes which implement this interface provide a method
