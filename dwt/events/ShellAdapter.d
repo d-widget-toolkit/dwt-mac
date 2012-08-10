@@ -12,6 +12,9 @@
  *******************************************************************************/
 module dwt.events.ShellAdapter;
 
+import dwt.dwthelper.utils;
+
+
 import dwt.events.ShellListener;
 
 /**
