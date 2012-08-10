@@ -13,20 +13,31 @@
  *******************************************************************************/
 module dwt.graphics.Font;
 
-
-
-
-
-import tango.stdc.stringz;
-import tango.text.convert.Format;
-static import tango.text.convert.Utf;
-
 import dwt.dwthelper.utils;
+
+
+import dwt.SWT;
+import dwt.SWTError;
+import dwt.SWTException;
 import dwt.graphics.Device;
 import dwt.graphics.FontData;
 import dwt.graphics.Point;
 import dwt.graphics.Resource;
 import Carbon = dwt.internal.c.Carbon;
+import dwt.internal.cocoa.NSAutoreleasePool;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSFontManager;
+import dwt.internal.cocoa.NSMutableAttributedString;
+import dwt.internal.cocoa.NSMutableDictionary;
+import dwt.internal.cocoa.NSNumber;
+import dwt.internal.cocoa.NSRange;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSThread;
+import dwt.internal.cocoa.OS;
+
+import tango.stdc.stringz;
+import tango.text.convert.Format;
+static import tango.text.convert.Utf;
 
 /**
  * Instances of this class manage operating system resources that
@@ -144,8 +155,8 @@ public this(Device device, FontData[] fds) {
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         FontData fd = fds[0];
-    init_(fd.getName(), fd.getHeightF(), fd.getStyle(), fd.nsName);
-    init_();
+        init_(fd.getName(), fd.getHeightF(), fd.getStyle(), fd.nsName);
+        init_();
     } finally {
         if (pool !is null) pool.release();
     }
@@ -184,29 +195,11 @@ public this(Device device, String name, int height, int style) {
         if (pool !is null) pool.release();
     }
 }
-//FIXME: Jacob Carlborg
+
 /*public*/ this(Device device, String name, float height, int style) {
     super(device);
     init_(name, height, style, null);
     init_();
-}
-
-void addTraits(NSMutableAttributedString attrStr, NSRange range) {
-    if ((extraTraits & OS.NSBoldFontMask) !is 0) {
-        attrStr.addAttribute(OS.NSStrokeWidthAttributeName, NSNumber.numberWithDouble(SYNTHETIC_BOLD), range);
-    }
-    if ((extraTraits & OS.NSItalicFontMask) !is 0) {
-        attrStr.addAttribute(OS.NSObliquenessAttributeName, NSNumber.numberWithDouble(SYNTHETIC_ITALIC), range);
-    }
-}
-
-void addTraits(NSMutableDictionary dict) {
-    if ((extraTraits & OS.NSBoldFontMask) !is 0) {
-        dict.setObject(NSNumber.numberWithDouble(SYNTHETIC_BOLD), OS.NSStrokeWidthAttributeName);
-    }
-    if ((extraTraits & OS.NSItalicFontMask) !is 0) {
-        dict.setObject(NSNumber.numberWithDouble(SYNTHETIC_ITALIC), OS.NSObliquenessAttributeName);
-    }
 }
 
 void addTraits(NSMutableAttributedString attrStr, NSRange range) {
@@ -282,7 +275,7 @@ public FontData[] getFontData() {
         Point dpi = device.dpi, screenDPI = device.getScreenDPI();
         FontData data = new FontData(name, cast(float)/*64*/handle.pointSize() * screenDPI.y / dpi.y, style);
         data.nsName = nsName;
-    return [data];
+        return [data];
     } finally {
         if (pool !is null) pool.release();
     }
@@ -401,8 +394,8 @@ public bool isDisposed() {
  * @return a string representation of the receiver
  */
 public String toString () {
-    if (isDisposed()) return "Font {*DISPOSED*}";
-    return Format("Font {{}{}" , handle , "}");
+	if (isDisposed()) return "Font {*DISPOSED*}";
+	return Format("{}{}{}", "Font {" + handle + "}");
 }
 
 }
