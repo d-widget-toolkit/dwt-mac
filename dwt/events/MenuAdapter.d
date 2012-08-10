@@ -12,6 +12,9 @@
  *******************************************************************************/
 module dwt.events.MenuAdapter;
 
+import dwt.dwthelper.utils;
+
+
 import dwt.events.MenuListener;
 
 /**
