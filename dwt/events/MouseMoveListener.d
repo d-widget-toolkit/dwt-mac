@@ -12,9 +12,11 @@
  *******************************************************************************/
 module dwt.events.MouseMoveListener;
 
+import dwt.dwthelper.utils;
 
-import dwt.internal.SWTEventListener;
+
 import dwt.events.MouseEvent;
+import dwt.internal.SWTEventListener;
 
 /**
  * Classes which implement this interface provide a method
