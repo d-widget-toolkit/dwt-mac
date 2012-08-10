@@ -13,16 +13,17 @@
  *******************************************************************************/
 module dwt.graphics.Color;
 
-
-
-
-import tango.text.convert.Format;
-
 import dwt.dwthelper.utils;
+
+
+import dwt.SWT;
+import dwt.SWTException;
 import dwt.graphics.Device;
 import dwt.graphics.Resource;
 import dwt.graphics.RGB;
 import dwt.internal.c.Carbon;
+
+import tango.text.convert.Format;
 
 /**
  * Instances of this class manage the operating system resources that
@@ -136,8 +137,9 @@ void destroy() {
  */
 public bool equals(Object object) {
     if (object is this) return true;
-    if (!( null !is cast(Color)object )) return false;
-    Color color = cast(Color)object;
+    auto o = cast(Color)object;
+    if (!o) return false;
+    Color color = o;
     CGFloat[] rgbColor = color.handle;
     if (handle is rgbColor) return true;
     return device is color.device &&
