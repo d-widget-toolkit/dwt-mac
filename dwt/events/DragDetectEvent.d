@@ -12,8 +12,11 @@
  *******************************************************************************/
 module dwt.events.DragDetectEvent;
 
-import dwt.widgets.Event;
+import dwt.dwthelper.utils;
+
 import dwt.events.MouseEvent;
+import dwt.internal.SWTEventListener;
+import dwt.widgets.Event;
 
 /**
  * Instances of this class are sent as a result of
@@ -27,7 +30,7 @@ import dwt.events.MouseEvent;
 
 public final class DragDetectEvent : MouseEvent {
 
-    //private static final long serialVersionUID = -7229172519733647232L;
+    private static const long serialVersionUID = -7229172519733647232L;
 
 /**
  * Constructs a new instance of this class based on the
