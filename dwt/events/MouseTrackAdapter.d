@@ -12,6 +12,9 @@
  *******************************************************************************/
 module dwt.events.MouseTrackAdapter;
 
+import dwt.dwthelper.utils;
+
+
 import dwt.events.MouseTrackListener;
 
 /**
