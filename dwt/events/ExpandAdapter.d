@@ -12,6 +12,9 @@
  *******************************************************************************/
 module dwt.events.ExpandAdapter;
 
+import dwt.dwthelper.utils;
+
+
 import dwt.events.ExpandListener;
 
 /**
