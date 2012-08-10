@@ -12,16 +12,19 @@
  *******************************************************************************/
 module dwt.events.DragDetectListener;
 
+import dwt.dwthelper.utils;
 
-public import dwt.internal.DWTEventListener;
-public import dwt.events.DragDetectEvent;
+
+import dwt.events.DragDetectEvent;
+import dwt.internal.SWTEventListener;
+import dwt.widgets.Event;
 
 /**
  * Classes which implement this interface provide methods
  * that deal with the events that are generated when a drag
  * gesture is detected.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a control using the
  * <code>addDragDetectListener</code> method and removed using
  * the <code>removeDragDetectListener</code> method. When the
