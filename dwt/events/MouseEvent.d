@@ -12,12 +12,13 @@
  *******************************************************************************/
 module dwt.events.MouseEvent;
 
+import dwt.dwthelper.utils;
 
-import dwt.widgets.Event;
+
 import dwt.events.TypedEvent;
+import dwt.widgets.Event;
 
 import tango.text.convert.Format;
-import dwt.dwthelper.utils;
 
 /**
  * Instances of this class are sent whenever mouse
@@ -96,8 +97,13 @@ public this(Event e) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} button={} stateMask={} x={} y={} count={}}",
-        super.toString[ 0 .. $-1 ],
-        button, stateMask, x, y, count );
+    String string = super.toString ();
+    return Format("{}{}{}{}{}{}{}{}{}{}{}{}", string[0 .. string.length() - 1], // remove trailing '}'
+    	, " button=" , button
+    	, " stateMask=" , stateMask
+    	, " x=" , x
+    	, " y=" , y
+    	, " count=" , count
+    	, "}");
 }
 }
