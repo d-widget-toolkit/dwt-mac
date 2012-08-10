@@ -12,9 +12,11 @@
  *******************************************************************************/
 module dwt.events.FocusEvent;
 
+import dwt.dwthelper.utils;
 
-import dwt.widgets.Event;
+
 import dwt.events.TypedEvent;
+import dwt.widgets.Event;
 
 /**
  * Instances of this class are sent as a result of
@@ -26,7 +28,7 @@ import dwt.events.TypedEvent;
 
 public final class FocusEvent : TypedEvent {
 
-    //static final long serialVersionUID = 3258134643684227381L;
+    static const long serialVersionUID = 3258134643684227381L;
 
 /**
  * Constructs a new instance of this class based on the
