@@ -223,10 +223,10 @@ public void dispose () {
  *    Clipboard clipboard = new Clipboard(display);
  *    TextTransfer textTransfer = TextTransfer.getInstance();
  *    String textData = (String)clipboard.getContents(textTransfer);
- *    if (textData !is null) System.out.println("Text is "+textData);
+ *    if (textData !is null) System.out_.println("Text is "+textData);
  *    RTFTransfer rtfTransfer = RTFTransfer.getInstance();
  *    String rtfData = (String)clipboard.getContents(rtfTransfer);
- *    if (rtfData !is null) System.out.println("RTF Text is "+rtfData);
+ *    if (rtfData !is null) System.out_.println("RTF Text is "+rtfData);
  *    clipboard.dispose();
  *    </code></pre>
  *
@@ -259,10 +259,10 @@ public Object getContents(Transfer transfer) {
  *    Clipboard clipboard = new Clipboard(display);
  *    TextTransfer textTransfer = TextTransfer.getInstance();
  *    String textData = (String)clipboard.getContents(textTransfer);
- *    if (textData !is null) System.out.println("Text is "+textData);
+ *    if (textData !is null) System.out_.println("Text is "+textData);
  *    RTFTransfer rtfTransfer = RTFTransfer.getInstance();
  *    String rtfData = (String)clipboard.getContents(rtfTransfer, DND.CLIPBOARD);
- *    if (rtfData !is null) System.out.println("RTF Text is "+rtfData);
+ *    if (rtfData !is null) System.out_.println("RTF Text is "+rtfData);
  *    clipboard.dispose();
  *    </code></pre>
  *

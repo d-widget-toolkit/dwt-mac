@@ -184,7 +184,7 @@ public void dragOperationChanged(DropTargetEvent event);
  *       TextTransfer textTransfer = TextTransfer.getInstance();
  *       String data = (String)textTransfer.nativeToJava(event.currentDataType);
  *       if (data !is null) {
- *           System.out.println("Data to be dropped is (Text)"+data);
+ *           System.out_.println("Data to be dropped is (Text)"+data);
  *       }
  * };
  * </code></pre>

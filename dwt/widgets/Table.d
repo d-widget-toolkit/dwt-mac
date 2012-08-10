@@ -54,7 +54,7 @@ import dwt.widgets.TypedListener;
  *          TableItem item = cast(TableItem) event.item;
  *          int index = table.indexOf (item);
  *          item.setText ("Item " + index);
- *          System.out.println (item.getText ());
+ *          System.out_.println (item.getText ());
  *      }
  *  });
  * </pre></code>

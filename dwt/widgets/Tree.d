@@ -61,7 +61,7 @@ import dwt.widgets.Widget;
  *              text = parentItem.getText() + " - " + parentItem.indexOf(item);
  *          }
  *          item.setText(text);
- *          System.out.println(text);
+ *          System.out_.println(text);
  *          item.setItemCount(10);
  *      }
  *  });
