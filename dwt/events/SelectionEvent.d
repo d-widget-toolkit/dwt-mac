@@ -103,7 +103,7 @@ public class SelectionEvent : TypedEvent {
      */
     public bool doit;
 
-    //static final long serialVersionUID = 3976735856884987953L;
+    static const long serialVersionUID = 3976735856884987953L;
 
 /**
  * Constructs a new instance of this class based on the
