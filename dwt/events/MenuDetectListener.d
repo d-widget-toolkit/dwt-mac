@@ -12,9 +12,11 @@
  *******************************************************************************/
 module dwt.events.MenuDetectListener;
 
+import dwt.dwthelper.utils;
 
-import dwt.internal.SWTEventListener;
+
 import dwt.events.MenuDetectEvent;
+import dwt.internal.SWTEventListener;
 
 /**
  * Classes which implement this interface provide methods
@@ -22,7 +24,7 @@ import dwt.events.MenuDetectEvent;
  * platform-specific trigger for showing a context menu is
  * detected.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a control or TrayItem
  * using the <code>addMenuDetectListener</code> method and
  * removed using the <code>removeMenuDetectListener</code> method.
