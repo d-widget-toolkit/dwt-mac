@@ -12,12 +12,13 @@
  *******************************************************************************/
 module dwt.events.TraverseEvent;
 
+import dwt.dwthelper.utils;
 
 
 import dwt.events.KeyEvent;
+import dwt.widgets.Event;
 
 import tango.text.convert.Format;
-import dwt.dwthelper.utils;
 
 /**
  * Instances of this class are sent as a result of
@@ -135,6 +136,9 @@ public this(Event e) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} detail={}}", super.toString[ 0 .. $-2 ], detail );
+	String string = super.toString ();
+	return Format("{}{}{}{}", string[0 .. string.length() - 1], // remove trailing '}'
+		, " detail=" , detail
+		, "}";
 }
 }
