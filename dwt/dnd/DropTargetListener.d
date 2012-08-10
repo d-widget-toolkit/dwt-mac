@@ -15,9 +15,8 @@ module dwt.dnd.DropTargetListener;
 
 import dwt.dwthelper.utils;
 
-import dwt.internal.DWTEventListener;
-
 import dwt.dnd.DropTargetEvent;
+import dwt.internal.DWTEventListener;
 
 /**
  * The <code>DropTargetListener</code> class provides event notification to the application
