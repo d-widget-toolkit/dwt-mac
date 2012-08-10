@@ -12,9 +12,11 @@
  *******************************************************************************/
 module dwt.events.FocusListener;
 
+import dwt.dwthelper.utils;
 
-import dwt.internal.SWTEventListener;
+
 import dwt.events.FocusEvent;
+import dwt.internal.SWTEventListener;
 
 /**
  * Classes which implement this interface provide methods
