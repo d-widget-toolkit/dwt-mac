@@ -32,7 +32,7 @@ import tango.core.Tuple;
  *
  * @see CTabFolderEvent
  */
-public interface CTabFolderListener : DWTEventListener {
+public interface CTabFolderListener : SWTEventListener {
 
 /**
  * Sent when the user clicks on the close button of an item in the CTabFolder.  The item being closed is specified

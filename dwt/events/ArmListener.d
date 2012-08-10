@@ -32,7 +32,7 @@ import dwt.internal.SWTEventListener;
  *
  * @see ArmEvent
  */
-public interface ArmListener : DWTEventListener {
+public interface ArmListener : SWTEventListener {
 
 /**
  * Sent when a widget is armed, or 'about to be selected'.

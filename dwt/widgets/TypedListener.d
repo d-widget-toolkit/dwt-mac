@@ -16,7 +16,7 @@ module dwt.widgets.TypedListener;
 import dwt.dwthelper.utils;
 
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 
 
 
@@ -42,7 +42,7 @@ public class TypedListener : Listener {
     /**
      * The receiver's event listener
      */
-    protected DWTEventListener eventListener;
+    protected SWTEventListener eventListener;
 
 /**
  * Constructs a new instance of this class for the given event listener.
@@ -55,7 +55,7 @@ public class TypedListener : Listener {
  *
  * @param listener the event listener to store in the receiver
  */
-public this (DWTEventListener listener) {
+public this (SWTEventListener listener) {
     eventListener = listener;
 }
 
@@ -70,7 +70,7 @@ public this (DWTEventListener listener) {
  *
  * @return the receiver's event listener
  */
-public DWTEventListener getEventListener () {
+public SWTEventListener getEventListener () {
     return eventListener;
 }
 

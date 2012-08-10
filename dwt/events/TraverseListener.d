@@ -13,7 +13,7 @@
 module dwt.events.TraverseListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.TraverseEvent;
 
 /**
@@ -31,7 +31,7 @@ public import dwt.events.TraverseEvent;
  *
  * @see TraverseEvent
  */
-public interface TraverseListener : DWTEventListener {
+public interface TraverseListener : SWTEventListener {
 
 /**
  * Sent when a traverse event occurs in a control.

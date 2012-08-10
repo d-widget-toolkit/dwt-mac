@@ -1253,7 +1253,7 @@ public void removeListener (int eventType, Listener handler) {
  * @see Listener
  * @see #addListener
  */
-protected void removeListener (int eventType, DWTEventListener handler) {
+protected void removeListener (int eventType, SWTEventListener handler) {
     checkWidget();
     if (handler is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (eventTable is null) return;

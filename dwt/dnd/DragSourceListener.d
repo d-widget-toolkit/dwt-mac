@@ -16,7 +16,7 @@ module dwt.dnd.DragSourceListener;
 import dwt.dwthelper.utils;
 
 import dwt.dnd.DragSourceEvent;
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 
 /**
  * The <code>DragSourceListener</code> class provides event notification to the application for DragSource events.
@@ -30,7 +30,7 @@ import dwt.internal.DWTEventListener;
  * <b>move</b> operation, the application must remove the data that was transferred.</p>
  *
  */
-public interface DragSourceListener : DWTEventListener {
+public interface DragSourceListener : SWTEventListener {
 
 /**
  * The user has begun the actions required to drag the widget. This event gives the application

@@ -13,8 +13,8 @@
 module dwt.events.FocusListener;
 
 
-public import dwt.internal.DWTEventListener;
-public import dwt.events.FocusEvent;
+import dwt.internal.SWTEventListener;
+import dwt.events.FocusEvent;
 
 /**
  * Classes which implement this interface provide methods
@@ -32,7 +32,7 @@ public import dwt.events.FocusEvent;
  * @see FocusAdapter
  * @see FocusEvent
  */
-public interface FocusListener : DWTEventListener {
+public interface FocusListener : SWTEventListener {
 
 /**
  * Sent when a control gets focus.

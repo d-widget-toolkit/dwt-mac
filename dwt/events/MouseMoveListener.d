@@ -13,7 +13,7 @@
 module dwt.events.MouseMoveListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.MouseEvent;
 
 /**
@@ -30,7 +30,7 @@ public import dwt.events.MouseEvent;
  *
  * @see MouseEvent
  */
-public interface MouseMoveListener : DWTEventListener {
+public interface MouseMoveListener : SWTEventListener {
 
 /**
  * Sent when the mouse moves.

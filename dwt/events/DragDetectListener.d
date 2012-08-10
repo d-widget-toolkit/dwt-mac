@@ -35,7 +35,7 @@ import dwt.widgets.Event;
  *
  * @since 3.3
  */
-public interface DragDetectListener : DWTEventListener {
+public interface DragDetectListener : SWTEventListener {
 
 /**
  * Sent when a drag gesture is detected.

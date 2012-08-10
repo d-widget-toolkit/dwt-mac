@@ -34,7 +34,7 @@ import dwt.internal.SWTEventListener;
  * @see ControlAdapter
  * @see ControlEvent
  */
-public interface ControlListener : DWTEventListener {
+public interface ControlListener : SWTEventListener {
 
 /**
  * Sent when the location (x, y) of a control changes relative

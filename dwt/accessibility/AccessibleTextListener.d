@@ -45,7 +45,7 @@ import dwt.dwthelper.utils;
  *
  * @since 3.0
  */
-public interface AccessibleTextListener : DWTEventListener {
+public interface AccessibleTextListener : SWTEventListener {
 
     /**
      * Sent when an accessibility client requests the current character offset

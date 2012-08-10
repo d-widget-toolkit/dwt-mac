@@ -13,7 +13,7 @@
 module dwt.events.MouseWheelListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.MouseEvent;
 
 /**
@@ -33,7 +33,7 @@ public import dwt.events.MouseEvent;
  *
  * @since 3.3
  */
-public interface MouseWheelListener : DWTEventListener {
+public interface MouseWheelListener : SWTEventListener {
 
 /**
  * Sent when the mouse wheel is scrolled.

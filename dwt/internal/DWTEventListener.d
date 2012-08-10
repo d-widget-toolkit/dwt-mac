@@ -11,7 +11,7 @@
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
-module dwt.internal.DWTEventListener;
+module dwt.internal.SWTEventListener;
 
 import dwt.dwthelper.utils : EventListener;
 
@@ -21,12 +21,12 @@ import dwt.dwthelper.utils : EventListener;
  * <p>
  * It is part of our effort to provide support for both J2SE
  * and J2ME platforms. Under this scheme, classes need to
- * implement DWTEventListener instead of java.util.EventListener.
+ * implement SWTEventListener instead of java.util.EventListener.
  * </p>
  * <p>
  * Note: java.util.EventListener is not part of CDC and CLDC.
  * </p>
  */
-public interface DWTEventListener : EventListener
+public interface SWTEventListener : EventListener
 {
 }

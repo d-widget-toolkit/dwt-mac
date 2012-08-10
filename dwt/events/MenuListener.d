@@ -13,7 +13,7 @@
 module dwt.events.MenuListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.MenuEvent;
 
 /**
@@ -31,7 +31,7 @@ public import dwt.events.MenuEvent;
  * @see MenuAdapter
  * @see MenuEvent
  */
-public interface MenuListener : DWTEventListener {
+public interface MenuListener : SWTEventListener {
 
 /**
  * Sent when a menu is hidden.

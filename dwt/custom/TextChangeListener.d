@@ -15,7 +15,7 @@ module dwt.custom.TextChangeListener;
 import dwt.dwthelper.utils;
 
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 import dwt.custom.TextChangingEvent;
 import dwt.custom.TextChangedEvent;
 
@@ -32,7 +32,7 @@ import dwt.custom.TextChangedEvent;
  * below. If the entire text is replaced the textSet method
  * should be called instead.
  */
-public interface TextChangeListener : DWTEventListener {
+public interface TextChangeListener : SWTEventListener {
 
 /**
  * This method is called when the content is about to be changed.

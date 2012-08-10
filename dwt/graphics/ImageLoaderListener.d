@@ -14,7 +14,7 @@
 module dwt.graphics.ImageLoaderListener;
 
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 
 import dwt.graphics.ImageLoaderEvent;
 
@@ -34,7 +34,7 @@ import dwt.graphics.ImageLoaderEvent;
  * @see ImageLoaderEvent
  */
 
-public interface ImageLoaderListener : DWTEventListener {
+public interface ImageLoaderListener : SWTEventListener {
 
 /**
  * Sent when image data is either partially or completely loaded.

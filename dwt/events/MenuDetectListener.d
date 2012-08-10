@@ -13,7 +13,7 @@
 module dwt.events.MenuDetectListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.MenuDetectEvent;
 
 /**
@@ -34,7 +34,7 @@ public import dwt.events.MenuDetectEvent;
  *
  * @since 3.3
  */
-public interface MenuDetectListener : DWTEventListener {
+public interface MenuDetectListener : SWTEventListener {
 
 /**
  * Sent when the platform-dependent trigger for showing a menu item is detected.

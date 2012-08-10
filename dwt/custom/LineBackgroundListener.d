@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.custom.LineBackgroundListener;
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 import dwt.custom.LineBackgroundEvent;
 
 /**
@@ -23,7 +23,7 @@ import dwt.custom.LineBackgroundEvent;
  * @see LineBackgroundEvent
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
-public interface LineBackgroundListener : DWTEventListener {
+public interface LineBackgroundListener : SWTEventListener {
 
 /**
  * This method is called when a line is about to be drawn in order to get its

@@ -16,7 +16,7 @@ module dwt.dnd.DropTargetListener;
 import dwt.dwthelper.utils;
 
 import dwt.dnd.DropTargetEvent;
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 
 /**
  * The <code>DropTargetListener</code> class provides event notification to the application
@@ -39,7 +39,7 @@ import dwt.internal.DWTEventListener;
  * @see DropTargetEvent
  *
  */
-public interface DropTargetListener : DWTEventListener {
+public interface DropTargetListener : SWTEventListener {
 
 /**
  * The cursor has entered the drop target boundaries.

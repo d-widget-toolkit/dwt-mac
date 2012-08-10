@@ -12,7 +12,7 @@ module dwt.custom.CaretListener;
 
 import dwt.dwthelper.utils;
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 import dwt.custom.CaretEvent;
 
 /**
@@ -23,7 +23,7 @@ import dwt.custom.CaretEvent;
  *
  * @since 3.5
  */
-public interface CaretListener : DWTEventListener {
+public interface CaretListener : SWTEventListener {
 
 /**
  * This method is called after the caret offset is changed.

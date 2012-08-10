@@ -38,7 +38,7 @@ import tango.core.Tuple;
  *
  * @since 3.0
  */
-public interface CTabFolder2Listener : DWTEventListener {
+public interface CTabFolder2Listener : SWTEventListener {
     public enum {
         MINIMIZE,
         MAXIMIZE,

@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.browser.CloseWindowListener;
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 import dwt.browser.WindowEvent;
 
 /**
@@ -28,7 +28,7 @@ import dwt.browser.WindowEvent;
  *
  * @since 3.0
  */
-public interface CloseWindowListener : DWTEventListener {
+public interface CloseWindowListener : SWTEventListener {
 
 /**
  * This method is called when the window hosting a {@link Browser} should be closed.

@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.custom.LineStyleListener;
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 import dwt.custom.LineStyleEvent;
 
 /**
@@ -23,7 +23,7 @@ import dwt.custom.LineStyleEvent;
  * @see LineStyleEvent
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
-public interface LineStyleListener : DWTEventListener {
+public interface LineStyleListener : SWTEventListener {
 
 /**
  * This method is called when a line is about to be drawn in order to get the

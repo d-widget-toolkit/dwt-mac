@@ -15,7 +15,7 @@ module dwt.browser.StatusTextListener;
 import dwt.browser.StatusTextEvent;
 //import dwt.dwthelper.utils;
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 
 /**
  * This listener interface may be implemented in order to receive
@@ -27,7 +27,7 @@ import dwt.internal.DWTEventListener;
  *
  * @since 3.0
  */
-public interface StatusTextListener : DWTEventListener {
+public interface StatusTextListener : SWTEventListener {
 
 /**
  * This method is called when the status text is changed. The

@@ -12,7 +12,7 @@ module dwt.browser.AuthenticationListener;
 
 import dwt.dwthelper.utils;
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 
 /**
  * This listener interface may be implemented in order to receive
@@ -24,7 +24,7 @@ import dwt.internal.DWTEventListener;
  *
  * @since 3.5
  */
-public interface AuthenticationListener extends DWTEventListener {
+public interface AuthenticationListener extends SWTEventListener {
 
 /**
  * This method is called when a page is navigated to that requires

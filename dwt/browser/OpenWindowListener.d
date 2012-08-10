@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.browser.OpenWindowListener;
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 import dwt.browser.WindowEvent;
 
 /**
@@ -27,7 +27,7 @@ import dwt.browser.WindowEvent;
  *
  * @since 3.0
  */
-public interface OpenWindowListener : DWTEventListener {
+public interface OpenWindowListener : SWTEventListener {
 
 /**
  * This method is called when a new window needs to be created.

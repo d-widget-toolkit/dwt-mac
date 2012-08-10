@@ -35,9 +35,9 @@ class DNDListener : TypedListener {
     Widget dndWidget;
 /**
  * DNDListener constructor comment.
- * @param listener dwt.internal.DWTEventListener
+ * @param listener dwt.internal.SWTEventListener
  */
-this(DWTEventListener listener) {
+this(SWTEventListener listener) {
     super(listener);
 }
 public void handleEvent (Event e) {

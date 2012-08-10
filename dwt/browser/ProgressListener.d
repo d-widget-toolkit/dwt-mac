@@ -13,7 +13,7 @@
 module dwt.browser.ProgressListener;
 
 import dwt.browser.ProgressEvent;
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 
 /**
  * This listener interface may be implemented in order to receive
@@ -27,7 +27,7 @@ import dwt.internal.DWTEventListener;
  *
  * @since 3.0
  */
-public interface ProgressListener : DWTEventListener {
+public interface ProgressListener : SWTEventListener {
 
 /**
  * This method is called when a progress is made during the loading of the

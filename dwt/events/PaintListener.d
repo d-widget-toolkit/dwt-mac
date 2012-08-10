@@ -13,7 +13,7 @@
 module dwt.events.PaintListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.PaintEvent;
 
 /**
@@ -31,7 +31,7 @@ public import dwt.events.PaintEvent;
  *
  * @see PaintEvent
  */
-public interface PaintListener : DWTEventListener {
+public interface PaintListener : SWTEventListener {
 
 /**
  * Sent when a paint event occurs for the control.

@@ -15,7 +15,7 @@ module dwt.browser.VisibilityWindowListener;
 import dwt.browser.WindowEvent;
 //import dwt.dwthelper.utils;
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 
 /**
  * This listener interface may be implemented in order to receive
@@ -29,7 +29,7 @@ import dwt.internal.DWTEventListener;
  *
  * @since 3.0
  */
-public interface VisibilityWindowListener : DWTEventListener {
+public interface VisibilityWindowListener : SWTEventListener {
 
 /**
  * This method is called when the window hosting a <code>Browser</code>

@@ -33,7 +33,7 @@ import dwt.events.DisposeEvent;
  *
  * @see DisposeEvent
  */
-public interface DisposeListener : DWTEventListener {
+public interface DisposeListener : SWTEventListener {
 
 /**
  * Sent when the widget is disposed.

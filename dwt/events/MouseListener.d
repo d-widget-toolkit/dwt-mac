@@ -13,7 +13,7 @@
 module dwt.events.MouseListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.MouseEvent;
 
 /**
@@ -32,7 +32,7 @@ public import dwt.events.MouseEvent;
  * @see MouseAdapter
  * @see MouseEvent
  */
-public interface MouseListener : DWTEventListener {
+public interface MouseListener : SWTEventListener {
 
 /**
  * Sent when a mouse button is pressed twice within the

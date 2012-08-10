@@ -13,7 +13,7 @@
 module dwt.events.HelpListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.HelpEvent;
 
 /**
@@ -31,7 +31,7 @@ public import dwt.events.HelpEvent;
  *
  * @see HelpEvent
  */
-public interface HelpListener : DWTEventListener {
+public interface HelpListener : SWTEventListener {
 
 /**
  * Sent when help is requested for a control, typically

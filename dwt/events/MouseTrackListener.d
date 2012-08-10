@@ -13,7 +13,7 @@
 module dwt.events.MouseTrackListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.MouseEvent;
 
 /**
@@ -33,7 +33,7 @@ public import dwt.events.MouseEvent;
  * @see MouseTrackAdapter
  * @see MouseEvent
  */
-public interface MouseTrackListener : DWTEventListener {
+public interface MouseTrackListener : SWTEventListener {
 
 /**
  * Sent when the mouse pointer passes into the area of

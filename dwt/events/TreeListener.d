@@ -13,7 +13,7 @@
 module dwt.events.TreeListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.TreeEvent;
 
 /**
@@ -32,7 +32,7 @@ public import dwt.events.TreeEvent;
  * @see TreeAdapter
  * @see TreeEvent
  */
-public interface TreeListener : DWTEventListener {
+public interface TreeListener : SWTEventListener {
 
 /**
  * Sent when a tree branch is collapsed.

@@ -15,7 +15,7 @@ module dwt.accessibility.AccessibleControlListener;
 
 import dwt.accessibility.AccessibleControlEvent;
 import dwt.dwthelper.utils;
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 
 /**
  * Classes that implement this interface provide methods
@@ -44,7 +44,7 @@ import dwt.internal.DWTEventListener;
  *
  * @since 2.0
  */
-public interface AccessibleControlListener : DWTEventListener {
+public interface AccessibleControlListener : SWTEventListener {
 
     /**
      * Sent when an accessibility client requests the identifier

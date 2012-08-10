@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.custom.BidiSegmentListener;
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 import dwt.custom.BidiSegmentEvent;
 
 /**
@@ -20,7 +20,7 @@ import dwt.custom.BidiSegmentEvent;
  * BidiSegmentEvents.
  * @see BidiSegmentEvent
  */
-public interface BidiSegmentListener : DWTEventListener {
+public interface BidiSegmentListener : SWTEventListener {
 
 /**
  * This method is called when a line needs to be reordered for

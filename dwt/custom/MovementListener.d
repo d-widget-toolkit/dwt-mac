@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.custom.MovementListener;
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 import dwt.custom.MovementEvent;
 
 /**
@@ -27,7 +27,7 @@ import dwt.custom.MovementEvent;
  *
  * @since 3.3
  */
-public interface MovementListener : DWTEventListener {
+public interface MovementListener : SWTEventListener {
 /**
  * This method is called when a new offset is required based on the current
  * offset and a movement type.

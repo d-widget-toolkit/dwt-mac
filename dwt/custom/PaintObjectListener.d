@@ -13,7 +13,7 @@
 module dwt.custom.PaintObjectListener;
 
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 import dwt.custom.PaintObjectEvent;
 
 /**
@@ -21,7 +21,7 @@ import dwt.custom.PaintObjectEvent;
  *
  * @since 3.2
  */
-public interface PaintObjectListener : DWTEventListener {
+public interface PaintObjectListener : SWTEventListener {
 /**
  * This method is called when an object needs to be drawn.
  *

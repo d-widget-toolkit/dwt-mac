@@ -14,7 +14,7 @@ module dwt.custom.ExtendedModifyListener;
 
 import dwt.dwthelper.utils;
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 import dwt.custom.ExtendedModifyEvent;
 
 /**
@@ -25,7 +25,7 @@ import dwt.custom.ExtendedModifyEvent;
  * @see ExtendedModifyEvent
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
-public interface ExtendedModifyListener : DWTEventListener {
+public interface ExtendedModifyListener : SWTEventListener {
 
 /**
  * This method is called after a text change occurs.

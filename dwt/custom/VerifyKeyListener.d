@@ -15,7 +15,7 @@ module dwt.custom.VerifyKeyListener;
 import dwt.dwthelper.utils;
 
 import dwt.events.VerifyEvent;
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 
 /**
  * Classes which implement this interface provide a method
@@ -25,7 +25,7 @@ import dwt.internal.DWTEventListener;
  * @see VerifyEvent
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
-public interface VerifyKeyListener : DWTEventListener {
+public interface VerifyKeyListener : SWTEventListener {
 /**
  * The following event fields are used:<ul>
  * <li>event.character is the character that was typed (input)</li>

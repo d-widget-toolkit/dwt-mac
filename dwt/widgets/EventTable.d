@@ -16,7 +16,7 @@ module dwt.widgets.EventTable;
 
 
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 
 import dwt.dwthelper.System;
 import dwt.dwthelper.utils;
@@ -147,7 +147,7 @@ public void unhook (int eventType, Listener listener) {
     }
 }
 
-public void unhook (int eventType, DWTEventListener listener) {
+public void unhook (int eventType, SWTEventListener listener) {
     if (types is null) return;
     for (int i=0; i<types.length; i++) {
         if (types [i] is eventType) {

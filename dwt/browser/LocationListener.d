@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.browser.LocationListener;
 
-import dwt.internal.DWTEventListener;
+import dwt.internal.SWTEventListener;
 import dwt.browser.LocationEvent;
 
 /**
@@ -25,7 +25,7 @@ import dwt.browser.LocationEvent;
  *
  * @since 3.0
  */
-public interface LocationListener : DWTEventListener {
+public interface LocationListener : SWTEventListener {
 
 /**
  * This method is called when the current location is about to be changed.

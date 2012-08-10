@@ -13,7 +13,7 @@
 module dwt.events.KeyListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.KeyEvent;
 
 /**
@@ -32,7 +32,7 @@ public import dwt.events.KeyEvent;
  * @see KeyAdapter
  * @see KeyEvent
  */
-public interface KeyListener : DWTEventListener {
+public interface KeyListener : SWTEventListener {
 
 /**
  * Sent when a key is pressed on the system keyboard.

@@ -36,7 +36,7 @@ import dwt.internal.SWTEventListener;
  *
  * @since 3.2
  */
-public interface ExpandListener : DWTEventListener {
+public interface ExpandListener : SWTEventListener {
 
 /**
  * Sent when an item is collapsed.

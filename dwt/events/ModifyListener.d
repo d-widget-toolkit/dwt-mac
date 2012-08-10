@@ -13,7 +13,7 @@
 module dwt.events.ModifyListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.ModifyEvent;
 
 /**
@@ -30,7 +30,7 @@ public import dwt.events.ModifyEvent;
  *
  * @see ModifyEvent
  */
-public interface ModifyListener : DWTEventListener {
+public interface ModifyListener : SWTEventListener {
 
 /**
  * Sent when the text is modified.

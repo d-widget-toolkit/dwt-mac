@@ -13,7 +13,7 @@
 module dwt.events.VerifyListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.VerifyEvent;
 
 /**
@@ -31,7 +31,7 @@ public import dwt.events.VerifyEvent;
  *
  * @see VerifyEvent
  */
-public interface VerifyListener : DWTEventListener {
+public interface VerifyListener : SWTEventListener {
 
 /**
  * Sent when the text is about to be modified.

@@ -13,7 +13,7 @@
 module dwt.events.ShellListener;
 
 
-public import dwt.internal.DWTEventListener;
+public import dwt.internal.SWTEventListener;
 public import dwt.events.ShellEvent;
 
 /**
@@ -31,7 +31,7 @@ public import dwt.events.ShellEvent;
  * @see ShellAdapter
  * @see ShellEvent
  */
-public interface ShellListener : DWTEventListener {
+public interface ShellListener : SWTEventListener {
 
 /**
  * Sent when a shell becomes the active window.

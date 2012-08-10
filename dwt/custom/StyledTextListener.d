@@ -39,7 +39,7 @@ import dwt.widgets.TypedListener;
 class StyledTextListener : TypedListener {
 /**
  */
-this(DWTEventListener listener) {
+this(SWTEventListener listener) {
     super(listener);
 }
 /**
