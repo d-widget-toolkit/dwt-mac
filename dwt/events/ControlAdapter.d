@@ -12,7 +12,11 @@
  *******************************************************************************/
 module dwt.events.ControlAdapter;
 
+import dwt.dwthelper.utils;
+
+
 import dwt.events.ControlListener;
+
 /**
  * This adapter class provides default implementations for the
  * methods described by the <code>ControlListener</code> interface.
