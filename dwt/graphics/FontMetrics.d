@@ -54,7 +54,7 @@ public static FontMetrics cocoa_new(int ascent, int descent, int averageCharWidt
  */
 public int opEquals (Object object) {
     if (object is this) return true;
-    if (!( null !is cast(FontMetrics)object )) return false;
+    if (!(cast(FontMetrics)object)) return false;
     FontMetrics metrics = cast(FontMetrics)object;
     return ascent is metrics.ascent && descent is metrics.descent &&
         averageCharWidth is metrics.averageCharWidth && leading is metrics.leading &&

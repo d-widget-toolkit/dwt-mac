@@ -215,7 +215,7 @@ public this(String name, int height, int style) {
  *
  * @see #hashCode
  */
-public bool opEquals (Object object) {
+public int opEquals (Object object) {
     if (object is this) return true;
     if (!( null !is cast(FontData)object )) return false;
     FontData data = cast(FontData)object;
