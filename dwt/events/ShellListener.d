@@ -12,9 +12,11 @@
  *******************************************************************************/
 module dwt.events.ShellListener;
 
+import dwt.dwthelper.utils;
 
-import dwt.internal.SWTEventListener;
+
 import dwt.events.ShellEvent;
+import dwt.internal.SWTEventListener;
 
 /**
  * Classes which implement this interface provide methods
