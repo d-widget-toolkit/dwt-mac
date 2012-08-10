@@ -13,9 +13,10 @@
  *******************************************************************************/
 module dwt.graphics.Drawable;
 
-import dwt.graphics.GCData;
-
 import dwt.dwthelper.utils;
+
+
+import dwt.graphics.GCData;
 import objc = dwt.internal.objc.runtime;
 
 /**
