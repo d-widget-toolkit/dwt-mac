@@ -12,9 +12,11 @@
  *******************************************************************************/
 module dwt.events.TreeListener;
 
+import dwt.dwthelper.utils;
 
-import dwt.internal.SWTEventListener;
+
 import dwt.events.TreeEvent;
+import dwt.internal.SWTEventListener;
 
 /**
  * Classes which implement this interface provide methods
