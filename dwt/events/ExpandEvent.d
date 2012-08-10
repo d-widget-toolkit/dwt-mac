@@ -12,9 +12,11 @@
  *******************************************************************************/
 module dwt.events.ExpandEvent;
 
+import dwt.dwthelper.utils;
 
 
 import dwt.events.SelectionEvent;
+import dwt.widgets.Event;
 
 /**
  * Instances of this class are sent as a result of
@@ -28,7 +30,7 @@ import dwt.events.SelectionEvent;
 
 public class ExpandEvent : SelectionEvent {
 
-    //static final long serialVersionUID = 3976735856884987356L;
+    static const long serialVersionUID = 3976735856884987356L;
 
 /**
  * Constructs a new instance of this class based on the
