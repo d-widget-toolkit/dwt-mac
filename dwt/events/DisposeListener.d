@@ -12,16 +12,18 @@
  *******************************************************************************/
 module dwt.events.DisposeListener;
 
+import dwt.dwthelper.utils;
 
-public import dwt.internal.DWTEventListener;
-public import dwt.events.DisposeEvent;
+
+import dwt.internal.SWTEventListener;
+import dwt.events.DisposeEvent;
 
 /**
  * Classes which implement this interface provide a method
  * that deals with the event that is generated when a widget
  * is disposed.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a widget using the
  * <code>addDisposeListener</code> method and removed using
  * the <code>removeDisposeListener</code> method. When a
