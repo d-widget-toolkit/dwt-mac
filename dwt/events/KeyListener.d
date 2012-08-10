@@ -12,16 +12,18 @@
  *******************************************************************************/
 module dwt.events.KeyListener;
 
+import dwt.dwthelper.utils;
 
-import dwt.internal.SWTEventListener;
+
 import dwt.events.KeyEvent;
+import dwt.internal.SWTEventListener;
 
 /**
  * Classes which implement this interface provide methods
  * that deal with the events that are generated as keys
  * are pressed on the system keyboard.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a control using the
  * <code>addKeyListener</code> method and removed using
  * the <code>removeKeyListener</code> method. When a
