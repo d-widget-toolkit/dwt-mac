@@ -12,9 +12,11 @@
  *******************************************************************************/
 module dwt.events.ArmListener;
 
-public import dwt.internal.DWTEventListener;
-public import dwt.events.ArmEvent;
+import dwt.dwthelper.utils;
 
+
+import dwt.events.ArmEvent;
+import dwt.internal.SWTEventListener;
 
 /**
  * Classes which implement this interface provide a method
