@@ -12,14 +12,17 @@
  *******************************************************************************/
 module dwt.events.TypedEvent;
 
+import dwt.dwthelper.utils;
 
 
-import dwt.widgets.Display;
 import dwt.internal.DWTEventObject;
+import dwt.internal.SWTEventObject;
+import dwt.widgets.Display;
+import dwt.widgets.Event;
+import dwt.widgets.Widget;
 
 import tango.text.convert.Format;
 import tango.text.Util : split;
-import dwt.dwthelper.utils;
 
 /**
  * This is the super class for all typed event classes provided
@@ -89,8 +92,10 @@ public this(Event e) {
  * @return the name of the event
  */
 String getName () {
-    String str = this.classinfo.name;
-    return split( str, "." )[$-1];
+	String string = this.classinfo.name;
+	int index = string.lastIndexOf ('.');
+	if (index == -1) return string;
+	return string[index + 1 .. string.length ()];
 }
 
 /**
@@ -100,8 +105,10 @@ String getName () {
  * @return a string representation of the event
  */
 public override String toString() {
-    String str_widget = widget is null ? "null" : widget.toString;
-    String str_data   = data is null ? "null" : data.toString;
-    return Format( "{}{{time={} data={}}", str_widget, time, str_data );
+    return Format("{}{}{}{}{}{}{}{}", getName ()
+    	, "{" , widget
+    	, " time=" , time
+    	, " data=" , data
+    	, "}");
 }
 }
