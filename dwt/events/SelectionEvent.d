@@ -12,12 +12,14 @@
  *******************************************************************************/
 module dwt.events.SelectionEvent;
 
+import dwt.dwthelper.utils;
 
 
 import dwt.events.TypedEvent;
+import dwt.widgets.Event;
+import dwt.widgets.Widget;
 
 import tango.text.convert.Format;
-import dwt.dwthelper.utils;
 
 /**
  * Instances of this class are sent as a result of
@@ -131,17 +133,18 @@ public this(Event e) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} item={} detail={} x={} y={} width={} height={} stateMask={} text={} doit={}}",
-        super.toString[ 0 .. $-2 ],
-        item,
-        detail,
-        x,
-        y,
-        width,
-        height,
-        stateMask,
-        text,
-        doit );
+    String string = super.toString ();
+    return Format("{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}", string[0 .. string.length() - 1], // remove trailing '}'
+    	, " item=" , item
+    	, " detail=" , detail
+    	, " x=" , x
+    	, " y=" , y
+    	, " width=" , width
+    	, " height=" , height
+    	, " stateMask=" , stateMask
+    	, " text=" , text
+    	, " doit=" , doit
+    	, "}");
 }
 }
 
