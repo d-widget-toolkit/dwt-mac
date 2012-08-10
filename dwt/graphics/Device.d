@@ -13,11 +13,8 @@
  *******************************************************************************/
 module dwt.graphics.Device;
 
-
-import dwt.internal.Compatibility;
-
-import cocoa = dwt.internal.cocoa.id;
-
+import dwt.SWT;
+import dwt.SWTException;
 import dwt.dwthelper.System;
 import dwt.dwthelper.utils;
 import dwt.graphics.Drawable;
@@ -28,7 +25,24 @@ import dwt.graphics.FontData;
 import dwt.graphics.GCData;
 import dwt.graphics.Point;
 import dwt.graphics.Rectangle;
+import dwt.internal.Compatibility;
 import Carbon = dwt.internal.c.Carbon;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSAutoreleasePool;
+import dwt.internal.cocoa.NSDictionary;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSFontManager;
+import dwt.internal.cocoa.NSMutableDictionary;
+import dwt.internal.cocoa.NSMutableParagraphStyle;
+import dwt.internal.cocoa.NSNumber;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSScreen;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSThread;
+import dwt.internal.cocoa.NSValue;
+import dwt.internal.cocoa.OS;
+import cocoa = dwt.internal.cocoa.id;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 
@@ -44,7 +58,7 @@ import tango.io.Stdout;
  */
 public abstract class Device : Drawable {
 
-    /* debug_ing */
+    /* Debugging */
     public static const bool DEBUG = true;
     bool debug_ = DEBUG;
     bool tracking = DEBUG;
@@ -81,7 +95,7 @@ public abstract class Device : Drawable {
     protected static Runnable DeviceFinder;
     static this (){
         try {
-            ClassInfo.find ("dwt.widgets.Display");
+            ClassInfo.find ("dwt.widgets.Display.Display");
         } catch (ClassNotFoundException e) {}
     }
 
@@ -380,18 +394,18 @@ public FontData[] getFontList (String faceName, bool scalable) {
     if (!scalable) return new FontData[0];
     int count = 0;
     NSArray families = NSFontManager.sharedFontManager().availableFontFamilies();
-    int /*long*/ familyCount = families.count();
+    NSUInteger familyCount = families.count();
     FontData[] fds = new FontData[100];
-    for (int i = 0; i < familyCount; i++) {
+    for (NSUInteger i = 0; i < familyCount; i++) {
         NSString nsFamily = new NSString(families.objectAtIndex(i));
         String name = nsFamily.getString();
         NSArray fonts = NSFontManager.sharedFontManager().availableMembersOfFontFamily(nsFamily);
-        int fontCount = (int)/*64*/fonts.count();
-        for (int j = 0; j < fontCount; j++) {
+        NSUInteger fontCount = fonts.count();
+        for (NSUInteger j = 0; j < fontCount; j++) {
             NSArray fontDetails = new NSArray(fonts.objectAtIndex(j));
             String nsName = new NSString(fontDetails.objectAtIndex(0)).getString();
-            int /*long*/ weight = new NSNumber(fontDetails.objectAtIndex(2)).integerValue();
-            int /*long*/ traits = new NSNumber(fontDetails.objectAtIndex(3)).integerValue();
+            NSInteger weight = new NSNumber(fontDetails.objectAtIndex(2)).integerValue();
+            NSInteger traits = new NSNumber(fontDetails.objectAtIndex(3)).integerValue();
             int style = DWT.NORMAL;
             if ((traits & OS.NSItalicFontMask) !is 0) style |= DWT.ITALIC;
             if (weight is 9) style |= DWT.BOLD;
@@ -617,9 +631,9 @@ public bool loadFont (String path) {
     if (path is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     bool result = false;
     NSString nsPath = NSString.stringWith(path);
-    int /*long*/ fsRepresentation = nsPath.fileSystemRepresentation();
+    char* fsRepresentation = nsPath.fileSystemRepresentation();
 
-    if (fsRepresentation !is 0) {
+    if (fsRepresentation !is null) {
         byte [] fsRef = new byte [80];
         bool [] isDirectory = new bool[1];
         if (OS.FSPathMakeRef (fsRepresentation, fsRef, isDirectory) is OS.noErr) {
@@ -676,22 +690,22 @@ void printErrors () {
             }
             if (objectCount !is 0) {
                 String string = "Summary: ";
-                if (colors !is 0) string += colors + " Color(s), ";
-                if (cursors !is 0) string += cursors + " Cursor(s), ";
-                if (fonts !is 0) string += fonts + " Font(s), ";
-                if (gcs !is 0) string += gcs + " GC(s), ";
-                if (images !is 0) string += images + " Image(s), ";
-                if (paths !is 0) string += paths + " Path(s), ";
-                if (patterns !is 0) string += patterns + " Pattern(s), ";
-                if (regions !is 0) string += regions + " Region(s), ";
-                if (textLayouts !is 0) string += textLayouts + " TextLayout(s), ";
-                if (transforms !is 0) string += transforms + " Transforms(s), ";
+                if (colors !is 0) string ~= Format("{}{}, ", colors, " Color(s), ");
+                if (cursors !is 0) string ~= Format("{}{}", cursors , " Cursor(s), ");
+                if (fonts !is 0) string ~= Format("{}{}", fonts , " Font(s), ");
+                if (gcs !is 0) string ~= Format("{}{}", gcs , " GC(s), ");
+                if (images !is 0) string ~= Format("{}{}", images , " Image(s), ");
+                if (paths !is 0) string ~= Format("{}{}", paths , " Path(s), ");
+                if (patterns !is 0) string ~= Format("{}{}", patterns , " Pattern(s), ");
+                if (regions !is 0) string ~= Format("{}{}", regions , " Region(s), ");
+                if (textLayouts !is 0) string ~= Format("{}{}", textLayouts , " TextLayout(s), ");
+                if (transforms !is 0) string ~= Format("{}{}", transforms , " Transforms(s), ");
                 if (string.length () !is 0) {
                     string = string.substring (0, string.length () - 2);
-                    System.out.println (string);
+                    System.out_.println (string);
                 }
                 for (int i=0; i<errors.length; i++) {
-                    if (errors [i] !is null) errors [i].printStackTrace (System.out);
+                    if (errors [i] !is null) errors [i].printStackTrace (System.Out);
                 }
             }
         }
