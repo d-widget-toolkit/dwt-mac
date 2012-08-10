@@ -12,9 +12,11 @@
  *******************************************************************************/
 module dwt.events.SelectionListener;
 
+import dwt.dwthelper.utils;
 
-import dwt.internal.SWTEventListener;
+
 import dwt.events.SelectionEvent;
+import dwt.internal.SWTEventListener;
 
 import tango.core.Traits;
 import tango.core.Tuple;
