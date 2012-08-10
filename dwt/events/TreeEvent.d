@@ -12,9 +12,11 @@
  *******************************************************************************/
 module dwt.events.TreeEvent;
 
+import dwt.dwthelper.utils;
 
-import dwt.widgets.Event;
+
 import dwt.events.SelectionEvent;
+import dwt.widgets.Event;
 
 /**
  * Instances of this class are sent as a result of
