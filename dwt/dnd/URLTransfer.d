@@ -15,13 +15,12 @@ module dwt.dnd.URLTransfer;
 
 import dwt.dwthelper.utils;
 
-import dwt.internal.cocoa.NSString;
-import dwt.internal.cocoa.NSURL;
-import dwt.internal.cocoa.OS;
-
 import dwt.dnd.ByteArrayTransfer;
 import dwt.dnd.DND;
 import dwt.dnd.TransferData;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSURL;
+import dwt.internal.cocoa.OS;
 
 /**
  * The class <code>URLTransfer</code> provides a platform specific mechanism
@@ -76,7 +75,7 @@ public void javaToNative (Object object, TransferData transferData){
     if (!checkURL(object) || !isSupportedType(transferData)) {
         DND.error(DND.ERROR_INVALID_DATA);
     }
-    String url = (cast(ArrayWrapperString)object).array;
+    String url = stringcast(object);
     NSString nsString = NSString.stringWith(url);
     NSString escapedString = nsString.stringByAddingPercentEscapesUsingEncoding(OS.NSUTF8StringEncoding);
     transferData.data = NSURL.URLWithString(escapedString);
@@ -96,7 +95,7 @@ public Object nativeToJava(TransferData transferData){
     if (!isSupportedType(transferData) || transferData.data is null) return null;
     NSURL nsUrl = cast(NSURL) transferData.data;
     NSString nsString = nsUrl.absoluteString();
-    return new ArrayWrapperString(nsString.getString());
+    return stringcast(nsString.getString());
 }
 
 protected int[] getTypeIds(){
@@ -108,7 +107,8 @@ protected String[] getTypeNames(){
 }
 
 bool checkURL(Object object) {
-    return object !is null && (cast(ArrayWrapperString) object) && (cast(ArrayWrapperString) object).array.length() > 0;
+    auto o = stringcast(object),
+    return object !is null && o && o.length() > 0;
 }
 
 protected bool validate(Object object) {
