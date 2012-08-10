@@ -12,15 +12,17 @@
  *******************************************************************************/
 module dwt.events.MenuListener;
 
+import dwt.dwthelper.utils;
 
-import dwt.internal.SWTEventListener;
+
 import dwt.events.MenuEvent;
+import dwt.internal.SWTEventListener;
 
 /**
  * Classes which implement this interface provide methods
  * that deal with the hiding and showing of menus.
  * <p>
- * After creating an instance of a class that :
+ * After creating an instance of a class that implements
  * this interface it can be added to a menu using the
  * <code>addMenuListener</code> method and removed using
  * the <code>removeMenuListener</code> method. When the
