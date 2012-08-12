@@ -13,9 +13,9 @@
  *******************************************************************************/
 module dwt.graphics.Resource;
 
-
-
 import dwt.dwthelper.utils;
+
+import dwt.SWT;
 import dwt.graphics.Device;
 
 /**
