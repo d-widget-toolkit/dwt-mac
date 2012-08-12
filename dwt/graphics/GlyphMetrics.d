@@ -13,11 +13,11 @@
  *******************************************************************************/
 module dwt.graphics.GlyphMetrics;
 
+import dwt.dwthelper.utils;
 
+import dwt.SWT;
 
 import tango.text.convert.Format;
-
-import dwt.dwthelper.utils;
 
 /**
  * Instances of this class represent glyph metrics.
@@ -89,7 +89,7 @@ public this(int ascent, int descent, int width) {
  */
 public int opEquals (Object object) {
     if (object is this) return true;
-    if (!( null !is cast(GlyphMetrics)object )) return false;
+    if (!(cast(GlyphMetrics)object)) return false;
     GlyphMetrics metrics = cast(GlyphMetrics)object;
     return metrics.ascent is ascent && metrics.descent is descent && metrics.width is width;
 }
@@ -119,7 +119,7 @@ alias toHash hashCode;
  * @return a string representation of the <code>GlyphMetrics</code>
  */
 public String toString () {
-    return Format("GlyphMetrics {{}{}{}{}{}{}" , ascent , ", " , descent , ", " , width , "}"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+    return Format("{}{}{}{}{}{}{}", "GlyphMetrics {" , ascent , ", " , descent , ", " , width , "}"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 }
 
 }
