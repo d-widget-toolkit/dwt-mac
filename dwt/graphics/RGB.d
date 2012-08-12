@@ -13,12 +13,12 @@
  *******************************************************************************/
 module dwt.graphics.RGB;
 
+import dwt.dwthelper.utils;
 
+import dwt.SWT;
 import dwt.internal.SerializableCompatibility;
 
-
 import tango.text.convert.Format;
-import dwt.dwthelper.utils;
 
 /**
  * Instances of this class are descriptions of colors in
@@ -231,7 +231,7 @@ alias toHash hashCode;
  * @return a string representation of the <code>RGB</code>
  */
 public String toString() {
-    return Format("RGB {{}{}{}{}{}{}" , red , ", " , green , ", " , blue , "}"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+    return Format("{}{}{}{}{}{}{}", "RGB {" , red , ", " , green , ", " , blue , "}"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 }
 
 }
