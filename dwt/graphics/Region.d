@@ -13,20 +13,29 @@
  *******************************************************************************/
 module dwt.graphics.Region;
 
-
-
-
-
-
-import tango.text.convert.Format;
-
 import dwt.dwthelper.utils;
+
+
+import dwt.SWT;
+import dwt.SWTError;
+import dwt.SWTException;
+import dwt.internal.C;
+import Carbon = dwt.internal.c.Carbon;
 import dwt.graphics.Device;
 import dwt.graphics.Point;
 import dwt.graphics.Rectangle;
 import dwt.graphics.Resource;
-import Carbon = dwt.internal.c.Carbon;
+import dwt.internal.Callback;
+import dwt.internal.cocoa.NSAffineTransform;
+import dwt.internal.cocoa.NSAutoreleasePool;
+import dwt.internal.cocoa.NSBezierPath;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSThread;
+import dwt.internal.cocoa.OS;
 import objc = dwt.internal.objc.runtime;
+
+import tango.text.convert.Format;
 
 /**
  * Instances of this class represent areas of an x-y coordinate
@@ -93,8 +102,8 @@ public this(Device device) {
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         handle = OS.NewRgn();
-    if (handle is null) DWT.error(DWT.ERROR_NO_HANDLES);
-    init_();
+        if (handle is null) DWT.error(DWT.ERROR_NO_HANDLES);
+        init_();
     } finally {
         if (pool !is null) pool.release();
     }
@@ -271,6 +280,7 @@ public void add(int x, int y, int width, int height) {
     try {
         Carbon.RgnHandle rectRgn = OS.NewRgn();
         Carbon.Rect r;
+
         OS.SetRect(&r, cast(short)x, cast(short)y, cast(short)(x + width),cast(short)(y + height));
         OS.RectRgn(rectRgn, &r);
         OS.UnionRgn(handle, rectRgn, handle);
@@ -326,7 +336,7 @@ public bool contains(int x, int y) {
     NSAutoreleasePool pool = null;
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
-        Carbon.Point point = {cast(short)x, cast(short)y};
+        Carbon.Point point = Carbon.Point(cast(short)x, cast(short)y);
         return OS.PtInRgn(point, handle);
     } finally {
         if (pool !is null) pool.release();
@@ -353,19 +363,23 @@ public bool contains(Point pt) {
     return contains(pt.x, pt.y);
 }
 
-static NSAffineTransform transform;
+NSAffineTransform transform;
 void convertRgn(NSAffineTransform transform) {
+    auto data = RegionData!(Carbon.RgnHandle)(this);
     Carbon.RgnHandle newRgn = OS.NewRgn();
     Carbon.RegionToRectsUPP proc = &Region.convertRgn_;
+    data.regionHandle = newRgn;
     this.transform = transform;
-    OS.QDRegionToRects(handle, OS.kQDParseRegionFromTopLeft, proc, newRgn);
+    OS.QDRegionToRects(handle, OS.kQDParseRegionFromTopLeft, proc, &data);
     this.transform = null;
     OS.CopyRgn(newRgn, handle);
     OS.DisposeRgn(newRgn);
 }
 
-extern(C) private static Carbon.OSStatus convertRgn_(ushort message, Carbon.RgnHandle rgn, Carbon.Rect* r, void* newRgn) {
+extern(C) private static Carbon.OSStatus convertRgn_(ushort message, Carbon.RgnHandle rgn, Carbon.Rect* r, RegionData!(Carbon.RgnHandle)* data) {
     if (message is OS.kQDRegionToRectsMsgParse) {
+        Carbon.RgnHandle newRgn = data.data;
+        NSAffineTransform transform = data.region.transform;
         Carbon.Rect rect;
         OS.memmove(&rect, r, rect.sizeof);
         int i = 0;
@@ -377,14 +391,17 @@ extern(C) private static Carbon.OSStatus convertRgn_(ushort message, Carbon.RgnH
         short startX, startY;
         points[i++] = startX = cast(short)point.x;
         points[i++] = startY = cast(short)point.y;
+        point.x = rect.right;
         point.y = rect.top;
         point = transform.transformPoint(point);
         points[i++] = cast(short)Math.round(point.x);
         points[i++] = cast(short)point.y;
+        point.x = rect.right;
         point.y = rect.bottom;
         point = transform.transformPoint(point);
         points[i++] = cast(short)Math.round(point.x);
         points[i++] = cast(short)Math.round(point.y);
+        point.x = rect.left;
         point.y = rect.bottom;
         point = transform.transformPoint(point);
         points[i++] = cast(short)point.x;
@@ -414,7 +431,7 @@ void destroy() {
  */
 public int opEquals(Object object) {
     if (this is object) return true;
-    if (!( null !is cast(Region)object )) return false;
+    if (!(cast(Region)object)) return false;
     Region region = cast(Region)object;
     return handle is region.handle;
 }
@@ -437,31 +454,35 @@ alias opEquals equals;
 public Rectangle getBounds() {
     if (isDisposed()) DWT.error(DWT.ERROR_GRAPHIC_DISPOSED);
     NSAutoreleasePool pool = null;
-    Carbon.Rect bounds;
-
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
-    OS.GetRegionBounds(handle, &bounds);
-    int width = bounds.right - bounds.left;
-    int height = bounds.bottom - bounds.left;
-    return new Rectangle(bounds.left, bounds.top, width, height);
+        Carbon.Rect bounds;
+        OS.GetRegionBounds(handle, &bounds);
+        int width = bounds.right - bounds.left;
+        int height = bounds.bottom - bounds.top;
+        return new Rectangle(bounds.left, bounds.top, width, height);
     } finally {
         if (pool !is null) pool.release();
     }
 }
 
 NSBezierPath getPath() {
+    auto data = RegionData!(objc.id)(this);
     NSBezierPath path = NSBezierPath.bezierPath();
     path.retain();
-    OS.QDRegionToRects(handle, OS.kQDParseRegionFromTopLeft, cast(Carbon.RegionToRectsUPP) &Region.regionToRects, path.id);
+    data.data = path.id;
+    OS.QDRegionToRects(handle, OS.kQDParseRegionFromTopLeft, cast(Carbon.RegionToRectsUPP) &Region.regionToRects, &data);
     if (path.isEmpty()) path.appendBezierPathWithRect(NSRect());
     return path;
 }
 
-static NSPoint pt = NSPoint();
-static Carbon.Rect rect;
-extern(C) private static Carbon.OSStatus regionToRects(ushort message, Carbon.RgnHandle rgn, Carbon.Rect* r, objc.id path) {
+NSPoint pt = NSPoint();
+Carbon.Rect rect;
+extern(C) private static Carbon.OSStatus regionToRects(ushort message, Carbon.RgnHandle rgn, Carbon.Rect* r, RegionData!(objc.id)* data) {
     if (message is OS.kQDRegionToRectsMsgParse) {
+        objc.id path = data.data;
+        NSPoint pt = data.region.pt;
+        Carbon.Rect rect = data.region.rect;
         OS.memmove(&rect, r, rect.sizeof);
         pt.x = rect.left;
         pt.y = rect.top;
@@ -845,6 +866,12 @@ public void translate (Point pt) {
  */
 public String toString () {
     if (isDisposed()) return "Region {*DISPOSED*}";
-    return Format("Region {{}{}" , handle , "}");
+    return Format("{}{}{}", "Region {" , handle , "}");
 }
+}
+
+struct RegionData (Data)
+{
+    Region region;
+    Data data;
 }
