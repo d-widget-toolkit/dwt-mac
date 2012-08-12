@@ -13,6 +13,7 @@
  *******************************************************************************/
 module dwt.graphics.PathData;
 
+import dwt.dwthelper.utils;
 
 /**
  * Instances of this class describe device-independent paths.
