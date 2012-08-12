@@ -13,9 +13,9 @@
  *******************************************************************************/
 module dwt.graphics.TextStyle;
 
-
-
 import dwt.dwthelper.utils;
+
+import dwt.SWT;
 import dwt.graphics.Color;
 import dwt.graphics.Font;
 import dwt.graphics.GlyphMetrics;
@@ -221,7 +221,7 @@ public this (TextStyle style) {
 public int opEquals(Object object) {
     if (object is this) return true;
     if (object is null) return false;
-    if (!( null !is cast(TextStyle)object )) return false;
+    if (!(cast(TextStyle)object)) return false;
     TextStyle style = cast(TextStyle)object;
     if (foreground !is null) {
         if (!foreground.equals(style.foreground)) return false;
@@ -340,23 +340,23 @@ public String toString () {
     StringBuffer buffer = new StringBuffer("TextStyle {"); //$NON-NLS-1$
     int startLength = buffer.length();
     if (font !is null) {
-        if (buffer.length() > startLength) buffer.format("{}", ", ");
-        buffer.format("{}", "font=");
+        if (buffer.length() > startLength) buffer.format("{}", ", "); //$NON-NLS-1$
+        buffer.format("{}", "font="); //$NON-NLS-1$
         buffer.format("{}", font.toString);
     }
     if (foreground !is null) {
-        if (buffer.length() > startLength) buffer.format("{}", ", ");
-        buffer.format("{}", "foreground=");
+        if (buffer.length() > startLength) buffer.format("{}", ", "); //$NON-NLS-1$
+        buffer.format("{}", "foreground="); //$NON-NLS-1$
         buffer.format("{}", foreground.toString);
     }
     if (background !is null) {
-        if (buffer.length() > startLength) buffer.format("{}", ", ");
-        buffer.format("{}", "background=");
+        if (buffer.length() > startLength) buffer.format("{}", ", "); //$NON-NLS-1$
+        buffer.format("{}", "background="); //$NON-NLS-1$
         buffer.format("{}", background.toString);
     }
     if (underline) {
-        if (buffer.length() > startLength) buffer.format("{}", ", ");
-        buffer.format("{}", "underlined");
+        if (buffer.length() > startLength) buffer.format("{}", ", "); //$NON-NLS-1$
+        buffer.format("{}", "underlined"); //$NON-NLS-1$
         switch (underlineStyle) {
             case DWT.UNDERLINE_SINGLE: buffer.append("single"); break; //$NON-NLS-1$
             case DWT.UNDERLINE_DOUBLE: buffer.append("double"); break; //$NON-NLS-1$
@@ -370,8 +370,8 @@ public String toString () {
         }
     }
     if (strikeout) {
-        if (buffer.length() > startLength) buffer.format("{}", ", ");
-        buffer.format("{}", "striked out");
+        if (buffer.length() > startLength) buffer.format("{}", ", "); //$NON-NLS-1$
+        buffer.format("{}", "striked out"); //$NON-NLS-1$
         if (strikeoutColor !is null) {
             buffer.append(", strikeoutColor="); //$NON-NLS-1$
             buffer.append(strikeoutColor);
@@ -391,16 +391,16 @@ public String toString () {
         }
     }
     if (rise !is 0) {
-        if (buffer.length() > startLength) buffer.format("{}", ", ");
-        buffer.format("{}", "rise=");
+        if (buffer.length() > startLength) buffer.format("{}", ", "); //$NON-NLS-1$
+        buffer.format("{}", "rise="); //$NON-NLS-1$
         buffer.format("{}", rise);
     }
     if (metrics !is null) {
-        if (buffer.length() > startLength) buffer.format("{}", ", ");
-        buffer.format("{}", "metrics=");
+        if (buffer.length() > startLength) buffer.format("{}", ", "); //$NON-NLS-1$
+        buffer.format("{}", "metrics="); //$NON-NLS-1$
         buffer.format("{}", metrics.toString);
     }
-    buffer.format("{}", "}");
+    buffer.format("{}", "}"); //$NON-NLS-1$
     return buffer.toString();
 }
 
