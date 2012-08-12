@@ -13,14 +13,12 @@
  *******************************************************************************/
 module dwt.graphics.Image;
 
-
-import dwt.dwthelper.InputStream;
-
-import java.io.*;
-
-import tango.text.convert.Format;
-
 import dwt.dwthelper.utils;
+
+
+import dwt.SWT;
+import dwt.SWTError;
+import dwt.SWTException;
 import dwt.graphics.Color;
 import dwt.graphics.Device;
 import dwt.graphics.Drawable;
@@ -31,10 +29,26 @@ import dwt.graphics.PaletteData;
 import dwt.graphics.RGB;
 import dwt.graphics.Rectangle;
 import dwt.graphics.Resource;
+import dwt.internal.cocoa.NSAffineTransform;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSAutoreleasePool;
+import dwt.internal.cocoa.NSBitmapImageRep;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSImage;
+import dwt.internal.cocoa.NSImageRep;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSThread;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 
+import dwt.dwthelper.InputStream;
+
 import tango.io.Stdout;
+import tango.text.convert.Format;
 
 /**
  * Instances of this class are graphics which have been prepared
@@ -246,10 +260,10 @@ public this(Device device, Image srcImage, int flag) {
         this.type = srcImage.type;
         /* Get source image size */
         NSSize size = srcImage.handle.size();
-    int width = cast(int)size.width;
-    int height = cast(int)size.height;
+        int width = cast(int)size.width;
+        int height = cast(int)size.height;
         NSBitmapImageRep srcRep = srcImage.getRepresentation();
-    NSInteger bpr = srcRep.bytesPerRow();
+        NSInteger bpr = srcRep.bytesPerRow();
 
         /* Copy transparent pixel and alpha data when necessary */
         transparentPixel = srcImage.transparentPixel;
@@ -329,7 +343,7 @@ public this(Device device, Image srcImage, int flag) {
             default:
             }
         }
-    init_();
+        init_();
     } finally {
         if (pool !is null) pool.release();
     }
@@ -447,7 +461,7 @@ public this(Device device, ImageData source, ImageData mask) {
         ImageData image = new ImageData(source.width, source.height, source.depth, source.palette, source.scanlinePad, source.data);
         image.maskPad = mask.scanlinePad;
         image.maskData = mask.data;
-    init_(image);
+        init_(image);
     } finally {
         if (pool !is null) pool.release();
     }
@@ -568,10 +582,10 @@ void createAlpha () {
         if (transparentPixel !is -1) {
             for (int i=0; i<dataSize; i+=4) {
                 int pixel = ((srcData[i+1] & 0xFF) << 16) | ((srcData[i+2] & 0xFF) << 8) | (srcData[i+3] & 0xFF);
-            srcData[i] = cast(byte)(pixel is transparentPixel ? 0 : 0xFF);
+                srcData[i] = cast(byte)(pixel is transparentPixel ? 0 : 0xFF);
             }
         } else if (alpha !is -1) {
-        byte a = cast(byte)this.alpha;
+            byte a = cast(byte)this.alpha;
             for (int i=0; i<dataSize; i+=4) {
                 srcData[i] = a;
             }
@@ -615,7 +629,7 @@ void destroy() {
  */
 public int opEquals (Object object) {
     if (object is this) return true;
-    if (!( null !is cast(Image)object )) return false;
+    if (!(cast(Image)object)) return false;
     Image image = cast(Image)object;
     return device is image.device && handle is image.handle &&
         transparentPixel is image.transparentPixel;
@@ -671,7 +685,7 @@ public Rectangle getBounds() {
             return new Rectangle(0, 0, width, height);
         }
         NSSize size = handle.size();
-    return new Rectangle(0, 0, width = cast(int)size.width, height = cast(int)size.height);
+        return new Rectangle(0, 0, width = cast(int)size.width, height = cast(int)size.height);
     } finally {
         if (pool !is null) pool.release();
     }
@@ -699,11 +713,12 @@ public ImageData getImageData() {
         NSBitmapImageRep imageRep = getRepresentation();
         NSInteger width = imageRep.pixelsWide();
         NSInteger height = imageRep.pixelsHigh();
-    NSInteger  bpr = imageRep.bytesPerRow();
-    NSInteger  bpp = imageRep.bitsPerPixel();
-    size_t dataSize = height * bpr;
-    byte[] srcData = new byte[dataSize];
-    OS.memmove(srcData.ptr, imageRep.bitmapData(), dataSize);
+        NSInteger  bpr = imageRep.bytesPerRow();
+        NSInteger  bpp = imageRep.bitsPerPixel();
+        size_t dataSize = height * bpr;
+
+        byte[] srcData = new byte[dataSize];
+        OS.memmove(srcData.ptr, imageRep.bitmapData(), dataSize);
 
         PaletteData palette = new PaletteData(0xFF0000, 0xFF00, 0xFF);
         ImageData data = new ImageData(cast(int)/*64*/width, cast(int)/*64*/height, cast(int)/*64*/bpp, palette, 4, srcData);
@@ -713,7 +728,7 @@ public ImageData getImageData() {
         if (transparentPixel is -1 && type is DWT.ICON) {
             /* Get the icon mask data */
             int maskPad = 2;
-            int /*long*/ maskBpl = (((width + 7) / 8) + (maskPad - 1)) / maskPad * maskPad;
+            auto maskBpl = (((width + 7) / 8) + (maskPad - 1)) / maskPad * maskPad;
             byte[] maskData = new byte[(int)/*64*/(height * maskBpl)];
             int offset = 0, maskOffset = 0;
             for (int y = 0; y<height; y++) {
@@ -951,8 +966,8 @@ void initNative(String filename) {
             return;
         }
 
-        width = (int)/*64*/nativeRep.pixelsWide();
-        height = (int)/*64*/nativeRep.pixelsHigh();
+        width = cast(int)/*64*/nativeRep.pixelsWide();
+        height = cast(int)/*64*/nativeRep.pixelsHigh();
 
         bool hasAlpha = nativeRep.hasAlpha();
         int bpr = width * 4;
@@ -971,8 +986,8 @@ void initNative(String filename) {
         rect.height = height;
 
         /* Compute the pixels */
-        int /*long*/ colorspace = OS.CGColorSpaceCreateDeviceRGB();
-        int /*long*/ ctx = OS.CGBitmapContextCreate(rep.bitmapData(), width, height, 8, bpr, colorspace, OS.kCGImageAlphaNoneSkipFirst);
+        CGColorSpaceRef colorspace = OS.CGColorSpaceCreateDeviceRGB();
+        CGContextRef ctx = OS.CGBitmapContextCreate(rep.bitmapData(), width, height, 8, bpr, colorspace, OS.kCGImageAlphaNoneSkipFirst);
         OS.CGColorSpaceRelease(colorspace);
         NSGraphicsContext.static_saveGraphicsState();
         NSGraphicsContext.setCurrentContext(NSGraphicsContext.graphicsContextWithGraphicsPort(ctx, false));
@@ -984,10 +999,10 @@ void initNative(String filename) {
 
         if (hasAlpha) {
             /* Compute the alpha values */
-            int /*long*/ bitmapBytesPerRow = width;
-            int /*long*/ bitmapByteCount = bitmapBytesPerRow * height;
-            int /*long*/ alphaBitmapData = OS.malloc(bitmapByteCount);
-            int /*long*/ alphaBitmapCtx = OS.CGBitmapContextCreate(alphaBitmapData, width, height, 8, bitmapBytesPerRow, 0, OS.kCGImageAlphaOnly);
+            size_t bitmapBytesPerRow = width;
+            size_t bitmapByteCount = bitmapBytesPerRow * height;
+            void* alphaBitmapData = OS.malloc(bitmapByteCount);
+            CGContextRef alphaBitmapCtx = OS.CGBitmapContextCreate(alphaBitmapData, width, height, 8, bitmapBytesPerRow, 0, OS.kCGImageAlphaOnly);
             NSGraphicsContext.static_saveGraphicsState();
             NSGraphicsContext.setCurrentContext(NSGraphicsContext.graphicsContextWithGraphicsPort(alphaBitmapCtx, false));
             nativeRep.drawInRect(rect);
@@ -1036,48 +1051,6 @@ void initNative(String filename) {
         if (nativeImage !is null) nativeImage.release();
         if (pool !is null) pool.release();
     }
-
-
-            /* Merge the alpha values with the pixels */
-            byte[] srcData = new byte[height * bpr];
-            OS.memmove(srcData, rep.bitmapData(), srcData.length);
-            for (int a = 0, p = 0; a < alphaData.length; a++, p += 4) {
-                srcData[p] = alphaData[a];
-            }
-            OS.memmove(rep.bitmapData(), srcData, srcData.length);
-
-            // If the alpha has only 0 or 255 (-1) for alpha values, compute the transparent pixel color instead
-            // of a continuous alpha range.
-            int transparentOffset = -1, i = 0;
-            for (i = 0; i < alphaData.length; i++) {
-                int alpha = alphaData[i];
-                if (transparentOffset is -1 && alpha is 0) transparentOffset = i;
-                if (!(alpha is 0 || alpha is -1)) break;
-            }
-            this.alpha = -1;
-            if (i is alphaData.length && transparentOffset !is -1) {
-                NSColor color = rep.colorAtX(transparentOffset % width, transparentOffset / width);
-                int red = (int) (color.redComponent() * 255);
-                int green = (int) (color.greenComponent() * 255);
-                int blue = (int) (color.blueComponent() * 255);
-                this.transparentPixel = (red << 16) + (green << 8) + blue;
-            } else {
-                this.alphaData = alphaData;
-            }
-        }
-
-        // For compatibility, images created from .ico files are treated as DWT.ICON format, even though
-        // they are no different than other bitmaps in Cocoa.
-        if (filename.toLowerCase().endsWith(".ico")) {
-            this.type = DWT.ICON;
-        } else {
-            this.type = DWT.BITMAP;
-        }
-    } finally {
-        if (nativeImage !is null) nativeImage.release();
-        if (pool !is null) pool.release();
-    }
-
 }
 
 /**
@@ -1130,7 +1103,7 @@ public objc.id internal_new_GC (GCData data) {
             data.font = device.systemFont;
             data.image = this;
         }
-    return context.id;
+        return context.id;
     } finally {
         if (pool !is null) pool.release();
     }
@@ -1226,8 +1199,8 @@ public void setBackground(Color color) {
         byte newGreen = (byte)((int)(color.handle[1] * 255) & 0xFF);
         byte newBlue = (byte)((int)(color.handle[2] * 255) & 0xFF);
         NSBitmapImageRep imageRep = getRepresentation();
-        int /*long*/ bpr = imageRep.bytesPerRow();
-        int /*long*/ data = imageRep.bitmapData();
+        NSInteger bpr = imageRep.bytesPerRow();
+        ubyte* data = imageRep.bitmapData();
         byte[] line = new byte[(int)bpr];
         for (int i = 0, offset = 0; i < height; i++, offset += bpr) {
             OS.memmove(line, data + offset, bpr);
@@ -1253,8 +1226,8 @@ public void setBackground(Color color) {
  * @return a string representation of the receiver
  */
 public String toString () {
-    if (isDisposed()) return "Image {*DISPOSED*}";
-    return Format("Image {{}{}" , handle , "}");
+	if (isDisposed()) return "Image {*DISPOSED*}";
+	return Format("{}{}{}", "Image {" , handle , "}");
 }
 
 }
