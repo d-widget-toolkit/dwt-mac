@@ -13,9 +13,10 @@
  *******************************************************************************/
 module dwt.graphics.LineAttributes;
 
-
-
 import dwt.dwthelper.utils;
+
+
+import dwt.SWT;
 import dwt.internal.c.Carbon;
 
 /**
@@ -38,7 +39,7 @@ public class LineAttributes {
     /**
      * The line width.
      */
-    public CGFloat width;
+    public float width;
 
     /**
      * The line style.
@@ -73,24 +74,24 @@ public class LineAttributes {
     /**
      * The line dash style for DWT.LINE_CUSTOM.
      */
-    public CGFloat[] dash;
+    public float[] dash;
 
     /**
      * The line dash style offset for DWT.LINE_CUSTOM.
      */
-    public CGFloat dashOffset;
+    public float dashOffset;
 
     /**
      * The line miter limit.
      */
-    public CGFloat miterLimit;
+    public float miterLimit;
 
 /**
  * Create a new line attributes with the specified line width.
  *
  * @param width the line width
  */
-public this(CGFloat width) {
+public this(float width) {
     this(width, DWT.CAP_FLAT, DWT.JOIN_MITER, DWT.LINE_SOLID, null, 0, 10);
 }
 
@@ -101,7 +102,7 @@ public this(CGFloat width) {
  * @param cap the line cap style
  * @param join the line join style
  */
-public this(CGFloat width, int cap, int join) {
+public this(float width, int cap, int join) {
     this(width, cap, join, DWT.LINE_SOLID, null, 0, 10);
 }
 
@@ -116,7 +117,7 @@ public this(CGFloat width, int cap, int join) {
  * @param dashOffset the line dash style offset
  * @param miterLimit the line miter limit
  */
-public this(CGFloat width, int cap, int join, int style, CGFloat[] dash, CGFloat dashOffset, CGFloat miterLimit) {
+public this(float width, int cap, int join, int style, float[] dash, float dashOffset, float miterLimit) {
     this.width = width;
     this.cap = cap;
     this.join = join;
