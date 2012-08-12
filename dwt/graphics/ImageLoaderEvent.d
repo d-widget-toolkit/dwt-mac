@@ -13,15 +13,14 @@
  *******************************************************************************/
 module dwt.graphics.ImageLoaderEvent;
 
+import dwt.dwthelper.utils;
 
 
+import dwt.graphics.ImageData;
+import dwt.graphics.ImageLoader;
 import dwt.internal.DWTEventObject;
 
 import tango.text.convert.Format;
-
-import dwt.dwthelper.utils;
-import dwt.graphics.ImageData;
-import dwt.graphics.ImageLoader;
 
 /**
  * Instances of this class are sent as a result of the incremental
@@ -91,7 +90,7 @@ public this(ImageLoader source, ImageData imageData, int incrementCount, bool en
  * @return a string representation of the event
  */
 public String toString () {
-    return Format("ImageLoaderEvent {source={}{}{}{}{}{}{}{}" , source , " imageData=" , imageData , " incrementCount=" , incrementCount , " endOfImage=" , endOfImage , "}"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+    return Format("{}{}{}{}{}{}{}{}{}", "ImageLoaderEvent {source=" , source , " imageData=" , imageData , " incrementCount=" , incrementCount , " endOfImage=" , endOfImage , "}"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 }
 
 }
