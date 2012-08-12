@@ -13,14 +13,14 @@
  *******************************************************************************/
 module dwt.graphics.Rectangle;
 
+import dwt.dwthelper.utils;
 
+
+import dwt.SWT;
+import dwt.graphics.Point;
 import dwt.internal.SerializableCompatibility;
 
-
 import tango.text.convert.Format;
-
-import dwt.dwthelper.utils;
-import dwt.graphics.Point;
 
 /**
  * Instances of this class represent rectangular areas in an
@@ -160,7 +160,7 @@ public bool contains (Point pt) {
  */
 public int opEquals (Object object) {
     if (object is this) return true;
-    if (!( null !is cast(Rectangle)object )) return false;
+    if (!(cast(Rectangle)object)) return false;
     Rectangle r = cast(Rectangle)object;
     return (r.x is this.x) && (r.y is this.y) && (r.width is this.width) && (r.height is this.height);
 }
@@ -321,7 +321,7 @@ public bool isEmpty () {
  * @return a string representation of the rectangle
  */
 public String toString () {
-    return Format( "Rectangle {{{}, {}, {}, {}}", x, y, width, height ); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+    return Format("{}{}{}{}{}{}{}{}{}", "Rectangle {" , x , ", " , y , ", " , width , ", " , height , "}"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 }
 
 /**
@@ -342,7 +342,7 @@ public String toString () {
  *
  * @see #add(Rectangle)
  */
-public Rectangle unionn (Rectangle rect) {
+public Rectangle union_ (Rectangle rect) {
     if (rect is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     int left = x < rect.x ? x : rect.x;
     int top = y < rect.y ? y : rect.y;
