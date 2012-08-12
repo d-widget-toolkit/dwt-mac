@@ -13,14 +13,20 @@
  *******************************************************************************/
 module dwt.graphics.Transform;
 
-
-
-
-import tango.text.convert.Format;
-
 import dwt.dwthelper.utils;
+
+import dwt.SWT;
+import dwt.SWTError;
+import dwt.SWTException;
 import dwt.graphics.Device;
 import dwt.graphics.Resource;
+import dwt.internal.cocoa.NSAffineTransform;
+import dwt.internal.cocoa.NSAffineTransformStruct;
+import dwt.internal.cocoa.NSAutoreleasePool;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSThread;
+
+import tango.text.convert.Format;
 
 /**
  * Instances of this class represent transformation matrices for
@@ -149,7 +155,7 @@ public this (Device device, float m11, float m12, float m21, float m22, float dx
         if (handle is null) DWT.error(DWT.ERROR_NO_HANDLES);
         handle.retain();
         setElements(m11, m12, m21, m22, dx, dy);
-    init_();
+        init_();
     } finally {
         if (pool !is null) pool.release();
     }
@@ -482,7 +488,7 @@ public String toString() {
     if (isDisposed()) return "Transform {*DISPOSED*}";
     float[] elements = new float[6];
     getElements(elements);
-    return Format("Transform {{}{}{}{}{}{}{}{}{}{}{}{}" , elements [0] , ", " , elements [1] , ", " ,elements [2] , ", " ,elements [3] , ", " ,elements [4] , ", " ,elements [5] , "}");
+    return Format("{}{}{}{}{}{}{}{}{}{}{}{}{}", "Transform {" , elements [0] , ", " , elements [1] , ", " ,elements [2] , ", " ,elements [3] , ", " ,elements [4] , ", " ,elements [5] , "}");
 }
 
 }
