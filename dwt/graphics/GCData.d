@@ -13,18 +13,24 @@
  *******************************************************************************/
 module dwt.graphics.GCData;
 
-
-
-
-
-import tango.core.Thread;
-
 import dwt.dwthelper.utils;
+
+
+import dwt.SWT;
 import dwt.graphics.Device;
 import dwt.graphics.Pattern;
 import dwt.graphics.Image;
 import dwt.graphics.Font;
 import dwt.internal.c.Carbon;
+import dwt.internal.cocoa.NSAffineTransform;
+import dwt.internal.cocoa.NSBezierPath;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSView;
+
+import tango.core.Thread;
 
 /**
  * Instances of this class are descriptions of GCs in terms
@@ -65,13 +71,12 @@ public final class GCData {
     public NSBezierPath path;
     public NSAffineTransform transform, inverseTransform;
     public NSBezierPath clipPath, visiblePath;
-    public int /*long*/ visibleRgn;
+    public RgnHandle visibleRgn;
     public NSView view;
     public NSSize* size;
     public Thread thread;
     public NSGraphicsContext flippedContext;
     public bool restoreContext;
     public NSSize sizeStruct;
-    public NSRect windowRectStruct;
-    public NSRect visibleRectStruct;
+    public bool NSRect paintRectStruct;
 }
