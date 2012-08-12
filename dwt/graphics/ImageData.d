@@ -14,17 +14,20 @@
  *******************************************************************************/
 module dwt.graphics.ImageData;
 
-
-import dwt.internal.CloneableCompatibility;
-
-import dwt.dwthelper.InputStream;
 import dwt.dwthelper.utils;
+
+
+import dwt.SWT;
+import dwt.SWTException;
 import dwt.graphics.Device;
 import dwt.graphics.GC;
 import dwt.graphics.Image;
 import dwt.graphics.ImageDataLoader;
 import dwt.graphics.PaletteData;
 import dwt.graphics.RGB;
+import dwt.internal.CloneableCompatibility;
+
+import dwt.dwthelper.InputStream;
 
 /**
  * Instances of this class are device-independent descriptions
@@ -221,26 +224,19 @@ public final class ImageData : CloneableCompatibility {
     /**
      * Arbitrary channel width data to 8-bit conversion table.
      */
-    private static byte[][] ANY_TO_EIGHT;
-    private static byte[] ONE_TO_ONE_MAPPING;
-
-    private static bool static_this_completed = false;
-    private static void static_this() {
-        if( static_this_completed ) return;
-        synchronized {
-            if( static_this_completed ) return;
-            ANY_TO_EIGHT = new byte[][](9);
-            for (int b = 0; b < 9; ++b) {
-                byte[] data = ANY_TO_EIGHT[b] = new byte[1 << b];
-                if (b is 0) continue;
-                int inc = 0;
-                for (int bit = 0x10000; (bit >>= b) !is 0;) inc |= bit;
-                for (int v = 0, p = 0; v < 0x10000; v+= inc) data[p++] = cast(byte)(v >> 8);
-            }
-            ONE_TO_ONE_MAPPING = ANY_TO_EIGHT[8];
-            static_this_completed = true;
+    static const byte[][] ANY_TO_EIGHT;
+    static this () {
+        ANY_TO_EIGHT = new byte[][](9);
+        for (int b = 0; b < 9; ++b) {
+            byte[] data = ANY_TO_EIGHT[b] = new byte[1 << b];
+            if (b == 0) continue;
+            int inc = 0;
+            for (int bit = 0x10000; (bit >>= b) != 0;) inc |= bit;
+            for (int v = 0, p = 0; v < 0x10000; v+= inc) data[p++] = (byte)(v >> 8);
         }
+        ONE_TO_ONE_MAPPING = ANY_TO_EIGHT[8];
     }
+    static const byte[] ONE_TO_ONE_MAPPING;
 
     /**
      * Scaled 8x8 Bayer dither matrix.
@@ -435,6 +431,7 @@ this(
     byte[] alphaData, int alpha, int transparentPixel, int type,
     int x, int y, int disposalMethod, int delayTime)
 {
+
     if (palette is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     if (!(depth is 1 || depth is 2 || depth is 4 || depth is 8
         || depth is 16 || depth is 24 || depth is 32)) {
@@ -1665,7 +1662,7 @@ static final ImageData convertMask(ImageData mask) {
     RGB[] rgbs = mask.getRGBs();
     if (rgbs !is null) {
         while (blackIndex < rgbs.length) {
-            if (rgbs[blackIndex] is palette.colors[0] ) break;
+            if (rgbs[blackIndex] == palette.colors[0] ) break;
             blackIndex++;
         }
     }
@@ -2264,9 +2261,6 @@ static void blit(int op,
     int destX, int destY, int destWidth, int destHeight,
     byte[] destReds, byte[] destGreens, byte[] destBlues,
     bool flipX, bool flipY) {
-
-    static_this();
-
     if ((destWidth <= 0) || (destHeight <= 0) || (alphaMode is ALPHA_TRANSPARENT)) return;
 
     /*** Prepare scaling data ***/
@@ -2802,9 +2796,6 @@ static void blit(int op,
     int destX, int destY, int destWidth, int destHeight,
     int destRedMask, int destGreenMask, int destBlueMask,
     bool flipX, bool flipY) {
-
-    static_this();
-
     if ((destWidth <= 0) || (destHeight <= 0) || (alphaMode is ALPHA_TRANSPARENT)) return;
 
     /*** Fast blit (straight copy) ***/
@@ -3173,9 +3164,6 @@ static void blit(int op,
     int destX, int destY, int destWidth, int destHeight,
     byte[] destReds, byte[] destGreens, byte[] destBlues,
     bool flipX, bool flipY) {
-
-    static_this();
-
     if ((destWidth <= 0) || (destHeight <= 0) || (alphaMode is ALPHA_TRANSPARENT)) return;
 
     // these should be supplied as params later
@@ -3524,7 +3512,6 @@ static int getChannelWidth(int mask, int shift) {
  * Extracts a field from packed RGB data given a mask for that field.
  */
 static byte getChannelField(int data, int mask) {
-    static_this();
     int shift = getChannelShift(mask);
     return ANY_TO_EIGHT[getChannelWidth(mask, shift)][(data & mask) >>> shift];
 }
