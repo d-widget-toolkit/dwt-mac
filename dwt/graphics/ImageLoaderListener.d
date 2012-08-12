@@ -13,10 +13,11 @@
  *******************************************************************************/
 module dwt.graphics.ImageLoaderListener;
 
+import dwt.dwthelper.utils;
 
-import dwt.internal.SWTEventListener;
 
 import dwt.graphics.ImageLoaderEvent;
+import dwt.internal.SWTEventListener;
 
 /**
  * Classes which implement this interface provide methods
