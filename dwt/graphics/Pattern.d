@@ -15,17 +15,22 @@ module dwt.graphics.Pattern;
 
 import dwt.dwthelper.utils;
 
-
-
-
-import tango.text.convert.Format;
-
+import dwt.SWT;
+import dwt.SWTError;
+import dwt.SWTException;
 import dwt.graphics.Color;
 import dwt.graphics.Device;
 import dwt.graphics.GC;
 import dwt.graphics.Image;
 import dwt.graphics.Resource;
 import dwt.internal.c.Carbon;
+import dwt.internal.cocoa.NSAutoreleasePool;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSGradient;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSThread;
+
+import tango.text.convert.Format;
 
 /**
  * Instances of this class represent patterns to use while drawing. Patterns
@@ -91,7 +96,7 @@ public this(Device device, Image image) {
         this.image = image;
         color = NSColor.colorWithPatternImage(image.handle);
         color.retain();
-    init_();
+        init_();
     } finally {
         if (pool !is null) pool.release();
     }
@@ -187,10 +192,10 @@ public this(Device device, float x1, float y1, float x2, float y2, Color color1,
         this.color2 = color2.handle;
         this.alpha1 = alpha1;
         this.alpha2 = alpha2;
-    NSColor start = NSColor.colorWithDeviceRed(cast(CGFloat) color1.handle[0], cast(CGFloat) color1.handle[1], cast(CGFloat) color1.handle[2], cast(CGFloat) (alpha1 / 255f));
-    NSColor end = NSColor.colorWithDeviceRed(cast(CGFloat) color2.handle[0], cast(CGFloat) color2.handle[1], cast(CGFloat) color2.handle[2], cast(CGFloat) (alpha2 / 255f));
-    gradient = (cast(NSGradient)(new NSGradient()).alloc()).initWithStartingColor(start, end);
-    init_();
+        NSColor start = NSColor.colorWithDeviceRed(color1.handle[0], color1.handle[1], color1.handle[2], (alpha1 / 255f));
+        NSColor end = NSColor.colorWithDeviceRed(color2.handle[0], color2.handle[1], color2.handle[2], (alpha2 / 255f));
+        gradient = (cast(NSGradient)(new NSGradient()).alloc()).initWithStartingColor(start, end);
+        init_();
     } finally {
         if (pool !is null) pool.release();
     }
@@ -227,7 +232,7 @@ public bool isDisposed() {
  */
 public String toString() {
     if (isDisposed()) return "Pattern {*DISPOSED*}";
-    return Format("Pattern {{}{}" , (color !is null ? color.id : gradient.id) , "}");
+    return Format("{}{}{}", "Pattern {" , (color != null ? color.id : gradient.id) , "}");
 }
 
 }
