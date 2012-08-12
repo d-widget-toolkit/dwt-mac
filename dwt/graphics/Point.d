@@ -13,11 +13,12 @@
  *******************************************************************************/
 module dwt.graphics.Point;
 
+import dwt.dwthelper.utils;
+
+
 import dwt.internal.SerializableCompatibility;
 
 import tango.text.convert.Format;
-
-import dwt.dwthelper.utils;
 
 /**
  * Instances of this class represent places on the (x, y)
@@ -111,7 +112,7 @@ alias toHash hashCode;
  * @return a string representation of the point
  */
 public String toString () {
-    return Format("Point {{}{}{}{}" , x , ", " , y , "}"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    return Format("{}{}{}{}{}", "Point {" , x , ", " , y , "}"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 }
 
 }
