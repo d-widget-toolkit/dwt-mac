@@ -13,14 +13,10 @@
  *******************************************************************************/
 module dwt.graphics.TextLayout;
 
-import dwt.internal.C;
-import dwt.internal.Compatibility;
-
-
-
-import tango.text.convert.Format;
-
 import dwt.dwthelper.utils;
+
+import dwt.SWT;
+import dwt.SWTException;
 import dwt.graphics.Color;
 import dwt.graphics.Device;
 import dwt.graphics.Font;
@@ -33,9 +29,32 @@ import dwt.graphics.Rectangle;
 import dwt.graphics.Region;
 import dwt.graphics.Resource;
 import dwt.graphics.TextStyle;
+import dwt.internal.C;
 import Carbon = dwt.internal.c.Carbon;
+import dwt.internal.Compatibility;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSAutoreleasePool;
+import dwt.internal.cocoa.NSBezierPath;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSLayoutManager;
+import dwt.internal.cocoa.NSMutableAttributedString;
+import dwt.internal.cocoa.NSMutableParagraphStyle;
+import dwt.internal.cocoa.NSNumber;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSRange;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSString;
 import dwt.internal.cocoa.NSText;
+import dwt.internal.cocoa.NSTextContainer;
+import dwt.internal.cocoa.NSTextStorage;
+import dwt.internal.cocoa.NSTextTab;
+import dwt.internal.cocoa.NSThread;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
+
+import tango.text.convert.Format;
 
 /**
  * <code>TextLayout</code> is a graphic object that represents
@@ -87,7 +106,7 @@ public final class TextLayout : Resource {
         int start;
 
         public String toString () {
-            return Format("StyleItem {{}{}{}{}" , start , ", " , style , "}");
+            return Format("{}{}{}{}{}", "StyleItem {" , start , ", " , style , "}");
         }
     }
 
@@ -405,8 +424,8 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
         NSPoint pt = NSPoint();
         pt.x = x;
         pt.y = y;
-        NSRange range = new NSRange();
-        int /*long*/ numberOfGlyphs = layoutManager.numberOfGlyphs();
+        NSRange range = NSRange();
+        NSUInteger numberOfGlyphs = layoutManager.numberOfGlyphs();
         if (numberOfGlyphs > 0) {
             range.location = 0;
             range.length = numberOfGlyphs;
@@ -417,16 +436,14 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
             if (selectionBackground is null) selectionBackground = device.getSystemColor(DWT.COLOR_LIST_SELECTION);
             NSColor selectionColor = NSColor.colorWithDeviceRed(selectionBackground.handle[0], selectionBackground.handle[1], selectionBackground.handle[2], selectionBackground.handle[3]);
             NSBezierPath path = NSBezierPath.bezierPath();
-            NSRect rect = new NSRect();
+            NSRect rect = NSRect();
             if (hasSelection) {
-                int /*long*/ pRectCount = OS.malloc(C.PTR_SIZEOF);
+                NSUInteger pRectCount;
                 range.location = translateOffset(selectionStart);
                 range.length = translateOffset(selectionEnd - selectionStart + 1);
-                int /*long*/ pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, pRectCount);
-                int /*long*/ [] rectCount = new int /*long*/ [1];
-                OS.memmove(rectCount, pRectCount, C.PTR_SIZEOF);
-                OS.free(pRectCount);
-                for (int k = 0; k < rectCount[0]; k++, pArray += NSRect.sizeof) {
+                NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, &pRectCount);
+                NSUInteger rectCount = pRectCount;
+                for (NSUInteger k = 0; k < rectCount; k++, pArray += NSRect.sizeof) {
                     OS.memmove(rect, pArray, NSRect.sizeof);
                     fixRect(rect);
                     rect.x += pt.x;
@@ -450,7 +467,7 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
         if (numberOfGlyphs > 0) {
             range.location = 0;
             range.length = numberOfGlyphs;
-            float /*double*/ [] fg = gc.data.foreground;
+            Carbon.CGFloat [] fg = gc.data.foreground;
             bool defaultFg = fg[0] is 0 && fg[1] is 0 && fg[2] is 0 && fg[3] is 1;
             if (!defaultFg) {
                 for (int i = 0; i < styles.length - 1; i++) {
@@ -494,25 +511,23 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                             range.location = Math.max(lineStart, start);
                             range.length = Math.min(lineEnd, end) + 1 - range.location;
                             if (range.length > 0) {
-                                int /*long*/ pRectCount = OS.malloc(C.PTR_SIZEOF);
-                                int /*long*/ pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, pRectCount);
-                                int /*long*/ [] rectCount = new int /*long*/ [1];
-                                OS.memmove(rectCount, pRectCount, C.PTR_SIZEOF);
-                                OS.free(pRectCount);
-                                NSRect rect = new NSRect();
+                                NSUInteger pRectCount; = OS.malloc(C.PTR_SIZEOF);
+                                NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, pRectCount);
+                                NSUInteger rectCount = pRectCount;
+                                NSRect rect = NSRect();
                                 gc.handle.saveGraphicsState();
-                                float /*double*/ baseline = layoutManager.typesetter().baselineOffsetInLayoutManager(layoutManager, lineStart);
-                                float /*double*/ [] color = null;
+                                Carbon.CGFloat baseline = layoutManager.typesetter().baselineOffsetInLayoutManager(layoutManager, lineStart);
+                                Carbon.CGFloat [] color = null;
                                 if (style.underlineColor !is null) color = style.underlineColor.handle;
                                 if (color is null && style.foreground !is null) color = style.foreground.handle;
                                 if (color !is null) {
                                     NSColor.colorWithDeviceRed(color[0], color[1], color[2], color[3]).setStroke();
                                 }
-                                for (int k = 0; k < rectCount[0]; k++, pArray += NSRect.sizeof) {
+                                for (NSUInteger k = 0; k < rectCount; k++, pArray += NSRect.sizeof) {
                                     OS.memmove(rect, pArray, NSRect.sizeof);
                                     fixRect(rect);
-                                    float /*double*/ underlineX = pt.x + rect.x;
-                                    float /*double*/ underlineY = pt.y + rect.y + rect.height - baseline + 1;
+                                    Carbon.CGFloat underlineX = pt.x + rect.x;
+                                    Carbon.CGFloat underlineY = pt.y + rect.y + rect.height - baseline + 1;
                                     NSBezierPath path = NSBezierPath.bezierPath();
                                     switch (style.underlineStyle) {
                                         case DWT.UNDERLINE_ERROR: {
@@ -533,10 +548,10 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                                             path.setLineWidth(1.0f);
                                             path.setLineCapStyle(OS.NSButtLineCapStyle);
                                             path.setLineJoinStyle(OS.NSMiterLineJoinStyle);
-                                            float /*double*/ lineBottom = pt.y + rect.y + rect.height;
+                                            Carbon.CGFloat lineBottom = pt.y + rect.y + rect.height;
                                             float squigglyThickness = 1;
                                             float squigglyHeight = 2 * squigglyThickness;
-                                            float /*double*/ squigglyY = Math.min(underlineY - squigglyHeight / 2, lineBottom - squigglyHeight - 1);
+                                            Carbon.CGFloat squigglyY = Math.min(underlineY - squigglyHeight / 2, lineBottom - squigglyHeight - 1);
                                             float[] points = computePolyline(cast(int)underlineX, cast(int)squigglyY, cast(int)(underlineX + rect.width), cast(int)(squigglyY + squigglyHeight));
                                             point.x = points[0] + 0.5f;
                                             point.y = points[1] + 0.5f;
@@ -548,7 +563,7 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                                             }
                                             break;
                                         }
-                                default:
+                                        default:
                                     }
                                     path.stroke();
                                 }
@@ -566,14 +581,12 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                             range.location = Math.max(lineStart, start);
                             range.length = Math.min(lineEnd, end) + 1 - range.location;
                             if (range.length > 0) {
-                                int /*long*/ pRectCount = OS.malloc(C.PTR_SIZEOF);
-                                int /*long*/ pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, pRectCount);
-                                int /*long*/ [] rectCount = new int /*long*/ [1];
-                                OS.memmove(rectCount, pRectCount, C.PTR_SIZEOF);
-                                OS.free(pRectCount);
-                                NSRect rect = new NSRect();
+                                NSUInteger pRectCount;
+                                NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, pRectCount);
+                                NSUInteger rectCount = pRectCount;
+                                NSRect rect = NSRect();
                                 gc.handle.saveGraphicsState();
-                                float /*double*/ [] color = null;
+                                Carbon.CGFloat [] color = null;
                                 if (style.borderColor !is null) color = style.borderColor.handle;
                                 if (color is null && style.foreground !is null) color = style.foreground.handle;
                                 if (color !is null) {
@@ -587,21 +600,14 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                                     case DWT.BORDER_DOT: dashes = width !is 0 ? GC.LINE_DOT : GC.LINE_DOT_ZERO; break;
                                 default:
                                 }
-                                float /*double*/ [] lengths = null;
+                                Carbon.CGFloat [] lengths = null;
                                 if (dashes !is null) {
-                                    lengths = new float /*double*/[dashes.length];
+                                    lengths = new Carbon.CGFloat[dashes.length];
                                     for (int k = 0; k < lengths.length; k++) {
                                         lengths[k] = width is 0 ? dashes[k] : dashes[k] * width;
                                     }
                                 }
-                                for (int k = 0; k < rectCount[0]; k++, pArray += NSRect.sizeof) {
-                                    OS.memmove(rect, pArray, NSRect.sizeof);
-                                    fixRect(rect);
-                                    rect.x += pt.x + 0.5f;
-                                    rect.y += pt.y + 0.5f;
-                                    rect.width -= 0.5f;
-                                    rect.height -= 0.5f;
-                                for (int k = 0; k < rectCount[0]; k++, pArray += NSRect.sizeof) {
+                                for (NSUInteger k = 0; k < rectCount; k++, pArray += NSRect.sizeof) {
                                     OS.memmove(rect, pArray, NSRect.sizeof);
                                     fixRect(rect);
                                     rect.x += pt.x + 0.5f;
@@ -613,12 +619,13 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                                     path.appendBezierPathWithRect(rect);
                                     path.stroke();
                                 }
-                                }
                                 gc.handle.restoreGraphicsState();
                             }
                         }
                     }
                 }
+            }
+        }
         gc.handle.restoreGraphicsState();
     } finally {
         gc.uncheckGC(pool);
@@ -748,18 +755,16 @@ public Rectangle getBounds(int start, int end) {
         end = Math.min(Math.max(0, end), length - 1);
         start = translateOffset(start);
         end = translateOffset(end);
-    NSRange range = NSRange();
+        NSRange range = NSRange();
         range.location = start;
         range.length = end - start + 1;
-        int /*long*/ pRectCount = OS.malloc(C.PTR_SIZEOF);
-        int /*long*/ pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, pRectCount);
-        int /*long*/ [] rectCount = new int /*long*/ [1];
-        OS.memmove(rectCount, pRectCount, C.PTR_SIZEOF);
-        OS.free(pRectCount);
-        NSRect rect = new NSRect();
+        NSUInteger pRectCount;
+        NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, pRectCount);
+        NSUInteger rectCount = pRectCount;
+        NSRect rect = NSRect();
         int left = 0x7FFFFFFF, right = 0;
         int top = 0x7FFFFFFF, bottom = 0;
-        for (int i = 0; i < rectCount[0]; i++, pArray += NSRect.sizeof) {
+        for (NSUInteger i = 0; i < rectCount; i++, pArray += NSRect.sizeof) {
             OS.memmove(rect, pArray, NSRect.sizeof);
             fixRect(rect);
             left = Math.min(left, (int)rect.x);
@@ -862,18 +867,13 @@ public int getLevel(int offset) {
         int length = text.length();
         if (!(0 <= offset && offset <= length)) DWT.error(DWT.ERROR_INVALID_RANGE);
         offset = translateOffset(offset);
-        int /*long*/ glyphOffset = layoutManager.glyphIndexForCharacterAtIndex(offset);
-        NSRange range  = new NSRange();
+        NSUInteger glyphOffset = layoutManager.glyphIndexForCharacterAtIndex(offset);
+        NSRange range  = NSRange();
         range.location = glyphOffset;
         range.length = 1;
-        int /*long*/ pBidiLevels = OS.malloc(1);
-        byte[] bidiLevels = new byte[1];
-        int /*long*/ result = layoutManager.getGlyphsInRange(range, 0, 0, 0, 0, pBidiLevels);
-        if (result > 0) {
-            OS.memmove(bidiLevels, pBidiLevels, 1);
-        }
-        OS.free(pBidiLevels);
-        return bidiLevels[0];
+        ubyte bidiLevels;
+        NSUInteger result = layoutManager.getGlyphsInRange(range, 0, 0, 0, 0, &bidiLevels);
+        return bidiLevels;
     } finally {
         if (pool !is null) pool.release();
     }
@@ -1015,14 +1015,14 @@ public FontMetrics getLineMetrics (int lineIndex) {
         if (length is 0) {
             Font font = this.font !is null ? this.font : device.systemFont;
             NSFont nsFont = font.handle;
-        int ascent = cast(int)(0.5f + nsFont.ascender());
-        int descent = cast(int)(0.5f + (-nsFont.descender() + nsFont.leading()));
+            int ascent = cast(int)(0.5f + nsFont.ascender());
+            int descent = cast(int)(0.5f + (-nsFont.descender() + nsFont.leading()));
             ascent = Math.max(ascent, this.ascent);
             descent = Math.max(descent, this.descent);
             return FontMetrics.cocoa_new(ascent, descent, 0, 0, ascent + descent);
         }
         Rectangle rect = getLineBounds(lineIndex);
-    int baseline = cast(int)layoutManager.typesetter().baselineOffsetInLayoutManager(layoutManager, getLineOffsets()[lineIndex]);
+        int baseline = cast(int)layoutManager.typesetter().baselineOffsetInLayoutManager(layoutManager, getLineOffsets()[lineIndex]);
         return FontMetrics.cocoa_new(rect.height - baseline, baseline, 0, 0, rect.height);
     } finally {
         if (pool !is null) pool.release();
@@ -1055,25 +1055,23 @@ public Point getLocation(int offset, bool trailing) {
         if (!(0 <= offset && offset <= length)) DWT.error(DWT.ERROR_INVALID_RANGE);
         if (length is 0) return new Point(0, 0);
         offset = translateOffset(offset);
-    NSUInteger glyphIndex = layoutManager.glyphIndexForCharacterAtIndex(offset);
-    NSRect rect = layoutManager.lineFragmentUsedRectForGlyphAtIndex(glyphIndex, null);
+        NSUInteger glyphIndex = layoutManager.glyphIndexForCharacterAtIndex(offset);
+        NSRect rect = layoutManager.lineFragmentUsedRectForGlyphAtIndex(glyphIndex, null);
         NSPoint point = layoutManager.locationForGlyphAtIndex(glyphIndex);
         if (trailing) {
-        NSRange range = NSRange();
+            NSRange range = NSRange();
             range.location = offset;
             range.length = 1;
-            int /*long*/ pRectCount = OS.malloc(C.PTR_SIZEOF);
-            int /*long*/ pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, pRectCount);
-            int /*long*/ [] rectCount = new int /*long*/ [1];
-            OS.memmove(rectCount, pRectCount, C.PTR_SIZEOF);
-            OS.free(pRectCount);
-            if (rectCount[0] > 0) {
-                NSRect bounds = new NSRect();
+            NSUInteger rectCount;
+            NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, rectCount);
+            if (rectCount > 0) {
+                NSRect bounds = NSRect();
                 OS.memmove(bounds, pArray, NSRect.sizeof);
                 fixRect(bounds);
                 point.x += bounds.width;
             }
         }
+        return new Point(cast(int)point.x, cast(int)rect.y);
     } finally {
         if (pool !is null) pool.release();
     }
@@ -1224,11 +1222,11 @@ public int getOffset(int x, int y, int[] trailing) {
         if (trailing !is null && trailing.length < 1) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
         int length = text.length();
         if (length is 0) return 0;
-    NSPoint pt = NSPoint();
+        NSPoint pt = NSPoint();
         pt.x = x;
         pt.y = y;
-    Carbon.CGFloat partialFration;
-    NSUInteger glyphIndex = layoutManager.glyphIndexForPoint(pt, textContainer, &partialFration);
+        Carbon.CGFloat partialFration;
+        NSUInteger glyphIndex = layoutManager.glyphIndexForPoint(pt, textContainer, &partialFration);
         NSUInteger offset = layoutManager.characterIndexForGlyphAtIndex(glyphIndex);
     if (trailing !is null) trailing[0] = cast(int) Math.round(partialFration);
         return Math.min(untranslateOffset(cast(int)/*64*/offset), length - 1);
