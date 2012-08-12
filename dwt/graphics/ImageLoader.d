@@ -13,17 +13,19 @@
  *******************************************************************************/
 module dwt.graphics.ImageLoader;
 
-
-import dwt.internal.Compatibility;
-
-
-import tango.core.Exception;
-import tango.core.Array;
-
 import dwt.dwthelper.utils;
+
+
+import dwt.SWT;
+import dwt.SWTException;
 import dwt.graphics.ImageData;
 import dwt.graphics.ImageLoaderEvent;
 import dwt.graphics.ImageLoaderListener;
+import dwt.internal.Compatibility;
+import dwt.internal.image.FileFormat;
+
+import tango.core.Exception;
+import tango.core.Array;
 
 /**
  * Instances of this class are used to load images from,
@@ -148,9 +150,6 @@ public ImageData[] load(InputStream stream) {
  * @param filename the name of the file to load the images from
  * @return an array of <code>ImageData</code> objects loaded from the specified file
  *
- * @exception IllegalArgumentException <ul>
- *    <li>ERROR_NULL_ARGUMENT - if the file name is null</li>
- * </ul>
  * @exception DWTException <ul>
  *    <li>ERROR_IO - if an IO error occurs while reading from the file</li>
  *    <li>ERROR_INVALID_IMAGE - if the image file contains invalid data</li>
@@ -158,22 +157,19 @@ public ImageData[] load(InputStream stream) {
  * </ul>
  */
 public ImageData[] load(String filename) {
-    if (filename is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
+    //if (filename is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     InputStream stream = null;
-    void close(){
-        try {
-            if( stream !is null ) stream.close();
-        } catch (IOException e) {
-            // Ignore error
-        }
-    }
     try {
         stream = Compatibility.newFileInputStream(filename);
-        scope(exit) close();
-
         return load(stream);
     } catch (IOException e) {
         DWT.error(DWT.ERROR_IO, e);
+    } finally {
+        try {
+            if (stream !is null) stream.close();
+        } catch (IOException e) {
+            // Ignore error
+        }
     }
     return null;
 }
@@ -279,7 +275,7 @@ public void save(String filename, int format) {
  */
 public void addImageLoaderListener(ImageLoaderListener listener) {
     if (listener is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
-    imageLoaderListeners ~= listener;
+    imageLoaderListeners.addElement(listener);
 }
 
 /**
@@ -297,7 +293,7 @@ public void addImageLoaderListener(ImageLoaderListener listener) {
 public void removeImageLoaderListener(ImageLoaderListener listener) {
     if (listener is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
     if (imageLoaderListeners.length is 0 ) return;
-    tango.core.Array.remove( imageLoaderListeners, listener, delegate bool(ImageLoaderListener l1, ImageLoaderListener l2 ){ return l1 is l2; });
+    imageLoaderListeners.removeElement(listener);
 }
 
 /**
@@ -310,7 +306,7 @@ public void removeImageLoaderListener(ImageLoaderListener listener) {
  * @see #removeImageLoaderListener(ImageLoaderListener)
  */
 public bool hasListeners() {
-    return imageLoaderListeners.length > 0;
+    return imageLoaderListeners !is null && imageLoaderListeners.size() > 0;
 }
 
 /**
@@ -321,7 +317,9 @@ public bool hasListeners() {
  */
 public void notifyListeners(ImageLoaderEvent event) {
     if (!hasListeners()) return;
-    foreach( listener; imageLoaderListeners ){
+    size_t size = imageLoaderListeners.size();
+    for (size_t i = 0; i < size; i++) {
+        ImageLoaderListener listener = imageLoaderListeners.elementAt(i);
         listener.imageDataLoaded(event);
     }
 }
