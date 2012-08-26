@@ -63,16 +63,6 @@ public NSFont fontWithFamily(NSString family, NSFontTraitMask traits, NSInteger 
     return result !is null ? new NSFont(result) : null;
 }
 
-public NSFont convertFont(NSFont fontObj, int /*long*/ trait) {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_convertFont_toHaveTrait_, fontObj !is null ? fontObj.id : 0, trait);
-    return result !is 0 ? new NSFont(result) : null;
-}
-
-public NSFont fontWithFamily(NSString family, int /*long*/ traits, int /*long*/ weight, float /*double*/ size) {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_fontWithFamily_traits_weight_size_, family !is null ? family.id : 0, traits, weight, size);
-    return result !is 0 ? new NSFont(result) : null;
-}
-
 public static NSFontManager sharedFontManager() {
     objc.id result = OS.objc_msgSend(OS.class_NSFontManager, OS.sel_sharedFontManager);
     return result !is null ? new NSFontManager(result) : null;
