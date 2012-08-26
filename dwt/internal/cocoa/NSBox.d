@@ -26,16 +26,6 @@ import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 
-alias NSUInteger NSBoxType;
-
-enum {
-    NSBoxPrimary = 0,
-    NSBoxSecondary = 1,
-    NSBoxSeparator = 2,
-    NSBoxOldStyle = 3,
-    NSBoxCustom = 4
-}
-
 public class NSBox : NSView {
 
 public this () {
@@ -59,13 +49,8 @@ public NSView contentView() {
     return result !is null ? new NSView(result) : null;
 }
 
-public NSView contentView() {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_contentView);
-    return result !is 0 ? new NSView(result) : null;
-}
-
 public NSSize contentViewMargins () {
-    NSSize result;
+    NSSize result = NSSize();
     OS.objc_msgSend_stret(&result, this.id, OS.sel_contentViewMargins);
     return result;
 }
@@ -86,7 +71,7 @@ public void setContentView (NSView aView) {
     OS.objc_msgSend(this.id, OS.sel_setContentView_, aView !is null ? aView.id : null);
 }
 
-public void setContentViewMargins (NSSize offsetSize) {
+public void setContentViewMargins(NSSize offsetSize) {
     OS.objc_msgSend(this.id, OS.sel_setContentViewMargins_, offsetSize);
 }
 
@@ -94,15 +79,15 @@ public void setFillColor(NSColor fillColor) {
     OS.objc_msgSend(this.id, OS.sel_setFillColor_, fillColor !is null ? fillColor.id : null);
 }
 
-public void setTitle (NSString aString) {
+public void setTitle(NSString aString) {
     OS.objc_msgSend(this.id, OS.sel_setTitle_, aString !is null ? aString.id : null);
 }
 
-public void setTitleFont (NSFont fontObj) {
+public void setTitleFont(NSFont fontObj) {
     OS.objc_msgSend(this.id, OS.sel_setTitleFont_, fontObj !is null ? fontObj.id : null);
 }
 
-public void setTitlePosition (NSTitlePosition aPosition) {
+public void setTitlePosition(NSTitlePosition aPosition) {
     OS.objc_msgSend(this.id, OS.sel_setTitlePosition_, aPosition);
 }
 
@@ -116,12 +101,18 @@ public NSCell titleCell () {
 }
 
 public NSFont titleFont() {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_titleFont);
-    return result !is 0 ? new NSFont(result) : null;
-}
-
-public NSFont titleFont() {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_titleFont);
     return result !is null ? new NSFont(result) : null;
 }
+
+}
+
+alias NSUInteger NSBoxType;
+
+enum {
+    NSBoxPrimary = 0,
+    NSBoxSecondary = 1,
+    NSBoxSeparator = 2,
+    NSBoxOldStyle = 3,
+    NSBoxCustom = 4
 }
