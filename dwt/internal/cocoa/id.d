@@ -44,10 +44,6 @@ public objc.id objc_getClass() {
 }
 
 public String toString() {
-    return getClass().getName() + "{" + id +  "}";
-}
-
-public String toString() {
-    return Format(this.classinfo.name, "{", id,  "}");
+    return Format("{}{}{}{}", this.classinfo.name, "{", id,  "}");
 }
 }
