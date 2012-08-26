@@ -11,9 +11,11 @@
  * Port to the D programming language:
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
-module dwt.internal.DWTEventObject;
+module dwt.internal.SWTEventObject;
 
 import dwt.dwthelper.utils;
+
+
 
 /**
  * This class is the cross-platform version of the
@@ -27,7 +29,7 @@ import dwt.dwthelper.utils;
  * Note: java.util.EventObject is not part of CDC and CLDC.
  * </p>
  */
-public class DWTEventObject : EventObject {
+public class SWTEventObject : EventObject {
 
     static const long serialVersionUID = 3258125873411470903L;
 
