@@ -50,13 +50,8 @@ public NSAttributedString attributedStringValue() {
 }
 
 public NSSize cellSize() {
-    NSSize result = new NSSize();
-    OS.objc_msgSend_stret(result, this.id, OS.sel_cellSize);
-    return result;
-}
-
-    NSSize result = new NSSize();
-    OS.objc_msgSend_stret(result, this.id, OS.sel_cellSize);
+    NSSize result = NSSize();
+    OS.objc_msgSend_stret(&result, this.id, OS.sel_cellSize);
     return result;
 }
 
@@ -74,10 +69,6 @@ public void drawWithExpansionFrame(NSRect cellFrame, NSView view) {
     OS.objc_msgSend(this.id, OS.sel_drawWithExpansionFrame_inView_, cellFrame, view !is null ? view.id : null);
 }
 
-public void drawWithExpansionFrame(NSRect cellFrame, NSView view) {
-    OS.objc_msgSend(this.id, OS.sel_drawWithExpansionFrame_inView_, cellFrame, view !is null ? view.id : 0);
-}
-
 public NSRect drawingRectForBounds(NSRect theRect) {
     NSRect result = NSRect();
     OS.objc_msgSend_stret(&result, this.id, OS.sel_drawingRectForBounds_, theRect);
@@ -85,14 +76,8 @@ public NSRect drawingRectForBounds(NSRect theRect) {
 }
 
 public NSRect expansionFrameWithFrame(NSRect cellFrame, NSView view) {
-    NSRect result = new NSRect();
-    OS.objc_msgSend_stret(result, this.id, OS.sel_expansionFrameWithFrame_inView_, cellFrame, view !is null ? view.id : null);
-    return result;
-}
-
-public NSRect expansionFrameWithFrame(NSRect cellFrame, NSView view) {
-    NSRect result = new NSRect();
-    OS.objc_msgSend_stret(result, this.id, OS.sel_expansionFrameWithFrame_inView_, cellFrame, view !is null ? view.id : 0);
+    NSRect result = NSRect();
+    OS.objc_msgSend_stret(&result, this.id, OS.sel_expansionFrameWithFrame_inView_, cellFrame, view !is null ? view.id : null);
     return result;
 }
 
@@ -116,8 +101,8 @@ public NSImage image() {
 }
 
 public NSRect imageRectForBounds(NSRect theRect) {
-    NSRect result = new NSRect();
-    OS.objc_msgSend_stret(result, this.id, OS.sel_imageRectForBounds_, theRect);
+    NSRect result = NSRect();
+    OS.objc_msgSend_stret(&result, this.id, OS.sel_imageRectForBounds_, theRect);
     return result;
 }
 
@@ -137,42 +122,6 @@ public void setAlignment(NSTextAlignment mode) {
     OS.objc_msgSend(this.id, OS.sel_setAlignment_, mode);
 }
 
-public NSColor highlightColorWithFrame(NSRect cellFrame, NSView controlView) {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_highlightColorWithFrame_inView_, cellFrame, controlView !is null ? controlView.id : 0);
-    return result !is 0 ? new NSColor(result) : null;
-}
-
-public int /*long*/ hitTestForEvent(NSEvent event, NSRect cellFrame, NSView controlView) {
-    return OS.objc_msgSend(this.id, OS.sel_hitTestForEvent_inRect_ofView_, event !is null ? event.id : 0, cellFrame, controlView !is null ? controlView.id : 0);
-}
-
-public NSImage image() {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_image);
-    return result !is 0 ? new NSImage(result) : null;
-}
-
-public NSRect imageRectForBounds(NSRect theRect) {
-    NSRect result = new NSRect();
-    OS.objc_msgSend_stret(result, this.id, OS.sel_imageRectForBounds_, theRect);
-    return result;
-}
-
-public bool isEnabled() {
-    return OS.objc_msgSend_bool(this.id, OS.sel_isEnabled);
-}
-
-public bool isHighlighted() {
-    return OS.objc_msgSend_bool(this.id, OS.sel_isHighlighted);
-}
-
-public int /*long*/ nextState() {
-    return OS.objc_msgSend(this.id, OS.sel_nextState);
-}
-
-public void setAlignment(int /*long*/ mode) {
-    OS.objc_msgSend(this.id, OS.sel_setAlignment_, mode);
-}
-
 public void setAllowsMixedState(bool flag) {
     OS.objc_msgSend(this.id, OS.sel_setAllowsMixedState_, flag);
 }
@@ -182,14 +131,6 @@ public void setAttributedStringValue(NSAttributedString obj) {
 }
 
 public void setControlSize(NSControlSize size) {
-    OS.objc_msgSend(this.id, OS.sel_setControlSize_, size);
-}
-
-public void setEnabled(bool flag) {
-    OS.objc_msgSend(this.id, OS.sel_setEnabled_, flag);
-}
-
-public void setControlSize(int /*long*/ size) {
     OS.objc_msgSend(this.id, OS.sel_setControlSize_, size);
 }
 
