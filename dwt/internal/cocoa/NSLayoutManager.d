@@ -85,8 +85,6 @@ public NSUInteger getGlyphsInRange(NSRange glyphRange, NSGlyph* glyphBuffer, NSU
     return OS.objc_msgSend(this.id, OS.sel_getGlyphsInRange_glyphs_characterIndexes_glyphInscriptions_elasticBits_bidiLevels_, glyphRange, glyphBuffer, charIndexBuffer, inscribeBuffer, elasticBuffer, bidiLevelBuffer);
 }
 
-}
-
 public NSUInteger glyphIndexForCharacterAtIndex(NSUInteger charIndex) {
     return cast(NSUInteger) OS.objc_msgSend(this.id, OS.sel_glyphIndexForCharacterAtIndex_, charIndex);
 }
@@ -96,9 +94,8 @@ public NSUInteger glyphIndexForPoint(NSPoint point, NSTextContainer container, C
 }
 
 public NSRange glyphRangeForCharacterRange(NSRange charRange, NSRangePointer actualCharRange) {
-
-    NSRange result = new NSRange();
-    OS.objc_msgSend_stret(result, this.id, OS.sel_glyphRangeForCharacterRange_actualCharacterRange_, charRange, actualCharRange);
+    NSRange result = NSRange();
+    OS.objc_msgSend_stret(&result, this.id, OS.sel_glyphIndexForPoint_inTextContainer_fractionOfDistanceThroughGlyph__actualCharacterRange_, charRange, actualCharRange);
     return result;
 }
 
@@ -109,9 +106,9 @@ public NSRange glyphRangeForTextContainer(NSTextContainer container) {
 }
 
 public NSRect lineFragmentUsedRectForGlyphAtIndex(NSUInteger glyphIndex, NSRangePointer effectiveGlyphRange) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_lineFragmentUsedRectForGlyphAtIndex_effectiveRange_, glyphIndex, effectiveGlyphRange);
-    return result;
+	NSRect result = NSRect();
+	OS.objc_msgSend_stret(&result, this.id, OS.sel_lineFragmentUsedRectForGlyphAtIndex_effectiveRange_, glyphIndex, effectiveGlyphRange);
+	return result;
 }
 
 public NSRect lineFragmentUsedRectForGlyphAtIndex(NSUInteger glyphIndex, NSRangePointer effectiveGlyphRange, bool flag) {
@@ -142,16 +139,8 @@ public void setBackgroundLayoutEnabled(bool flag) {
     OS.objc_msgSend(this.id, OS.sel_setBackgroundLayoutEnabled_, flag);
 }
 
-public void setBackgroundLayoutEnabled(bool flag) {
-    OS.objc_msgSend(this.id, OS.sel_setBackgroundLayoutEnabled_, flag);
-}
-
 public void setLineFragmentRect(NSRect fragmentRect, NSRange glyphRange, NSRect usedRect) {
     OS.objc_msgSend(this.id, OS.sel_setLineFragmentRect_forGlyphRange_usedRect_, fragmentRect, glyphRange, usedRect);
-}
-
-public void setTextStorage(NSTextStorage textStorage) {
-    OS.objc_msgSend(this.id, OS.sel_setTextStorage_, textStorage !is null ? textStorage.id : 0);
 }
 
 public void setTextStorage(NSTextStorage textStorage) {
