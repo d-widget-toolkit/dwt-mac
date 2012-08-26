@@ -42,11 +42,6 @@ public this(cocoa.id id) {
 }
 
 public static NSAttributedString attributedStringWithAttachment(NSTextAttachment attachment) {
-    int /*long*/ result = OS.objc_msgSend(OS.class_NSAttributedString, OS.sel_attributedStringWithAttachment_, attachment !is null ? attachment.id : 0);
-    return result !is 0 ? new NSAttributedString(result) : null;
-}
-
-public static NSAttributedString attributedStringWithAttachment(NSTextAttachment attachment) {
     objc.id result = OS.objc_msgSend(OS.class_NSAttributedString, OS.sel_attributedStringWithAttachment_, attachment !is null ? attachment.id : null);
     return result !is null ? new NSAttributedString(result) : null;
 }
