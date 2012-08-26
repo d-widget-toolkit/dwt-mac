@@ -13,13 +13,7 @@
 module dwt.internal.Compatibility;
 
 import dwt.dwthelper.utils;
-/+
-import java.text.MessageFormat;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.util.zip.InflaterInputStream;
-import java.util.zip.DeflaterOutputStream;
-+/
+
 
 import dwt.DWT;
 import dwt.dwthelper.FileInputStream;
@@ -165,7 +159,7 @@ public static int round(int p, int q) {
 public static int pow2(int n) {
     if (n >= 1 && n <= 30)
         return 2 << (n - 1);
-    else if (n != 0) {
+    else if (n !is 0) {
         DWT.error(DWT.ERROR_INVALID_RANGE);
     }
     return 1;
@@ -217,8 +211,8 @@ public static OutputStream newFileOutputStream(String filename) {
  *
  * @since 3.3
  */
-public static InflaterInputStream newInflaterInputStream(InputStream stream) {
-    return new InflaterInputStream(stream);
+public static InputStream newInflaterInputStream(InputStream stream) {
+    return new BufferedInputStream(stream);
 }
 
 /**
@@ -228,7 +222,7 @@ public static InflaterInputStream newInflaterInputStream(InputStream stream) {
  * @return true when the character is a letter
  */
 public static bool isLetter(dchar c) {
-    return Unicode.isLetter(c);
+    return Character.isLetter(c);
 }
 
 /**
@@ -238,7 +232,7 @@ public static bool isLetter(dchar c) {
  * @return true when the character is a letter or a digit
  */
 public static bool isLetterOrDigit(dchar c) {
-    return Unicode.isLetterOrDigit(c);
+    return Character.isLetterOrDigit(c);
 }
 
 /**
@@ -248,7 +242,7 @@ public static bool isLetterOrDigit(dchar c) {
  * @return true when the character is a Unicode space character
  */
 public static bool isSpaceChar(dchar c) {
-    return Unicode.isSpace(c);
+    return Character.isSpace(c);
 }
 
 /**
@@ -258,7 +252,7 @@ public static bool isSpaceChar(dchar c) {
  * @return true if the character is whitespace
  */
 public static bool isWhitespace(dchar c) {
-    return Unicode.isWhitespace(c);
+    return Character.isWhitespace(c);
 }
 
 /**
@@ -270,8 +264,10 @@ public static bool isWhitespace(dchar c) {
  *
  * @param prog the name of the program to execute
  *
- * @exception ProcessException
+ * @exception IOException
  *  if the program cannot be executed
+ * @exception SecurityException
+ *  if the current SecurityManager disallows program execution
  */
 public static void exec(String prog) {
     auto proc = new Process( prog );
@@ -287,8 +283,10 @@ public static void exec(String prog) {
  *
  * @param progArray array containing the program to execute and its arguments
  *
- * @exception ProcessException
+ * @exception IOException
  *  if the program cannot be executed
+ * @exception SecurityException
+ *  if the current SecurityManager disallows program execution
  */
 public static void exec(String[] progArray) {
     auto proc = new Process( progArray );
@@ -407,15 +405,7 @@ public static void interrupt() {
  * @return true if the two instances of class String are equal
  */
 public static bool equalsIgnoreCase(String s1, String s2) {
-    String s1b = new char[ s1.length ];
-    String s2b = new char[ s1.length ];
-    scope(exit){
-        delete s1b;
-        delete s2b;
-    }
-    String s1c = Unicode.toFold( s1, s1b );
-    String s2c = Unicode.toFold( s2, s2b );
-    return s1c == s2c;
+    return .equalsIgnoreCase(s1, s2);
 }
 
 }
