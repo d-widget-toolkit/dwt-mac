@@ -14,6 +14,7 @@
 module dwt.internal.cocoa.DOMDocument;
 
 import dwt.dwthelper.utils;
+
 import cocoa = dwt.internal.cocoa.id;
 import dwt.internal.cocoa.NSObject;
 import dwt.internal.cocoa.OS;

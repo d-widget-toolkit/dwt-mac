@@ -15,8 +15,6 @@ module dwt.internal.cocoa.CGSize;
 
 import dwt.internal.c.Carbon;
 
-extern (C):
-
 struct CGSize {
     CGFloat width;
     CGFloat height;
