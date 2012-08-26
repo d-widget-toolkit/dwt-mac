@@ -13,10 +13,10 @@
  *******************************************************************************/
 module dwt.internal.cocoa.NSAffineTransformStruct;
 
-struct NSAffineTransformStruct {
-    //float m11, m12, m21, m22;
-    //float tX, tY;
-    public float /*double*/ m11, m12, m21, m22;
-    public float /*double*/ tX, tY;
+import dwt.internal.c.Carbon;
 
+struct NSAffineTransformStruct {
+    public CGFloat m11, m12, m21, m22;
+    public CGFloat tX, tY;
+    //public static final int sizeof = OS.NSAffineTransformStruct_sizeof();
 }
