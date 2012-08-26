@@ -23,8 +23,6 @@ import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 
-alias uint NSGlyph;
-
 public class NSFont : NSObject {
 
 public this() {
@@ -40,12 +38,7 @@ public this(cocoa.id id) {
 }
 
 public CGFloat ascender() {
-    return cast(CGFloat) OS.objc_msgSend_fpret(this.id, OS.sel_ascender);
-}
-
-public static NSFont controlContentFontOfSize(float /*double*/ fontSize) {
-    int /*long*/ result = OS.objc_msgSend(OS.class_NSFont, OS.sel_controlContentFontOfSize_, fontSize);
-    return result !is 0 ? new NSFont(result) : null;
+    return cast(CGFloat)OS.objc_msgSend_fpret(this.id, OS.sel_ascender);
 }
 
 public static NSFont controlContentFontOfSize(CGFloat fontSize) {
@@ -54,7 +47,7 @@ public static NSFont controlContentFontOfSize(CGFloat fontSize) {
 }
 
 public CGFloat descender() {
-    return cast(CGFloat) OS.objc_msgSend_fpret(this.id, OS.sel_descender);
+    return cast(CGFloat)OS.objc_msgSend_fpret(this.id, OS.sel_descender);
 }
 
 public NSString familyName() {
@@ -73,15 +66,15 @@ public static NSFont fontWithName(NSString fontName, CGFloat fontSize) {
 }
 
 public CGFloat leading() {
-    return cast(CGFloat) OS.objc_msgSend_fpret(this.id, OS.sel_leading);
+    return cast(CGFloat)OS.objc_msgSend_fpret(this.id, OS.sel_leading);
 }
 
 public CGFloat pointSize() {
-    return cast(CGFloat) OS.objc_msgSend_fpret(this.id, OS.sel_pointSize);
+    return cast(CGFloat)OS.objc_msgSend_fpret(this.id, OS.sel_pointSize);
 }
 
 public static CGFloat smallSystemFontSize() {
-    return cast(CGFloat) OS.objc_msgSend_fpret(OS.class_NSFont, OS.sel_smallSystemFontSize);
+    return cast(CGFloat)OS.objc_msgSend_fpret(OS.class_NSFont, OS.sel_smallSystemFontSize);
 }
 
 public static NSFont systemFontOfSize(CGFloat fontSize) {
@@ -90,11 +83,13 @@ public static NSFont systemFontOfSize(CGFloat fontSize) {
 }
 
 public static CGFloat systemFontSize() {
-    return cast(CGFloat) OS.objc_msgSend_fpret(OS.class_NSFont, OS.sel_systemFontSize);
+    return cast(CGFloat)OS.objc_msgSend_fpret(OS.class_NSFont, OS.sel_systemFontSize);
 }
 
 public static CGFloat systemFontSizeForControlSize(NSControlSize controlSize) {
-    return cast(CGFloat) OS.objc_msgSend_fpret(OS.class_NSFont, OS.sel_systemFontSizeForControlSize_, controlSize);
+    return cast(CGFloat)OS.objc_msgSend_fpret(OS.class_NSFont, OS.sel_systemFontSizeForControlSize_, controlSize);
 }
 
 }
+
+alias uint NSGlyph;
