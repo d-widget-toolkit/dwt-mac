@@ -40,10 +40,6 @@ public this(cocoa.id id) {
 }
 
 public void drawImage(NSImage image, NSRect frame, NSView controlView) {
-    OS.objc_msgSend(this.id, OS.sel_drawImage_withFrame_inView_, image !is null ? image.id : 0, frame, controlView !is null ? controlView.id : 0);
-}
-
-public void drawImage(NSImage image, NSRect frame, NSView controlView) {
     OS.objc_msgSend(this.id, OS.sel_drawImage_withFrame_inView_, image !is null ? image.id : null, frame, controlView !is null ? controlView.id : null);
 }
 
