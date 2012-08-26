@@ -47,11 +47,6 @@ public static NSColor alternateSelectedControlColor() {
     return result !is null ? new NSColor(result) : null;
 }
 
-public static NSColor alternateSelectedControlColor() {
-    int /*long*/ result = OS.objc_msgSend(OS.class_NSColor, OS.sel_alternateSelectedControlColor);
-    return result !is 0 ? new NSColor(result) : null;
-}
-
 public static NSColor alternateSelectedControlTextColor() {
     objc.id result = OS.objc_msgSend(OS.class_NSColor, OS.sel_alternateSelectedControlTextColor);
     return result !is null ? new NSColor(result) : null;
@@ -94,11 +89,6 @@ public static NSColor colorWithPatternImage(NSImage image) {
 public static NSColor controlBackgroundColor() {
     objc.id result = OS.objc_msgSend(OS.class_NSColor, OS.sel_controlBackgroundColor);
     return result !is null ? new NSColor(result) : null;
-}
-
-public static NSColor controlBackgroundColor() {
-    int /*long*/ result = OS.objc_msgSend(OS.class_NSColor, OS.sel_controlBackgroundColor);
-    return result !is 0 ? new NSColor(result) : null;
 }
 
 public static NSColor controlDarkShadowColor() {
