@@ -17,7 +17,7 @@ import tango.core.sync.Mutex;
 import tango.core.sync.Condition;
 
 /**
- * Instance of this represent a recursive monitor.
+ * Instances of this represent a recursive monitor.
  */
 public class Lock {
     int count, waitCount;
@@ -29,6 +29,7 @@ public class Lock {
         mutex = new Mutex;
         cond = new Condition(mutex);
     }
+
 /**
  * Locks the monitor and returns the lock count. If
  * the lock is owned by another thread, wait until
