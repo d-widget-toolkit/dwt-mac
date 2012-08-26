@@ -39,8 +39,6 @@ public bool containsIndex(NSUInteger value) {
     return OS.objc_msgSend_bool(this.id, OS.sel_containsIndex_, value);
 }
 
-}
-
 public NSUInteger count() {
     return cast(NSUInteger) OS.objc_msgSend(this.id, OS.sel_count);
 }
