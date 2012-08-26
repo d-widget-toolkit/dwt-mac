@@ -46,11 +46,6 @@ public NSArray cookiesForURL(NSURL URL) {
     return result !is null ? new NSArray(result) : null;
 }
 
-public NSArray cookiesForURL(NSURL URL) {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_cookiesForURL_, URL !is null ? URL.id : 0);
-    return result !is 0 ? new NSArray(result) : null;
-}
-
 public void deleteCookie(NSHTTPCookie cookie) {
     OS.objc_msgSend(this.id, OS.sel_deleteCookie_, cookie !is null ? cookie.id : null);
 }
