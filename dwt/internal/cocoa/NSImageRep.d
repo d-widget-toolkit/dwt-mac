@@ -49,15 +49,6 @@ public bool drawInRect(NSRect rect) {
     return OS.objc_msgSend_bool(this.id, OS.sel_drawInRect_, rect);
 }
 
-public NSString colorSpaceName() {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_colorSpaceName);
-    return result !is 0 ? new NSString(result) : null;
-}
-
-public bool drawInRect(NSRect rect) {
-    return OS.objc_msgSend_bool(this.id, OS.sel_drawInRect_, rect);
-}
-
 public bool hasAlpha() {
     return OS.objc_msgSend_bool(this.id, OS.sel_hasAlpha);
 }
