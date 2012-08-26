@@ -13,12 +13,13 @@
  *******************************************************************************/
 module dwt.internal.cocoa.CGRect;
 
+import dwt.dwthelper.utils;
+
 import dwt.internal.cocoa.CGPoint;
 import dwt.internal.cocoa.CGSize;
-
-extern (C):
 
 struct CGRect {
     CGPoint origin;
     CGSize size;
+    //public static final int sizeof = OS.CGRect_sizeof();
 }
