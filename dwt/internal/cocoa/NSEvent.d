@@ -104,12 +104,8 @@ public double timestamp() {
     return OS.objc_msgSend_fpret(this.id, OS.sel_timestamp);
 }
 
-public double timestamp() {
-    return OS.objc_msgSend_fpret(this.id, OS.sel_timestamp);
-}
-
 public NSEventType type() {
-    return cast(dwt.internal.objc.cocoa.Cocoa.NSEventType) OS.objc_msgSend(this.id, OS.sel_type);
+    return cast(NSEventType) OS.objc_msgSend(this.id, OS.sel_type);
 }
 
 public NSWindow window() {
