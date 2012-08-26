@@ -73,10 +73,6 @@ public void setImagePosition(NSCellImagePosition aPosition) {
 }
 
 public void setKeyEquivalent(NSString charCode) {
-    OS.objc_msgSend(this.id, OS.sel_setKeyEquivalent_, charCode !is null ? charCode.id : 0);
-}
-
-public void setKeyEquivalent(NSString charCode) {
     OS.objc_msgSend(this.id, OS.sel_setKeyEquivalent_, charCode !is null ? charCode.id : null);
 }
 
