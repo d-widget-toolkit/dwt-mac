@@ -52,10 +52,6 @@ public NSUInteger count() {
     return cast(NSUInteger) OS.objc_msgSend(this.id, OS.sel_count);
 }
 
-public int /*long*/ indexOfObjectIdenticalTo(id anObject) {
-    return OS.objc_msgSend(this.id, OS.sel_indexOfObjectIdenticalTo_, anObject !is null ? anObject.id : 0);
-}
-
 public NSUInteger indexOfObjectIdenticalTo(cocoa.id anObject) {
     return cast(NSUInteger) OS.objc_msgSend(this.id, OS.sel_indexOfObjectIdenticalTo_, anObject !is null ? anObject.id : null);
 }
