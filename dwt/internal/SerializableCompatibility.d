@@ -15,6 +15,7 @@ module dwt.internal.SerializableCompatibility;
 
 import dwt.dwthelper.utils;
 
+
 interface Serializable{}
 
 /**
