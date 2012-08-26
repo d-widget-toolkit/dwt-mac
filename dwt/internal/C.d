@@ -41,7 +41,7 @@ public class C : Platform {
     alias stdcstring.memmove memmove;
     alias stdcstring.strlen strlen;
 
-/+public static final native void free (int /*long*/ ptr);
+/+public static final native int /*long*/ getenv (byte[] env);
 public static final native int /*long*/ malloc (int /*long*/ size);
 /**
  * @param dest cast=(void *)
