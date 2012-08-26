@@ -15,6 +15,7 @@ module dwt.internal.SWTEventListener;
 
 import dwt.dwthelper.utils : EventListener;
 
+
 /**
  * This interface is the cross-platform version of the
  * java.util.EventListener interface.
@@ -27,6 +28,5 @@ import dwt.dwthelper.utils : EventListener;
  * Note: java.util.EventListener is not part of CDC and CLDC.
  * </p>
  */
-public interface SWTEventListener : EventListener
-{
+public interface SWTEventListener : EventListener {
 }
