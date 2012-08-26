@@ -14,6 +14,7 @@
 module dwt.internal.BidiUtil;
 
 import dwt.dwthelper.utils;
+
 import dwt.graphics.GC;
 import dwt.widgets.Control;
 
@@ -62,13 +63,13 @@ public static void drawGlyphs(GC gc, char[] renderBuffer, int[] renderDx, int x,
  * Bidi not supported on emulated platforms.
  *
  */
-public static boolean isBidiPlatform() {
+public static bool isBidiPlatform() {
     return false;
 }
 /*
  * Not implemented.
  */
-public static boolean isKeyboardBidi() {
+public static bool isKeyboardBidi() {
     return false;
 }
 /*
@@ -111,10 +112,10 @@ public static void setKeyboardLanguage(int language) {
 /*
  * Not implemented.
  */
-public static boolean setOrientation(objc.id hwnd, int orientation) {
+public static bool setOrientation(objc.id hwnd, int orientation) {
     return false;
 }
-public static boolean setOrientation (Control control, int orientation) {
+public static bool setOrientation (Control control, int orientation) {
     return false;
 }
 }
