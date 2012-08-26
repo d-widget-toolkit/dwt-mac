@@ -45,10 +45,6 @@ public NSButton addButtonWithTitle(NSString title) {
     return result !is null ? new NSButton(result) : null;
 }
 
-public void beginSheetModalForWindow(NSWindow window, id delegate, int /*long*/ didEndSelector, int /*long*/ contextInfo) {
-    OS.objc_msgSend(this.id, OS.sel_beginSheetModalForWindow_modalDelegate_didEndSelector_contextInfo_, window !is null ? window.id : 0, delegate !is null ? delegate.id : 0, didEndSelector, contextInfo);
-}
-
 public void beginSheetModalForWindow(NSWindow window, cocoa.id delegate_, objc.SEL didEndSelector, void* contextInfo) {
     OS.objc_msgSend(this.id, OS.sel_beginSheetModalForWindow_modalDelegate_didEndSelector_contextInfo_, window !is null ? window.id : null, delegate_ !is null ? delegate_.id : null, didEndSelector, contextInfo);
 }
@@ -59,10 +55,6 @@ public NSInteger runModal() {
 
 public void setAlertStyle (NSAlertStyle style) {
     OS.objc_msgSend(this.id, OS.sel_setAlertStyle_, style);
-}
-
-public void setMessageText(NSString messageText) {
-    OS.objc_msgSend(this.id, OS.sel_setMessageText_, messageText !is null ? messageText.id : 0);
 }
 
 public void setMessageText(NSString messageText) {
