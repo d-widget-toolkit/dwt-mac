@@ -14,29 +14,29 @@ module dwt.internal.LONG;
 
 import dwt.dwthelper.utils;
 
-/** @jniclass flags=no_gen */
-public class LONG
-{
-    public int /*long*/value;
+import tango.stdc.config;
 
-    public this (int /*long*/value)
+/** @jniclass flags=no_gen */
+public class LONG {
+    public c_long value;
+
+    public this (c_long value)
     {
         this.value = value;
     }
 
     public override int opEquals (Object object)
     {
-        if (object is this)
-            return true;
-
+        if (object is this) return true;
         if (auto obj = cast(LONG) object)
             return obj.value is this.value;
 
         return false;
     }
 
-    public override hash_t toHash ()
-    {
+    public override hash_t toHash () {
         return /*64*/value;
     }
+
+    alias toHash hashCode;
 }
