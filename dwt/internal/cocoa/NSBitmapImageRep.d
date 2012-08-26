@@ -45,12 +45,8 @@ public NSData TIFFRepresentation() {
     return result !is null ? new NSData(result) : null;
 }
 
-}
-
 public ubyte* bitmapData () {
     return cast(ubyte*) OS.objc_msgSend(this.id, OS.sel_bitmapData);
-}
-
 }
 
 public NSBitmapFormat bitmapFormat() {
@@ -63,18 +59,6 @@ public NSInteger bitsPerPixel () {
 
 public NSInteger bytesPerPlane () {
     return cast(NSInteger) OS.objc_msgSend(this.id, OS.sel_bytesPerPlane);
-    return result !is 0 ? new NSColor(result) : null;
-}
-
-public void getBitmapDataPlanes(int[] /*long[]*/ data) {
-    OS.objc_msgSend(this.id, OS.sel_getBitmapDataPlanes_, data);
-}
-
-public static id imageRepWithData(NSData data) {
-    int /*long*/ result = OS.objc_msgSend(OS.class_NSBitmapImageRep, OS.sel_imageRepWithData_, data !is null ? data.id : 0);
-    return result !is 0 ? new id(result) : null;
-}
-
 }
 
 public NSInteger bytesPerRow () {
@@ -115,17 +99,8 @@ public NSBitmapImageRep initWithFocusedViewRect(NSRect rect) {
     return result is this.id ? this : (result !is 0 ? new NSBitmapImageRep(result) : null);
 }
 
-public NSBitmapImageRep initWithFocusedViewRect(NSRect rect) {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_initWithFocusedViewRect_, rect);
-    return result is this.id ? this : (result !is 0 ? new NSBitmapImageRep(result) : null);
-}
-
 public bool isPlanar () {
     return OS.objc_msgSend_bool(this.id, OS.sel_isPlanar);
-}
-
-public int /*long*/ numberOfPlanes() {
-    return OS.objc_msgSend(this.id, OS.sel_numberOfPlanes);
 }
 
 public NSInteger numberOfPlanes() {
