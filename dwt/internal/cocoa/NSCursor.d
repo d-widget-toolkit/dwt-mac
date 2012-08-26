@@ -35,7 +35,6 @@ public this(cocoa.id id) {
     super(id);
 }
 
-
 public static NSCursor IBeamCursor() {
     objc.id result = OS.objc_msgSend(OS.class_NSCursor, OS.sel_IBeamCursor);
     return result !is null ? new NSCursor(result) : null;
@@ -54,11 +53,6 @@ public static NSCursor crosshairCursor() {
 public static NSCursor currentCursor() {
     objc.id result = OS.objc_msgSend(OS.class_NSCursor, OS.sel_currentCursor);
     return result !is null ? new NSCursor(result) : null;
-}
-
-public static NSCursor currentCursor() {
-    int /*long*/ result = OS.objc_msgSend(OS.class_NSCursor, OS.sel_currentCursor);
-    return result !is 0 ? new NSCursor(result) : null;
 }
 
 public NSCursor initWithImage(NSImage newImage, NSPoint aPoint) {
