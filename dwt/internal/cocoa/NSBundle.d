@@ -37,8 +37,7 @@ public this(cocoa.id id) {
 }
 
 public static bool loadNibFile(NSString fileName, NSDictionary context, NSZone* zone) {
-    return OS.objc_msgSend_bool(OS.class_NSBundle, OS.sel_loadNibFile_externalNameTable_withZone_, fileName !is null ? fileName.id : null,
-            context !is null ? context.id : null, zone);
+    return OS.objc_msgSend_bool(OS.class_NSBundle, OS.sel_loadNibFile_externalNameTable_withZone_, fileName !is null ? fileName.id : null, context !is null ? context.id : null, zone);
 }
 
 public NSString bundleIdentifier() {
@@ -56,11 +55,6 @@ public static NSBundle bundleWithIdentifier(NSString identifier) {
     return result !is null ? new NSBundle(result) : null;
 }
 
-public static NSBundle bundleWithIdentifier(NSString identifier) {
-    int /*long*/ result = OS.objc_msgSend(OS.class_NSBundle, OS.sel_bundleWithIdentifier_, identifier !is null ? identifier.id : 0);
-    return result !is 0 ? new NSBundle(result) : null;
-}
-
 public static NSBundle bundleWithPath(NSString path) {
     objc.id result = OS.objc_msgSend(OS.class_NSBundle, OS.sel_bundleWithPath_, path !is null ? path.id : null);
     return result !is null ? new NSBundle(result) : null;
@@ -74,11 +68,6 @@ public NSDictionary infoDictionary() {
 public static NSBundle mainBundle() {
     objc.id result = OS.objc_msgSend(OS.class_NSBundle, OS.sel_mainBundle);
     return result !is null ? new NSBundle(result) : null;
-}
-
-public static NSBundle mainBundle() {
-    int /*long*/ result = OS.objc_msgSend(OS.class_NSBundle, OS.sel_mainBundle);
-    return result !is 0 ? new NSBundle(result) : null;
 }
 
 public id objectForInfoDictionaryKey(NSString key) {
