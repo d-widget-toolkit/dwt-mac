@@ -14,19 +14,12 @@
  *******************************************************************************/
 module dwt.internal.Library;
 
-import tango.util.Convert;
-
 import dwt.dwthelper.utils;
 
-//do it here, so it can be evaluated at compile time
-//this saves a static ctor.
-private int buildSWT_VERSION (int major, int minor)
-{
-    return major * 1000 + minor;
-}
 
-public class Library
-{
+import tango.util.Convert;
+
+public class Library {
 
     /* DWT Version - Mmmm (M=major, mmm=minor) */
 
@@ -48,149 +41,117 @@ public class Library
     /**
      * The JAVA and DWT versions
      */
-    //public static const int JAVA_VERSION;
-    public static const int SWT_VERSION = .buildSWT_VERSION(MAJOR_VERSION,
-            MINOR_VERSION);
+    public static const int DWT_VERSION = SWT_VERSION_(MAJOR_VERSION, MINOR_VERSION);;
 
-    version (darwin)
-        static const String SEPARATOR = "\n";
-
-    else
-        static assert(false, "Only Mac OS X supported for this port");
-    static final String SUFFIX_64 = "-64";  //$NON-NLS-1$
-    static final String SWTDIR_32 = "swtlib-32";    //$NON-NLS-1$
-    static final String SWTDIR_64 = "swtlib-64";    //$NON-NLS-1$
-
+    static const String SEPARATOR = "\n";
 
     /* 64-bit support */
     static /*final*/ bool IS_64 = 0x1FFFFFFFFL is (int /*long*/)0x1FFFFFFFFL;
     static final String SUFFIX_64 = "-64";  //$NON-NLS-1$
-    static final String SWTDIR_32 = "swtlib-32";    //$NON-NLS-1$
-    static final String SWTDIR_64 = "swtlib-64";    //$NON-NLS-1$
+    static final String DWTDIR_32 = "swtlib-32";    //$NON-NLS-1$
+    static final String DWTDIR_64 = "swtlib-64";    //$NON-NLS-1$
 
+// static {
+//  SEPARATOR = System.getProperty("file.separator");
+//  JAVA_VERSION = parseVersion(System.getProperty("java.version"));
+//  DWT_VERSION = DWT_VERSION(MAJOR_VERSION, MINOR_VERSION);
+// }
 
-    static int parseVersion (String aVersion)
-    {
-        if (aVersion == null)
-            return 0;
-        int major = 0, minor = 0, micro = 0;
-        int length = aVersion.length, index = 0, start = 0;
-        bool isDigit (char c)
-        {
-            return c >= '0' && c <= '9';
-        }
-        while (index < length && isDigit(aVersion[index]))
-            index++;
-        try
-        {
-            if (start < length)
-                major = to!(int)(aVersion[start .. index]);
-        }
-        catch (ConversionException e)
-        {
-        }
-        start = ++index;
-        while (index < length && isDigit(aVersion[index]))
-            index++;
-        try
-        {
-            if (start < length)
-                minor = to!(int)(aVersion[start .. index]);
-        }
-        catch (ConversionException e)
-        {
-        }
-        start = ++index;
-        while (index < length && isDigit(aVersion[index]))
-            index++;
-        try
-        {
-            if (start < length)
-                micro = to!(int)(aVersion[start .. index]);
-        }
-        catch (ConversionException e)
-        {
-        }
-        return buildJAVA_VERSION(major, minor, micro);
-    }
+static int parseVersion(String version_) {
+    if (version_ is null) return 0;
+    int major = 0, minor = 0, micro = 0;
+    int length = version_.length(), index = 0, start = 0;
+    while (index < length && Character.isDigit(version_.charAt(index))) index++;
+    try {
+        if (start < length) major = Integer.parseInt(version_.substring(start, index));
+    } catch (NumberFormatException e) {}
+    start = ++index;
+    while (index < length && Character.isDigit(version_.charAt(index))) index++;
+    try {
+        if (start < length) minor = Integer.parseInt(version_.substring(start, index));
+    } catch (NumberFormatException e) {}
+    start = ++index;
+    while (index < length && Character.isDigit(version_.charAt(index))) index++;
+    try {
+        if (start < length) micro = Integer.parseInt(version_.substring(start, index));
+    } catch (NumberFormatException e) {}
+    return JAVA_VERSION(major, minor, micro);
+}
 
-    /**
-     * Returns the Java version number as an integer.
-     *
-     * @param major
-     * @param minor
-     * @param micro
-     * @return the version
-     */
-    public static int buildJAVA_VERSION (int major, int minor, int micro)
-    {
-        return (major << 16) + (minor << 8) + micro;
-    }
+/**
+ * Returns the Java version number as an integer.
+ * 
+ * @param major
+ * @param minor
+ * @param micro
+ * @return the version
+ */
+public static int JAVA_VERSION (int major, int minor, int micro) {
+    return (major << 16) + (minor << 8) + micro;
+}
 
-    /**
-     * Returns the DWT version number as an integer.
-     *
-     * @param major
-     * @param minor
-     * @return the version
-     */
-    public static int buildSWT_VERSION (int major, int minor)
-    {
-        return .buildSWT_VERSION(major, minor);
-    }
+/**
+ * Returns the DWT version number as an integer.
+ * 
+ * @param major
+ * @param minor
+ * @return the version
+ */
+public static int SWT_VERSION_ (int major, int minor) {
+    return major * 1000 + minor;
+}
 /+ PORTING_LEFT
- static bool extract (String fileName, String mappedName) {
- FileOutputStream os = null;
- InputStream is = null;
- File file = new File(fileName);
+static bool extract (String fileName, String mappedName) {
+    FileOutputStream os = null;
+    InputStream is = null;
+    File file = new File(fileName);
     bool extracted = false;
- try {
- if (!file.exists ()) {
- is = Library.class.getResourceAsStream ("/" + mappedName); //$NON-NLS-1$
- if (is !is null) {
+    try {
+        if (!file.exists ()) {
+            is = Library.class.getResourceAsStream ("/" + mappedName); //$NON-NLS-1$
+            if (is !is null) {
                 extracted = true;
- int read;
- byte [] buffer = new byte [4096];
- os = new FileOutputStream (fileName);
- while ((read = is.read (buffer)) !is -1) {
- os.write(buffer, 0, read);
- }
- os.close ();
- is.close ();
- if (!Platform.PLATFORM.equals ("win32")) { //$NON-NLS-1$
- try {
- Runtime.getRuntime ().exec (new String []{"chmod", "755", fileName}).waitFor(); //$NON-NLS-1$ //$NON-NLS-2$
- } catch (Throwable e) {}
- }
- if (load (fileName)) return true;
- }
- }
+                int read;
+                byte [] buffer = new byte [4096];
+                os = new FileOutputStream (fileName);
+                while ((read = is.read (buffer)) !is -1) {
+                    os.write(buffer, 0, read);
+                }
+                os.close ();
+                is.close ();
+                if (!Platform.PLATFORM.equals ("win32")) { //$NON-NLS-1$
+                    try {
+                        Runtime.getRuntime ().exec (new String []{"chmod", "755", fileName}).waitFor(); //$NON-NLS-1$ //$NON-NLS-2$
+                    } catch (Throwable e) {}
+                }
+            }
+        }
         if (load (fileName)) return true;
- } catch (Throwable e) {
- try {
- if (os !is null) os.close ();
- } catch (IOException e1) {}
- try {
- if (is !is null) is.close ();
- } catch (IOException e1) {}
+    } catch (Throwable e) {
+        try {
+            if (os !is null) os.close ();
+        } catch (IOException e1) {}
+        try {
+            if (is !is null) is.close ();
+        } catch (IOException e1) {}
         if (extracted && file.exists ()) file.delete ();
- }
- return false;
- }
+    }
+    return false;
+}
 
- static bool load (String libName) {
- try {
- if (libName.indexOf (SEPARATOR) !is -1) {
- System.load (libName);
- } else {
- System.loadLibrary (libName);
- }
- return true;
- } catch (UnsatisfiedLinkError e) {}
- return false;
- }
+static bool load (String libName) {
+    try {
+        if (libName.indexOf (SEPARATOR) !is -1) {
+            System.load (libName);
+        } else {
+            System.loadLibrary (libName);
+        }        
+        return true;
+    } catch (UnsatisfiedLinkError e) {}
+    return false;
+}
 
- /**
+/**
  * Loads the shared library that matches the version of the
  * Java code which is currently running.  DWT shared libraries
  * follow an encoding scheme where the major, minor and revision
@@ -201,11 +162,11 @@ public class Library
  *
  * @param name the name of the library to load
  */
- public static void loadLibrary (String name) {
- loadLibrary (name, true);
- }
+public static void loadLibrary (String name) {
+    loadLibrary (name, true);
+}
 
- /**
+/**
  * Loads the shared library that matches the version of the
  * Java code which is currently running.  DWT shared libraries
  * follow an encoding scheme where the major, minor and revision
@@ -217,10 +178,10 @@ public class Library
  * @param name the name of the library to load
  * @param mapName true if the name should be mapped, false otherwise
  */
- public static void loadLibrary (String name, bool mapName) {
- String prop = System.getProperty ("sun.arch.data.model"); //$NON-NLS-1$
- if (prop is null) prop = System.getProperty ("com.ibm.vm.bitmode"); //$NON-NLS-1$
- if (prop !is null) {
+public static void loadLibrary (String name, bool mapName) {
+    String prop = System.getProperty ("sun.arch.data.model"); //$NON-NLS-1$
+    if (prop is null) prop = System.getProperty ("com.ibm.vm.bitmode"); //$NON-NLS-1$
+    if (prop !is null) {
         if ("32".equals (prop) && IS_64) { //$NON-NLS-1$
             throw new UnsatisfiedLinkError ("Cannot load 64-bit DWT libraries on 32-bit JVM"); //$NON-NLS-1$
         }
@@ -228,51 +189,51 @@ public class Library
             throw new UnsatisfiedLinkError ("Cannot load 32-bit DWT libraries on 64-bit JVM"); //$NON-NLS-1$
         }
     }
-
- /* Compute the library name and mapped name */
- String libName1, libName2, mappedName1, mappedName2;
- if (mapName) {
- String version = System.getProperty ("swt.version"); //$NON-NLS-1$
- if (version is null) {
- version = "" + MAJOR_VERSION; //$NON-NLS-1$
- /* Force 3 digits in minor version number */
- if (MINOR_VERSION < 10) {
- version += "00"; //$NON-NLS-1$
- } else {
- if (MINOR_VERSION < 100) version += "0"; //$NON-NLS-1$
- }
- version += MINOR_VERSION;
- /* No "r" until first revision */
- if (REVISION > 0) version += "r" + REVISION; //$NON-NLS-1$
- }
- libName1 = name + "-" + Platform.PLATFORM + "-" + version;  //$NON-NLS-1$ //$NON-NLS-2$
- libName2 = name + "-" + Platform.PLATFORM;  //$NON-NLS-1$
+    
+    /* Compute the library name and mapped name */
+    String libName1, libName2, mappedName1, mappedName2;
+    if (mapName) {
+        String version = System.getProperty ("swt.version"); //$NON-NLS-1$
+        if (version is null) {
+            version = "" + MAJOR_VERSION; //$NON-NLS-1$
+            /* Force 3 digits in minor version number */
+            if (MINOR_VERSION < 10) {
+                version += "00"; //$NON-NLS-1$
+            } else {
+                if (MINOR_VERSION < 100) version += "0"; //$NON-NLS-1$
+            }
+            version += MINOR_VERSION;        
+            /* No "r" until first revision */
+            if (REVISION > 0) version += "r" + REVISION; //$NON-NLS-1$
+        }
+        libName1 = name + "-" + Platform.PLATFORM + "-" + version;  //$NON-NLS-1$ //$NON-NLS-2$
+        libName2 = name + "-" + Platform.PLATFORM;  //$NON-NLS-1$
         mappedName1 = mapLibraryName (libName1);
         mappedName2 = mapLibraryName (libName2);
- } else {
- libName1 = libName2 = mappedName1 = mappedName2 = name;
- }
+    } else {
+        libName1 = libName2 = mappedName1 = mappedName2 = name;
+    }
 
- /* Try loading library from swt library path */
- String path = System.getProperty ("swt.library.path"); //$NON-NLS-1$
- if (path !is null) {
- path = new File (path).getAbsolutePath ();
- if (load (path + SEPARATOR + mappedName1)) return;
- if (mapName && load (path + SEPARATOR + mappedName2)) return;
- }
+    /* Try loading library from swt library path */
+    String path = System.getProperty ("swt.library.path"); //$NON-NLS-1$
+    if (path !is null) {
+        path = new File (path).getAbsolutePath ();
+        if (load (path + SEPARATOR + mappedName1)) return;
+        if (mapName && load (path + SEPARATOR + mappedName2)) return;
+    }
 
- /* Try loading library from java library path */
- if (load (libName1)) return;
- if (mapName && load (libName2)) return;
+    /* Try loading library from java library path */
+    if (load (libName1)) return;
+    if (mapName && load (libName2)) return;
 
- /* Try loading library from the tmp directory if swt library path is not specified */
+    /* Try loading library from the tmp directory if swt library path is not specified */
     String fileName1 = mappedName1;
     String fileName2 = mappedName2;
- if (path is null) {
- path = System.getProperty ("java.io.tmpdir"); //$NON-NLS-1$
- path = new File (path).getAbsolutePath ();
- if (load (path + SEPARATOR + mappedName1)) return;
- if (mapName && load (path + SEPARATOR + mappedName2)) return;
+    if (path is null) {
+        path = System.getProperty ("java.io.tmpdir"); //$NON-NLS-1$
+        File dir = new File (path, IS_64 ? SWTDIR_64 : SWTDIR_32);
+        bool make = false;
+        if ((dir.exists () && dir.isDirectory ()) || (make = dir.mkdir ())) {
             path = dir.getAbsolutePath ();
             if (make && !Platform.PLATFORM.equals ("win32")) { //$NON-NLS-1$
                 try {
@@ -288,16 +249,16 @@ public class Library
         }
         if (load (path + SEPARATOR + fileName1)) return;
         if (mapName && load (path + SEPARATOR + fileName2)) return;
- }
-
- /* Try extracting and loading library from jar */
- if (path !is null) {
+    }
+        
+    /* Try extracting and loading library from jar */
+    if (path !is null) {
         if (extract (path + SEPARATOR + fileName1, mappedName1)) return;
         if (mapName && extract (path + SEPARATOR + fileName2, mappedName2)) return;
- }
-
- /* Failed to find the library */
- throw new UnsatisfiedLinkError ("no " + libName1 + " or " + libName2 + " in swt.library.path, java.library.path or the jar file"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    }
+    
+    /* Failed to find the library */
+    throw new UnsatisfiedLinkError ("no " + libName1 + " or " + libName2 + " in swt.library.path, java.library.path or the jar file"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 }
 
 static String mapLibraryName (String libName) {
@@ -310,14 +271,4 @@ static String mapLibraryName (String libName) {
     return libName;
 }
 
-static String mapLibraryName (String libName) {
-    /* DWT libraries in the Macintosh use the extension .jnilib but the some VMs map to .dylib. */
-    libName = System.mapLibraryName (libName);
-    String ext = ".dylib"; //$NON-NLS-1$
-    if (libName.endsWith(ext)) {
-        libName = libName.substring(0, libName.length() - ext.length()) + ".jnilib"; //$NON-NLS-1$
-    }
-    return libName;
- }
- +/
-}
+}+/
