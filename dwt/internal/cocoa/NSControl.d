@@ -74,8 +74,6 @@ public bool isEnabled() {
     return OS.objc_msgSend_bool(this.id, OS.sel_isEnabled);
 }
 
-}
-
 public bool sendAction(objc.SEL theAction, cocoa.id theTarget) {
     return OS.objc_msgSend_bool(this.id, OS.sel_sendAction_to_, theAction, theTarget !is null ? theTarget.id : null);
 }
@@ -89,11 +87,7 @@ public void setAlignment(NSTextAlignment mode) {
 }
 
 public void setCell(NSCell aCell) {
-    OS.objc_msgSend(this.id, OS.sel_setCell_, aCell !is null ? aCell.id : 0);
-}
-
-public void setCell(NSCell aCell) {
-    OS.objc_msgSend(this.id, OS.sel_setCell_, aCell !is null ? aCell.id : 0);
+    OS.objc_msgSend(this.id, OS.sel_setCell_, aCell !is null ? aCell.id : null);
 }
 
 public static void setCellClass(objc.Class factoryId) {
