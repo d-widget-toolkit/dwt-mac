@@ -56,11 +56,6 @@ public static NSGraphicsContext graphicsContextWithGraphicsPort(void* graphicsPo
     return result !is null ? new NSGraphicsContext(result) : null;
 }
 
-public static NSGraphicsContext graphicsContextWithGraphicsPort(int /*long*/ graphicsPort, bool initialFlippedState) {
-    int /*long*/ result = OS.objc_msgSend(OS.class_NSGraphicsContext, OS.sel_graphicsContextWithGraphicsPort_flipped_, graphicsPort, initialFlippedState);
-    return result !is 0 ? new NSGraphicsContext(result) : null;
-}
-
 public static NSGraphicsContext graphicsContextWithWindow(NSWindow window) {
     objc.id result = OS.objc_msgSend(OS.class_NSGraphicsContext, OS.sel_graphicsContextWithWindow_, window !is null ? window.id : null);
     return result !is null ? new NSGraphicsContext(result) : null;
@@ -72,10 +67,6 @@ public void* graphicsPort() {
 
 public NSImageInterpolation imageInterpolation() {
     return cast(NSImageInterpolation) OS.objc_msgSend(this.id, OS.sel_imageInterpolation);
-}
-
-public bool isDrawingToScreen() {
-    return OS.objc_msgSend_bool(this.id, OS.sel_isDrawingToScreen);
 }
 
 public bool isDrawingToScreen() {
