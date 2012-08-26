@@ -13,16 +13,12 @@
  *******************************************************************************/
 module dwt.internal.cocoa.CGPoint;
 
+import dwt.dwthelper.utils;
+
 import dwt.internal.c.Carbon;
-
-/* this shouldn't be needed but CGFloat is not recognized*/
-static if ((void*).sizeof > int.sizeof) // 64bit target
-    alias double CGFloat;
-
-else
-    alias float CGFloat;
 
 struct CGPoint {
     CGFloat x = 0.0;
     CGFloat y = 0.0;
+    //public static final int sizeof = OS.CGPoint_sizeof();
 }
