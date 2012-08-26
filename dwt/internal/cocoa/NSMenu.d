@@ -48,11 +48,6 @@ public NSMenuItem addItemWithTitle(NSString aString, objc.SEL aSelector, NSStrin
     return result !is null ? new NSMenuItem(result) : null;
 }
 
-public NSMenuItem addItemWithTitle(NSString aString, int /*long*/ aSelector, NSString charCode) {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_addItemWithTitle_action_keyEquivalent_, aString !is null ? aString.id : 0, aSelector, charCode !is null ? charCode.id : 0);
-    return result !is 0 ? new NSMenuItem(result) : null;
-}
-
 public void cancelTracking() {
     OS.objc_msgSend(this.id, OS.sel_cancelTracking);
 }
