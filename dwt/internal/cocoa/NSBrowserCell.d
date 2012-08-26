@@ -32,15 +32,14 @@ public this (objc.id id) {
 
 public this (cocoa.id id) {
     super(id);
-
 }
 
-public NSColor highlightColorInView (NSView controlView) {
+public NSColor highlightColorInView(NSView controlView) {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_highlightColorInView_, controlView !is null ? controlView.id : null);
     return result !is null ? new NSColor(result) : null;
 }
 
-public void setLeaf (bool flag) {
+public void setLeaf(bool flag) {
     OS.objc_msgSend(this.id, OS.sel_setLeaf_, flag);
 }
 
