@@ -58,10 +58,6 @@ public void endSheet(NSWindow sheet, NSInteger returnCode) {
     OS.objc_msgSend(this.id, OS.sel_endSheet_returnCode_, sheet !is null ? sheet.id : null, returnCode);
 }
 
-public void endSheet(NSWindow sheet, int /*long*/ returnCode) {
-    OS.objc_msgSend(this.id, OS.sel_endSheet_returnCode_, sheet !is null ? sheet.id : 0, returnCode);
-}
-
 public void finishLaunching() {
     OS.objc_msgSend(this.id, OS.sel_finishLaunching);
 }
@@ -72,10 +68,6 @@ public void hide(cocoa.id sender) {
 
 public void hideOtherApplications(cocoa.id sender) {
     OS.objc_msgSend(this.id, OS.sel_hideOtherApplications_, sender !is null ? sender.id : null);
-}
-
-public bool isActive() {
-    return OS.objc_msgSend_bool(this.id, OS.sel_isActive);
 }
 
 public bool isActive() {
@@ -112,10 +104,6 @@ public NSArray orderedWindows() {
 
 public void postEvent(NSEvent event, bool flag) {
     OS.objc_msgSend(this.id, OS.sel_postEvent_atStart_, event !is null ? event.id : null, flag);
-}
-
-public void postEvent(NSEvent event, bool flag) {
-    OS.objc_msgSend(this.id, OS.sel_postEvent_atStart_, event !is null ? event.id : 0, flag);
 }
 
 public void run() {
