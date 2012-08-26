@@ -22,16 +22,13 @@ import dwt.internal.cocoa.NSSize;
 import dwt.internal.cocoa.OS;
 import objc = dwt.internal.objc.runtime;
 
-public class NSAffineTransform : NSObject
-{
+public class NSAffineTransform : NSObject {
 
-public this ()
-{
+public this () {
     super();
 }
 
-public this (objc.id id)
-{
+public this (objc.id id) {
     super(id);
 }
 
@@ -43,23 +40,18 @@ public void concat() {
     OS.objc_msgSend(this.id, OS.sel_concat);
 }
 
-public NSAffineTransform initWithTransform (NSAffineTransform transform)
-{
+public NSAffineTransform initWithTransform (NSAffineTransform transform) {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_initWithTransform_, transform !is null ? transform.id : null);
-    return result !is null ? this : null;
+    return result is this.id ? this : (result !is null ? new NSAffineTransform(result) : null);
 }
 
-public void invert ()
-{
+public void invert() {
     OS.objc_msgSend(this.id, OS.sel_invert);
 }
 
-
-public void prependTransform (NSAffineTransform transform)
-{
+public void prependTransform(NSAffineTransform transform) {
     OS.objc_msgSend(this.id, OS.sel_prependTransform_, transform !is null ? transform.id : null);
 }
-
 
 public void rotateByDegrees(CGFloat angle) {
     OS.objc_msgSend(this.id, OS.sel_rotateByDegrees_, angle);
@@ -73,40 +65,34 @@ public void set() {
     OS.objc_msgSend(this.id, OS.sel_set);
 }
 
-public void setTransformStruct (NSAffineTransformStruct transformStruct)
-{
+public void setTransformStruct(NSAffineTransformStruct transformStruct) {
     OS.objc_msgSend(this.id, OS.sel_setTransformStruct_, transformStruct);
 }
 
-public static NSAffineTransform transform ()
-{
+public static NSAffineTransform transform() {
     objc.id result = OS.objc_msgSend(OS.class_NSAffineTransform, OS.sel_transform);
     return result !is null ? new NSAffineTransform(result) : null;
 }
 
-public NSPoint transformPoint (NSPoint aPoint)
-{
-    NSPoint result;
+public NSPoint transformPoint(NSPoint aPoint) {
+    NSPoint result = NSPoint();
     OS.objc_msgSend_stret(&result, this.id, OS.sel_transformPoint_, aPoint);
     return result;
 }
 
-public NSSize transformSize (NSSize aSize)
-{
-    NSSize result;
+public NSSize transformSize(NSSize aSize) {
+    NSSize result = NSSize();
     OS.objc_msgSend_stret(&result, this.id, OS.sel_transformSize_, aSize);
     return result;
 }
 
-public NSAffineTransformStruct transformStruct ()
-{
-    NSAffineTransformStruct result;
+public NSAffineTransformStruct transformStruct() {
+    NSAffineTransformStruct result = NSAffineTransformStruct();
     OS.objc_msgSend_stret(&result, this.id, OS.sel_transformStruct);
     return result;
 }
 
-public void translateXBy (CGFloat deltaX, CGFloat deltaY)
-{
+public void translateXBy (CGFloat deltaX, CGFloat deltaY) {
     OS.objc_msgSend(this.id, OS.sel_translateXBy_yBy_, deltaX, deltaY);
 }
 
