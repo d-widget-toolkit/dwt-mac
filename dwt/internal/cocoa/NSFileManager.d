@@ -52,10 +52,6 @@ public NSDirectoryEnumerator enumeratorAtPath(NSString path) {
     return result !is null ? new NSDirectoryEnumerator(result) : null;
 }
 
-public bool fileExistsAtPath(NSString path, int /*long*/ isDirectory) {
-    return OS.objc_msgSend_bool(this.id, OS.sel_fileExistsAtPath_isDirectory_, path !is null ? path.id : 0, isDirectory);
-}
-
 public bool fileExistsAtPath(NSString path, bool* isDirectory) {
     return OS.objc_msgSend_bool(this.id, OS.sel_fileExistsAtPath_isDirectory_, path !is null ? path.id : null, isDirectory);
 }
