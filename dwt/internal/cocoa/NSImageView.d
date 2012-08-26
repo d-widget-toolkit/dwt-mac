@@ -38,11 +38,6 @@ public this(cocoa.id id) {
 }
 
 public NSImage image() {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_image);
-    return result !is 0 ? new NSImage(result) : null;
-}
-
-public NSImage image() {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_image);
     return result !is null ? new NSImage(result) : null;
 }
