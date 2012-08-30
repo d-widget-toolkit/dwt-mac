@@ -63,14 +63,6 @@ public void becomeKeyWindow() {
     OS.objc_msgSend(this.id, OS.sel_becomeKeyWindow);
 }
 
-public bool areCursorRectsEnabled() {
-    return OS.objc_msgSend_bool(this.id, OS.sel_areCursorRectsEnabled);
-}
-
-public void becomeKeyWindow() {
-    OS.objc_msgSend(this.id, OS.sel_becomeKeyWindow);
-}
-
 public bool canBecomeKeyWindow() {
     return OS.objc_msgSend_bool(this.id, OS.sel_canBecomeKeyWindow);
 }
@@ -160,8 +152,6 @@ public bool hasShadow() {
     return OS.objc_msgSend_bool(this.id, OS.sel_hasShadow);
 }
 
-}
-
 public NSWindow initWithContentRect(NSRect contentRect, NSUInteger aStyle, NSBackingStoreType bufferingType, bool flag) {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_initWithContentRect_styleMask_backing_defer_, contentRect, aStyle, bufferingType, flag);
     return result is this.id ? this : (result !is null ? new NSWindow(result) : null);
@@ -170,14 +160,6 @@ public NSWindow initWithContentRect(NSRect contentRect, NSUInteger aStyle, NSBac
 public NSWindow initWithContentRect(NSRect contentRect, NSUInteger aStyle, NSBackingStoreType bufferingType, bool flag, NSScreen screen) {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_initWithContentRect_styleMask_backing_defer_screen_, contentRect, aStyle, bufferingType, flag, screen !is null ? screen.id : null);
     return result is this.id ? this : (result !is null ? new NSWindow(result) : null);
-}
-
-public void invalidateShadow() {
-    OS.objc_msgSend(this.id, OS.sel_invalidateShadow);
-}
-
-public bool isDocumentEdited() {
-    return OS.objc_msgSend_bool(this.id, OS.sel_isDocumentEdited);
 }
 
 public void invalidateShadow() {
@@ -230,20 +212,6 @@ public void miniaturize(cocoa.id sender) {
     OS.objc_msgSend(this.id, OS.sel_miniaturize_, sender !is null ? sender.id : null);
 }
 
-public static float /*double*/ minFrameWidthWithTitle(NSString aTitle, int /*long*/ aStyle) {
-    return (float)OS.objc_msgSend_fpret(OS.class_NSWindow, OS.sel_minFrameWidthWithTitle_styleMask_, aTitle !is null ? aTitle.id : 0, aStyle);
-}
-
-public NSSize minSize() {
-    NSSize result = new NSSize();
-    OS.objc_msgSend_stret(result, this.id, OS.sel_minSize);
-    return result;
-}
-
-public void miniaturize(id sender) {
-    OS.objc_msgSend(this.id, OS.sel_miniaturize_, sender !is null ? sender.id : 0);
-}
-
 public NSPoint mouseLocationOutsideOfEventStream() {
     NSPoint result = NSPoint();
     OS.objc_msgSend_stret(&result, this.id, OS.sel_mouseLocationOutsideOfEventStream);
@@ -279,19 +247,6 @@ public void removeChildWindow(NSWindow childWin) {
     OS.objc_msgSend(this.id, OS.sel_removeChildWindow_, childWin !is null ? childWin.id : null);
 }
 
-public void orderWindow(int /*long*/ place, int /*long*/ otherWin) {
-    OS.objc_msgSend(this.id, OS.sel_orderWindow_relativeTo_, place, otherWin);
-}
-
-public NSWindow parentWindow() {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_parentWindow);
-    return result is this.id ? this : (result !is 0 ? new NSWindow(result) : null);
-}
-
-public void removeChildWindow(NSWindow childWin) {
-    OS.objc_msgSend(this.id, OS.sel_removeChildWindow_, childWin !is null ? childWin.id : 0);
-}
-
 public NSScreen screen() {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_screen);
     return result !is null ? new NSScreen(result) : null;
@@ -299,10 +254,6 @@ public NSScreen screen() {
 
 public void sendEvent(NSEvent theEvent) {
     OS.objc_msgSend(this.id, OS.sel_sendEvent_, theEvent !is null ? theEvent.id : null);
-}
-
-public void sendEvent(NSEvent theEvent) {
-    OS.objc_msgSend(this.id, OS.sel_sendEvent_, theEvent !is null ? theEvent.id : 0);
 }
 
 public void setAcceptsMouseMovedEvents(bool flag) {
@@ -327,10 +278,6 @@ public void setDefaultButtonCell(NSButtonCell defButt) {
 
 public void setDelegate(cocoa.id anObject) {
     OS.objc_msgSend(this.id, OS.sel_setDelegate_, anObject !is null ? anObject.id : null);
-}
-
-public void setDocumentEdited(bool flag) {
-    OS.objc_msgSend(this.id, OS.sel_setDocumentEdited_, flag);
 }
 
 public void setDocumentEdited(bool flag) {
