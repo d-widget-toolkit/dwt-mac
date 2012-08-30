@@ -35,10 +35,6 @@ public this(cocoa.id id) {
     super(id);
 }
 
-public void setCachePolicy(int /*long*/ policy) {
-    OS.objc_msgSend(this.id, OS.sel_setCachePolicy_, policy);
-}
-
 public void setCachePolicy(NSURLRequestCachePolicy policy) {
     OS.objc_msgSend(this.id, OS.sel_setCachePolicy_, policy);
 }
