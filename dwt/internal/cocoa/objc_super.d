@@ -16,7 +16,14 @@ module dwt.internal.cocoa.objc_super;
 static import dwt.internal.objc.runtime;
 
 alias dwt.internal.objc.runtime.objc_super objc_super;
-/*public class objc_super {
-    public id receiver;
-    public id cls;
-}*/
+
+/**
+ * @jniclass flags=struct
+ */
+// public class objc_super {
+//     /** @field cast=(id) */
+//     public int /*long*/ receiver;
+//     /** @field accessor=swt_super_class,cast=(Class) */
+//     public int /*long*/ super_class;
+//     public static final int sizeof = OS.objc_super_sizeof();
+// }
