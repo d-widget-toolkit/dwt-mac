@@ -36,10 +36,6 @@ public this(cocoa.id id) {
     super(id);
 }
 
-public void beginSheetWithPrintInfo(NSPrintInfo printInfo, NSWindow docWindow, id delegate, int /*long*/ didEndSelector, int /*long*/ contextInfo) {
-    OS.objc_msgSend(this.id, OS.sel_beginSheetWithPrintInfo_modalForWindow_delegate_didEndSelector_contextInfo_, printInfo !is null ? printInfo.id : 0, docWindow !is null ? docWindow.id : 0, delegate !is null ? delegate.id : 0, didEndSelector, contextInfo);
-}
-
 public void beginSheetWithPrintInfo(NSPrintInfo printInfo, NSWindow docWindow, cocoa.id delegate_, objc.SEL didEndSelector, void* contextInfo) {
     OS.objc_msgSend(this.id, OS.sel_beginSheetWithPrintInfo_modalForWindow_delegate_didEndSelector_contextInfo_, printInfo !is null ? printInfo.id : null, docWindow !is null ? docWindow.id : null, delegate_ !is null ? delegate_.id : null, didEndSelector, contextInfo);
 }
