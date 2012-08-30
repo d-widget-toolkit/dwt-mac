@@ -84,15 +84,15 @@ public NSPasteboard draggingPasteboard() {
 
 public NSDragOperation draggingSourceOperationMask() {
     return cast(NSDragOperation) OS.objc_msgSend(this.id, OS.sel_draggingSourceOperationMask);
+}
+
 public NSObject autorelease() {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_autorelease);
     return result is this.id ? this : (result !is null ? new NSObject(result) : null);
-public void cancelAuthenticationChallenge(NSURLAuthenticationChallenge challenge) {
-    OS.objc_msgSend(this.id, OS.sel_cancelAuthenticationChallenge_, challenge !is null ? challenge.id : null);
 }
 
 public void cancelAuthenticationChallenge(NSURLAuthenticationChallenge challenge) {
-    OS.objc_msgSend(this.id, OS.sel_cancelAuthenticationChallenge_, challenge !is null ? challenge.id : 0);
+    OS.objc_msgSend(this.id, OS.sel_cancelAuthenticationChallenge_, challenge !is null ? challenge.id : null);
 }
 
 public NSString className() {
@@ -159,8 +159,6 @@ public NSUInteger retainCount() {
 
 public void setValue(cocoa.id value, NSString key) {
     OS.objc_msgSend(this.id, OS.sel_setValue_forKey_, value !is null ? value.id : null, key !is null ? key.id : null);
-}
-
 }
 
 public objc.Class superclass() {
