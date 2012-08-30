@@ -34,10 +34,6 @@ public this(cocoa.id id) {
     super(id);
 }
 
-public float /*double*/ knobThickness() {
-    return (float)OS.objc_msgSend_fpret(this.id, OS.sel_knobThickness);
-}
-
 public CGFloat knobThickness() {
     return cast(CGFloat)OS.objc_msgSend_fpret(this.id, OS.sel_knobThickness);
 }
