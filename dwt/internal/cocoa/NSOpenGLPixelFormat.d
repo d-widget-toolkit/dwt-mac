@@ -34,10 +34,6 @@ public this(cocoa.id id) {
     super(id);
 }
 
-public void getValues(int[] /*long[]*/ vals, int attrib, int screen) {
-    OS.objc_msgSend(this.id, OS.sel_getValues_forAttribute_forVirtualScreen_, vals, attrib, screen);
-}
-
 public void getValues(GLint* vals, NSOpenGLPixelFormatAttribute attrib, GLint screen) {
     OS.objc_msgSend(this.id, OS.sel_getValues_forAttribute_forVirtualScreen_, vals, attrib, screen);
 }
