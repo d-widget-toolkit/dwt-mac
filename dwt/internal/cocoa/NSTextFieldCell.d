@@ -36,10 +36,6 @@ public this(cocoa.id id) {
 }
 
 public void setPlaceholderString(NSString string) {
-    OS.objc_msgSend(this.id, OS.sel_setPlaceholderString_, string !is null ? string.id : 0);
-}
-
-public void setPlaceholderString(NSString string) {
     OS.objc_msgSend(this.id, OS.sel_setPlaceholderString_, string !is null ? string.id : null);
 }
 
