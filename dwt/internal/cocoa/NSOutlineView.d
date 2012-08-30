@@ -45,36 +45,28 @@ public void collapseItem(cocoa.id item, bool collapseChildren) {
     OS.objc_msgSend(this.id, OS.sel_collapseItem_collapseChildren_, item !is null ? item.id : null, collapseChildren);
 }
 
-}
-
 public void expandItem(cocoa.id item) {
     OS.objc_msgSend(this.id, OS.sel_expandItem_, item !is null ? item.id : null);
-}
-
-public NSRect frameOfOutlineCellAtRow(int /*long*/ row) {
-    NSRect result = new NSRect();
-    OS.objc_msgSend_stret(result, this.id, OS.sel_frameOfOutlineCellAtRow_, row);
-    return result;
-}
-
 }
 
 public void expandItem(cocoa.id item, bool expandChildren) {
     OS.objc_msgSend(this.id, OS.sel_expandItem_expandChildren_, item !is null ? item.id : null, expandChildren);
 }
 
-}
-
 public NSRect frameOfOutlineCellAtRow(NSInteger row) {
-    NSRect result;
+    NSRect result = NSRect();
     OS.objc_msgSend_stret(&result, this.id, OS.sel_frameOfOutlineCellAtRow_, row);
     return result;
 }
 
+public CGFloat indentationPerLevel() {
+    return cast(CGFloat)OS.objc_msgSend_fpret(this.id, OS.sel_indentationPerLevel);
 }
 
 public bool isItemExpanded(cocoa.id item) {
     return OS.objc_msgSend_bool(this.id, OS.sel_isItemExpanded_, item !is null ? item.id : null);
+}
+
 public cocoa.id itemAtRow(NSInteger row) {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_itemAtRow_, row);
     return result !is null ? new cocoa.id(result) : null;
