@@ -70,10 +70,6 @@ public NSPrintingOrientation orientation() {
     return cast(NSPrintingOrientation) OS.objc_msgSend(this.id, OS.sel_orientation);
 }
 
-public int /*long*/ orientation() {
-    return OS.objc_msgSend(this.id, OS.sel_orientation);
-}
-
 public NSSize paperSize() {
     NSSize result = NSSize();
     OS.objc_msgSend_stret(&result, this.id, OS.sel_paperSize);
