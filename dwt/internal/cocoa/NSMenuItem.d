@@ -14,6 +14,7 @@
 module dwt.internal.cocoa.NSMenuItem;
 
 import dwt.dwthelper.utils;
+
 import cocoa = dwt.internal.cocoa.id;
 import dwt.internal.cocoa.NSImage;
 import dwt.internal.cocoa.NSMenu;
