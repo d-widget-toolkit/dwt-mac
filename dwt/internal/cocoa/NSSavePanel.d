@@ -50,10 +50,6 @@ public NSInteger runModalForDirectory(NSString path, NSString name) {
     return cast(NSInteger) OS.objc_msgSend(this.id, OS.sel_runModalForDirectory_file_, path !is null ? path.id : null, name !is null ? name.id : null);
 }
 
-public int /*long*/ runModalForDirectory(NSString path, NSString name) {
-    return OS.objc_msgSend(this.id, OS.sel_runModalForDirectory_file_, path !is null ? path.id : 0, name !is null ? name.id : 0);
-}
-
 public static NSSavePanel savePanel() {
     objc.id result = OS.objc_msgSend(OS.class_NSSavePanel, OS.sel_savePanel);
     return result !is null ? new NSSavePanel(result) : null;
@@ -67,24 +63,12 @@ public void setCanCreateDirectories(bool flag) {
     OS.objc_msgSend(this.id, OS.sel_setCanCreateDirectories_, flag);
 }
 
-public void setAccessoryView(NSView view) {
-    OS.objc_msgSend(this.id, OS.sel_setAccessoryView_, view !is null ? view.id : 0);
-}
-
-public void setCanCreateDirectories(bool flag) {
-    OS.objc_msgSend(this.id, OS.sel_setCanCreateDirectories_, flag);
-}
-
 public void setDirectory(NSString path) {
     OS.objc_msgSend(this.id, OS.sel_setDirectory_, path !is null ? path.id : null);
 }
 
 public void setMessage(NSString message) {
     OS.objc_msgSend(this.id, OS.sel_setMessage_, message !is null ? message.id : null);
-}
-
-public void setMessage(NSString message) {
-    OS.objc_msgSend(this.id, OS.sel_setMessage_, message !is null ? message.id : 0);
 }
 
 public void setTitle(NSString title) {
