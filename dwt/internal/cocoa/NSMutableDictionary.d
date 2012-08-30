@@ -14,6 +14,7 @@
 module dwt.internal.cocoa.NSMutableDictionary;
 
 import dwt.dwthelper.utils;
+
 import cocoa = dwt.internal.cocoa.id;
 import dwt.internal.cocoa.NSDictionary;
 import dwt.internal.cocoa.NSString;
@@ -40,19 +41,6 @@ public static NSMutableDictionary dictionaryWithCapacity(NSUInteger numItems) {
     return result !is null ? new NSMutableDictionary(result) : null;
 }
 
-public NSMutableDictionary initWithCapacity(int /*long*/ numItems) {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_initWithCapacity_, numItems);
-    return result is this.id ? this : (result !is 0 ? new NSMutableDictionary(result) : null);
-}
-
-public void removeObjectForKey(id aKey) {
-    OS.objc_msgSend(this.id, OS.sel_removeObjectForKey_, aKey !is null ? aKey.id : 0);
-}
-
-public void setDictionary(NSDictionary otherDictionary) {
-    OS.objc_msgSend(this.id, OS.sel_setDictionary_, otherDictionary !is null ? otherDictionary.id : 0);
-}
-
 public NSMutableDictionary initWithCapacity(NSUInteger numItems) {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_initWithCapacity_, numItems);
     return result is this.id ? this : (result !is null ? new NSMutableDictionary(result) : null);
@@ -68,10 +56,6 @@ public void setDictionary(NSDictionary otherDictionary) {
 
 public void setObject(cocoa.id anObject, cocoa.id aKey) {
     OS.objc_msgSend(this.id, OS.sel_setObject_forKey_, anObject !is null ? anObject.id : null, aKey !is null ? aKey.id : null);
-}
-
-public void setObject(objc.id anObject, cocoa.id aKey) {
-    OS.objc_msgSend(this.id, OS.sel_setObject_forKey_, anObject, aKey !is null ? aKey.id : null);
 }
 
 public void setValue(cocoa.id value, NSString key) {
