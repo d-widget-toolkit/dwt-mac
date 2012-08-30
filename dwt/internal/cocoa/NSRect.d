@@ -56,8 +56,13 @@ public struct NSRect {
         return size.height;
     }
 
+    CGFloat height (CGFloat height)
+    {
+        return size.height = height;
+    }
+
     public String toString() {
-        return Format("NSRect{" , x , "," , y , "," , width , "," , height , "}");
+        return Format("{}{}{}{}{}{}{}{}{}", "NSRect{" , x , "," , y , "," , width , "," , height , "}");
     }
 
     NSPoint origin;
