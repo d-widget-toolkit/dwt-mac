@@ -58,18 +58,14 @@ public NSInteger integerValue() {
     return cast(NSInteger) OS.objc_msgSend(this.id, OS.sel_integerValue);
 }
 
-public int /*long*/ integerValue() {
-    return OS.objc_msgSend(this.id, OS.sel_integerValue);
-}
-
 public static NSNumber numberWithBool(bool value) {
     objc.id result = OS.objc_msgSend(OS.class_NSNumber, OS.sel_numberWithBool_, value);
     return result !is null ? new NSNumber(result) : null;
 }
 
 public static NSNumber numberWithDouble(double value) {
-   objc.id result = OS.objc_msgSend(OS.class_NSNumber, OS.sel_numberWithDouble_, value);
-   return result !is null ? new NSNumber(result) : null;
+    objc.id result = OS.objc_msgSend(OS.class_NSNumber, OS.sel_numberWithDouble_, value);
+    return result !is null ? new NSNumber(result) : null;
 }
 
 public static NSNumber numberWithInt(int value) {
