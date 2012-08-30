@@ -21,8 +21,6 @@ import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 
-
-
 public class NSScroller : NSControl {
 
 public this() {
@@ -41,22 +39,8 @@ public NSControlSize controlSize() {
     return cast(NSControlSize) OS.objc_msgSend(this.id, OS.sel_controlSize);
 }
 
-}
-
 public NSScrollerPart hitPart() {
     return cast(NSScrollerPart) OS.objc_msgSend(this.id, OS.sel_hitPart);
-}
-
-public static float /*double*/ scrollerWidthForControlSize(int /*long*/ controlSize) {
-    return (float)OS.objc_msgSend_fpret(OS.class_NSScroller, OS.sel_scrollerWidthForControlSize_, controlSize);
-}
-
-public void setControlSize(int /*long*/ controlSize) {
-    OS.objc_msgSend(this.id, OS.sel_setControlSize_, controlSize);
-}
-
-public static CGFloat scrollerWidth() {
-    return cast(CGFloat) OS.objc_msgSend_fpret(OS.class_NSScroller, OS.sel_scrollerWidth);
 }
 
 public static CGFloat scrollerWidthForControlSize(NSControlSize controlSize) {
@@ -65,6 +49,10 @@ public static CGFloat scrollerWidthForControlSize(NSControlSize controlSize) {
 
 public void setControlSize(NSControlSize controlSize) {
     OS.objc_msgSend(this.id, OS.sel_setControlSize_, controlSize);
+}
+
+public static CGFloat scrollerWidth() {
+    return cast(CGFloat) OS.objc_msgSend_fpret(OS.class_NSScroller, OS.sel_scrollerWidth);
 }
 
 public void setFloatValue(float aFloat, CGFloat proportion) {
