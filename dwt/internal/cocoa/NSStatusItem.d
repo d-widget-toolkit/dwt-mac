@@ -42,10 +42,6 @@ public void drawStatusBarBackgroundInRect(NSRect rect, bool highlight) {
 }
 
 public void popUpStatusItemMenu(NSMenu menu) {
-    OS.objc_msgSend(this.id, OS.sel_popUpStatusItemMenu_, menu !is null ? menu.id : 0);
-}
-
-public void popUpStatusItemMenu(NSMenu menu) {
     OS.objc_msgSend(this.id, OS.sel_popUpStatusItemMenu_, menu !is null ? menu.id : null);
 }
 
