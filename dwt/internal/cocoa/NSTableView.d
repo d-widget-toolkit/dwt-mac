@@ -233,18 +233,6 @@ public void setHeaderView(NSTableHeaderView headerView) {
 }
 
 public void setHighlightedTableColumn(NSTableColumn tc) {
-    OS.objc_msgSend(this.id, OS.sel_setHighlightedTableColumn_, tc !is null ? tc.id : 0);
-}
-
-public void setIndicatorImage(NSImage anImage, NSTableColumn tc) {
-    OS.objc_msgSend(this.id, OS.sel_setIndicatorImage_inTableColumn_, anImage !is null ? anImage.id : 0, tc !is null ? tc.id : 0);
-}
-
-public void setIntercellSpacing(NSSize aSize) {
-    OS.objc_msgSend(this.id, OS.sel_setIntercellSpacing_, aSize);
-}
-
-public void setHighlightedTableColumn(NSTableColumn tc) {
     OS.objc_msgSend(this.id, OS.sel_setHighlightedTableColumn_, tc !is null ? tc.id : null);
 }
 
