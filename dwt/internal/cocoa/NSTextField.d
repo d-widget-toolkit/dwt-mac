@@ -34,10 +34,6 @@ public this(cocoa.id id) {
     super(id);
 }
 
-public void selectText(id sender) {
-    OS.objc_msgSend(this.id, OS.sel_selectText_, sender !is null ? sender.id : 0);
-}
-
 public void selectText(cocoa.id sender) {
     OS.objc_msgSend(this.id, OS.sel_selectText_, sender !is null ? sender.id : null);
 }
