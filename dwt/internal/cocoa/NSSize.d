@@ -23,6 +23,6 @@ public struct NSSize {
     //public static final int sizeof = OS.NSSize_sizeof();
 
     public String toString() {
-        return Format("NSSize{" , width , "," , height , "}");
+        return Format("{}{}{}{}{}", "NSSize{" , width , "," , height , "}");
     }
 }
