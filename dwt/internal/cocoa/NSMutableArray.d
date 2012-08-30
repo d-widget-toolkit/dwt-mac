@@ -56,22 +56,12 @@ public void removeLastObject() {
     OS.objc_msgSend(this.id, OS.sel_removeLastObject);
 }
 
-}
-
-public void removeLastObject() {
-    OS.objc_msgSend(this.id, OS.sel_removeLastObject);
-}
-
 public void removeObject(cocoa.id anObject) {
     OS.objc_msgSend(this.id, OS.sel_removeObject_, anObject !is null ? anObject.id : null);
 }
 
 public void removeObjectAtIndex(NSUInteger index) {
     OS.objc_msgSend(this.id, OS.sel_removeObjectAtIndex_, index);
-}
-
-public void removeObjectIdenticalTo(id anObject) {
-    OS.objc_msgSend(this.id, OS.sel_removeObjectIdenticalTo_, anObject !is null ? anObject.id : 0);
 }
 
 public void removeObjectIdenticalTo(cocoa.id anObject) {
