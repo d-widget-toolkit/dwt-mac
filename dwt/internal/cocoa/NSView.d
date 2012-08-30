@@ -62,10 +62,6 @@ public NSToolTipTag addToolTipRect(NSRect aRect, cocoa.id anObject, void* data) 
     return cast(NSToolTipTag) OS.objc_msgSend(this.id, OS.sel_addToolTipRect_owner_userData_, aRect, anObject !is null ? anObject.id : null, data);
 }
 
-public int /*long*/ addToolTipRect(NSRect aRect, id anObject, int /*long*/ data) {
-    return OS.objc_msgSend(this.id, OS.sel_addToolTipRect_owner_userData_, aRect, anObject !is null ? anObject.id : 0, data);
-}
-
 public void beginDocument() {
     OS.objc_msgSend(this.id, OS.sel_beginDocument);
 }
@@ -297,10 +293,6 @@ public bool shouldDelayWindowOrderingForEvent(NSEvent theEvent) {
     return OS.objc_msgSend_bool(this.id, OS.sel_shouldDelayWindowOrderingForEvent_, theEvent !is null ? theEvent.id : null);
 }
 
-public bool shouldDelayWindowOrderingForEvent(NSEvent theEvent) {
-    return OS.objc_msgSend_bool(this.id, OS.sel_shouldDelayWindowOrderingForEvent_, theEvent !is null ? theEvent.id : 0);
-}
-
 public NSArray subviews() {
 	objc.id result = OS.objc_msgSend(this.id, OS.sel_subviews);
 	return result !is null ? new NSArray(result) : null;
@@ -320,25 +312,8 @@ public void unlockFocus() {
     OS.objc_msgSend(this.id, OS.sel_unlockFocus);
 }
 
-public NSArray trackingAreas() {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_trackingAreas);
-    return result !is 0 ? new NSArray(result) : null;
-}
-
-public void unlockFocus() {
-    OS.objc_msgSend(this.id, OS.sel_unlockFocus);
-}
-
 public void unregisterDraggedTypes() {
     OS.objc_msgSend(this.id, OS.sel_unregisterDraggedTypes);
-}
-
-public void updateTrackingAreas() {
-    OS.objc_msgSend(this.id, OS.sel_updateTrackingAreas);
-}
-
-public void viewDidMoveToWindow() {
-    OS.objc_msgSend(this.id, OS.sel_viewDidMoveToWindow);
 }
 
 public void updateTrackingAreas() {
