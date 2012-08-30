@@ -57,16 +57,8 @@ public NSFont font() {
     return result !is null ? new NSFont(result) : null;
 }
 
-public id delegate() {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_delegate);
-    return result !is 0 ? new id(result) : null;
-}
-
-public NSFont font() {
-    int /*long*/ result = OS.objc_msgSend(this.id, OS.sel_font);
-    return result !is 0 ? new NSFont(result) : null;
-}
-
+public void paste(id sender) {
+    OS.objc_msgSend(this.id, OS.sel_paste_, sender !is null ? sender.id : null);
 }
 
 public void replaceCharactersInRange(NSRange range, NSString aString) {
