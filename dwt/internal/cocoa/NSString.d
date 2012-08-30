@@ -41,18 +41,8 @@ public String getString() {
     return dwt.dwthelper.utils.toString(buffer);
 }
 
-public wchar[] getString16() {
-    wchar[] buffer = new wchar[length()];
-    getCharacters(buffer.ptr);
-    return buffer;
-}
-
 public static NSString stringWith(String str) {
     return stringWithUTF8String((str ~ '\0').ptr);
-}
-
-public static NSString stringWith16(wchar[] buffer) {
-	return stringWithCharacters(buffer.ptr, buffer.length);
 }
 
 public /*const*/char* UTF8String() {
@@ -143,10 +133,6 @@ public static NSString stringWithCharacters(/*const*/wchar* characters, NSUInteg
 }
 
 public static NSString stringWithFormat(NSString stringWithFormat) {
-    int /*long*/ result = OS.objc_msgSend(OS.class_NSString, OS.sel_stringWithFormat_, stringWithFormat !is null ? stringWithFormat.id : 0);
-}
-
-public static NSString stringWithFormat(NSString stringWithFormat) {
     objc.id result = OS.objc_msgSend(OS.class_NSString, OS.sel_stringWithFormat_, stringWithFormat !is null ? stringWithFormat.id : null);
     return result !is mull ? new NSString(result) : null;
 }
@@ -154,6 +140,16 @@ public static NSString stringWithFormat(NSString stringWithFormat) {
 public static NSString stringWithUTF8String(/*const*/char* nullTerminatedCString) {
     objc.id result = OS.objc_msgSend(OS.class_NSString, OS.sel_stringWithUTF8String_, nullTerminatedCString);
     return result !is null ? new NSString(result) : null;
+}
+
+public wchar[] getString16() {
+    wchar[] buffer = new wchar[length()];
+    getCharacters(buffer.ptr);
+    return buffer;
+}
+
+public static NSString stringWith16(wchar[] buffer) {
+	return stringWithCharacters(buffer.ptr, buffer.length);
 }
 
 }
