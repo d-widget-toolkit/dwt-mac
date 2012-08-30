@@ -72,10 +72,6 @@ public NSTabViewItem selectedTabViewItem() {
     return result !is null ? new NSTabViewItem(result) : null;
 }
 
-public void setControlSize(int /*long*/ controlSize) {
-    OS.objc_msgSend(this.id, OS.sel_setControlSize_, controlSize);
-}
-
 public void setControlSize(NSControlSize controlSize) {
     OS.objc_msgSend(this.id, OS.sel_setControlSize_, controlSize);
 }
