@@ -44,11 +44,6 @@ public static NSString stringWithCharacters(/*const*/wchar* characters, NSUInteg
 }
 
 public static NSString stringWithFormat(NSString stringWithFormat) {
-    int /*long*/ result = OS.objc_msgSend(OS.class_NSMutableString, OS.sel_stringWithFormat_, stringWithFormat !is null ? stringWithFormat.id : 0);
-    return result !is 0 ? new NSString(result) : null;
-}
-
-public static NSString stringWithFormat(NSString stringWithFormat) {
     objc.id result = OS.objc_msgSend(OS.class_NSMutableString, OS.sel_stringWithFormat_, stringWithFormat !is null ? stringWithFormat.id : null);
     return result !is null ? new NSString(result) : null;
 }
