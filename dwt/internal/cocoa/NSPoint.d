@@ -23,9 +23,8 @@ public struct NSPoint {
     public CGFloat x;
     public CGFloat y;
 
-
-        public String toString() {
-        return Format("NSPoint{" , x , "," , y , "}");
+    public String toString() {
+        return Format("{}{}{}{}{}", "NSPoint{" , x , "," , y , "}");
     }
 
     // For comparing with null
