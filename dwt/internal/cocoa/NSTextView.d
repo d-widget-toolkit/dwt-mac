@@ -80,20 +80,8 @@ public void setLinkTextAttributes(NSDictionary attributeDictionary) {
     OS.objc_msgSend(this.id, OS.sel_setLinkTextAttributes_, attributeDictionary !is null ? attributeDictionary.id : null);
 }
 
-public void setDefaultParagraphStyle(NSParagraphStyle paragraphStyle) {
-    OS.objc_msgSend(this.id, OS.sel_setDefaultParagraphStyle_, paragraphStyle !is null ? paragraphStyle.id : 0);
-}
-
-public void setLinkTextAttributes(NSDictionary attributeDictionary) {
-    OS.objc_msgSend(this.id, OS.sel_setLinkTextAttributes_, attributeDictionary !is null ? attributeDictionary.id : 0);
-}
-
 public void setRichText(bool flag) {
     OS.objc_msgSend(this.id, OS.sel_setRichText_, flag);
-}
-
-public bool shouldChangeTextInRange(NSRange affectedCharRange, NSString replacementString) {
-    return OS.objc_msgSend_bool(this.id, OS.sel_shouldChangeTextInRange_replacementString_, affectedCharRange, replacementString !is null ? replacementString.id : 0);
 }
 
 public bool shouldChangeTextInRange(NSRange affectedCharRange, NSString replacementString) {
