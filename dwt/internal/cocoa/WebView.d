@@ -57,14 +57,6 @@ public void cut(cocoa.id sender) {
     OS.objc_msgSend(this.id, OS.sel_cut_, sender !is null ? sender.id : null);
 }
 
-public void copy(id sender) {
-    OS.objc_msgSend(this.id, OS.sel_copy_, sender !is null ? sender.id : 0);
-}
-
-public void cut(id sender) {
-    OS.objc_msgSend(this.id, OS.sel_cut_, sender !is null ? sender.id : 0);
-}
-
 public bool goBack() {
     return OS.objc_msgSend_bool(this.id, OS.sel_goBack);
 }
@@ -105,10 +97,6 @@ public void setFrameLoadDelegate(cocoa.id delegate_) {
 
 public void setPolicyDelegate(cocoa.id delegate_) {
     OS.objc_msgSend(this.id, OS.sel_setPolicyDelegate_, delegate_ !is null ? delegate_.id : null);
-}
-
-public void setPreferences(WebPreferences prefs) {
-    OS.objc_msgSend(this.id, OS.sel_setPreferences_, prefs !is null ? prefs.id : 0);
 }
 
 public void setPreferences(WebPreferences prefs) {
