@@ -41,10 +41,6 @@ public void setJavaScriptEnabled(bool flag) {
     OS.objc_msgSend(this.id, OS.sel_setJavaScriptEnabled_, flag);
 }
 
-public void setJavaScriptEnabled(bool flag) {
-    OS.objc_msgSend(this.id, OS.sel_setJavaScriptEnabled_, flag);
-}
-
 public static WebPreferences standardPreferences() {
     objc.id result = OS.objc_msgSend(OS.class_WebPreferences, OS.sel_standardPreferences);
     return result !is null ? new WebPreferences(result) : null;
