@@ -137,7 +137,7 @@ void getEntryValue(int type, byte[] buffer, int index, int[] values)  {
     }
 }
 
-void decodePixels(ImageData image)  {
+void decodePixels(ImageData image) {
     /* Each row is byte aligned */
     byte[] imageData = new byte[(imageWidth * depth + 7) / 8 * imageLength];
     image.data = imageData;
@@ -168,7 +168,7 @@ void decodePixels(ImageData image)  {
     }
 }
 
-PaletteData getColorMap()  {
+PaletteData getColorMap() {
     int numColors = 1 << bitsPerSample[0];
     /* R, G, B entries are 16 bit wide (2 bytes) */
     int numBytes = 3 * 2 * numColors;
@@ -297,7 +297,7 @@ int[] formatColorMap(RGB[] rgbs) {
     return colorMap;
 }
 
-void parseEntries(byte[] buffer)  {
+void parseEntries(byte[] buffer) {
     for (int offset = 0; offset < buffer.length; offset += IFD_ENTRY_SIZE) {
         int tag = toInt(buffer, offset, TYPE_SHORT);
         int type = toInt(buffer, offset + 2, TYPE_SHORT);
@@ -379,7 +379,7 @@ void parseEntries(byte[] buffer)  {
     }
 }
 
-public ImageData read()  {
+public ImageData read() {
     /* Set TIFF default values */
     bitsPerSample = [1];
     colorMapOffset = NO_VALUE;
@@ -466,7 +466,7 @@ int toInt(byte[] buffer, int i, int type) {
     return -1;
 }
 
-void write(int photometricInterpretation)  {
+void write(int photometricInterpretation) {
     bool isRGB = photometricInterpretation is 2;
     bool isColorMap = photometricInterpretation is 3;
     bool isBiLevel = photometricInterpretation is 0 || photometricInterpretation is 1;
