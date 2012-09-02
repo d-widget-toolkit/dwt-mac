@@ -39,8 +39,8 @@ final class GIFFileFormat : FileFormat {
     static final int GIF_EXTENSION_BLOCK_ID = 0x21;
     static final int GIF_IMAGE_BLOCK_ID = 0x2C;
     static final int GIF_TRAILER_ID = 0x3B;
-    static final byte[] GIF89a = cast(byte[])"GIF89a";
-    static final byte[] NETSCAPE2_0 = cast(byte[])"NETSCAPE2.0";
+    static final byte [] GIF89a = cast(byte[])"GIF89a";
+    static final byte [] NETSCAPE2_0 = cast(byte[])"NETSCAPE2.0";
 
     /**
      * Answer a palette containing numGrays
@@ -58,7 +58,7 @@ final class GIFFileFormat : FileFormat {
 
     override bool isFileFormat(LEDataInputStream stream) {
         try {
-            byte[3] signature;
+            byte[] signature = new byte[3];
             stream.read(signature);
             stream.unread(signature);
             return signature[0] is 'G' && signature[1] is 'I' && signature[2] is 'F';
@@ -72,9 +72,9 @@ final class GIFFileFormat : FileFormat {
      * Return an array of ImageData representing the image(s).
      */
     override ImageData[] loadFromByteStream() {
-        byte[3] signature;
-        byte[3] versionBytes;
-        byte[7] block;
+        byte[] signature = new byte[3];
+        byte[] versionBytes = new byte[3];
+        byte[] block = new byte[7];
         try {
             inputStream.read(signature);
             if (!(signature[0] is 'G' && signature[1] is 'I' && signature[2] is 'F'))
@@ -120,7 +120,6 @@ final class GIFFileFormat : FileFormat {
             images = new ImageData[oldImages.length + 1];
             System.arraycopy(oldImages, 0, images, 0, oldImages.length);
             images[images.length - 1] = image;
-            //images ~= image;
             try {
                 /* Read the 0-byte terminator at the end of the image. */
                 id = inputStream.read();
@@ -226,7 +225,6 @@ final class GIFFileFormat : FileFormat {
                 comment = new byte[oldComment.length + size];
                 System.arraycopy(oldComment, 0, comment, 0, oldComment.length);
                 System.arraycopy(block, 0, comment, oldComment.length, size);
-                //comment ~= block[ 0 .. size ];
                 size = inputStream.read();
             }
             return comment;
@@ -257,7 +255,6 @@ final class GIFFileFormat : FileFormat {
                 text = new byte[oldText.length + size];
                 System.arraycopy(oldText, 0, text, 0, oldText.length);
                 System.arraycopy(block, 0, text, oldText.length, size);
-                //text ~= block[ 0 .. size ];
                 size = inputStream.read();
             }
             return text;
@@ -321,7 +318,6 @@ final class GIFFileFormat : FileFormat {
                 data = new byte[oldData.length + size];
                 System.arraycopy(oldData, 0, data, 0, oldData.length);
                 System.arraycopy(block, 0, data, oldData.length, size);
-                //data ~= block[ 0 .. size ];
                 size = inputStream.read();
             }
             // Look for the NETSCAPE 'repeat count' field for an animated GIF.
