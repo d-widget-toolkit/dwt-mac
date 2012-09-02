@@ -77,7 +77,7 @@ private this () {
     distanceTable = getFixedDistanceTable();
 }
 
-private this (PngDecodingDataStream stream)  {
+private this (PngDecodingDataStream stream) {
     int literals = PngLzBlockReader.FIRST_LENGTH_CODE
         + stream.getNextIdatBits(5);
     int distances = PngLzBlockReader.FIRST_DISTANCE_CODE
@@ -153,11 +153,11 @@ private int [] readLengths (PngDecodingDataStream stream,
     return lengths;
 }
 
-int getNextLiteralValue(PngDecodingDataStream stream)  {
+int getNextLiteralValue(PngDecodingDataStream stream) {
     return literalTable.getNextValue(stream);
 }
 
-int getNextDistanceValue(PngDecodingDataStream stream)  {
+int getNextDistanceValue(PngDecodingDataStream stream) {
     return distanceTable.getNextValue(stream);
 }
 
