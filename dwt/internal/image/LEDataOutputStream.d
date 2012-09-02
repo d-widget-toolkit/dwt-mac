@@ -16,49 +16,47 @@ module dwt.internal.image.LEDataOutputStream;
 import dwt.dwthelper.OutputStream;
 
 final class LEDataOutputStream : OutputStream {
-
     alias OutputStream.write write;
-
-    OutputStream ostr;
+    OutputStream out_;
 
 public this(OutputStream output) {
-    this.ostr = output;
+    this.out_ = output;
 }
 /**
  * Write the specified number of bytes of the given byte array,
  * starting at the specified offset, to the output stream.
  */
 public override void write(byte b[], int off, int len) {
-    ostr.write(b, off, len);
+    out_.write(b, off, len);
 }
 /**
  * Write the given byte to the output stream.
  */
-public override void write(int b)  {
-    ostr.write(b);
+public override void write(int b) {
+    out_.write(b);
 }
 /**
  * Write the given byte to the output stream.
  */
 public void writeByte(byte b) {
-    ostr.write(b);
+    out_.write(b);
 }
 /**
  * Write the four bytes of the given integer
  * to the output stream.
  */
 public void writeInt(int theInt) {
-    ostr.write(theInt & 0xFF);
-    ostr.write((theInt >> 8) & 0xFF);
-    ostr.write((theInt >> 16) & 0xFF);
-    ostr.write((theInt >> 24) & 0xFF);
+    out_.write(theInt & 0xFF);
+    out_.write((theInt >> 8) & 0xFF);
+    out_.write((theInt >> 16) & 0xFF);
+    out_.write((theInt >> 24) & 0xFF);
 }
 /**
  * Write the two bytes of the given short
  * to the output stream.
  */
 public void writeShort(int theShort) {
-    ostr.write(theShort & 0xFF);
-    ostr.write((theShort >> 8) & 0xFF);
+    out_.write(theShort & 0xFF);
+    out_.write((theShort >> 8) & 0xFF);
 }
 }
