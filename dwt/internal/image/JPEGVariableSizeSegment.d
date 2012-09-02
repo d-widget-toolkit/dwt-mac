@@ -16,8 +16,6 @@ module dwt.internal.image.JPEGVariableSizeSegment;
 import dwt.internal.image.JPEGSegment;
 import dwt.internal.image.LEDataInputStream;
 
-import tango.core.Exception;
-
 abstract class JPEGVariableSizeSegment : JPEGSegment {
 
     public this(byte[] reference) {
