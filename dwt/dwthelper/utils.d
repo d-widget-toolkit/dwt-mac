@@ -825,6 +825,14 @@ class ParseException : Exception {
     }
 }
 
+class ClassNotFoundException : Exception
+{
+    this (String e, String file = null, long line = 0)
+    {
+        super(e, file, line);
+    }
+}
+
 interface Cloneable{
 }
 
@@ -1065,4 +1073,15 @@ struct ImportData{
 
 template getImportData(String name ){
     const ImportData getImportData = ImportData( import(name), name );
+}
+
+Class Class_forName (string name)
+{
+   if (auto cls = Class.find(name))
+       return cls;
+
+   else
+       throw new ClassNotFoundException("Class not found " ~ name, __FILE__, __LINE__);
+
+   return null;
 }

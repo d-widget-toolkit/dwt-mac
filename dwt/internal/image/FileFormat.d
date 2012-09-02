@@ -14,23 +14,25 @@ module dwt.internal.image.FileFormat;
 
 import dwt.dwthelper.utils;
 
-import dwt.graphics.ImageLoader;
-import dwt.graphics.ImageData;
-import dwt.internal.image.LEDataInputStream;
-import dwt.internal.image.LEDataOutputStream;
 
-
+import dwt.DWT;
 import dwt.dwthelper.InputStream;
 import dwt.dwthelper.OutputStream;
+import dwt.graphics.ImageData;
+import dwt.graphics.ImageLoader;
 import dwt.internal.image.GIFFileFormat;
+import dwt.internal.image.JPEGFileFormat;
+import dwt.internal.image.LEDataInputStream;
+import dwt.internal.image.LEDataOutputStream;
+import dwt.internal.image.OS2BMPFileFormat;
+import dwt.internal.image.PNGFileFormat;
+import dwt.internal.image.TIFFFileFormat;
 import dwt.internal.image.WinBMPFileFormat;
 import dwt.internal.image.WinICOFileFormat;
-import dwt.internal.image.TIFFFileFormat;
-import dwt.internal.image.OS2BMPFileFormat;
-import dwt.internal.image.JPEGFileFormat;
-import dwt.internal.image.PNGFileFormat;
+
 import tango.core.Exception;
 import tango.core.Tuple;
+
 /**
  * Abstract factory class for loading/unloading images from files or streams
  * in various image file formats.
@@ -40,7 +42,6 @@ public abstract class FileFormat {
     static const String FORMAT_PACKAGE = "dwt.internal.image"; //$NON-NLS-1$
     static const String FORMAT_SUFFIX = "FileFormat"; //$NON-NLS-1$
     static const String[] FORMATS = [ "WinBMP"[], "WinBMP", "GIF", "WinICO", "JPEG", "PNG", "TIFF", "OS2BMP" ]; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$//$NON-NLS-5$ //$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$
-    alias Tuple!( WinBMPFileFormat, WinBMPFileFormat, GIFFileFormat, WinICOFileFormat, JPEGFileFormat, PNGFileFormat, TIFFFileFormat, OS2BMPFileFormat ) TFormats;
     LEDataInputStream inputStream;
     LEDataOutputStream outputStream;
     ImageLoader loader;
@@ -62,11 +63,12 @@ public ImageData[] loadFromStream(LEDataInputStream stream) {
     try {
         inputStream = stream;
         return loadFromByteStream();
-    } catch (IOException e) {
-        DWT.error(DWT.ERROR_IO, e);
-        return null;
     } catch (Exception e) {
-        DWT.error(DWT.ERROR_INVALID_IMAGE, e);
+        if (auto c = cast(IOException) e) {
+            SWT.error(SWT.ERROR_IO, c);
+        } else {
+            SWT.error(SWT.ERROR_INVALID_IMAGE, e);
+        }
         return null;
     }
 }
@@ -75,18 +77,24 @@ public ImageData[] loadFromStream(LEDataInputStream stream) {
  * Read the specified input stream using the specified loader, and
  * return the device independent image array represented by the stream.
  */
-public static ImageData[] load(InputStream istr, ImageLoader loader) {
+public static ImageData[] load(InputStream is_, ImageLoader loader) {
     FileFormat fileFormat = null;
-    LEDataInputStream stream = new LEDataInputStream(istr);
+    LEDataInputStream stream = new LEDataInputStream(is_);
     bool isSupported = false;
-    foreach( TFormat; TFormats ){
-        try{
-            fileFormat = new TFormat();
-            if (fileFormat.isFileFormat(stream)) {
-                isSupported = true;
-                break;
+    for (int i = 1; i < FORMATS.length; i++) {
+        if (FORMATS[i] != null) {
+            try {
+                Class clazz = Class_forName(FORMAT_PACKAGE ~ '.' ~ FORMATS[i] ~ '.' ~ FORMATS[i] ~ FORMAT_SUFFIX);
+                if (fileFormat = cast(FileFormat) clazz.create()) {
+                    if (fileFormat.isFileFormat(stream)) {
+                        isSupported = true;
+                        break;
+                    }
+                }
+            } catch (ClassNotFoundException e) {
+                FORMATS[i] = null;
+            } catch (Exception e) {
             }
-        } catch (Exception e) {
         }
     }
     if (!isSupported) DWT.error(DWT.ERROR_UNSUPPORTED_FORMAT);
@@ -106,13 +114,10 @@ public static void save(OutputStream os, int format, ImageLoader loader) {
     LEDataOutputStream stream = new LEDataOutputStream(os);
     FileFormat fileFormat = null;
     try {
-        foreach( idx, TFormat; TFormats ){
-            if( idx is format ){
-                fileFormat = new TFormat();
-            }
-        }
+        Class clazz = Class_forName(FORMAT_PACKAGE ~ '.' ~ FORMATS[format] ~ '.' ~ FORMATS[format] ~ FORMAT_SUFFIX);
+        fileFormat = cast(FileFormat) clazz.create();
     } catch (Exception e) {
-        DWT.error(DWT.ERROR_UNSUPPORTED_FORMAT);
+        SWT.error(SWT.ERROR_UNSUPPORTED_FORMAT);
     }
     if (format is DWT.IMAGE_BMP_RLE) {
         switch (loader.data[0].depth) {
