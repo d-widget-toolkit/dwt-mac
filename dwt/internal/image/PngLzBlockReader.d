@@ -67,7 +67,7 @@ void setWindowSize(int windowSize) {
     window = new byte[windowSize];
 }
 
-void readNextBlockHeader()  {
+void readNextBlockHeader() {
     isLastBlock = stream.getNextIdatBit() !is 0;
     compressionType = cast(byte)(stream.getNextIdatBits(2) & 0xFF);
     if (compressionType > 2) stream.error();
@@ -86,7 +86,7 @@ void readNextBlockHeader()  {
     }
 }
 
-byte getNextByte()  {
+byte getNextByte() {
     if (compressionType is UNCOMPRESSED) {
         if (uncompressedBytesRemaining is 0) {
             readNextBlockHeader();
@@ -106,7 +106,7 @@ byte getNextByte()  {
     }
 }
 
-private void assertBlockAtEnd()  {
+private void assertBlockAtEnd() {
     if (compressionType is UNCOMPRESSED) {
         if (uncompressedBytesRemaining > 0) stream.error();
     } else if (copyBytesRemaining > 0 ||
@@ -115,7 +115,7 @@ private void assertBlockAtEnd()  {
         stream.error();
     }
 }
-void assertCompressedDataAtEnd()  {
+void assertCompressedDataAtEnd() {
     assertBlockAtEnd();
     while (!isLastBlock) {
         readNextBlockHeader();
@@ -123,7 +123,7 @@ void assertCompressedDataAtEnd()  {
     }
 }
 
-private byte getNextCompressedByte()  {
+private byte getNextCompressedByte() {
     if (copyBytesRemaining > 0) {
         byte value = window[copyIndex];
         window[windowIndex] = value;
