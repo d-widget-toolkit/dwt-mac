@@ -12,17 +12,15 @@
  *******************************************************************************/
 module dwt.internal.image.LEDataInputStream;
 
+import tango.core.Exception;
 
 import dwt.dwthelper.InputStream;
 import dwt.dwthelper.System;
-import tango.core.Exception;
 
 final class LEDataInputStream : InputStream{
-
     alias InputStream.read read;
 
-    InputStream host;
-
+    InputStream in_;
     int position;
 
     /**
@@ -43,19 +41,19 @@ final class LEDataInputStream : InputStream{
     }
 
     public this(InputStream input, int bufferSize) {
-        host = input;
+        in_ = input;
         if (bufferSize > 0) {
             buf = new byte[bufferSize];
             pos = bufferSize;
         }
-        else throw new IllegalArgumentException("bufferSize must be greater zero" );
+        else throw new IllegalArgumentException("bufferSize must be greater zero");
     }
 
     public void close() {
         buf = null;
-        if (host !is null) {
-            host.close();
-            host = null;
+        if (in_ !is null) {
+            in_.close();
+            in_ = null;
         }
     }
 
@@ -71,7 +69,7 @@ final class LEDataInputStream : InputStream{
      */
     public override int available() {
         if (buf is null) throw new IOException("buf is null");
-        return (buf.length - pos) + host.available();
+        return (buf.length - pos) + in_.available();
     }
 
     /**
@@ -83,8 +81,8 @@ final class LEDataInputStream : InputStream{
             position++;
             return (buf[pos++] & 0xFF);
         }
-        int c = host.read();
-        if (c !is -1 ) position++;
+        int c = in_.read();
+        if (c !is -1) position++;
         return c;
     }
 
@@ -142,8 +140,7 @@ final class LEDataInputStream : InputStream{
         // Have we copied enough?
         if (cacheCopied is len) return len;
 
-        int inCopied = host.read( buffer, newOffset, len - cacheCopied );
-        if( inCopied is -1 ) inCopied = -1;
+        int inCopied = in_.read( buffer, newOffset, len - cacheCopied);
         if (inCopied > 0 ) return inCopied + cacheCopied;
         if (cacheCopied is 0) return inCopied;
         return cacheCopied;
@@ -185,10 +182,10 @@ final class LEDataInputStream : InputStream{
      * @exception   java.io.IOException if the pushback buffer is too small
      */
     public void unread(byte[] b) {
-        int l = b.length;
-        if (l > pos) throw new IOException("cannot unread");
+        int len = b.length;
+        if (len > pos) throw new IOException("cannot unread");
         position -= l;
-        pos -= l;
-        System.arraycopy(b, 0, buf, pos, l);
+        pos -= len;
+        System.arraycopy(b, 0, buf, pos, len);
     }
 }
