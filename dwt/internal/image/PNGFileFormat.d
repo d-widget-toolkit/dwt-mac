@@ -12,6 +12,7 @@
  *******************************************************************************/
 module dwt.internal.image.PNGFileFormat;
 
+import dwt.dwthelper.utils;
 
 
 import dwt.graphics.ImageLoader;
@@ -25,7 +26,7 @@ import dwt.internal.image.PngIdatChunk;
 import dwt.internal.image.PngEncoder;
 import dwt.internal.image.PngInputStream;
 import dwt.internal.image.PngDecodingDataStream;
-import dwt.dwthelper.utils;
+
 
 import dwt.dwthelper.BufferedInputStream;
 
@@ -47,7 +48,7 @@ final class PNGFileFormat : FileFormat {
  * Skip over signature data. This has already been
  * verified in isFileFormat().
  */
-void readSignature()  {
+void readSignature() {
     byte[] signature = new byte[SIGNATURE_LENGTH];
     inputStream.read(signature);
 }
@@ -100,7 +101,7 @@ override ImageData[] loadFromByteStream() {
  * Read and handle the next chunk of data from the
  * PNG file.
  */
-void readNextChunk(PngChunkReader chunkReader)  {
+void readNextChunk(PngChunkReader chunkReader) {
     PngChunk chunk = chunkReader.readNextChunk();
     switch (chunk.getChunkType()) {
         case PngChunk.CHUNK_IEND:
@@ -303,7 +304,7 @@ void setImageDataValues(byte[] data, ImageData imageData) {
  * Read the image data from the data stream. This must handle
  * decoding the data, filtering, and interlacing.
  */
-void readPixelData(PngIdatChunk chunk, PngChunkReader chunkReader)  {
+void readPixelData(PngIdatChunk chunk, PngChunkReader chunkReader) {
     InputStream stream = new PngInputStream(chunk, chunkReader);
     //TEMPORARY CODE
     //PORTING_FIXME
@@ -439,7 +440,7 @@ void readInterlaceFrame(
  * Read the pixel data for an interlaced image from the
  * data stream.
  */
-void readInterlacedImage(InputStream inputStream)  {
+void readInterlacedImage(InputStream inputStream) {
     readInterlaceFrame(inputStream, 8, 8, 0, 0, 0);
     readInterlaceFrame(inputStream, 8, 8, 0, 4, 1);
     readInterlaceFrame(inputStream, 8, 4, 4, 0, 2);
@@ -466,7 +467,7 @@ void fireInterlacedFrameEvent(int frameCount) {
  * data stream.
  * Update the imageData to reflect the new data.
  */
-void readNonInterlacedImage(InputStream inputStream)  {
+void readNonInterlacedImage(InputStream inputStream) {
     int dataOffset = 0;
     int alignedBytesPerRow = getAlignedBytesPerRow();
     int bytesPerRow = getBytesPerRow();
