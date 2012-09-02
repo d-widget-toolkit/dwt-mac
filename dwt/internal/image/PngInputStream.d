@@ -38,7 +38,7 @@ public this(PngIdatChunk chunk, PngChunkReader reader) {
     offset = 0;
 }
 
-private bool checkChunk()  {
+private bool checkChunk() {
     while (offset is length) {
         chunk = reader.readNextChunk();
         if (chunk is null) throw new IOException("no data");
@@ -50,11 +50,11 @@ private bool checkChunk()  {
     return true;
 }
 
-public override void close()  {
+public override void close() {
     chunk = null;
 }
 
-public override int read()  {
+public override int read() {
     if (chunk is null) throw new IOException("");
     if (offset is length && !checkChunk()) return -1;
     int b = chunk.reference[DATA_OFFSET + offset] & 0xFF;
@@ -62,7 +62,7 @@ public override int read()  {
     return b;
 }
 
-public override int read(byte[] b, int off, int len)  {
+public override int read(byte[] b, int off, int len) {
     if (chunk is null) throw new IOException("");
     if (offset is length && !checkChunk()) return -1;
     len = Math.min(len, length - offset);
