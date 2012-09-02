@@ -52,7 +52,6 @@ class PngChunk {
     static const byte[] TYPE_tRNS = cast(byte[])"tRNS";//{(byte) 't', (byte) 'R', (byte) 'N', (byte) 'S'};
 
     static const int[] CRC_TABLE;
-    //public static void static_this() {
     static this() {
         CRC_TABLE = new int[256];
         for (int i = 0; i < 256; i++) {
@@ -312,7 +311,6 @@ static PngChunk readNextFromStream(LEDataInputStream stream) {
 
         int chunkLength = tempChunk.getSize();
         byte[] chunk = new byte[chunkLength];
-
         result = stream.read(chunk, 0, chunkLength);
         if (result !is chunkLength) return null;
 
