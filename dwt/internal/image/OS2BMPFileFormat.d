@@ -158,7 +158,7 @@ static byte[] paletteToBytes(PaletteData pal) {
  * Unload the given image's data into the given byte stream.
  * Answer the number of bytes written.
  */
-int unloadData(ImageData image, OutputStream ostr) {
+int unloadData(ImageData image, OutputStream out_) {
     int bmpBpl = 0;
     try {
         int bpl = (image.width * image.depth + 7) / 8;
@@ -181,7 +181,7 @@ int unloadData(ImageData image, OutputStream ostr) {
                     bufOffset += bmpBpl;
                     dataIndex -= imageBpl;
                 }
-                ostr.write(buf, 0, bufOffset);
+                out_.write(buf, 0, bufOffset);
             }
         } else {
             for (int y = 0; y < image.height; y += linesPerBuf) {
@@ -193,7 +193,7 @@ int unloadData(ImageData image, OutputStream ostr) {
                     bufOffset += bmpBpl;
                     dataIndex -= imageBpl;
                 }
-                ostr.write(buf, 0, bufOffset);
+                out_.write(buf, 0, bufOffset);
             }
         }
     } catch (IOException e) {
@@ -238,9 +238,9 @@ override void unloadIntoByteStream(ImageLoader loader) {
 
     // Prepare data. This is done first so we don't have to try to rewind
     // the stream and fill in the details later.
-    ByteArrayOutputStream ostr = new ByteArrayOutputStream();
-    unloadData(image, ostr);
-    byte[] data = ostr.toByteArray();
+    ByteArrayOutputStream out_ = new ByteArrayOutputStream();
+    unloadData(image, out_);
+    byte[] data = out_.toByteArray();
 
     // Calculate file size
     fileHeader[1] = fileHeader[4] + data.length;
