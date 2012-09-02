@@ -22,7 +22,7 @@ public class PngDeflater {
     static const int MAX_MATCHES = 32;
     static const int HASH = 8209;
 
-    byte[] istr;
+    byte[] in_;
     int inLength;
 
     ByteArrayOutputStream bytes;
@@ -35,11 +35,7 @@ public class PngDeflater {
     Link[WINDOW] window;// = new Link[WINDOW];
     int nextWindow;
 
-public this(){
-    bytes = new ByteArrayOutputStream(1024);
-}
-
-class Link {
+static class Link {
 
     int hash, value;
     Link previous, next;
@@ -125,67 +121,69 @@ static const Code distanceCodes[];
 
 static this() {
     lengthCodes = [
-        new Code(257, 0, 3, 3),
-        new Code(258, 0, 4, 4),
-        new Code(259, 0, 5, 5),
-        new Code(260, 0, 6, 6),
-        new Code(261, 0, 7, 7),
-        new Code(262, 0, 8, 8),
-        new Code(263, 0, 9, 9),
-        new Code(264, 0, 10, 10),
-        new Code(265, 1, 11, 12),
-        new Code(266, 1, 13, 14),
-        new Code(267, 1, 15, 16),
-        new Code(268, 1, 17, 18),
-        new Code(269, 2, 19, 22),
-        new Code(270, 2, 23, 26),
-        new Code(271, 2, 27, 30),
-        new Code(272, 2, 31, 34),
-        new Code(273, 3, 35, 42),
-        new Code(274, 3, 43, 50),
-        new Code(275, 3, 51, 58),
-        new Code(276, 3, 59, 66),
-        new Code(277, 4, 67, 82),
-        new Code(278, 4, 83, 98),
-        new Code(279, 4, 99, 114),
-        new Code(280, 4, 115, 130),
-        new Code(281, 5, 131, 162),
-        new Code(282, 5, 163, 194),
-        new Code(283, 5, 195, 226),
-        new Code(284, 5, 227, 257),
-        new Code(285, 0, 258, 258)];
+    new Code(257, 0, 3, 3),
+    new Code(258, 0, 4, 4),
+    new Code(259, 0, 5, 5),
+    new Code(260, 0, 6, 6),
+    new Code(261, 0, 7, 7),
+    new Code(262, 0, 8, 8),
+    new Code(263, 0, 9, 9),
+    new Code(264, 0, 10, 10),
+    new Code(265, 1, 11, 12),
+    new Code(266, 1, 13, 14),
+    new Code(267, 1, 15, 16),
+    new Code(268, 1, 17, 18),
+    new Code(269, 2, 19, 22),
+    new Code(270, 2, 23, 26),
+    new Code(271, 2, 27, 30),
+    new Code(272, 2, 31, 34),
+    new Code(273, 3, 35, 42),
+    new Code(274, 3, 43, 50),
+    new Code(275, 3, 51, 58),
+    new Code(276, 3, 59, 66),
+    new Code(277, 4, 67, 82),
+    new Code(278, 4, 83, 98),
+    new Code(279, 4, 99, 114),
+    new Code(280, 4, 115, 130),
+    new Code(281, 5, 131, 162),
+    new Code(282, 5, 163, 194),
+    new Code(283, 5, 195, 226),
+    new Code(284, 5, 227, 257),
+    new Code(285, 0, 258, 258)];
 
     distanceCodes = [
-        new Code(0, 0, 1, 1),
-        new Code(1, 0, 2, 2),
-        new Code(2, 0, 3, 3),
-        new Code(3, 0, 4, 4),
-        new Code(4, 1, 5, 6),
-        new Code(5, 1, 7, 8),
-        new Code(6, 2, 9, 12),
-        new Code(7, 2, 13, 16),
-        new Code(8, 3, 17, 24),
-        new Code(9, 3, 25, 32),
-        new Code(10, 4, 33, 48),
-        new Code(11, 4, 49, 64),
-        new Code(12, 5, 65, 96),
-        new Code(13, 5, 97, 128),
-        new Code(14, 6, 129, 192),
-        new Code(15, 6, 193, 256),
-        new Code(16, 7, 257, 384),
-        new Code(17, 7, 385, 512),
-        new Code(18, 8, 513, 768),
-        new Code(19, 8, 769, 1024),
-        new Code(20, 9, 1025, 1536),
-        new Code(21, 9, 1537, 2048),
-        new Code(22, 10, 2049, 3072),
-        new Code(23, 10, 3073, 4096),
-        new Code(24, 11, 4097, 6144),
-        new Code(25, 11, 6145, 8192),
-        new Code(26, 12, 8193, 12288),
-        new Code(27, 12, 12289, 16384),
-        new Code(28, 13, 16385, 24576),
-        new Code(29, 13, 24577, 32768)];
+    new Code(0, 0, 1, 1),
+    new Code(1, 0, 2, 2),
+    new Code(2, 0, 3, 3),
+    new Code(3, 0, 4, 4),
+    new Code(4, 1, 5, 6),
+    new Code(5, 1, 7, 8),
+    new Code(6, 2, 9, 12),
+    new Code(7, 2, 13, 16),
+    new Code(8, 3, 17, 24),
+    new Code(9, 3, 25, 32),
+    new Code(10, 4, 33, 48),
+    new Code(11, 4, 49, 64),
+    new Code(12, 5, 65, 96),
+    new Code(13, 5, 97, 128),
+    new Code(14, 6, 129, 192),
+    new Code(15, 6, 193, 256),
+    new Code(16, 7, 257, 384),
+    new Code(17, 7, 385, 512),
+    new Code(18, 8, 513, 768),
+    new Code(19, 8, 769, 1024),
+    new Code(20, 9, 1025, 1536),
+    new Code(21, 9, 1537, 2048),
+    new Code(22, 10, 2049, 3072),
+    new Code(23, 10, 3073, 4096),
+    new Code(24, 11, 4097, 6144),
+    new Code(25, 11, 6145, 8192),
+    new Code(26, 12, 8193, 12288),
+    new Code(27, 12, 12289, 16384),
+    new Code(28, 13, 16385, 24576),
+    new Code(29, 13, 24577, 32768)];
+
+    bytes = new ByteArrayOutputStream(1024);
 }
 
 void writeShortLSB(ByteArrayOutputStream baos, int theShort) {
@@ -361,7 +359,7 @@ Match findLongestMatch(int position, Link firstPosition) {
             int i;
 
             for (i = 1; position + i < inLength; i++) {
-                if (istr[position + i] !is istr[matchPosition + i]) {
+                if (in_[position + i] !is in_[matchPosition + i]) {
                     break;
                 }
             }
@@ -410,9 +408,9 @@ void updateHashtable(int to, int from) {
             break;
         }
 
-        data[0] = istr[i];
-        data[1] = istr[i + 1];
-        data[2] = istr[i + 2];
+        data[0] = in_[i];
+        data[1] = in_[i + 1];
+        data[2] = in_[i + 2];
 
         hashval = hash(data);
 
@@ -462,20 +460,20 @@ void compress() {
     writeBits(0x01, 2); // BTYPE = 0x01 (compression with fixed Huffman codes)
 
     // just output first byte so we never match at zero
-    outputLiteral(istr[0]);
+    outputLiteral(in_[0]);
     position = 1;
 
     while (position < inLength) {
 
         if (inLength - position < MIN_LENGTH) {
-            outputLiteral(istr[position]);
+            outputLiteral(in_[position]);
             position = position + 1;
             continue;
         }
 
-        data[0] = istr[position];
-        data[1] = istr[position + 1];
-        data[2] = istr[position + 2];
+        data[0] = in_[position];
+        data[1] = in_[position + 1];
+        data[2] = in_[position + 2];
 
         hashval = hash(data);
         firstPosition = hashtable[hashval];
@@ -489,7 +487,7 @@ void compress() {
             if (deferredMatch !is null) {
                 if (match.length > deferredMatch.length + 1) {
                     // output literal at deferredPosition
-                    outputLiteral(istr[deferredPosition]);
+                    outputLiteral(in_[deferredPosition]);
                     // defer this match
                     deferredPosition = position;
                     deferredMatch = match;
@@ -526,7 +524,7 @@ void compress() {
                 position = newPosition;
             }
             else {
-                outputLiteral(istr[position]);
+                outputLiteral(in_[position]);
                 position = position + 1;
             }
 
@@ -548,7 +546,7 @@ void compressHuffmanOnly() {
 
     for (position = 0; position < inLength;) {
 
-        outputLiteral(istr[position]);
+        outputLiteral(in_[position]);
         position = position + 1;
 
     }
@@ -584,7 +582,7 @@ void store() {
         writeShortLSB(bytes, blockLength ^ 0xffff); // NLEN (one's complement of LEN)
 
         // write actual data
-        bytes.write(istr, start, blockLength);
+        bytes.write(in_, start, blockLength);
 
         length = length - blockLength;
         start = start + blockLength;
@@ -595,7 +593,7 @@ void store() {
 
 public byte[] deflate(byte[] input) {
 
-    istr = input;
+    in_ = input;
     inLength = input.length;
 
     // write zlib header
@@ -604,7 +602,7 @@ public byte[] deflate(byte[] input) {
 
     // compute checksum
     for (int i = 0; i < inLength; i++) {
-        updateAdler(istr[i]);
+        updateAdler(in_[i]);
     }
 
     //store();
