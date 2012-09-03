@@ -10,6 +10,16 @@ port is finished we will move the repository to a new one and integrated it with
 [DWT](https://github.com/d-widget-toolkit/dwt) repository. When that is done we will port the
 code to D2 and drop the support for D1.
 
+There's an archive with prepared sources. These are the original Java files with a few
+modifications:
+
+* All trailing whitespace are removed
+* All tabs are converted to spaces
+* Imports are expanded
+* SWT is replaced with DWT in a few places
+
+[https://github.com/d-widget-toolkit/dwt-mac/downloads](https://github.com/d-widget-toolkit/dwt-mac/downloads)
+
 ### Types
 
 #### 32/64 bits
