@@ -3,6 +3,8 @@
 This is a temporarily repository for the Mac OS X port of
 [DWT](https://github.com/d-widget-toolkit/dwt).
 
+Note, this is a port of SWT 3.5.
+
 ## Contributing
 
 The plan is to finishing the Mac OS X port in this repository using D1 and Tango. When the
