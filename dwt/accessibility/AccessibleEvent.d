@@ -13,7 +13,7 @@
  *******************************************************************************/
 module dwt.accessibility.AccessibleEvent;
 
-import dwt.internal.DWTEventObject;
+import dwt.internal.SWTEventObject;
 
 import tango.text.convert.Format;
 
@@ -34,7 +34,7 @@ import dwt.dwthelper.utils;
  *
  * @since 2.0
  */
-public class AccessibleEvent : DWTEventObject {
+public class AccessibleEvent : SWTEventObject {
     /**
      * The value of this field is set by an accessibility client
      * before the accessible listener method is called.

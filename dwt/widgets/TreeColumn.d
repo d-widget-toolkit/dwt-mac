@@ -22,12 +22,32 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSAttributedString;
+import dwt.internal.cocoa.NSTableHeaderCell;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSObject;
+import dwt.internal.cocoa.NSTableColumn;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSAffineTransform;
+import dwt.internal.cocoa.NSOutlineView;
+import dwt.internal.cocoa.NSTableHeaderView;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.SWTTreeItem;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Item;
 import dwt.widgets.Tree;
 import dwt.widgets.TreeItem;
 import dwt.widgets.TypedListener;
+import dwt.graphics.Image;
+import dwt.graphics.Font;
+import dwt.graphics.GC;
+import dwt.events.ControlListener;
+import dwt.events.SelectionListener;
 
 /**
  * Instances of this class represent a column in a tree widget.
@@ -215,7 +235,7 @@ void destroyWidget () {
     releaseHandle ();
 }
 
-void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect cellRect, int /*long*/ view) {
+void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect cellRect, objc.id view) {
     /*
      * Feature in Cocoa.  When the last column in a tree does not reach the
      * rightmost edge of the tree view, the cell that draws the rightmost-
@@ -280,12 +300,12 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect cel
         NSRect sourceRect = NSRect ();
         sourceRect.width = destRect.width;
         sourceRect.height = destRect.height;
-        image.handle.drawInRect (destRect, sourceRect, OS.NSCompositeSourceOver, 1f);
+        image.handle.drawInRect (destRect, sourceRect, cast(NSCompositingOperation)OS.NSCompositeSourceOver, 1f);
         if (isFlipped) context.restoreGraphicsState ();
         drawX += destRect.width;
     }
 
-    if (displayText !is null && displayText.length () > 0) {
+    if (displayText !is null && displayText.length > 0) {
         if (image !is null) drawX += MARGIN; /* space between image and text */
         NSRect destRect = NSRect ();
         destRect.x = drawX;
@@ -410,7 +430,7 @@ public String getToolTipText () {
  */
 public int getWidth () {
     checkWidget ();
-    int width = (int)nsColumn.width();
+    int width = cast(int)nsColumn.width();
     // TODO how to differentiate 0 and 1 cases?
     if (width > 0) width += Tree.CELL_GAP;
     return width;
@@ -622,7 +642,7 @@ public void setText (String string) {
     checkWidget ();
     if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     super.setText (string);
-    char [] buffer = new char [text.length ()];
+    char [] buffer = new char [text.length];
     text.getChars (0, buffer.length, buffer, 0);
     int length = fixMnemonic (buffer);
     displayText = new_String (buffer, 0, length);

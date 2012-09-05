@@ -19,11 +19,18 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.dwthelper.System;
 import dwt.widgets.CoolItem;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.Event;
 import dwt.widgets.Listener;
+import dwt.graphics.Cursor;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.graphics.GC;
+import dwt.graphics.Color;
 
 /**
  * Instances of this class provide an area for dynamically
@@ -327,7 +334,7 @@ bool insertItemIntoRow(CoolItem item, int rowIndex, int x_root) {
     if (rowIndex < 0 || rowIndex >= items.length) {
         /* Create a new row for the item. */
         bool bottom = rowIndex >= items.length;
-        CoolItem[][] newRows = new CoolItem[items.length + 1][];
+        CoolItem[][] newRows = new CoolItem[][items.length + 1];
         System.arraycopy(items, 0, newRows, bottom ? 0 : 1, items.length);
         int row = bottom ? items.length : 0;
         newRows[row] = new CoolItem[1];

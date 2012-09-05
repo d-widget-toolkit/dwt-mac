@@ -239,12 +239,12 @@ id objc_msgSendSuper (ARGS...) (objc_super* superr, SEL op, ARGS args)
     return (cast(fp)&bindings.objc_msgSendSuper)(superr, op, args);
 }
 
-id objc_msgSendSuper_stret (T, ARGS...) (T* stretAddr, objc_super* super_, SEL op, ARGS args)
+id objc_msgSendSuper_stret (T, ARGS...) (T* stretAddr, objc_super* super_, SEL theSelector, ARGS args)
 {
     if (T.sizeof > STRUCT_SIZE_LIMIT)
     {
         alias extern (C) void function (T*, objc_super*, SEL, ARGS) fp;
-        (cast(fp)&bindings.objc_msgSendSuper_stret)(stretAddr, super_, theSelector, args);
+        objc_msgSendSuper_stret(stretAddr, super_, theSelector, args);
     }
 
     else
@@ -252,6 +252,7 @@ id objc_msgSendSuper_stret (T, ARGS...) (T* stretAddr, objc_super* super_, SEL o
         alias extern (C) T* function (objc_super*, SEL, ARGS) fp;
         stretAddr = (cast(fp)&bindings.objc_msgSendSuper)(super_, theSelector, args);
     }
+    return cast(id)stretAddr;
 }
 
 bool objc_msgSend_bool (ARGS...) (id theReceiver, SEL theSelector, ARGS args)

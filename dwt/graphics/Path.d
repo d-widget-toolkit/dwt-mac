@@ -15,9 +15,9 @@ module dwt.graphics.Path;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.graphics.Device;
 import dwt.graphics.Font;
 import dwt.graphics.GC;
@@ -339,7 +339,7 @@ public void addString(String stri, float x, float y, Font font) {
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         NSString str = NSString.stringWith(stri);
-        NSTextStorage textStorage = (NSTextStorage)new NSTextStorage().alloc().init();
+        NSTextStorage textStorage = cast(NSTextStorage)(new NSTextStorage()).alloc().init();
         NSLayoutManager layoutManager = cast(NSLayoutManager)(new NSLayoutManager()).alloc().init();
         NSTextContainer textContainer = cast(NSTextContainer)(new NSTextContainer()).alloc();
         NSSize size = NSSize();
@@ -356,7 +356,7 @@ public void addString(String stri, float x, float y, Font font) {
         * on a thread other than the main thread. The fix is to add attributes to
         * a separate NSMutableAttributedString and add it to text storage when done.
         */
-        NSMutableAttributedString attrStr = (NSMutableAttributedString)new NSMutableAttributedString().alloc();
+        NSMutableAttributedString attrStr = cast(NSMutableAttributedString)(new NSMutableAttributedString()).alloc();
         attrStr.id = attrStr.initWithString(str).id;
         attrStr.beginEditing();
         attrStr.addAttribute(OS.NSFontAttributeName, font.handle, range);

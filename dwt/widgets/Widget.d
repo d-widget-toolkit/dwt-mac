@@ -17,21 +17,36 @@ module dwt.widgets.Widget;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSArray;
 import dwt.internal.cocoa.NSMutableArray;
 import dwt.internal.cocoa.NSValue;
 import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSRange;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSPasteboard;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.OS;
+import dwt.internal.cocoa.objc_super;
 
 import tango.core.Thread;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 import dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;
+import dwt.internal.SWTEventListener;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Display;
 import dwt.widgets.Event;
 import dwt.widgets.EventTable;
 import dwt.widgets.Listener;
 import dwt.widgets.TypedListener;
+import dwt.events.DisposeListener;
 
 /**
  * This class is the abstract superclass of all user interface objects.
@@ -202,6 +217,7 @@ void setClipRegion (CGFloat x, CGFloat y) {
 }
 
 objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, NSRangePointer range) {
+    return null;
 }
 
 void callSuper(objc.id id, objc.SEL sel) {
@@ -214,13 +230,8 @@ void callSuper(objc.id id, objc.SEL sel) {
 void callSuper(objc.id id, objc.SEL sel, objc.id arg0) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
-    super_struct.super_class = OS.objc_msgSend(id, OS.sel_superclass);
-    OS.objc_msgSendSuper(super_struct, sel);
-}
-
-    super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
-    OS.objc_msgSendSuper(&super_struct, sel, arg0);
+    OS.objc_msgSendSuper(&super_struct, sel);
 }
 
 void callSuper(objc.id id, objc.SEL sel, NSRect arg0) {
@@ -240,16 +251,18 @@ void callSuper(objc.id id, objc.SEL sel, NSRect arg0, objc.id arg1) {
 objc.id callSuper(objc.id id, objc.SEL sel, objc.id arg0, NSRect arg1, objc.id arg2) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
-    super_struct.super_class = OS.objc_msgSend(id, OS.sel_superclass);
-    return OS.objc_msgSendSuper(super_struct, sel, arg0, arg1, arg2);
-}
-
-    super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
     return OS.objc_msgSendSuper(&super_struct, sel, arg0, arg1, arg2);
 }
 
-bool canBecomeKeyWindow (objc.id id, objc.SEL sel) {
+boolean callSuperBoolean(objc.id id, objc.SEL sel) {
+    objc_super super_struct = objc_super();
+    super_struct.receiver = id;
+    super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
+    return OS.objc_msgSendSuper_bool(&super_struct, sel);
+}
+
+boolean canBecomeKeyWindow (objc.id id, objc.SEL sel) {
     return callSuperBoolean (id, sel);
 }
 
@@ -257,13 +270,16 @@ NSSize cellSize (objc.id id, objc.SEL sel) {
     NSSize result = NSSize();
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
-    super_struct.super_class = OS.objc_msgSend(id, OS.sel_superclass);
-    OS.objc_msgSendSuper_stret(result, super_struct, sel);
+    super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
+    OS.objc_msgSendSuper_stret(&result, &super_struct, sel);
     return result;
 }
 
+NSSize cellSizeForBounds (objc.id id, objc.SEL sel, NSRect cellFrame) {
+    objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
+    NSSize result = NSSize();
     OS.objc_msgSendSuper_stret(&result, &super_struct, sel);
     return result;
 }
@@ -271,14 +287,8 @@ NSSize cellSize (objc.id id, objc.SEL sel) {
 boolean callSuperBoolean(objc.id id, objc.SEL sel, objc.id arg0) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
-    super_struct.super_class = OS.objc_msgSend(id, OS.sel_superclass);
-    return OS.objc_msgSendSuper_bool(super_struct, sel, range, arg1);
-}
-
-int /*long*/ callSuperObject(int /*long*/ id, int /*long*/ sel) {
-    super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
-    return OS.objc_msgSendSuper(&super_struct, sel, arg0) !is null;
+    return OS.objc_msgSendSuper_bool(&super_struct, sel, arg0);
 }
 
 bool callSuperBoolean(objc.id id, objc.SEL sel, NSRange range, objc.id arg1) {
@@ -310,12 +320,18 @@ boolean canDragRowsWithIndexes_atPoint(objc.id id, objc.SEL sel, objc.id arg0, o
 NSInteger characterIndexForPoint (objc.id id, objc.SEL sel, NSPointPointer point) {
     return OS.NSNotFound;
 }
-
-boolean acceptsFirstMouse (objc.id id, objc.SEL sel, objc.id theEvent) {
-    objc_super super_struct = new objc_super();
+objc.id columnAtPoint(objc.id id, objc.SEL sel, NSPoint point) {
+    objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
-    return OS.objc_msgSendSuper(super_struct, sel, theEvent) != 0;
+    return OS.objc_msgSendSuper(&super_struct, sel, point);
+}
+
+boolean acceptsFirstMouse (objc.id id, objc.SEL sel, objc.id theEvent) {
+    objc_super super_struct = objc_super();
+    super_struct.receiver = id;
+    super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
+    return OS.objc_msgSendSuper_bool(&super_struct, sel, theEvent);
 }
 
 boolean acceptsFirstResponder (objc.id id, objc.SEL sel) {
@@ -615,7 +631,7 @@ void drawRect (objc.id id, objc.SEL sel, NSRect rect) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
-    OS.objc_msgSendSuper(super_struct, sel, rect);
+    OS.objc_msgSendSuper(&super_struct, sel, rect);
     if (!isDisposed()) {
         /*
         * Feature in Cocoa. There are widgets that draw outside of the UI thread,
@@ -632,7 +648,7 @@ void _drawThemeProgressArea (objc.id id, objc.SEL sel, objc.id arg0) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
-    OS.objc_msgSendSuper(super_struct, sel, arg0);
+    OS.objc_msgSendSuper(&super_struct, sel, arg0);
 }
 
 void drawWidget (objc.id id, NSGraphicsContext context, NSRect rect) {
@@ -811,7 +827,7 @@ String getName () {
     String string = this.classinfo.name;
     int index = string.lastIndexOf ('.');
     if (index is -1) return string;
-    return string.substring (index + 1, string.length ());
+    return string.substring (index + 1, string.length);
 }
 
 String getNameText () {
@@ -881,7 +897,7 @@ NSRect imageRectForBounds (objc.id id, objc.SEL sel, NSRect cellFrame) {
     return NSRect();
 }
 
-boolean insertText (objc.id id, objc.SEL sel, objc.id string) {
+bool insertText (objc.id id, objc.SEL sel, objc.id string) {
     callSuper (id, sel, string);
     return true;
 }
@@ -1004,32 +1020,15 @@ void otherMouseUp(objc.id id, objc.SEL sel, objc.id theEvent) {
     callSuper(id, sel, theEvent);
 }
 
-void otherMouseDown(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
-    callSuper(id, sel, theEvent);
-}
-
-void otherMouseUp(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
-    callSuper(id, sel, theEvent);
-}
-
 void otherMouseDragged(objc.id id, objc.SEL sel, objc.id theEvent) {
     callSuper(id, sel, theEvent);
-}
-
-bool shouldDelayWindowOrderingForEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
-    objc_super super_struct = new objc_super();
-    super_struct.receiver = id;
-    super_struct.super_class = OS.objc_msgSend(id, OS.sel_superclass);
-    return OS.objc_msgSendSuper(super_struct, sel, theEvent) !is 0;
-}
-
 }
 
 bool shouldDelayWindowOrderingForEvent (objc.id id, objc.SEL sel, objc.id theEvent) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
-    return OS.objc_msgSendSuper(&super_struct, sel, theEvent) !is null;
+    return OS.objc_msgSendSuper_bool(&super_struct, sel, theEvent);
 }
 
 boolean menuHasKeyEquivalent_forEvent_target_action(objc.id id, objc.SEL sel, objc.id menu, objc.id event, objc.id target, objc.id action) {
@@ -1058,15 +1057,13 @@ void menu_willHighlightItem(objc.id id, objc.SEL sel, objc.id menu, objc.id item
 }
 
 void menuDidClose(objc.id id, objc.SEL sel, objc.id menu) {
-    callSuper(id, sel, selector);
-}
-
+    callSuper(id, sel, menu);
 }
 
 void menuWillOpen(objc.id id, objc.SEL sel, objc.id menu) {
 }
 
-void noResponderFor(objc.id id, objc.SEL sel, objc.SEL selector) {
+void noResponderFor(objc.id id, objc.SEL sel, objc.id selector) {
     callSuper(id, sel, selector);
 }
 
@@ -1086,8 +1083,13 @@ objc.id outlineView_objectValueForTableColumn_byItem(objc.id id, objc.SEL sel, o
 }
 
 bool outlineView_isItemExpandable(objc.id id, objc.SEL sel, objc.id outlineView, objc.id item) {
+    return false;
+}
+
 NSInteger outlineView_numberOfChildrenOfItem(objc.id id, objc.SEL sel, objc.id outlineView, objc.id item) {
     return 0;
+}
+
 void outlineView_willDisplayCell_forTableColumn_item(objc.id id, objc.SEL sel, objc.id outlineView, objc.id cell, objc.id tableColumn, objc.id item) {
 }
 
@@ -1095,6 +1097,8 @@ void outlineViewColumnDidMove (objc.id id, objc.SEL sel, objc.id aNotification) 
 }
 
 void outlineViewColumnDidResize (objc.id id, objc.SEL sel, objc.id aNotification) {
+}
+
 void outlineViewSelectionDidChange(objc.id id, objc.SEL sel, objc.id notification) {
 }
 
@@ -1102,10 +1106,6 @@ void outlineView_setObjectValue_forTableColumn_byItem(objc.id id, objc.SEL sel, 
 }
 
 bool outlineView_writeItems_toPasteboard(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2) {
-    return false;
-}
-
-
     return false;
 }
 
@@ -1300,11 +1300,11 @@ objc.id previousValidKeyView (objc.id id, objc.SEL sel) {
     return callSuperObject(id, sel);
 }
 
-int /*long*/ nextValidKeyView (int /*long*/ id, int /*long*/ sel) {
+objc.id nextValidKeyView (objc.id id, objc.SEL sel) {
     return callSuperObject(id, sel);
 }
 
-int /*long*/ previousValidKeyView (int /*long*/ id, int /*long*/ sel) {
+objc.id previousValidKeyView (objc.id id, objc.SEL sel) {
     return callSuperObject(id, sel);
 }
 
@@ -1518,7 +1518,7 @@ bool setInputState (Event event, NSEvent nsEvent, int type) {
     if ((modifierFlags & OS.NSControlKeyMask) !is 0) event.stateMask |= DWT.CONTROL;
     if ((modifierFlags & OS.NSCommandKeyMask) !is 0) event.stateMask |= DWT.COMMAND;
     //TODO multiple mouse buttons pressed
-    switch (nsEvent.type()) {
+    switch (cast(int)nsEvent.type()) {
         case OS.NSLeftMouseDragged:
         case OS.NSRightMouseDragged:
         case OS.NSOtherMouseDragged:
@@ -1636,9 +1636,6 @@ bool setKeyState (Event event, int type, NSEvent nsEvent) {
                 }
 
                 if (currentKbd !is null) OS.CFRelease(currentKbd);
-                }
-
-                if (currentKbd !is 0) OS.CFRelease(currentKbd);
             }
     }
     if (event.keyCode is 0 && event.character is 0) {
@@ -1664,57 +1661,10 @@ void setNeedsDisplay (objc.id id, objc.SEL sel, bool flag) {
         needsDisplay.addObject(view);
         return;
     }
-    objc_super super_struct = new objc_super();
+    objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
-    OS.objc_msgSendSuper(super_struct, sel, flag);
-}
-
-void setNeedsDisplayInRect (int /*long*/ id, int /*long*/ sel, int /*long*/ arg0) {
-    if (!isDrawing()) return;
-    NSRect rect = new NSRect();
-    OS.memmove(rect, arg0, NSRect.sizeof);
-    NSView view = new NSView(id);
-    if (display.isPainting.containsObject(view)) {
-        NSMutableArray needsDisplayInRect = display.needsDisplayInRect;
-        if (needsDisplayInRect is null) {
-            needsDisplayInRect = (NSMutableArray)new NSMutableArray().alloc();
-            display.needsDisplayInRect = needsDisplayInRect = needsDisplayInRect.initWithCapacity(12);
-        }
-        needsDisplayInRect.addObject(view);
-        needsDisplayInRect.addObject(NSValue.valueWithRect(rect));
-        return;
-    }
-    objc_super super_struct = new objc_super();
-    super_struct.receiver = id;
-    super_struct.super_class = OS.objc_msgSend(id, OS.sel_superclass);
-    OS.objc_msgSendSuper(super_struct, sel, rect);
-}
-
-void setObjectValue(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0) {
-    callSuper(id, sel, arg0);
-}
-
-bool setTabGroupFocus () {
-    return setTabItemFocus ();
-}
-
-bool setTabItemFocus () {
-    return false;
-}
-
-bool shouldChangeTextInRange_replacementString(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1) {
-    return true;
-}
-
-void superKeyDown (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
-    callSuper (id, sel, theEvent);
-}
-
-void superKeyUp (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
-    callSuper (id, sel, theEvent);
-}
-
+    OS.objc_msgSendSuper(&super_struct, sel, flag);
 }
 
 void setNeedsDisplayInRect (objc.id id, objc.SEL sel, objc.id arg0) {
@@ -1795,10 +1745,6 @@ void textDidChange(objc.id id, objc.SEL sel, objc.id aNotification) {
     callSuper (id, sel, aNotification);
 }
 
-void textDidEndEditing(int /*long*/ id, int /*long*/ sel, int /*long*/ aNotification) {
-    callSuper(id, sel, aNotification);
-}
-
 void textDidEndEditing(objc.id id, objc.SEL sel, objc.id aNotification) {
     callSuper(id, sel, aNotification);
 }
@@ -1813,19 +1759,6 @@ NSRect titleRectForBounds (objc.id id, objc.SEL sel, NSRect cellFrame) {
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
     NSRect result = NSRect();
     OS.objc_msgSendSuper_stret(&result, &super_struct, sel, cellFrame);
-    return result;
-}
-
-String tooltipText () {
-    return null;
-}
-
-NSRect titleRectForBounds (int /*long*/ id, int /*long*/ sel, NSRect cellFrame) {
-    objc_super super_struct = new objc_super();
-    super_struct.receiver = id;
-    super_struct.super_class = OS.objc_msgSend(id, OS.sel_superclass);
-    NSRect result = new NSRect();
-    OS.objc_msgSendSuper_stret(result, super_struct, sel, cellFrame);
     return result;
 }
 
@@ -1852,12 +1785,6 @@ void resetCursorRects (objc.id id, objc.SEL sel) {
     callSuper (id, sel);
 }
 
-void updateTrackingAreas (int /*long*/ id, int /*long*/ sel) {
-    callSuper (id, sel);
-}
-
-}
-
 void updateTrackingAreas (objc.id id, objc.SEL sel) {
     callSuper (id, sel);
 }
@@ -1870,13 +1797,14 @@ objc.id validAttributesForMarkedText (objc.id id, objc.SEL sel) {
 void tabView_didSelectTabViewItem(objc.id id, objc.SEL sel, objc.id tabView, objc.id tabViewItem) {
 }
 
-int /*long*/ view_stringForToolTip_point_userData (int /*long*/ id, int /*long*/ sel, int /*long*/ view, int /*long*/ tag, int /*long*/ point, int /*long*/ userData) {
-    return 0;
+objc.id view_stringForToolTip_point_userData (objc.id id, objc.SEL sel, objc.id view, objc.id tag, objc.id point, objc.id userData) {
+    return null;
 }
 
-void viewDidMoveToWindow(int /*long*/ id, int /*long*/ sel) {
+void viewDidMoveToWindow(objc.id id, objc.SEL sel) {
 }
 
+void viewWillMoveToWindow(objc.id id, objc.SEL sel, objc.id arg0) {
 }
 
 void tabView_willSelectTabViewItem(objc.id id, objc.SEL sel, objc.id tabView, objc.id tabViewItem) {
@@ -1884,13 +1812,6 @@ void tabView_willSelectTabViewItem(objc.id id, objc.SEL sel, objc.id tabView, ob
 
 bool tableView_writeRowsWithIndexes_toPasteboard(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2) {
     return false;
-}
-
-objc.id view_stringForToolTip_point_userData (objc.id id, objc.SEL sel, objc.id view, objc.id tag, objc.id point, objc.id userData) {
-    return null;
-}
-
-void viewDidMoveToWindow(objc.id id, objc.SEL sel) {
 }
 
 void windowDidMove(objc.id id, objc.SEL sel, objc.id notification) {

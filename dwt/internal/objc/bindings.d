@@ -37,6 +37,7 @@ Class class_getSuperclass (Class cls);
 IMP method_setImplementation (Method method, IMP imp);
 id class_createInstance (Class cls, size_t extraBytes);
 id objc_getMetaClass (char* name);
+void objc_msgSendSuper_stret(ARGS...)(void* stretAddr, objc_super* superContext, SEL theSelector, ARGS args);
 
 void instrumentObjcMessageSends(bool val);
 

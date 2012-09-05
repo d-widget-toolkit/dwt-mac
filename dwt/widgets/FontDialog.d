@@ -18,12 +18,22 @@ module dwt.widgets.FontDialog;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSFontPanel;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.SWTPanelDelegate;
+import dwt.internal.cocoa.OS;
 import dwt.dwthelper.utils;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Dialog;
 import dwt.widgets.Display;
 import dwt.widgets.Shell;
+import dwt.graphics.RGB;
+import dwt.graphics.FontData;
+import dwt.graphics.Font;
 
 /**
  * Instances of this class allow the user to select a font

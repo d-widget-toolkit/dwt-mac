@@ -20,9 +20,21 @@ module dwt.widgets.Menu;
 
 
 
+import dwt.DWT;
 import dwt.dwthelper.System;
 import dwt.dwthelper.utils;
 import dwt.internal.objc.cocoa.Cocoa;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.NSMenu;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSWindow;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSMenuItem;
+import dwt.internal.cocoa.SWTMenu;
+import dwt.internal.cocoa.SWTMenuItem;
+import dwt.internal.cocoa.OS;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.TypedListener;
 import dwt.widgets.Event;
@@ -31,6 +43,10 @@ import dwt.widgets.Widget;
 import dwt.widgets.Control;
 import dwt.widgets.Decorations;
 import dwt.widgets.Shell;
+import dwt.widgets.TrayItem;
+import dwt.events.HelpListener;
+import dwt.events.MenuListener;
+import dwt.graphics.Point;
 
 /**
  * Instances of this class are user interface objects that contain
@@ -241,6 +257,7 @@ void _setVisible (bool visible) {
 
         // Hold on to window in case it is disposed while the popup is open.
         window.retain();
+        NSEvent nsEvent = NSEvent.otherEventWithType(cast(NSEventType)OS.NSApplicationDefined, location, 0, 0.0, window.windowNumber(), window.graphicsContext(), cast(short)0, 0, 0);
         NSMenu.popUpContextMenu(nsMenu, nsEvent, shell.view);
         window.release();
     } else {

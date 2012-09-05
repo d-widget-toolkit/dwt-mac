@@ -17,8 +17,18 @@ module dwt.widgets.Item;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSRange;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.SWTEventListener;
 import dwt.dwthelper.utils;
 import dwt.widgets.Widget;
+import dwt.graphics.Image;
+import dwt.events.DisposeListener;
 
 /**
  * This class is the abstract superclass of all non-windowed

@@ -27,8 +27,8 @@ import dwt.accessibility.AccessibleControlListener;
 import dwt.accessibility.AccessibleTextEvent;
 import dwt.accessibility.AccessibleTextListener;
 import dwt.accessibility.SWTAccessibleDelegate;
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.graphics.Point;
 import dwt.graphics.Rectangle;
 import dwt.internal.cocoa.NSArray;
@@ -836,7 +836,7 @@ public class Accessible {
                     for (int i = 0; i < appChildren.length; i++) {
                         Object child = appChildren[i];
                         if (auto c = cast(Integer) child) {
-                            cocoa.id accChild = childIDToOs(c).intValue());
+                            cocoa.id accChild = childIDToOs(c).intValue();
                             childArray.addObject(accChild);
                         } else {
                             childArray.addObject((cast(Accessible)child).control.view);
@@ -1128,7 +1128,7 @@ public class Accessible {
         String appValue = event.result;
 
         if (appValue !is null) {
-            returnValue = NSString.stringWith(appValue.substring((int)/*64*/range.location, (int)/*64*/(range.location + range.length)));
+            returnValue = NSString.stringWith(appValue.substring(cast(int)/*64*/range.location, cast(int)/*64*/(range.location + range.length)));
         }
 
         return returnValue;

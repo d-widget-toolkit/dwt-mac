@@ -22,12 +22,29 @@ import dwt.dwthelper.utils;
 
 import cocoa = dwt.internal.cocoa.id;
 
+import dwt.DWT;
+import dwt.accessibility.ACC;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSNumber;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSMutableArray;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.SWTView;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.Event;
 import dwt.widgets.TypedListener;
+import dwt.graphics.Cursor;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.events.SelectionListener;
 
 /**
  * Instances of the receiver represent a selectable user interface object
@@ -123,7 +140,7 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
             extraAttributes.addObject(OS.NSAccessibilityDescriptionAttribute);
             extraAttributes.addObject(OS.NSAccessibilityTitleAttribute);
 
-            for (int i = (int)/*64*/extraAttributes.count() - 1; i >= 0; i--) {
+            for (int i = cast(int)/*64*/extraAttributes.count() - 1; i >= 0; i--) {
                 NSString attribute = new NSString(extraAttributes.objectAtIndex(i).id);
                 if (accessible.internal_accessibilityAttributeValue(attribute, ACC.CHILDID_SELF) !is null) {
                     ourAttributes.addObject(extraAttributes.objectAtIndex(i));
@@ -280,12 +297,13 @@ public Point computeSize (int wHint, int hHint, bool changed) {
 
 void createHandle () {
     state |= THEME_BACKGROUND;
+    NSView widget = cast(NSView)(new SWTView()).alloc();
     widget.initWithFrame (NSRect());
     widget.init ();
     view = widget;
 }
 
-void drawBackground (int /*long*/ id, NSGraphicsContext context, NSRect rect) {
+void drawBackground (objc.id id, NSGraphicsContext context, NSRect rect) {
     if (id !is view.id) return;
     fillBackground (view, context, rect, -1);
 }
@@ -386,11 +404,12 @@ void mouseDown(objc.id id, objc.SEL sel, objc.id theEvent) {
     }
 }
 
-bool mouseEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent, int type) {
+bool mouseEvent (objc.id id, objc.SEL sel, objc.id theEvent, int type) {
     super.mouseEvent (id, sel, theEvent, type);
-    return new NSEvent (theEvent).type () !is OS.NSLeftMouseDown;
+    return (new NSEvent (theEvent)).type () !is OS.NSLeftMouseDown;
 }
 
+void mouseDragged(objc.id id, objc.SEL sel, objc.id theEvent) {
     //TODO use sendMouseEvent
     super.mouseDragged(id, sel, theEvent);
     if (isDisposed()) return;

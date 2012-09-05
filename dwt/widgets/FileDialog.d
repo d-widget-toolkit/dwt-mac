@@ -20,9 +20,24 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSOpenPanel;
+import dwt.internal.cocoa.NSSavePanel;
+import dwt.internal.cocoa.NSPopUpButton;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSMenu;
+import dwt.internal.cocoa.NSMenuItem;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSFileManager;
+import dwt.internal.cocoa.SWTPanelDelegate;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
+import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Dialog;
 import dwt.widgets.Shell;
+import dwt.widgets.Display;
 
 /**
  * Instances of this class allow the user to navigate
@@ -48,6 +63,8 @@ import dwt.widgets.Shell;
 public class FileDialog : Dialog {
     NSSavePanel panel;
     NSPopUpButton popup;
+    String [] filterNames;
+    String [] filterExtensions;
     String [] fileNames;
     String filterPath = "", fileName = "";
     int filterIndex = -1;
@@ -213,18 +230,16 @@ public bool getOverwrite () {
 public String open () {
     String fullPath = null;
     fileNames = new String [0];
-    int /*long*/ method = 0;
-    int /*long*/ methodImpl = 0;
-    Callback callback = null;
+    objc.Method method = null;
+    objc.IMP methodImpl = null;
+    objc.IMP callback = null;
     if ((style & DWT.SAVE) !is 0) {
         NSSavePanel savePanel = NSSavePanel.savePanel();
         panel = savePanel;
         if (!overwrite) {
-            callback = new Callback(this, "_overwriteExistingFileCheck", 3);
-            int /*long*/ proc = callback.getAddress();
-            if (proc is 0) error (DWT.ERROR_NO_MORE_CALLBACKS);
-            method = OS.class_getInstanceMethod(OS.class_NSSavePanel, OS.sel_overwriteExistingFileCheck);
-            if (method !is 0) methodImpl = OS.method_setImplementation(method, proc);
+            callback = cast(objc.IMP)&_overwriteExistingFileCheck;
+            method = OS.class_getInstanceMethod(OS.class_NSSavePanel.isa, OS.sel_overwriteExistingFileCheck);
+            if (method !is null) methodImpl = OS.method_setImplementation(method, callback);
         }
     } else {
         NSOpenPanel openPanel = NSOpenPanel.openPanel();
@@ -232,17 +247,17 @@ public String open () {
         panel = openPanel;
     }
     panel.setCanCreateDirectories(true);
-    int /*long*/ jniRef = 0;
-    SWTPanelDelegate delegate = null;
+    void* jniRef = null;
+    SWTPanelDelegate delegate_ = null;
     if (filterExtensions !is null && filterExtensions.length !is 0) {
-        delegate = (SWTPanelDelegate)new SWTPanelDelegate().alloc().init();
+        delegate_ = cast(SWTPanelDelegate)(new SWTPanelDelegate()).alloc().init();
         jniRef = OS.NewGlobalRef(this);
-        if (jniRef is 0) DWT.error(DWT.ERROR_NO_HANDLES);
-        OS.object_setInstanceVariable(delegate.id, Display.DWT_OBJECT, jniRef);
-        panel.setDelegate(delegate);
-        NSPopUpButton widget = (NSPopUpButton)new NSPopUpButton().alloc();
-        widget.initWithFrame(new NSRect(), false);
-        widget.setTarget(delegate);
+        if (jniRef is null) DWT.error(DWT.ERROR_NO_HANDLES);
+        OS.object_setInstanceVariable(delegate_.id, Display.SWT_OBJECT, jniRef);
+        panel.setDelegate(delegate_);
+        NSPopUpButton widget = cast(NSPopUpButton)(new NSPopUpButton()).alloc();
+        widget.initWithFrame(NSRect(), false);
+        widget.setTarget(delegate_);
         widget.setAction(OS.sel_sendSelection_);
         NSMenu menu = widget.menu();
         menu.setAutoenablesItems(false);
@@ -251,8 +266,8 @@ public String open () {
             if (filterNames !is null && filterNames.length > i) {
                 str = filterNames [i];
             }
-            NSMenuItem nsItem = (NSMenuItem)new NSMenuItem().alloc();
-            nsItem.initWithTitle(NSString.stringWith(str), 0, NSString.stringWith(""));
+            NSMenuItem nsItem = cast(NSMenuItem)(new NSMenuItem()).alloc();
+            nsItem.initWithTitle(NSString.stringWith(str), null, NSString.stringWith(""));
             menu.addItem(nsItem);
             nsItem.release();
         }
@@ -264,17 +279,17 @@ public String open () {
     panel.setTitle(NSString.stringWith(title !is null ? title : ""));
     NSApplication application = NSApplication.sharedApplication();
     if (parent !is null && (style & DWT.SHEET) !is 0) {
-        application.beginSheet(panel, parent.window, null, 0, 0);
+        application.beginSheet(panel, parent.window, null, null, null);
     }
     NSString dir = filterPath !is null ? NSString.stringWith(filterPath) : null;
     NSString file = fileName !is null ? NSString.stringWith(fileName) : null;
-    int /*long*/ response = panel.runModalForDirectory(dir, file);
+    auto response = panel.runModalForDirectory(dir, file);
     if (parent !is null && (style & DWT.SHEET) !is 0) {
         application.endSheet(panel, 0);
     }
     if (!overwrite) {
-        if (method !is 0) OS.method_setImplementation(method, methodImpl);
-        if (callback !is null) callback.dispose();
+        if (method !is null) OS.method_setImplementation(method, methodImpl);
+        /+if (callback !is null) callback.dispose();+/
     }
     if (response is OS.NSFileHandlingPanelOKButton) {
         NSString filename = panel.filename();
@@ -307,61 +322,61 @@ public String open () {
         filterIndex = -1;
     }
     if (popup !is null) {
-        filterIndex = (int)/*64*/popup.indexOfSelectedItem();
+        filterIndex = cast(int)/*64*/popup.indexOfSelectedItem();
         panel.setAccessoryView(null);
         popup.release();
         popup = null;
     }
-    if (delegate !is null) {
+    if (delegate_ !is null) {
         panel.setDelegate(null);
-        delegate.release();
+        delegate_.release();
     }
-    if (jniRef !is 0) OS.DeleteGlobalRef(jniRef);
+    if (jniRef !is null) OS.DeleteGlobalRef(jniRef);
     panel = null;
     return fullPath;
 }
 
-int /*long*/ _overwriteExistingFileCheck (int /*long*/ id, int /*long*/ sel, int /*long*/ str) {
-    return 1;
+static objc.id _overwriteExistingFileCheck (objc.id id, objc.SEL sel, objc.id str) {
+    return cast(objc.id)1;
 }
 
-int /*long*/ panel_shouldShowFilename (int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1) {
+objc.id panel_shouldShowFilename (objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
     NSString path = new NSString(arg1);
     if (filterExtensions !is null && filterExtensions.length !is 0) {
         NSFileManager manager = NSFileManager.defaultManager();
-        int /*long*/ ptr = OS.malloc(1);
+        auto ptr = cast(bool*)OS.malloc(1);
         bool found = manager.fileExistsAtPath(path, ptr);
         byte[] isDirectory = new byte[1];
-        OS.memmove(isDirectory, ptr, 1);
+        OS.memmove(isDirectory.ptr, ptr, 1);
         OS.free(ptr);
         if (found) {
             if (isDirectory[0] !is 0) {
-                return 1;
+                return cast(objc.id)1;
             } else {
                 NSString ext = path.pathExtension();
                 if (ext !is null) {
-                    int filterIndex = (int)/*64*/popup.indexOfSelectedItem();
+                    int filterIndex = cast(int)/*64*/popup.indexOfSelectedItem();
                     String extension = ext.getString();
                     String extensions = filterExtensions [filterIndex];
-                    int start = 0, length = extensions.length ();
+                    int start = 0, length = extensions.length;
                     while (start < length) {
                         int index = extensions.indexOf (EXTENSION_SEPARATOR, start);
                         if (index is -1) index = length;
                         String filter = extensions.substring (start, index).trim ();
-                        if (filter.equals ("*") || filter.equals ("*.*")) return 1;
+                        if (filter.equals ("*") || filter.equals ("*.*")) return cast(objc.id)1;
                         if (filter.startsWith ("*.")) filter = filter.substring (2);
-                        if (filter.toLowerCase ().equals(extension.toLowerCase ())) return 1;
+                        if (filter.toLowerCase ().equals(extension.toLowerCase ())) return cast(objc.id)1;
                         start = index + 1;
                     }
                 }
-                return 0;
+                return cast(objc.id)0;
             }
         }
     }
-    return 1;
+    return cast(objc.id)1;
 }
 
-void sendSelection (int /*long*/ id, int /*long*/ sel, int /*long*/ arg) {
+void sendSelection (objc.id id, objc.SEL sel, objc.id arg) {
     panel.validateVisibleColumns();
 }
 

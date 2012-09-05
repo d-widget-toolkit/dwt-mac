@@ -21,6 +21,24 @@ import dwt.DWT;
 import dwt.dwthelper.utils;
 import Carbon = dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSBezierPath;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.NSTrackingArea;
+import dwt.internal.cocoa.NSScrollView;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSWindow;
+import dwt.internal.cocoa.NSScreen;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSAffineTransform;
+import dwt.internal.cocoa.SWTWindowDelegate;
+import dwt.internal.cocoa.SWTWindow;
+import dwt.internal.cocoa.OS;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
@@ -34,6 +52,12 @@ import dwt.widgets.Menu;
 import dwt.widgets.Monitor;
 import dwt.widgets.TypedListener;
 import dwt.widgets.Widget;
+import dwt.graphics.GC;
+import dwt.graphics.Cursor;
+import dwt.graphics.Region;
+import dwt.graphics.Rectangle;
+import dwt.graphics.Point;
+import dwt.events.ShellListener;
 
 /**
  * Instances of this class represent the "windows"
@@ -144,8 +168,8 @@ public class Shell : Decorations {
 
     NSWindow window;
     SWTWindowDelegate windowDelegate;
-    int /*long*/ tooltipOwner, tooltipTag, tooltipUserData;
-    bool opened, moved, resized, fullScreen, center;
+    NSToolTipTag tooltipOwner, tooltipTag, tooltipUserData;
+    bool opened, moved, resized, fullScreen, center_;
     Control lastActive;
     Rectangle normalBounds;
     bool keyInputHappened;
@@ -295,7 +319,7 @@ this (Display display, Shell parent, int style, objc.id handle, bool embedded) {
         error (DWT.ERROR_INVALID_ARGUMENT);
     }
     if (!Display.getSheetEnabled ()) {
-        this.center = parent !is null && (style & DWT.SHEET) !is 0;
+        this.center_ = parent !is null && (style & DWT.SHEET) !is 0;
     }
     this.style = checkStyle (parent, style);
     this.parent = parent;
@@ -494,7 +518,7 @@ public void addShellListener(ShellListener listener) {
     addListener(DWT.Deiconify,typedListener);
 }
 
-void becomeKeyWindow (int /*long*/ id, int /*long*/ sel) {
+void becomeKeyWindow (objc.id id, objc.SEL sel) {
     Display display = this.display;
     display.keyWindow = window;
     super.becomeKeyWindow(id, sel);
@@ -576,9 +600,12 @@ public Rectangle computeTrim (int x, int y, int width, int height) {
     rect.height = trim.height;
     if (window !is null) {
         if (!fixResize()) {
+            auto h = rect.height;
             rect = window.frameRectForContentRect(rect);
+            rect.y = rect.y + (h-rect.height);
         }
     }
+    return new Rectangle (cast(int)rect.x, cast(int)rect.y, cast(int)rect.width, cast(int)rect.height);
 }
 
 void createHandle () {
@@ -636,7 +663,7 @@ void createHandle () {
     window.setAcceptsMouseMovedEvents(true);
     windowDelegate = cast(SWTWindowDelegate)(new SWTWindowDelegate()).alloc().init();
     window.setDelegate(windowDelegate);
-    id id = window.fieldEditor (true, null);
+    auto id = window.fieldEditor (true, null);
     if (id !is null) {
         OS.object_setClass (id.id, cast(objc.Class) OS.objc_getClass ("SWTEditorView"));
     }
@@ -666,7 +693,7 @@ void destroyWidget () {
     }
 }
 
-void drawBackground (int /*long*/ id, NSGraphicsContext context, NSRect rect) {
+void drawBackground (objc.id id, NSGraphicsContext context, NSRect rect) {
     if (id !is view.id) return;
     if (regionPath !is null && background is null) {
         context.saveGraphicsState();
@@ -783,7 +810,7 @@ public Rectangle getClientArea () {
         NSSize size = NSSize();
         size.width = width;
         size.height = height;
-        size = NSScrollView.contentSizeForFrameSize(size, (style & DWT.H_SCROLL) !is 0, (style & DWT.V_SCROLL) !is 0, OS.NSNoBorder);
+        size = NSScrollView.contentSizeForFrameSize(size, (style & DWT.H_SCROLL) !is 0, (style & DWT.V_SCROLL) !is 0, cast(NSBorderType)OS.NSNoBorder);
         width = cast(int)size.width;
         height = cast(int)size.height;
     }
@@ -915,7 +942,7 @@ public Point getMinimumSize () {
     checkWidget();
     if (window is null) return new Point(0, 0);
     NSSize size = window.minSize();
-    return new Point((int)size.width, (int)size.height);
+    return new Point(cast(int)size.width, cast(int)size.height);
 }
 
 /**
@@ -1045,35 +1072,20 @@ void makeKeyAndOrderFront() {
     * making the child a key window.
     */
     if (parent !is null) {
-        Shell shell = (Shell) parent;
+        Shell shell = cast(Shell) parent;
         if (shell.window.isMiniaturized()) shell.window.deminiaturize(null);
     }
     window.makeKeyAndOrderFront (null);
-void makeKeyAndOrderFront() {
-    /*
-    * Bug in Cocoa.  If a child window becomes the key window when its
-    * parent window is miniaturized, the parent window appears as if
-    * restored to its full size without actually being restored. In this
-    * case the parent window does become active when its child is closed
-    * and the user is forced to restore the window from the dock.
-    * The fix is to be sure that the parent window is deminiaturized before
-    * making the child a key window.
-    */
-    if (parent !is null) {
-        Shell shell = (Shell) parent;
-        if (shell.window.isMiniaturized()) shell.window.deminiaturize(null);
 }
 
-void noResponderFor(int /*long*/ id, int /*long*/ sel, int /*long*/ selector) {
+void noResponderFor(objc.id id, objc.SEL sel, objc.id selector) {
     /**
      * Feature in Cocoa.  If the selector is keyDown and nothing has handled the event
      * a system beep is generated.  There's no need to beep, as many keystrokes in the DWT
      * are listened for and acted upon but not explicitly handled in a keyDown handler.  Fix is to
      * not call the default implementation when a keyDown: is being handled.
      */
-    if (selector !is OS.sel_keyDown_) super.noResponderFor(id, sel, selector);
-     */
-    if (selector !is OS.sel_keyDown_) super.noResponderFor(id, sel, selector);
+    if (cast(objc.SEL)selector !is OS.sel_keyDown_) super.noResponderFor(id, sel, selector);
 }
 
 /**
@@ -1111,7 +1123,7 @@ public void open () {
     if (!restoreFocus () && !traverseGroup (true)) {
         // if the parent shell is minimized, setting focus will cause it
         // to become unminimized.
-        if (parent is null || !((Shell)parent).window.isMiniaturized()) {
+        if (parent is null || !(cast(Shell)parent).window.isMiniaturized()) {
             setFocus ();
         }
     }
@@ -1191,26 +1203,26 @@ public void removeShellListener(ShellListener listener) {
 
 void sendToolTipEvent (bool enter) {
     if (!isVisible()) return;
-    if (tooltipTag is 0) {
+    if (tooltipTag is null) {
         NSView view = window.contentView();
-        tooltipTag = view.addToolTipRect(new NSRect(), window, 0);
-        if (tooltipTag !is 0) {
+        tooltipTag = view.addToolTipRect(NSRect(), window, null);
+        if (tooltipTag !is null) {
             NSTrackingArea trackingArea = new NSTrackingArea(tooltipTag);
-            id owner = trackingArea.owner();
+            cocoa.id owner = trackingArea.owner();
             if (owner !is null) tooltipOwner = owner.id;
-            id userInfo = trackingArea.userInfo();
+            cocoa.id userInfo = trackingArea.userInfo();
             if (userInfo !is null) {
                 tooltipUserData = userInfo.id;
             } else {
-                int /*long*/ [] value = new int /*long*/ [1];
-                OS.object_getInstanceVariable(tooltipTag, new byte[]{'_','u', 's', 'e', 'r', 'I', 'n', 'f', 'o'}, value);
-                tooltipUserData = value[0];
+                void* value;
+                OS.object_getInstanceVariable(tooltipTag, ['_','u', 's', 'e', 'r', 'I', 'n', 'f', 'o'], value);
+                tooltipUserData = cast(objc.id)value;
             }
         }
     }
-    if (tooltipTag is 0 || tooltipOwner is 0 || tooltipUserData is 0) return;
+    if (tooltipTag is null || tooltipOwner is null || tooltipUserData is null) return;
     NSPoint pt = window.convertScreenToBase(NSEvent.mouseLocation());
-    NSEvent event = NSEvent.enterExitEventWithType(enter ? OS.NSMouseEntered : OS.NSMouseExited, pt, 0, 0, window.windowNumber(), null, 0, tooltipTag, tooltipUserData);
+    NSEvent event = NSEvent.enterExitEventWithType(cast(NSEventType)(enter ? OS.NSMouseEntered : OS.NSMouseExited), pt, 0, 0, window.windowNumber(), null, 0, cast(NSInteger)tooltipTag, tooltipUserData);
     OS.objc_msgSend(tooltipOwner, enter ? OS.sel_mouseEntered_ : OS.sel_mouseExited_, event.id);
 }
 
@@ -1309,6 +1321,7 @@ void setBounds (int x, int y, int width, int height, bool move, bool resize) {
     if (fullScreen) setFullScreen (false);
     bool sheet = window.isSheet();
     if (sheet && move && !resize) return;
+    int screenHeight = cast(int) display.getPrimaryFrame().height;
     NSRect frame = window.frame();
     if (!move) {
         x = cast(int)frame.x;
@@ -1316,17 +1329,17 @@ void setBounds (int x, int y, int width, int height, bool move, bool resize) {
     }
     if (resize) {
         NSSize minSize = window.minSize();
-        width = Math.max(width, (int)minSize.width);
-        height = Math.max(height, (int)minSize.height);
+        width = Math.max(width, cast(int)minSize.width);
+        height = Math.max(height, cast(int)minSize.height);
     } else {
     }
     if (sheet) {
-        y = screenHeight - (int)(frame.y + frame.height);
+        y = screenHeight - cast(int)(frame.y + frame.height);
         NSRect parentRect = parent.getShell().window.frame();
         frame.width = width;
         frame.height = height;
         frame.x = parentRect.x + (parentRect.width - frame.width) / 2;
-        frame.y = screenHeight - (int)(y + frame.height);
+        frame.y = screenHeight - cast(int)(y + frame.height);
         window.setFrame(frame, isVisible(), true);
     } else {
         frame.x = x;
@@ -1396,7 +1409,7 @@ public void setFullScreen (bool fullScreen) {
         if (getMonitor().equals(display.getPrimaryMonitor ())) {
             if (menuBar !is null) {
                 float /*double*/ menuBarHt = currentFrame.height - contentView().frame().height;
-                fullScreenFrame.height -= menuBarHt;
+                fullScreenFrame.height = fullScreenFrame.height - menuBarHt;
                 OS.SetSystemUIMode(OS.kUIModeContentHidden, 0);
             }
             else {
@@ -1480,14 +1493,14 @@ public void setMinimized (bool minimized) {
 public void setMinimumSize (int width, int height) {
     checkWidget();
     if (window is null) return;
-    NSSize size = new NSSize();
+    NSSize size = NSSize();
     size.width = width;
     size.height = height;
     window.setMinSize(size);
     NSRect frame = window.frame();
     if (width > frame.width || height > frame.height) {
-        width = (int)(width > frame.width ? width : frame.width);
-        height = (int)(height > frame.height ? height : frame.height);
+        width = cast(int)(width > frame.width ? width : frame.width);
+        height = cast(int)(height > frame.height ? height : frame.height);
         setBounds(0, 0, width, height, false, true);
     }
 }
@@ -1613,7 +1626,7 @@ void setWindowVisible (bool visible, bool key) {
     if (window !is null && (window.isVisible() is visible)) return;
     if (visible) {
         display.clearPool ();
-        if (center && !moved) {
+        if (center_ && !moved) {
             if (isDisposed ()) return;
             center ();
         }
@@ -1623,14 +1636,14 @@ void setWindowVisible (bool visible, bool key) {
         invalidateVisibleRegion();
         if ((style & (DWT.SHEET)) !is 0) {
             NSApplication application = NSApplication.sharedApplication();
-            application.beginSheet(window, ((Shell)parent).window, null, 0, 0);
+            application.beginSheet(window, (cast(Shell)parent).window, null, null, null);
             if (OS.VERSION <= 0x1060 && window.respondsToSelector(OS.sel__setNeedsToUseHeartBeatWindow_)) {
                 OS.objc_msgSend(window.id, OS.sel__setNeedsToUseHeartBeatWindow_, 0);
             }
         } else {
             // If the parent window is miniaturized, the window will be shown
             // when its parent is shown.
-            bool parentMinimized = parent !is null && ((Shell)parent).window.isMiniaturized();
+            bool parentMinimized = parent !is null && (cast(Shell)parent).window.isMiniaturized();
             if (!parentMinimized) {
                 if (key) {
                     makeKeyAndOrderFront ();
@@ -1691,7 +1704,7 @@ void setZOrder (Control control, bool above) {
         }
     } else {
         NSWindow otherWindow = control.getShell().window;
-        window.orderWindow(above ? OS.NSWindowAbove : OS.NSWindowBelow, otherWindow.windowNumber());
+        window.orderWindow(cast(NSWindowOrderingMode)(above ? OS.NSWindowAbove : OS.NSWindowBelow), otherWindow.windowNumber());
     }
 }
 
@@ -1709,7 +1722,7 @@ void updateModal () {
 void updateParent (bool visible) {
     if (visible) {
         if (parent !is null && parent.getVisible ()) {
-            ((Shell)parent).window.addChildWindow (window, OS.NSWindowAbove);
+            (cast(Shell)parent).window.addChildWindow (window, cast(NSWindowOrderingMode)OS.NSWindowAbove);
         }
     } else {
         NSWindow parentWindow = window.parentWindow ();
@@ -1736,24 +1749,20 @@ void updateSystemUIMode () {
     } else {
         OS.SetSystemUIMode (OS.kUIModeNormal, 0);
     }
-    char[] chars = new char [string.length ()];
-    string.getChars (0, chars.length, chars, 0);
-    int length = fixMnemonic (chars);
-    return NSString.stringWithCharacters (chars, length).id;
 }
 
-int /*long*/ view_stringForToolTip_point_userData (int /*long*/ id, int /*long*/ sel, int /*long*/ view, int /*long*/ tag, int /*long*/ point, int /*long*/ userData) {
-    NSPoint pt = new NSPoint();
-    OS.memmove (pt, point, NSPoint.sizeof);
+objc.id view_stringForToolTip_point_userData (objc.id id, objc.SEL sel, objc.id view, objc.id tag, objc.id point, objc.id userData) {
+    NSPoint pt = NSPoint();
+    OS.memmove (&pt, point, NSPoint.sizeof);
     Control control = display.findControl (false);
-    if (control is null) return 0;
-    Widget target = control.findTooltip (new NSView (view).convertPoint_toView_ (pt, null));
+    if (control is null) return null;
+    Widget target = control.findTooltip ((new NSView (view)).convertPoint_toView_ (pt, null));
     String string = target.tooltipText ();
-    if (string is null) return 0;
-    char[] chars = new char [string.length ()];
+    if (string is null) return null;
+    char[] chars = new char [string.length];
     string.getChars (0, chars.length, chars, 0);
     int length = fixMnemonic (chars);
-    return NSString.stringWithCharacters (chars, length).id;
+    return NSString.stringWith(chars[0 .. length]).id;
 }
 
 void windowDidBecomeKey(objc.id id, objc.SEL sel, objc.id notification) {
@@ -1764,7 +1773,7 @@ void windowDidBecomeKey(objc.id id, objc.SEL sel, objc.id notification) {
     if (isDisposed ()) return;
     Shell parentShell = this;
     while (parentShell.parent !is null) {
-        parentShell = (Shell) parentShell.parent;
+        parentShell = cast(Shell) parentShell.parent;
         if (parentShell.fullScreen) {
             break;
         }
@@ -1803,56 +1812,22 @@ void windowDidResize(objc.id id, objc.SEL sel, objc.id notification) {
 void windowDidResignKey(objc.id id, objc.SEL sel, objc.id notification) {
     super.windowDidResignKey(id, sel, notification);
     sendEvent (DWT.Deactivate);
-                Control trimControl = control;
-                if (trimControl !is null && trimControl.isTrim (hitView[0])) trimControl = null;
-                display.checkEnterExit (trimControl, nsEvent, false);
-                if (trimControl !is null) trimControl.sendMouseEvent (nsEvent, type, false);
-            }
-            Widget target = null;
-            if (control !is null) target = control.findTooltip (nsEvent.locationInWindow());
-            if (display.tooltipControl !is control || display.tooltipTarget !is target) {
-                Control oldControl = display.tooltipControl;
-                Shell oldShell = oldControl !is null && !oldControl.isDisposed() ? oldControl.getShell() : null;
-                Shell shell = control !is null && !control.isDisposed() ? control.getShell() : null;
-                if (oldShell !is null) oldShell.sendToolTipEvent (false);
-                if (shell !is null) shell.sendToolTipEvent (true);
-            }
-            display.tooltipControl = control;
-            display.tooltipTarget = target;
-            break;
-
-        case OS.NSKeyDown:
-            /**
-             * Feature in cocoa.  Control+Tab, Ctrl+Shift+Tab, Ctrl+PageDown and Ctrl+PageUp are
-             * swallowed to handle native traversal. If we find that, force the key event to
-             * the first responder.
-             */
-            if ((nsEvent.modifierFlags() & OS.NSControlKeyMask) !is 0) {
-                NSString chars = nsEvent.characters();
-
-                if (chars !is null && chars.length() is 1) {
-                    int firstChar = (int)/*64*/chars.characterAtIndex(0);
-
-                    // Shift-tab appears as control-Y.
-                    switch (firstChar) {
-                        case '\t':
-                        case 25:
-                        case OS.NSPageDownFunctionKey:
-                        case OS.NSPageUpFunctionKey:
-                            window.firstResponder().keyDown(nsEvent);
-                            return;
-                    }
-                }
-            }
-            break;
-    }
-    super.windowSendEvent (id, sel, event);
+    if (isDisposed ()) return;
+    setActiveControl (null);
+    if (isDisposed ()) return;
+    saveFocus();
 }
 
-void windowSendEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ event) {
+void windowSendEvent (objc.id id, objc.SEL sel, objc.id event) {
     NSEvent nsEvent = new NSEvent (event);
-    int type = (int)/*64*/nsEvent.type ();
-    switch (type) {
+    auto type = nsEvent.type ();
+    switch (cast(int)type) {
+        case OS.NSLeftMouseDown:
+        case OS.NSRightMouseDown:
+        case OS.NSOtherMouseDown:
+            display.clickCount = cast(int)(display.clickCountButton == nsEvent.buttonNumber() ? nsEvent.clickCount() : 1);
+            display.clickCountButton = cast(int)nsEvent.buttonNumber();
+            break;
         case OS.NSLeftMouseUp:
         case OS.NSRightMouseUp:
         case OS.NSOtherMouseUp:
@@ -1889,7 +1864,7 @@ void windowSendEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ event) {
                 NSString chars = nsEvent.characters();
 
                 if (chars !is null && chars.length() is 1) {
-                    int firstChar = (int)/*64*/chars.characterAtIndex(0);
+                    int firstChar = cast(int)/*64*/chars.characterAtIndex(0);
 
                     // Shift-tab appears as control-Y.
                     switch (firstChar) {

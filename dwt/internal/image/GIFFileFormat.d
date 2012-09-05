@@ -17,9 +17,9 @@ import dwt.graphics.PaletteData;
 import dwt.internal.image.LEDataInputStream;
 import dwt.internal.image.LZWCodec;
 import dwt.graphics.RGB;
-import java.io.*;
 import dwt.graphics.ImageLoaderEvent;
 import dwt.graphics.ImageLoader;
+import dwt.graphics.ImageData;
 import tango.core.Exception;
 import dwt.dwthelper.utils;
 

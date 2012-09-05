@@ -16,6 +16,9 @@ import dwt.internal.image.TIFFRandomFileAccess;
 import dwt.internal.image.TIFFModifiedHuffmanCodec;
 import dwt.internal.image.LEDataOutputStream;
 import dwt.graphics.ImageLoader;
+import dwt.graphics.ImageData;
+import dwt.graphics.PaletteData;
+import dwt.graphics.RGB;
 import dwt.DWT;
 import dwt.dwthelper.utils;
 

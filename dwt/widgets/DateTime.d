@@ -22,10 +22,24 @@ import dwt.dwthelper.utils;
 
 import tango.text.convert.Format;
 
+import dwt.DWT;
 import Carbon = dwt.internal.c.Carbon;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSCalendarDate;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSDate;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSControl;
+import dwt.internal.cocoa.NSDatePicker;
+import dwt.internal.cocoa.SWTDatePicker;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import dwt.widgets.Composite;
 import dwt.widgets.TypedListener;
+import dwt.graphics.Point;
+import dwt.events.SelectionListener;
 
 /**
  * Instances of this class are selectable user interface
@@ -152,8 +166,8 @@ public Point computeSize (int wHint, int hHint, bool changed) {
     int width = 0, height = 0;
     NSControl widget = cast(NSControl)view;
     NSSize size = widget.cell ().cellSize ();
-    width = (int)Math.ceil (size.width);
-    height = (int)Math.ceil (size.height);
+    width = cast(int)Math.ceil (size.width);
+    height = cast(int)Math.ceil (size.height);
     if (width is 0) width = DEFAULT_WIDTH;
     if (height is 0) height = DEFAULT_HEIGHT;
     if (wHint !is DWT.DEFAULT) width = wHint;
@@ -166,17 +180,17 @@ public Point computeSize (int wHint, int hHint, bool changed) {
 void createHandle () {
     NSDatePicker widget = cast(NSDatePicker)(new SWTDatePicker()).alloc();
     widget.init();
-    NSDatePickerStyle pickerStyle = OS.NSTextFieldAndStepperDatePickerStyle;
+    NSDatePickerStyle pickerStyle = cast(NSDatePickerStyle)OS.NSTextFieldAndStepperDatePickerStyle;
     NSDatePickerElementFlags elementFlags;
     if ((style & DWT.CALENDAR) !is 0) {
-        pickerStyle = OS.NSClockAndCalendarDatePickerStyle;
-        elementFlags = OS.NSYearMonthDayDatePickerElementFlag;
+        pickerStyle = cast(NSDatePickerStyle)OS.NSClockAndCalendarDatePickerStyle;
+        elementFlags = cast(NSDatePickerElementFlags)OS.NSYearMonthDayDatePickerElementFlag;
     } else {
         if ((style & DWT.TIME) !is 0) {
-            elementFlags = (style & DWT.SHORT) !is 0 ? OS.NSHourMinuteDatePickerElementFlag : OS.NSHourMinuteSecondDatePickerElementFlag;
+            elementFlags = cast(NSDatePickerElementFlags)((style & DWT.SHORT) !is 0 ? OS.NSHourMinuteDatePickerElementFlag : OS.NSHourMinuteSecondDatePickerElementFlag);
         }
         if ((style & DWT.DATE) !is 0) {
-            elementFlags = (style & DWT.SHORT) !is 0 ? OS.NSYearMonthDatePickerElementFlag : OS.NSYearMonthDayDatePickerElementFlag;
+            elementFlags = cast(NSDatePickerElementFlags)((style & DWT.SHORT) !is 0 ? OS.NSYearMonthDatePickerElementFlag : OS.NSYearMonthDayDatePickerElementFlag);
         }
     }
     widget.setDrawsBackground(true);
@@ -315,16 +329,16 @@ bool isEventView (int /*long*/ id) {
     return true;
 }
 
-bool isFlipped (int /*long*/ id, int /*long*/ sel) {
+bool isFlipped (objc.id id, objc.SEL sel) {
     if ((style & DWT.CALENDAR) !is 0) return super.isFlipped (id, sel);
     return true;
 }
 
-bool isEventView (int /*long*/ id) {
+bool isEventView (objc.id id) {
     return true;
 }
 
-bool isFlipped (int /*long*/ id, int /*long*/ sel) {
+bool isFlipped (objc.id id, objc.SEL sel) {
     if ((style & DWT.CALENDAR) !is 0) return super.isFlipped (id, sel);
     return true;
 }
@@ -395,9 +409,11 @@ void updateBackground () {
             nsColor = NSColor.textBackgroundColor ();
         }
 
-        }
-
     }
+
+}
+
+void setBackgroundColor(NSColor nsColor) {
     (cast(NSDatePicker)view).setBackgroundColor(nsColor);
 }
 

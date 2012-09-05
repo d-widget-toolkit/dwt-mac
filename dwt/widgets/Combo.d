@@ -21,11 +21,43 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSRange;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSPopUpButton;
+import dwt.internal.cocoa.SWTPopUpButton;
+import dwt.internal.cocoa.NSMenu;
+import dwt.internal.cocoa.NSComboBox;
+import dwt.internal.cocoa.SWTComboBox;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSComboBoxCell;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSControl;
+import dwt.internal.cocoa.NSCell;
+import dwt.internal.cocoa.NSMenuItem;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSText;
+import dwt.internal.cocoa.NSTextView;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSTextFieldCell;
+import dwt.internal.cocoa.NSTextField;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSNotification;
+import dwt.internal.cocoa.OS;
+import dwt.internal.objc.cocoa.Cocoa;
 import Carbon = dwt.internal.c.Carbon;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Composite;
 import dwt.widgets.Event;
 import dwt.widgets.TypedListener;
+import dwt.events.ModifyListener;
+import dwt.events.SelectionListener;
+import dwt.events.VerifyListener;
+import dwt.graphics.Point;
+import dwt.graphics.Color;
 
 /**
  * Instances of this class are controls that allow the user
@@ -71,6 +103,7 @@ public class Combo : Composite {
     bool receivingFocus;
     bool ignoreVerify, ignoreSelection;
     NSRange selectionRangeStruct;
+    NSRange* selectionRange = null;
 
     /**
      * the operating system limit for the number of characters
@@ -143,9 +176,12 @@ public void add (String string) {
     if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     NSString str = NSString.stringWith(string);
     if ((style & DWT.READ_ONLY) !is 0) {
-        NSPopUpButton widget = (NSPopUpButton)view;
+        NSPopUpButton widget = cast(NSPopUpButton)view;
         int /*long*/ selection = widget.indexOfSelectedItem();
         NSMenu nsMenu = widget.menu();
+        NSMenuItem nsItem = cast(NSMenuItem)(new NSMenuItem()).alloc();
+        NSString empty = NSString.stringWith("");
+        nsItem.initWithTitle(NSString.stringWith(string), null, empty);
         nsMenu.addItem(nsItem);
         nsItem.release();
         if (selection is -1) widget.selectItemAtIndex(-1);
@@ -184,9 +220,12 @@ public void add (String string, int index) {
     if (0 > index || index > count) error (DWT.ERROR_INVALID_RANGE);
     NSString str = NSString.stringWith(string);
     if ((style & DWT.READ_ONLY) !is 0) {
-        NSPopUpButton widget = (NSPopUpButton)view;
+        NSPopUpButton widget = cast(NSPopUpButton)view;
         int /*long*/ selection = widget.indexOfSelectedItem();
         NSMenu nsMenu = widget.menu();
+        NSMenuItem nsItem = cast(NSMenuItem)(new NSMenuItem()).alloc();
+        NSString empty = NSString.stringWith("");
+        nsItem.initWithTitle(NSString.stringWith(string), null, empty);
         nsMenu.insertItem(nsItem, index);
         nsItem.release();
         if (selection is -1) widget.selectItemAtIndex(-1);
@@ -359,14 +398,14 @@ public Point computeSize (int wHint, int hHint, bool changed) {
         ignoreVerify = true;
         NSComboBoxCell cell = new NSComboBoxCell (viewCell.id);
         NSArray array = cell.objectValues ();
-        int length = (int)/*64*/array.count ();
+        int length = cast(int)/*64*/array.count ();
         if (length > 0) {
             cell = new NSComboBoxCell (cell.copy ());
             for (int i = 0; i < length; i++) {
-                id object = array.objectAtIndex (i);
+                cocoa.id object = array.objectAtIndex (i);
                 cell.setTitle (new NSString (object));
                 size = cell.cellSize ();
-                width = Math.max (width, (int)Math.ceil (size.width));
+                width = Math.max (width, cast(int)Math.ceil (size.width));
             }
             cell.release ();
         }
@@ -448,18 +487,18 @@ public void cut () {
     int start = selection.x, end = selection.y;
     String text = getText ();
     String leftText = text.substring (0, start);
-    String rightText = text.substring (end, text.length ());
+    String rightText = text.substring (end, text.length);
     String oldText = text.substring (start, end);
     String newText = "";
     if (hooks (DWT.Verify) || filters (DWT.Verify)) {
         newText = verifyText (newText, start, end, null);
         if (newText is null) return;
     }
-    char [] buffer = new char [oldText.length ()];
+    char [] buffer = new char [oldText.length];
     oldText.getChars (0, buffer.length, buffer, 0);
     copyToClipboard (buffer);
     setText (leftText ~ newText ~ rightText, false);
-    start += newText.length ();
+    start += newText.length;
     setSelection (new Point (start, start));
     sendEvent (DWT.Modify);
 }
@@ -527,7 +566,7 @@ public void deselectAll () {
         (cast(NSPopUpButton)view).selectItem(null);
         sendEvent (DWT.Modify);
     } else {
-        NSComboBox widget = (NSComboBox)view;
+        NSComboBox widget = cast(NSComboBox)view;
         int /*long*/ index = widget.indexOfSelectedItem();
         if (index !is -1) widget.deselectItemAtIndex(index);
     }
@@ -535,7 +574,7 @@ public void deselectAll () {
 
 bool dragDetect(int x, int y, bool filter, bool[] consume) {
     if ((style & DWT.READ_ONLY) is 0) {
-        NSText fieldEditor = ((NSControl)view).currentEditor();
+        NSText fieldEditor = (cast(NSControl)view).currentEditor();
         if (fieldEditor !is null) {
             NSRange selectedRange = fieldEditor.selectedRange();
             if (selectedRange.length > 0) {
@@ -558,7 +597,7 @@ bool dragDetect(int x, int y, bool filter, bool[] consume) {
 
 bool dragDetect(int x, int y, bool filter, bool[] consume) {
     if ((style & DWT.READ_ONLY) is 0) {
-        NSText fieldEditor = ((NSControl)view).currentEditor();
+        NSText fieldEditor = (cast(NSControl)view).currentEditor();
         if (fieldEditor !is null) {
             NSRange selectedRange = fieldEditor.selectedRange();
             if (selectedRange.length > 0) {
@@ -773,7 +812,7 @@ public int getSelectionIndex () {
     if ((style & DWT.READ_ONLY) !is 0) {
         return cast(int)/*64*/(cast(NSPopUpButton)view).indexOfSelectedItem();
     } else {
-        return (int)/*64*/((NSComboBox)view).indexOfSelectedItem();
+        return cast(int)/*64*/(cast(NSComboBox)view).indexOfSelectedItem();
     }
 }
 
@@ -829,11 +868,11 @@ public int getTextHeight () {
     checkWidget();
     NSCell cell;
     if ((style & DWT.READ_ONLY) !is 0) {
-        cell = ((NSPopUpButton)view).cell();
+        cell = (cast(NSPopUpButton)view).cell();
     } else {
-        cell = ((NSComboBox)view).cell();
+        cell = (cast(NSComboBox)view).cell();
     }
-    return (int)cell.cellSize().height;
+    return cast(int)cell.cellSize().height;
 }
 
 /**
@@ -928,7 +967,7 @@ public int indexOf (String string, int start) {
     int count = getItemCount ();
     if (!(0 <= start && start < count)) return -1;
     for (int i=start; i<count; i++) {
-        if (string.equals (getItem (i))) {
+        if (string == getItem (i)) {
             return i;
         }
     }
@@ -937,7 +976,7 @@ public int indexOf (String string, int start) {
 
 void insertEditText (String string) {
     ignoreVerify = true;
-    NSUInteger length_ = string.length ();
+    NSUInteger length_ = string.length;
     Point selection = getSelection ();
     if (hasFocus ()) {
         if (textLimit !is LIMIT) {
@@ -949,13 +988,13 @@ void insertEditText (String string) {
         char [] buffer = new char [length_];
         string.getChars (0, buffer.length, buffer, 0);
         NSString nsstring = NSString.stringWithCharacters (buffer.toString16().ptr, buffer.length);
-        NSText fieldEditor = ((NSTextField) view).currentEditor ();
+        NSText fieldEditor = (cast(NSTextField) view).currentEditor ();
         fieldEditor.replaceCharactersInRange (fieldEditor.selectedRange (), nsstring);
         selectionRange = null;
     } else {
         String oldText = getText ();
         if (textLimit !is LIMIT) {
-            int charCount = oldText.length ();
+            int charCount = oldText.length;
             if (charCount - (selection.y - selection.x) + length_ > textLimit) {
                 string = string.substring(0, textLimit - charCount + (selection.y - selection.x));
             }
@@ -964,7 +1003,7 @@ void insertEditText (String string) {
         NSString nsstring = NSString.stringWith(newText);
         (new NSCell ((cast(NSTextField) view).cell ())).setTitle (nsstring);
         selectionRange = null;
-        setSelection (new Point(selection.x + string.length (), 0));
+        setSelection (new Point(selection.x + string.length, 0));
     }
     ignoreVerify = false;
 }
@@ -973,7 +1012,7 @@ bool isEventView (int /*long*/ id) {
     return true;
 }
 
-void mouseDown(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void mouseDown(objc.id id, objc.SEL sel, objc.id theEvent) {
     // If this is a combo box with an editor field and the control is disposed
     // while the view's cell editor is open we crash while tearing down the
     // popup window. Fix is to retain the view before letting Cocoa track
@@ -1007,7 +1046,7 @@ public void paste () {
     int start = selection.x, end = selection.y;
     String text = getText ();
     String leftText = text.substring (0, start);
-    String rightText = text.substring (end, text.length ());
+    String rightText = text.substring (end, text.length);
     String newText = getClipboardText ();
     if (newText is null) return;
     if (hooks (DWT.Verify) || filters (DWT.Verify)) {
@@ -1015,13 +1054,13 @@ public void paste () {
         if (newText is null) return;
     }
     if (textLimit !is LIMIT) {
-        int charCount = text.length ();
-        if (charCount - (end - start) + newText.length() > textLimit) {
+        int charCount = text.length;
+        if (charCount - (end - start) + newText.length > textLimit) {
             newText = newText.substring(0, textLimit - charCount + (end - start));
         }
     }
     setText (leftText ~ newText ~ rightText, false);
-    start += newText.length ();
+    start += newText.length;
     setSelection (new Point (start, start));
     sendEvent (DWT.Modify);
 }
@@ -1034,7 +1073,7 @@ void register() {
 void releaseWidget () {
     super.releaseWidget ();
     if ((style & DWT.READ_ONLY) is 0) {
-        ((NSControl)view).abortEditing();
+        (cast(NSControl)view).abortEditing();
     }
     selectionRange = null;
 }
@@ -1268,7 +1307,7 @@ bool sendKeyEvent (NSEvent nsEvent, int type) {
                 return false;
             case 0: /* A */
                 if ((style & DWT.READ_ONLY) is 0) {
-                    ((NSComboBox)view).selectText(null);
+                    (cast(NSComboBox)view).selectText(null);
                     return false;
                 }
             default:
@@ -1278,7 +1317,8 @@ bool sendKeyEvent (NSEvent nsEvent, int type) {
     case 76: /* KP Enter */
     case 36: /* Return */
         postEvent (DWT.DefaultSelection);
-            default:
+    default:
+    }
     return result;
 }
 
@@ -1392,7 +1432,7 @@ public void setItems (String [] items) {
             nsMenu.addItem(nsItem);
             nsItem.release();
             //clear the selection
-            ((NSPopUpButton)view).selectItemAtIndex(-1);
+            (cast(NSPopUpButton)view).selectItemAtIndex(-1);
         } else {
             (cast(NSComboBox)view).addItemWithObjectValue(str);
         }
@@ -1463,7 +1503,7 @@ public void setSelection (Point selection) {
     checkWidget ();
     if (selection is null) error (DWT.ERROR_NULL_ARGUMENT);
     if ((style & DWT.READ_ONLY) is 0) {
-        NSComboBox widget = (NSComboBox)view;
+        NSComboBox widget = cast(NSComboBox)view;
         NSString str = (new NSCell((cast(NSComboBox)view).cell())).title();
         NSUInteger length = str.length();
         NSUInteger start = Math.min (Math.max (Math.min (selection.x, selection.y), 0), length);
@@ -1523,10 +1563,10 @@ void setText (String string, bool notify) {
             if (notify) sendEvent (DWT.Modify);
         }
     } else {
-        char[] buffer = new char [Math.min(string.length (), textLimit)];
+        char[] buffer = new char [Math.min(string.length, textLimit)];
         string.getChars (0, buffer.length, buffer, 0);
-        NSString nsstring = NSString.stringWithCharacters (buffer, buffer.length);
-        new NSCell(((NSComboBox)view).cell()).setTitle(nsstring);
+        NSString nsstring = NSString.stringWithUTF8String (buffer.ptr);
+        (new NSCell((cast(NSComboBox)view).cell())).setTitle(nsstring);
         if (notify) sendEvent (DWT.Modify);
     }
     selectionRange = null;
@@ -1586,16 +1626,16 @@ public void setVisibleItemCount (int count) {
     }
 }
 
-bool shouldChangeTextInRange_replacementString(int /*long*/ id, int /*long*/ sel, int /*long*/ affectedCharRange, int /*long*/ replacementString) {
-    NSRange range = new NSRange();
-    OS.memmove(range, affectedCharRange, NSRange.sizeof);
+bool shouldChangeTextInRange_replacementString(objc.id id, objc.SEL sel, NSRangePointer affectedCharRange, objc.id replacementString) {
+    NSRange range = NSRange();
+    OS.memmove(&range, affectedCharRange, NSRange.sizeof);
     bool result = callSuperBoolean(id, sel, range, replacementString);
     if (hooks (DWT.Verify)) {
-        String text = new NSString(replacementString).getString();
+        String text = (new NSString(replacementString)).getString();
         NSEvent currentEvent = display.application.currentEvent();
         int /*long*/ type = currentEvent.type();
         if (type !is OS.NSKeyDown && type !is OS.NSKeyUp) currentEvent = null;
-        String newText = verifyText(text, (int)/*64*/range.location, (int)/*64*/(range.location+range.length), currentEvent);
+        String newText = verifyText(text, cast(int)/*64*/range.location, cast(int)/*64*/(range.location+range.length), currentEvent);
         if (newText is null) return false;
         if (text !is newText) {
             insertEditText(newText);
@@ -1606,6 +1646,7 @@ bool shouldChangeTextInRange_replacementString(int /*long*/ id, int /*long*/ sel
     return result;
 }
 
+void textViewDidChangeSelection(objc.id id, objc.SEL sel, objc.id aNotification) {
     NSNotification notification = new NSNotification(aNotification);
     NSText editor = new NSText(notification.object().id);
     selectionRangeStruct = editor.selectedRange();

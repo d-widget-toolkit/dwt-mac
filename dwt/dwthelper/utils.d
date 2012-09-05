@@ -10,7 +10,7 @@ import Math = tango.math.Math;
 import tango.core.Exception : IllegalArgumentException, IOException, PlatformException;
 
 import tango.io.Stdout;
-import tango.io.stream.FormatStream;
+import tango.io.stream.Format;
 
 import tango.text.convert.Format;
 
@@ -593,7 +593,7 @@ public int indexOf(String str, String ch, int start){
     return res;
 }
 
-int indexOf (T) (T[] arr, T element)
+int countUntil (T) (T[] arr, T element)
 {
     foreach (i, e ; arr)
         if (e == element)
@@ -1075,7 +1075,7 @@ template getImportData(String name ){
     const ImportData getImportData = ImportData( import(name), name );
 }
 
-Class Class_forName (string name)
+Class Class_forName (String name)
 {
    if (auto cls = Class.find(name))
        return cls;

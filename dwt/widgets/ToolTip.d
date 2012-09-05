@@ -18,7 +18,9 @@ module dwt.widgets.ToolTip;
 
 
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.Runnable;
 import dwt.graphics.Device;
 import dwt.widgets.Display;
 import dwt.widgets.Event;
@@ -27,6 +29,18 @@ import dwt.widgets.Shell;
 import dwt.widgets.TrayItem;
 import dwt.widgets.TypedListener;
 import dwt.widgets.Widget;
+import dwt.widgets.Control;
+import dwt.graphics.Image;
+import dwt.graphics.TextLayout;
+import dwt.graphics.TextStyle;
+import dwt.graphics.Region;
+import dwt.graphics.Font;
+import dwt.graphics.Point;
+import dwt.graphics.Color;
+import dwt.graphics.Rectangle;
+import dwt.graphics.GC;
+import dwt.graphics.FontData;
+import dwt.events.SelectionListener;
 
 /**
  * Instances of this class represent popup windows that are used
@@ -125,7 +139,7 @@ public this (Shell parent, int style) {
     addListener (DWT.Dispose, listener);
     tip.addListener (DWT.Paint, listener);
     tip.addListener (DWT.MouseDown, listener);
-    parentListener = new Listener () {
+    parentListener = new class Listener {
         public void handleEvent (Event event) {
             dispose ();
         }
@@ -581,7 +595,7 @@ public void setMessage (String string) {
     if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (layoutMessage !is null) layoutMessage.dispose();
     layoutMessage = null;
-    if (string.length () !is 0) {
+    if (string.length !is 0) {
         Display display = getDisplay ();
         layoutMessage = new TextLayout (display);
         layoutMessage.setText (string);
@@ -609,7 +623,7 @@ public void setText (String string) {
     layoutText = null;
     if (boldFont !is null) boldFont.dispose ();
     boldFont = null;
-    if (string.length () !is 0) {
+    if (string.length !is 0) {
         Display display = getDisplay ();
         layoutText = new TextLayout (display);
         layoutText.setText (string);
@@ -617,7 +631,7 @@ public void setText (String string) {
         FontData data = font.getFontData () [0];
         boldFont = new Font (cast(Device) display, data.getName (), data.getHeight (), DWT.BOLD);
         TextStyle style = new TextStyle (boldFont, null, null);
-        layoutText.setStyle (style, 0, string.length ());
+        layoutText.setStyle (style, 0, string.length);
     }
     if (tip.getVisible ()) configure ();
 }

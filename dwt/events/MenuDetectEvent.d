@@ -73,7 +73,7 @@ public this(Event e) {
  */
 public override String toString() {
     String string = super.toString ();
-    return Format("{}{}{}{}{}{}{}{}", string[0 .. string.length() - 1) // remove trailing '}'
+    return Format("{}{}{}{}{}{}{}{}", string[0 .. string.length() - 1] // remove trailing '}'
     	, " x=" , x
     	, " y=" , y
     	, " doit=" , doit

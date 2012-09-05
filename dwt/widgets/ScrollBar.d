@@ -20,13 +20,20 @@ module dwt.widgets.ScrollBar;
 
 
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSScroller;
+import dwt.internal.cocoa.OS;
+import dwt.internal.objc.cocoa.Cocoa;
 import Carbon = dwt.internal.c.Carbon;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Event;
 import dwt.widgets.Scrollable;
 import dwt.widgets.TypedListener;
 import dwt.widgets.Widget;
+import dwt.events.SelectionListener;
+import dwt.graphics.Point;
 
 /**
  * Instances of this class are selectable user interface
@@ -100,7 +107,7 @@ public class ScrollBar : Widget {
     int minimum, maximum = 100, thumb = 10;
     int increment = 1;
     int pageIncrement = 10;
-    id target;
+    objc.id target;
     objc.SEL actionSelector;
 
 this () {
@@ -273,7 +280,7 @@ public int getSelection () {
     checkWidget();
     NSScroller widget = cast(NSScroller)view;
     double value = widget.doubleValue();
-    return (int)(0.5f + ((maximum - thumb - minimum) * value + minimum));
+    return cast(int)(0.5f + ((maximum - thumb - minimum) * value + minimum));
 }
 
 /**
@@ -428,13 +435,13 @@ void releaseWidget () {
 void sendSelection () {
     int value = 0;
     if (target !is null) {
-        view.sendAction(actionSelector, target);
+        view.sendAction(actionSelector, cast(cocoa.id)target);
     } else {
         value = getSelection ();
     }
     Event event = new Event();
     NSScrollerPart hitPart = (cast(NSScroller)view).hitPart();
-    switch (hitPart) {
+    switch (cast(int)hitPart) {
         case OS.NSScrollerDecrementLine:
             value -= increment;
             event.detail = DWT.ARROW_UP;

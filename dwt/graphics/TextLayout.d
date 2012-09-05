@@ -15,8 +15,8 @@ module dwt.graphics.TextLayout;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.graphics.Color;
 import dwt.graphics.Device;
 import dwt.graphics.Font;
@@ -53,6 +53,7 @@ import dwt.internal.cocoa.NSTextTab;
 import dwt.internal.cocoa.NSThread;
 import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
+import dwt.graphics.RGB;
 
 import tango.text.convert.Format;
 
@@ -99,7 +100,7 @@ public final class TextLayout : Resource {
     static const int UNDERLINE_THICK = 1 << 16;
     static final RGB LINK_FOREGROUND = new RGB (0, 51, 153);
     int[] invalidOffsets;
-    static final char LTR_MARK = '\u200E', RTL_MARK = '\u200F', ZWS = '\u200B';
+    static const wchar LTR_MARK = '\u200E', RTL_MARK = '\u200F', ZWS = '\u200B';
 
     static class StyleItem {
         TextStyle style;
@@ -168,10 +169,10 @@ void computeRuns() {
     if (textStorage !is null) return;
     String segmentsText = getSegmentsText();
     NSString str = NSString.stringWith(segmentsText);
-    textStorage = (NSTextStorage)new NSTextStorage().alloc().init();
+    textStorage = cast(NSTextStorage)(new NSTextStorage()).alloc().init();
     layoutManager = cast(NSLayoutManager)(new NSLayoutManager()).alloc().init();
     layoutManager.setBackgroundLayoutEnabled(NSThread.isMainThread());
-    textContainer = (NSTextContainer)new NSTextContainer().alloc();
+    textContainer = cast(NSTextContainer)(new NSTextContainer()).alloc();
     NSSize size = NSSize();
     size.width = wrapWidth !is -1 ? wrapWidth : Float.MAX_VALUE;
     size.height = Float.MAX_VALUE;
@@ -185,7 +186,7 @@ void computeRuns() {
     * on a thread other than the main thread. The fix is to add attributes to
     * a separate NSMutableAttributedString and add it to text storage when done.
     */
-    NSMutableAttributedString attrStr = (NSMutableAttributedString)new NSMutableAttributedString().alloc();
+    NSMutableAttributedString attrStr = cast(NSMutableAttributedString)(new NSMutableAttributedString()).alloc();
     attrStr.id = attrStr.initWithString(str).id;
     attrStr.beginEditing();
     Font defaultFont = font !is null ? font : device.systemFont;
@@ -511,7 +512,7 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                             range.location = Math.max(lineStart, start);
                             range.length = Math.min(lineEnd, end) + 1 - range.location;
                             if (range.length > 0) {
-                                NSUInteger pRectCount; = OS.malloc(C.PTR_SIZEOF);
+                                NSUInteger pRectCount = OS.malloc(C.PTR_SIZEOF);
                                 NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, pRectCount);
                                 NSUInteger rectCount = pRectCount;
                                 NSRect rect = NSRect();
@@ -722,7 +723,7 @@ public Rectangle getBounds() {
             rect.height = layoutManager.defaultLineHeightForFont(nsFont);
         }
         rect.height = Math.max(rect.height, ascent + descent) + spacing;
-        return new Rectangle(0, 0, (int)Math.ceil(rect.width), (int)Math.ceil(rect.height));
+        return new Rectangle(0, 0, cast(int)Math.ceil(rect.width), cast(int)Math.ceil(rect.height));
     } finally {
         if (pool !is null) pool.release();
     }
@@ -767,10 +768,10 @@ public Rectangle getBounds(int start, int end) {
         for (NSUInteger i = 0; i < rectCount; i++, pArray += NSRect.sizeof) {
             OS.memmove(rect, pArray, NSRect.sizeof);
             fixRect(rect);
-            left = Math.min(left, (int)rect.x);
-            right = Math.max(right, (int)Math.ceil(rect.x + rect.width));
-            top = Math.min(top, (int)rect.y);
-            bottom = Math.max(bottom, (int)Math.ceil(rect.y + rect.height));
+            left = Math.min(left, cast(int)rect.x);
+            right = Math.max(right, cast(int)Math.ceil(rect.x + rect.width));
+            top = Math.min(top, cast(int)rect.y);
+            bottom = Math.max(bottom, cast(int)Math.ceil(rect.y + rect.height));
         }
         return new Rectangle(left, top, right - left, bottom - top);
     } finally {
@@ -961,8 +962,8 @@ public Rectangle getLineBounds(int lineIndex) {
         computeRuns();
         if (!(0 <= lineIndex && lineIndex < lineBounds.length)) DWT.error(DWT.ERROR_INVALID_RANGE);
         NSRect rect = lineBounds[lineIndex];
-        int height =  Math.max((int)Math.ceil(rect.height), ascent + descent);
-        return new Rectangle((int)rect.x, (int)rect.y, (int)Math.ceil(rect.width), height);
+        int height =  Math.max(cast(int)Math.ceil(rect.height), ascent + descent);
+        return new Rectangle(cast(int)rect.x, cast(int)rect.y, cast(int)Math.ceil(rect.width), height);
     } finally {
         if (pool !is null) pool.release();
     }

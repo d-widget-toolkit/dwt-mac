@@ -15,9 +15,9 @@ module dwt.graphics.GC;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.graphics.Color;
 import dwt.graphics.Device;
 import dwt.graphics.Drawable;
@@ -217,7 +217,7 @@ public this(Drawable drawable) {
 public this(Drawable drawable, int style) {
     if (drawable is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     NSAutoreleasePool pool = null;
-    if (!NSThread.isMainThread()) pool = (NSAutoreleasePool) new NSAutoreleasePool().alloc().init();
+    if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         GCData data = new GCData();
         data.style = checkStyle(style);
@@ -274,7 +274,7 @@ objc.id applierFunc(objc.id info, objc.id elementPtr) {
         case OS.kCGPathElementCloseSubpath: type = DWT.PATH_CLOSE; length = 0; break;
     }
     if (types !is null) {
-        types[typeCount] = (byte)type;
+        types[typeCount] = cast(byte)type;
         if (length > 0) {
             OS.memmove(point, element.points, length * CGPoint.sizeof);
             System.arraycopy(point, 0, points, count, length * 2);
@@ -475,8 +475,8 @@ public void copyArea(Image image, int x, int y) {
         if (data.image !is null) {
             int srcX = x, srcY = y, destX = 0, destY = 0;
             NSSize srcSize = data.image.handle.size();
-            int imgHeight = (int)srcSize.height;
-            int destWidth = (int)srcSize.width - x, destHeight = (int)srcSize.height - y;
+            int imgHeight = cast(int)srcSize.height;
+            int destWidth = cast(int)srcSize.width - x, destHeight = cast(int)srcSize.height - y;
             int srcWidth = destWidth, srcHeight = destHeight;
             NSGraphicsContext context = NSGraphicsContext.graphicsContextWithBitmapImageRep(image.getRepresentation());
             NSGraphicsContext.static_saveGraphicsState();
@@ -549,7 +549,7 @@ public void copyArea(Image image, int x, int y) {
                     size_t bpp = OS.CGDisplayBitsPerPixel(display[0]);
                     size_t bps = OS.CGDisplayBitsPerSample(display[0]);
                     int bitmapInfo = OS.kCGImageAlphaNoneSkipFirst;
-                    switch ((int)/*63*/bpp) {
+                    switch (cast(int)/*63*/bpp) {
                         case 16: bitmapInfo |= OS.kCGBitmapByteOrder16Host; break;
                         case 32: bitmapInfo |= OS.kCGBitmapByteOrder32Host; break;
                     }
@@ -567,7 +567,7 @@ public void copyArea(Image image, int x, int y) {
                         OS.CGColorSpaceRelease(colorspace);
                         OS.CGDataProviderRelease(provider);
                     }
-                    copyArea(image, x - (int)rect.origin.x, y - (int)rect.origin.y, srcImage);
+                    copyArea(image, x - cast(int)rect.origin.x, y - cast(int)rect.origin.y, srcImage);
                     if (srcImage !is 0) OS.CGImageRelease(srcImage);
                 }
             }
@@ -649,7 +649,7 @@ public void copyArea(int srcX, int srcY, int width, int height, int destX, int d
         if (image !is null) {
             NSImage imageHandle = image.handle;
             NSSize size = imageHandle.size();
-            int imgHeight = (int)size.height;
+            int imgHeight = cast(int)size.height;
             handle.saveGraphicsState();
             NSAffineTransform transform = NSAffineTransform.transform();
             transform.scaleXBy(1, -1);
@@ -761,7 +761,7 @@ static CGMutablePathRef createCGPathRef(NSBezierPath nsPath) {
         if (cgPath is 0) DWT.error(DWT.ERROR_NO_HANDLES);
         auto points = OS.malloc(NSPoint.sizeof * 3);
         if (points is 0) DWT.error(DWT.ERROR_NO_HANDLES);
-        auto [] pt = new Carbon.CGFloat[6];
+        auto pt = new Carbon.CGFloat[6];
         for (int i = 0; i < count; i++) {
             auto element = nsPath.elementAtIndex(i, points);
             switch (element) {
@@ -860,7 +860,7 @@ NSBezierPath createNSBezierPath (CGMutablePathRef  cgPath) {
 }
 
 NSAttributedString createString(String string, int flags, bool draw) {
-    NSMutableDictionary dict = ((NSMutableDictionary)new NSMutableDictionary().alloc()).initWithCapacity(5);
+    NSMutableDictionary dict = (cast(NSMutableDictionary)(new NSMutableDictionary()).alloc()).initWithCapacity(5);
     Font font = data.font;
     dict.setObject(font.handle, OS.NSFontAttributeName);
     font.addTraits(dict);
@@ -882,7 +882,7 @@ NSAttributedString createString(String string, int flags, bool draw) {
         dict.setObject(device.paragraphStyle, OS.NSParagraphStyleAttributeName);
     }
     size_t length = string.length();
-    wchar[] chars = new wchar[length]
+    wchar[] chars = new wchar[length];
     string.getChars(0, length, chars, 0);
     int breakCount = 0;
     int[] breaks = null;
@@ -920,8 +920,8 @@ NSAttributedString createString(String string, int flags, bool draw) {
         }
         length = j;
     }
-    NSString str = (cast(NSString)new NSString().alloc()).initWithCharacters(chars, length);
-    NSAttributedString attribStr = (cast(NSAttributedString)new NSAttributedString().alloc()).initWithString(str, dict);
+    NSString str = (cast(NSString)(new NSString()).alloc()).initWithCharacters(chars, length);
+    NSAttributedString attribStr = (cast(NSAttributedString)(new NSAttributedString()).alloc()).initWithString(str, dict);
     dict.release();
     str.release();
     return attribStr;
@@ -2389,7 +2389,7 @@ public int getCharWidth(char ch) {
 public Rectangle getClipping() {
     if (handle is null) DWT.error(DWT.ERROR_GRAPHIC_DISPOSED);
     NSAutoreleasePool pool = null;
-    if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool().alloc()).init();
+    if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) ((new NSAutoreleasePool()).alloc()).init();
     try {
         NSRect rect = void;
         if (data.view !is null) {
@@ -2453,7 +2453,7 @@ public void getClipping(Region region) {
     if (region is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     if (region.isDisposed()) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     NSAutoreleasePool pool = null;
-    if (!NSThread.isMainThread()) pool = (NSAutoreleasePool) new NSAutoreleasePool().alloc().init();
+    if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         region.subtract(region);
         NSRect rect = void;
@@ -3204,7 +3204,7 @@ public void setBackgroundPattern(Pattern pattern) {
 public void setClipping(int x, int y, int width, int height) {
     if (handle is null) DWT.error(DWT.ERROR_GRAPHIC_DISPOSED);
     NSAutoreleasePool pool = null;
-    if (!NSThread.isMainThread()) pool = (NSAutoreleasePool) new NSAutoreleasePool().alloc().init();
+    if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         if (width < 0) {
             x = x + width;
@@ -3257,7 +3257,7 @@ public void setClipping(Path path) {
     if (handle is null) DWT.error(DWT.ERROR_GRAPHIC_DISPOSED);
     if (path !is null && path.isDisposed()) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     NSAutoreleasePool pool = null;
-    if (!NSThread.isMainThread()) pool = (NSAutoreleasePool) new NSAutoreleasePool().alloc().init();
+    if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         setClipping(new NSBezierPath(path.handle.copy().id));
     } finally {
@@ -3307,7 +3307,7 @@ public void setClipping(Region region) {
     if (handle is null) DWT.error(DWT.ERROR_GRAPHIC_DISPOSED);
     if (region !is null && region.isDisposed()) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     NSAutoreleasePool pool = null;
-    if (!NSThread.isMainThread()) pool = (NSAutoreleasePool) new NSAutoreleasePool().alloc().init();
+    if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         setClipping(region !is null ? region.getPath() : null);
     } finally {

@@ -20,6 +20,7 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
 import dwt.widgets.Control;
 import dwt.widgets.CoolBar;
 import dwt.widgets.Event;
@@ -28,6 +29,14 @@ import dwt.widgets.Listener;
 import dwt.widgets.ToolBar;
 import dwt.widgets.ToolItem;
 import dwt.widgets.TypedListener;
+import dwt.graphics.Rectangle;
+import dwt.graphics.Image;
+import dwt.graphics.Point;
+import dwt.graphics.PaletteData;
+import dwt.graphics.ImageData;
+import dwt.graphics.Color;
+import dwt.graphics.GC;
+import dwt.events.SelectionListener;
 
 /**
  * Instances of this class are selectable user interface

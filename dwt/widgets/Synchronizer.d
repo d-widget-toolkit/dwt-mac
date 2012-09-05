@@ -16,14 +16,18 @@ module dwt.widgets.Synchronizer;
 
 
 
+import dwt.DWT;
 import dwt.internal.Compatibility;
 
 import tango.core.Thread;
 import tango.core.Exception;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
+import dwt.dwthelper.Runnable;
 import dwt.widgets.Display;
 import dwt.widgets.RunnableLock;
+import dwt.graphics.Device;
 
 /**
  * Instances of this class provide synchronization support

@@ -19,13 +19,24 @@ module dwt.widgets.Scrollable;
 
 
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSClipView;
+import dwt.internal.cocoa.NSScroller;
+import dwt.internal.cocoa.NSScrollView;
+import dwt.internal.cocoa.SWTScroller;
+import dwt.internal.cocoa.OS;
+import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.Display;
 import dwt.widgets.ScrollBar;
 import dwt.widgets.Widget;
+import dwt.graphics.Rectangle;
 
 /**
  * This class is the abstract superclass of all classes which
@@ -127,7 +138,7 @@ public Rectangle computeTrim (int x, int y, int width, int height) {
         NSSize size = NSSize();
         size.width = width;
         size.height = height;
-        NSBorderType border = hasBorder() ? OS.NSBezelBorder : OS.NSNoBorder;
+        NSBorderType border = cast(NSBorderType)(hasBorder() ? OS.NSBezelBorder : OS.NSNoBorder);
         size = NSScrollView.frameSizeForContentSize(size, (style & DWT.H_SCROLL) !is 0, (style & DWT.V_SCROLL) !is 0, border);
         width = cast(int)size.width;
         height = cast(int)size.height;
@@ -165,7 +176,7 @@ ScrollBar createScrollBar (int style) {
     bar.createJNIRef();
     bar.register();
     if ((state & CANVAS) is 0) {
-        bar.target = scroller.target();
+        bar.target = scroller.target().id;
         bar.actionSelector = scroller.action();
     }
     scroller.setTarget(scrollView);
@@ -207,7 +218,7 @@ public Rectangle getClientArea () {
         NSSize size = scrollView.contentSize();
         NSClipView contentView = scrollView.contentView();
         NSRect bounds = contentView.bounds();
-        return new Rectangle((int)bounds.x, (int)bounds.y, (int)size.width, (int)size.height);
+        return new Rectangle(cast(int)bounds.x, cast(int)bounds.y, cast(int)size.width, cast(int)size.height);
     } else {
         NSRect rect = view.bounds();
         return new Rectangle(0, 0, cast(int)rect.width, cast(int)rect.height);
@@ -250,7 +261,7 @@ bool hooksKeys () {
     return hooks (DWT.KeyDown) || hooks (DWT.KeyUp) || hooks (DWT.Traverse);
 }
 
-bool isEventView (int /*long*/ id) {
+bool isEventView (objc.id id) {
     return id is eventView ().id;
 }
 
@@ -287,14 +298,14 @@ void releaseChildren (bool destroy) {
 }
 
 void sendHorizontalSelection () {
-    if ((state & CANVAS) is 0 && scrollView !is null && visibleRgn is 0) {
+    if ((state & CANVAS) is 0 && scrollView !is null && visibleRgn is null) {
         scrollView.contentView().setCopiesOnScroll(!isObscured());
     }
     horizontalBar.sendSelection ();
 }
 
 void sendVerticalSelection () {
-    if ((state & CANVAS) is 0 && scrollView !is null && visibleRgn is 0) {
+    if ((state & CANVAS) is 0 && scrollView !is null && visibleRgn is null) {
         scrollView.contentView().setCopiesOnScroll(!isObscured());
     }
     verticalBar.sendSelection ();
@@ -339,9 +350,12 @@ NSView topView () {
 void updateCursorRects (bool enabled) {
     super.updateCursorRects (enabled);
     if (scrollView is null) return;
-    updateCursorRects (enabled, scrollView);
+    super.updateCursorRects (enabled, scrollView);
     NSClipView contentView = scrollView.contentView ();
-    updateCursorRects (enabled, contentView);
+    super.updateCursorRects (enabled, contentView);
+}
+void updateCursorRects (bool enabled, NSView widget) {
+    super.updateCursorRects(enabled, widget);
 }
 
 }

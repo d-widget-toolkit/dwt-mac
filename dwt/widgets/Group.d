@@ -20,7 +20,22 @@ import dwt.DWT;
 
 
 
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSTextFieldCell;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSBox;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.SWTBox;
+import dwt.internal.cocoa.SWTView;
+import dwt.internal.cocoa.OS;
+import dwt.internal.objc.cocoa.Cocoa;
+import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Composite;
+import dwt.graphics.Rectangle;
 
 /**
  * Instances of this class provide an etched border
@@ -119,14 +134,14 @@ NSView contentView () {
 
 void createHandle () {
     state |= THEME_BACKGROUND;
-    NSBox widget = (NSBox)new SWTBox().alloc();
+    NSBox widget = cast(NSBox)(new SWTBox()).alloc();
     widget.init();
-    widget.setTitlePosition(OS.NSNoTitle);
-    NSView contentWidget = (NSView)new SWTView().alloc();
+    widget.setTitlePosition(cast(NSTitlePosition)OS.NSNoTitle);
+    NSView contentWidget = cast(NSView)(new SWTView()).alloc();
     contentWidget.init();
 //  contentWidget.setDrawsBackground(false);
     widget.setContentView(contentWidget);
-    contentView = contentWidget;
+    contentView_ = contentWidget;
     view = widget;
 }
 
@@ -137,11 +152,11 @@ NSFont defaultNSFont () {
 void deregister () {
     super.deregister ();
     display.removeWidget (contentView);
-    SWTBox box = (SWTBox)view;
+    SWTBox box = cast(SWTBox)view;
     display.removeWidget (box.titleCell());
 }
 
-void drawBackground (int /*long*/ id, NSGraphicsContext context, NSRect rect) {
+void drawBackground (objc.id id, NSGraphicsContext context, NSRect rect) {
     if (id !is view.id) return;
     fillBackground (view, context, rect, -1);
 }
@@ -205,7 +220,7 @@ void setForeground (float /*double*/ [] color) {
     } else {
         nsColor = NSColor.colorWithDeviceRed (color[0], color[1], color[2], 1);
     }
-    NSTextFieldCell cell = new NSTextFieldCell (((NSBox)view).titleCell ().id);
+    NSTextFieldCell cell = new NSTextFieldCell ((cast(NSBox)view).titleCell ().id);
     cell.setTextColor (nsColor);
 }
 
@@ -237,11 +252,11 @@ public void setText (String string) {
     checkWidget();
     if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     text = string;
-    char [] buffer = new char [text.length ()];
+    char [] buffer = new char [text.length];
     text.getChars (0, buffer.length, buffer, 0);
     int length = fixMnemonic (buffer);
     NSBox box = cast(NSBox)view;
-    box.setTitlePosition(length is 0 ? OS.NSNoTitle : OS.NSAtTop);
+    box.setTitlePosition(cast(NSTitlePosition)(length is 0 ? OS.NSNoTitle : OS.NSAtTop));
     box.setTitle(NSString.stringWithCharacters(buffer.toString16().ptr, length));
 }
 

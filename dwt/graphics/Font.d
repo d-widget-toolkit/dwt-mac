@@ -16,9 +16,9 @@ module dwt.graphics.Font;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.graphics.Device;
 import dwt.graphics.FontData;
 import dwt.graphics.Point;

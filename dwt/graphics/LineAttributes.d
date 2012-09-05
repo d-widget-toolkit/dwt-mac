@@ -16,7 +16,7 @@ module dwt.graphics.LineAttributes;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.internal.c.Carbon;
 
 /**
