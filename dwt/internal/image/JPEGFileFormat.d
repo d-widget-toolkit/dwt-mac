@@ -25,6 +25,11 @@ import dwt.internal.image.JPEGQuantizationTable;
 import dwt.internal.image.JPEGStartOfImage;
 import dwt.internal.image.JPEGDecoder;
 import dwt.internal.image.JPEGEndOfImage;
+import dwt.internal.image.LEDataInputStream;
+import dwt.graphics.ImageLoader;
+import dwt.graphics.ImageData;
+import dwt.graphics.PaletteData;
+import dwt.graphics.RGB;
 import dwt.dwthelper.utils;
 
 

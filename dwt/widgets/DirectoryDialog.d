@@ -19,8 +19,14 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSOpenPanel;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import dwt.widgets.Dialog;
+import dwt.widgets.Display;
 import dwt.widgets.Shell;
 
 
@@ -141,7 +147,7 @@ public String open () {
     panel.setCanChooseDirectories(true);
     NSApplication application = NSApplication.sharedApplication();
     if (parent !is null && (style & DWT.SHEET) !is 0) {
-        application.beginSheet(panel, parent.window, null, 0, 0);
+        application.beginSheet(panel, parent.window, null, null, null);
     }
     NSString dir = filterPath !is null ? NSString.stringWith(filterPath) : null;
     int /*long*/ response = panel.runModalForDirectory(dir, null);

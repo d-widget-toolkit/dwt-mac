@@ -58,7 +58,7 @@ public cocoa.id accessibilityAttributeValue(NSString attribute, cocoa.id paramet
     return result !is null ? new id(result) : null;
 }
 
-public bool accessibilitySetOverrideValue(id value, NSString attribute) {
+public bool accessibilitySetOverrideValue(objc.id value, NSString attribute) {
     return OS.objc_msgSend_bool(this.id, OS.sel_accessibilitySetOverrideValue_forAttribute_, value !is null ? value.id : null, attribute !is null ? attribute.id : null);
 }
 

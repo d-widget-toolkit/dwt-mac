@@ -20,8 +20,10 @@ import dwt.internal.SWTEventListener;
 
 
 
+import dwt.DWT;
 import dwt.widgets.Event;
 import dwt.widgets.Listener;
+import dwt.events.all;
 
 /**
  * Instances of this class are <em>internal DWT implementation</em>

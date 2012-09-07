@@ -16,9 +16,8 @@ module dwt.accessibility.SWTAccessibleDelegate;
 import dwt.dwthelper.utils;
 
 import dwt.accessibility.Accessible;
-import dwt.SWT;
+import dwt.DWT;
 import dwt.internal.C;
-import dwt.internal.Callback;
 import dwt.internal.cocoa.NSArray;
 import dwt.internal.cocoa.NSObject;
 import dwt.internal.cocoa.NSPoint;

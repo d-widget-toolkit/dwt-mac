@@ -18,13 +18,20 @@ module dwt.widgets.Decorations;
 
 
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
+import dwt.internal.cocoa.NSButton;
+import dwt.internal.cocoa.NSButtonCell;
 import dwt.widgets.Button;
 import dwt.widgets.Canvas;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.Display;
 import dwt.widgets.Menu;
+import dwt.widgets.Widget;
+import dwt.graphics.Image;
+import dwt.graphics.ImageData;
 
 /**
  * Instances of this class provide the appearance and
@@ -469,7 +476,7 @@ public void setDefaultButton (Button button) {
     defaultButton = button;
     NSButtonCell cell = null;
     if (defaultButton !is null && (defaultButton.style & DWT.PUSH) !is 0) {
-        cell = new NSButtonCell (((NSButton)defaultButton.view).cell ());
+        cell = new NSButtonCell ((cast(NSButton)defaultButton.view).cell ());
     }
     view.window().setDefaultButtonCell (cell);
     display.updateDefaultButton();

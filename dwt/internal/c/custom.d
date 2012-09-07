@@ -303,7 +303,7 @@ IMP dragSelectionWithEvent_offset_slideBack_CALLBACK (IMP func)
 
 
 
-IMP isFlipped_CALLBACK (IMP func)
+IMP isFlipped_CALLBACK ()
 {
     assert(false, "not implemented");
 }

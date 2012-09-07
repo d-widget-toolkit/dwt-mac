@@ -19,15 +19,28 @@ module dwt.widgets.MenuItem;
 
 
 
+import tango.text.convert.Format;
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
 import dwt.internal.objc.cocoa.Cocoa;
+import dwt.internal.cocoa.NSMenu;
+import dwt.internal.cocoa.NSMenuItem;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.SWTMenu;
+import dwt.internal.cocoa.OS;
 import dwt.widgets.Decorations;
 import dwt.widgets.Display;
 import dwt.widgets.Event;
 import dwt.widgets.Item;
 import dwt.widgets.Menu;
 import dwt.widgets.TypedListener;
+import dwt.events.ArmListener;
+import dwt.events.HelpListener;
+import dwt.events.SelectionListener;
+import dwt.graphics.Image;
 
 /**
  * Instances of this class represent a selectable user interface object
@@ -686,7 +699,7 @@ public void setMenu (Menu menu) {
 
     if (menu !is null) {
         nsItem.setTarget(null);
-        nsItem.setAction(0);
+        nsItem.setAction(null);
     } else {
         nsItem.setTarget(nsItem);
         nsItem.setAction(OS.sel_sendSelection);
@@ -771,7 +784,7 @@ public void setText (String string) {
 }
 
 void updateText () {
-    char [] buffer = new char [text.length ()];
+    char [] buffer = new char [text.length];
     text.getChars (0, buffer.length, buffer, 0);
     int i=0, j=0;
     while (i < buffer.length) {
@@ -796,7 +809,7 @@ void updateAccelerator (bool show) {
     if (accelerator !is 0) return;
     int mask = 0, key = 0;
     if (show) {
-        char [] buffer = new char [text.length ()];
+        char [] buffer = new char [text.length];
         text.getChars (0, buffer.length, buffer, 0);
         int i=0, j=0;
         while (i < buffer.length) {
@@ -857,7 +870,7 @@ void updateAccelerator (bool show) {
             }
         }
     }
-    NSString string = NSString.stringWith (key is 0 ? "" : String.valueOf ((char)key));
+    NSString string = NSString.stringWith (key is 0 ? "" : Format("{}", cast(char)key));
     nsItem.setKeyEquivalentModifierMask (mask);
     nsItem.setKeyEquivalent (string.lowercaseString ());
 }

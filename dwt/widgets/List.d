@@ -20,15 +20,42 @@ import dwt.dwthelper.utils;
 
 
 
+import tango.text.convert.Format;
 
 import cocoa = dwt.internal.cocoa.id;
 
+import dwt.DWT;
+import dwt.accessibility.ACC;
+import dwt.dwthelper.System;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSCell;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSIndexSet;
+import dwt.internal.cocoa.NSTableView;
+import dwt.internal.cocoa.NSTableColumn;
+import dwt.internal.cocoa.NSScrollView;
+import dwt.internal.cocoa.NSRange;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSMutableIndexSet;
+import dwt.internal.cocoa.NSAttributedString;
+import dwt.internal.cocoa.SWTScrollView;
+import dwt.internal.cocoa.SWTTableView;
+import dwt.internal.cocoa.OS;
 import Carbon = dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Composite;
 import dwt.widgets.Scrollable;
 import dwt.widgets.TypedListener;
+import dwt.graphics.Color;
+import dwt.graphics.Point;
+import dwt.graphics.Font;
+import dwt.graphics.Rectangle;
+import dwt.events.SelectionListener;
 
 /**
  * Instances of this class represent a selectable user interface
@@ -156,7 +183,7 @@ public void add (String string) {
         items = newItems;
     }
     items [itemCount++] = string;
-    ((NSTableView)view).noteNumberOfRowsChanged ();
+    (cast(NSTableView)view).noteNumberOfRowsChanged ();
     setScrollWidth(string);
 }
 
@@ -194,7 +221,7 @@ public void add (String string, int index) {
     }
     System.arraycopy (items, index, items, index + 1, itemCount++ - index);
     items [index] = string;
-    ((NSTableView)view).noteNumberOfRowsChanged ();
+    (cast(NSTableView)view).noteNumberOfRowsChanged ();
     if (index !is itemCount) fixSelection (index, true);
     setScrollWidth(string);
 }
@@ -246,7 +273,7 @@ public Point computeSize (int wHint, int hHint, bool changed) {
             if (items[i] !is null) {
                 cell.setTitle (NSString.stringWith (items[i]));
                 NSSize size = cell.cellSize ();
-                width = Math.max (width, (int)Math.ceil (size.width));
+                width = Math.max (width, cast(int)Math.ceil (size.width));
             }
         }
         width += CELL_GAP;
@@ -272,7 +299,7 @@ void createHandle () {
     if ((style & DWT.H_SCROLL) !is 0) scrollWidget.setHasHorizontalScroller(true);
     if ((style & DWT.V_SCROLL) !is 0) scrollWidget.setHasVerticalScroller(true);
     scrollWidget.setAutohidesScrollers(true);
-    scrollWidget.setBorderType((style & DWT.BORDER) !is 0 ? OS.NSBezelBorder : OS.NSNoBorder);
+    scrollWidget.setBorderType(cast(NSBorderType)((style & DWT.BORDER) !is 0 ? OS.NSBezelBorder : OS.NSNoBorder));
 
     NSTableView widget = cast(NSTableView)(new SWTTableView()).alloc();
     widget.init();
@@ -281,16 +308,16 @@ void createHandle () {
     widget.setHeaderView(null);
     widget.setDelegate(widget);
     if ((style & DWT.H_SCROLL) !is 0) {
-        widget.setColumnAutoresizingStyle (OS.NSTableViewNoColumnAutoresizing);
+        widget.setColumnAutoresizingStyle (cast(NSTableViewColumnAutoresizingStyle)OS.NSTableViewNoColumnAutoresizing);
     }
-    NSSize spacing = new NSSize();
+    NSSize spacing = NSSize();
     spacing.width = spacing.height = CELL_GAP;
     widget.setIntercellSpacing(spacing);
     widget.setDoubleAction(OS.sel_sendDoubleSelection);
-    if (!hasBorder()) widget.setFocusRingType(OS.NSFocusRingTypeNone);
+    if (!hasBorder()) widget.setFocusRingType(cast(NSFocusRingType)OS.NSFocusRingTypeNone);
 
     column = cast(NSTableColumn)(new NSTableColumn()).alloc();
-    column = column.initWithIdentifier(NSString.stringWith(String.valueOf(++NEXT_ID)));
+    column = column.initWithIdentifier(NSString.stringWith(Format("{}",++NEXT_ID)));
     column.setWidth(0);
     widget.addTableColumn (column);
 
@@ -415,17 +442,17 @@ public void deselectAll () {
 }
 
 bool dragDetect(int x, int y, bool filter, bool[] consume) {
-    NSTableView widget = (NSTableView)view;
-    NSPoint pt = new NSPoint();
+    NSTableView widget = cast(NSTableView)view;
+    NSPoint pt = NSPoint();
     pt.x = x;
     pt.y = y;
-    int /*long*/ row = widget.rowAtPoint(pt);
+    auto row = widget.rowAtPoint(pt);
     if (row is -1) return false;
     bool dragging = super.dragDetect(x, y, filter, consume);
     if (dragging) {
         if (!widget.isRowSelected(row)) {
             //TODO expand current selection when Shift, Command key pressed??
-            NSIndexSet set = (NSIndexSet)new NSIndexSet().alloc();
+            NSIndexSet set = cast(NSIndexSet)(new NSIndexSet()).alloc();
             set = set.initWithIndex(row);
             widget.selectRowIndexes (set, false);
             set.release();
@@ -698,7 +725,7 @@ public int indexOf (String item) {
     checkWidget();
     if (item is null) error (DWT.ERROR_NULL_ARGUMENT);
     for (int i=0; i<itemCount; i++) {
-        if (items [i].equals (item)) return i;
+        if (items [i] == item) return i;
     }
     return -1;
 }
@@ -726,7 +753,7 @@ public int indexOf (String string, int start) {
     checkWidget();
     if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     for (int i=start; i<itemCount; i++) {
-        if (items [i].equals (string)) return i;
+        if (items [i] == string) return i;
     }
     return -1;
 }
@@ -755,20 +782,20 @@ public bool isSelected (int index) {
  * right-clicks or control-clicks on an NSTableView or its subclasses. Fix is to select the
  * clicked-on row ourselves.
  */
-int /*long*/ menuForEvent(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+objc.id menuForEvent(objc.id id, objc.SEL sel, objc.id theEvent) {
     NSEvent event = new NSEvent(theEvent);
-    NSTableView table = (NSTableView)view;
+    NSTableView table = cast(NSTableView)view;
 
     // get the current selections for the outline view.
     NSIndexSet selectedRowIndexes = table.selectedRowIndexes();
 
     // select the row that was clicked before showing the menu for the event
     NSPoint mousePoint = view.convertPoint_fromView_(event.locationInWindow(), null);
-    int /*long*/ row = table.rowAtPoint(mousePoint);
+    auto row = table.rowAtPoint(mousePoint);
 
     // figure out if the row that was just clicked on is currently selected
     if (selectedRowIndexes.containsIndex(row) is false) {
-        NSIndexSet set = (NSIndexSet)new NSIndexSet().alloc();
+        NSIndexSet set = cast(NSIndexSet)(new NSIndexSet()).alloc();
         set = set.initWithIndex(row);
         table.selectRowIndexes (set, false);
         set.release();
@@ -783,20 +810,20 @@ int /*long*/ menuForEvent(int /*long*/ id, int /*long*/ sel, int /*long*/ theEve
  * right-clicks or control-clicks on an NSTableView or its subclasses. Fix is to select the
  * clicked-on row ourselves.
  */
-int /*long*/ menuForEvent(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+objc.id menuForEvent(objc.id id, objc.SEL sel, objc.id theEvent) {
     NSEvent event = new NSEvent(theEvent);
-    NSTableView table = (NSTableView)view;
+    NSTableView table = cast(NSTableView)view;
 
     // get the current selections for the outline view.
     NSIndexSet selectedRowIndexes = table.selectedRowIndexes();
 
     // select the row that was clicked before showing the menu for the event
     NSPoint mousePoint = view.convertPoint_fromView_(event.locationInWindow(), null);
-    int /*long*/ row = table.rowAtPoint(mousePoint);
+    auto row = table.rowAtPoint(mousePoint);
 
     // figure out if the row that was just clicked on is currently selected
     if (selectedRowIndexes.containsIndex(row) is false) {
-        NSIndexSet set = (NSIndexSet)new NSIndexSet().alloc();
+        NSIndexSet set = cast(NSIndexSet)(new NSIndexSet()).alloc();
         set = set.initWithIndex(row);
         table.selectRowIndexes (set, false);
         set.release();
@@ -806,6 +833,8 @@ int /*long*/ menuForEvent(int /*long*/ id, int /*long*/ sel, int /*long*/ theEve
     return super.menuForEvent(id, sel, theEvent);
 }
 
+int numberOfRowsInTableView(objc.id id, objc.SEL sel, objc.id aTableView) {
+    return itemCount;
 }
 
 void releaseHandle () {
@@ -992,7 +1021,7 @@ public void removeSelectionListener(SelectionListener listener) {
 public void select (int index) {
     checkWidget();
     if (0 <= index && index < itemCount) {
-        NSIndexSet set = (NSIndexSet)new NSIndexSet().alloc();
+        NSIndexSet set = cast(NSIndexSet)(new NSIndexSet()).alloc();
         set = set.initWithIndex(index);
         NSTableView widget = cast(NSTableView)view;
         ignoreSelect = true;
@@ -1036,8 +1065,9 @@ public void select (int start, int end) {
         NSRange range = NSRange();
         range.location = start;
         range.length = end - start + 1;
-        NSIndexSet set = (NSIndexSet)new NSIndexSet().alloc();
+        NSIndexSet set = cast(NSIndexSet)(new NSIndexSet()).alloc();
         set = set.initWithIndexesInRange(range);
+        NSTableView widget = cast(NSTableView)view;
         ignoreSelect = true;
         widget.selectRowIndexes(set, (style & DWT.MULTI) !is 0);
         ignoreSelect = false;
@@ -1073,7 +1103,7 @@ public void select (int [] indices) {
     int length = indices.length;
     if (length is 0 || ((style & DWT.SINGLE) !is 0 && length > 1)) return;
     int count = 0;
-    NSMutableIndexSet set = (NSMutableIndexSet)new NSMutableIndexSet().alloc().init();
+    NSMutableIndexSet set = cast(NSMutableIndexSet)(new NSMutableIndexSet()).alloc().init();
     for (int i=0; i<length; i++) {
         int index = indices [i];
         if (index >= 0 && index < itemCount) {
@@ -1091,7 +1121,7 @@ public void select (int [] indices) {
 }
 
 void select (int [] indices, int count, bool clear) {
-    NSMutableIndexSet set = (NSMutableIndexSet)new NSMutableIndexSet().alloc().init();
+    NSMutableIndexSet set = cast(NSMutableIndexSet)(new NSMutableIndexSet()).alloc().init();
     for (int i=0; i<count; i++) set.addIndex (indices [i]);
     NSTableView widget = cast(NSTableView)view;
     ignoreSelect = true;
@@ -1120,7 +1150,7 @@ public void selectAll () {
 }
 
 void sendDoubleSelection() {
-    if (((NSTableView)view).clickedRow () !is -1) {
+    if ((cast(NSTableView)view).clickedRow () !is -1) {
         postEvent (DWT.DefaultSelection);
     }
 }
@@ -1180,7 +1210,7 @@ public void setItem (int index, String string) {
     //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (!(0 <= index && index < itemCount)) error (DWT.ERROR_INVALID_RANGE);
     items [index] = string;
-    NSTableView tableView = (NSTableView)view;
+    NSTableView tableView = cast(NSTableView)view;
     NSRect rect = tableView.rectOfRow (index);
     tableView.setNeedsDisplayInRect (rect);
     setScrollWidth(string);
@@ -1263,9 +1293,9 @@ public void setSelection (int index) {
     checkWidget();
     deselectAll ();
     if (0 <= index && index < itemCount) {
-        NSIndexSet set = (NSIndexSet)new NSIndexSet().alloc();
+        NSIndexSet set = cast(NSIndexSet)(new NSIndexSet()).alloc();
         set = set.initWithIndex(index);
-        NSTableView widget = (NSTableView)view;
+        NSTableView widget = cast(NSTableView)view;
         ignoreSelect = true;
         widget.selectRowIndexes(set, false);
         ignoreSelect = false;
@@ -1302,12 +1332,12 @@ public void setSelection (int start, int end) {
     if (itemCount is 0 || start >= itemCount) return;
     start = Math.max (0, start);
     end = Math.min (end, itemCount - 1);
-    NSRange range = new NSRange();
+    NSRange range = NSRange();
     range.location = start;
     range.length = end - start + 1;
-    NSIndexSet set = (NSIndexSet)new NSIndexSet().alloc();
+    NSIndexSet set = cast(NSIndexSet)(new NSIndexSet()).alloc();
     set = set.initWithIndexesInRange(range);
-    NSTableView widget = (NSTableView)view;
+    NSTableView widget = cast(NSTableView)view;
     ignoreSelect = true;
     widget.selectRowIndexes(set, false);
     ignoreSelect = false;
@@ -1342,7 +1372,7 @@ public void setSelection (int [] indices) {
     deselectAll ();
     int length_ = indices.length;
     if (length_ is 0 || ((style & DWT.SINGLE) !is 0 && length_ > 1)) return;
-    int [] newIndices = new int [length];
+    int [] newIndices = new int [length_];
     int count = 0;
     for (int i=0; i<length_; i++) {
         int index = indices [length_ - i - 1];
@@ -1385,14 +1415,14 @@ public void setSelection (String [] items) {
     int length_ = items.length;
     if (length_ is 0 || ((style & DWT.SINGLE) !is 0 && length_ > 1)) return;
     int count = 0;
-    int [] indices = new int [length];
+    int [] indices = new int [length_];
     for (int i=0; i<length_; i++) {
         String string = items [length_ - i - 1];
         if ((style & DWT.SINGLE) !is 0) {
             int index = indexOf (string, 0);
             if (index !is -1) {
                 count = 1;
-                indices = new int [] {index};
+                indices = [index];
             }
         } else {
             int index = 0;
@@ -1427,9 +1457,9 @@ public void setSelection (String [] items) {
  */
 public void setTopIndex (int index) {
     checkWidget();
-    NSTableView widget = (NSTableView) view;
+    NSTableView widget = cast(NSTableView) view;
     int row = Math.max(0, Math.min(index, itemCount));
-    NSPoint pt = new NSPoint();
+    NSPoint pt = NSPoint();
     pt.x = scrollView.contentView().bounds().x;
     pt.y = widget.frameOfCellAtColumn(0, row).y;
     view.scrollPoint(pt);
@@ -1467,7 +1497,7 @@ bool tableView_shouldEditTableColumn_row(objc.id id, objc.SEL sel, objc.id aTabl
 }
 
 objc.id tableView_objectValueForTableColumn_row(objc.id id, objc.SEL sel, objc.id aTableView, objc.id aTableColumn, objc.id rowIndex) {
-    NSAttributedString attribStr = createString(items[(int)/*64*/rowIndex], null, foreground, 0, true, false);
+    NSAttributedString attribStr = createString(items[cast(int)/*64*/rowIndex], null, foreground, 0, true, false);
     return attribStr.id;
 }
 

@@ -21,6 +21,8 @@ import dwt.dwthelper.FileOutputStream;
 import dwt.dwthelper.InflaterInputStream;
 import dwt.dwthelper.BufferedInputStream;
 import dwt.dwthelper.ResourceBundle;
+import dwt.dwthelper.InputStream;
+import dwt.dwthelper.OutputStream;
 
 import Math = tango.math.Math;
 import Unicode = tango.text.Unicode;

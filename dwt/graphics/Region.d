@@ -16,16 +16,15 @@ module dwt.graphics.Region;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.internal.C;
 import Carbon = dwt.internal.c.Carbon;
 import dwt.graphics.Device;
 import dwt.graphics.Point;
 import dwt.graphics.Rectangle;
 import dwt.graphics.Resource;
-import dwt.internal.Callback;
 import dwt.internal.cocoa.NSAffineTransform;
 import dwt.internal.cocoa.NSAutoreleasePool;
 import dwt.internal.cocoa.NSBezierPath;

@@ -7,7 +7,6 @@ import dwt.dwthelper.utils;
 import dwt.dwthelper.File;
 import dwt.dwthelper.InputStream;
 import TangoFile = tango.io.device.File;
-import tango.io.protocol.Reader;
 import tango.core.Exception;
 import tango.text.convert.Format;
 

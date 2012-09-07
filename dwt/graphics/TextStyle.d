@@ -15,7 +15,7 @@ module dwt.graphics.TextStyle;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.graphics.Color;
 import dwt.graphics.Font;
 import dwt.graphics.GlyphMetrics;

@@ -15,6 +15,7 @@ module dwt.widgets.EventTable;
 
 
 
+import dwt.DWT;
 
 import dwt.internal.SWTEventListener;
 

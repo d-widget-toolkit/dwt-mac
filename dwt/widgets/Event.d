@@ -22,6 +22,8 @@ import dwt.dwthelper.utils;
 
 import dwt.widgets.Widget;
 import dwt.widgets.Display;
+import dwt.graphics.GC;
+import dwt.graphics.Rectangle;
 
 /**
  * Instances of this class provide a description of a particular

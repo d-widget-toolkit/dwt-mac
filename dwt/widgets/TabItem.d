@@ -20,10 +20,22 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSValue;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSWindow;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSTabViewItem;
+import dwt.internal.cocoa.OS;
+import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Control;
 import dwt.widgets.Item;
 import dwt.widgets.TabFolder;
+import dwt.graphics.Image;
+import dwt.graphics.Rectangle;
 
 /**
  * Instances of this class represent a selectable user interface object
@@ -293,7 +305,7 @@ public void setControl (Control control) {
     if (oldControl !is null) {
         NSView topView = oldControl.topView ();
         if (topView.superview () is null) {
-            parent.contentView ().addSubview (topView, OS.NSWindowBelow, null);
+            parent.contentView ().addSubview (topView, cast(NSWindowOrderingMode)OS.NSWindowBelow, null);
         }
     }
 }
@@ -337,7 +349,7 @@ public void setText (String string) {
     int index = parent.indexOf (this);
     if (index is -1) return;
     super.setText (string);
-    char [] chars = new char [string.length ()];
+    char [] chars = new char [string.length];
     string.getChars (0, chars.length, chars, 0);
     int length = fixMnemonic (chars);
     NSString str = NSString.stringWithCharacters (chars.toString16().ptr, length);

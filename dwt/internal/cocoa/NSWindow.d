@@ -29,6 +29,7 @@ import dwt.internal.cocoa.NSString;
 import dwt.internal.cocoa.NSText;
 import dwt.internal.cocoa.NSToolbar;
 import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSEvent;
 import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
@@ -328,7 +329,7 @@ public void setToolbar(NSToolbar toolbar) {
     OS.objc_msgSend(this.id, OS.sel_setToolbar_, toolbar !is null ? toolbar.id : null);
 }
 
-public NSButton standardWindowButton(NSWindingButton b) {
+public NSButton standardWindowButton(NSWindowButton b) {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_standardWindowButton_, b);
     return result !is null ? new NSButton(result) : null;
 }

@@ -13,9 +13,15 @@
 module dwt.internal.image.WinBMPFileFormat;
 
 import dwt.internal.image.FileFormat;
+import dwt.internal.image.LEDataInputStream;
 import dwt.dwthelper.ByteArrayOutputStream;
 import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.OutputStream;
+import dwt.graphics.ImageLoader;
+import dwt.graphics.ImageData;
+import dwt.graphics.PaletteData;
+import dwt.graphics.Point;
 
 import tango.core.Exception;
 

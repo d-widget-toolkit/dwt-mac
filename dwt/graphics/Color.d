@@ -16,8 +16,8 @@ module dwt.graphics.Color;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.graphics.Device;
 import dwt.graphics.Resource;
 import dwt.graphics.RGB;

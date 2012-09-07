@@ -16,7 +16,7 @@ module dwt.graphics.GCData;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.graphics.Device;
 import dwt.graphics.Pattern;
 import dwt.graphics.Image;
@@ -78,5 +78,5 @@ public final class GCData {
     public NSGraphicsContext flippedContext;
     public bool restoreContext;
     public NSSize sizeStruct;
-    public bool NSRect paintRectStruct;
+    public NSRect paintRectStruct;
 }

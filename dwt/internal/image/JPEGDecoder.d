@@ -15,6 +15,8 @@ module dwt.internal.image.JPEGDecoder;
 
 import dwt.dwthelper.InputStream;
 import dwt.internal.image.LEDataInputStream;
+import dwt.graphics.ImageLoader;
+import dwt.graphics.ImageData;
 import dwt.dwthelper.utils;
 
 import tango.core.Exception;

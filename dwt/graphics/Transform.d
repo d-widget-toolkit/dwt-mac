@@ -15,9 +15,9 @@ module dwt.graphics.Transform;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.graphics.Device;
 import dwt.graphics.Resource;
 import dwt.internal.cocoa.NSAffineTransform;

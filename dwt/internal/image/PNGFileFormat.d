@@ -13,9 +13,11 @@
 module dwt.internal.image.PNGFileFormat;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.InputStream;
 
 
 import dwt.graphics.ImageLoader;
+import dwt.graphics.ImageData;
 import dwt.internal.image.FileFormat;
 import dwt.internal.image.PngIhdrChunk;
 import dwt.internal.image.PngPlteChunk;
@@ -26,6 +28,7 @@ import dwt.internal.image.PngIdatChunk;
 import dwt.internal.image.PngEncoder;
 import dwt.internal.image.PngInputStream;
 import dwt.internal.image.PngDecodingDataStream;
+import dwt.internal.image.LEDataInputStream;
 
 
 import dwt.dwthelper.BufferedInputStream;

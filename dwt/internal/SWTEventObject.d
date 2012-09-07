@@ -23,7 +23,7 @@ import dwt.dwthelper.utils;
  * <p>
  * It is part of our effort to provide support for both J2SE
  * and J2ME platforms. Under this scheme, classes need to
- * extend DWTEventObject instead of java.util.EventObject.
+ * extend SWTEventObject instead of java.util.EventObject.
  * </p>
  * <p>
  * Note: java.util.EventObject is not part of CDC and CLDC.

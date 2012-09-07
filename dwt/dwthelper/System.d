@@ -119,36 +119,10 @@ struct Err
 
 class System {
 
-    alias SimpleType!(int).arraycopy arraycopy;
-    alias SimpleType!(byte).arraycopy arraycopy;
-    alias SimpleType!(double).arraycopy arraycopy;
-    alias SimpleType!(float).arraycopy arraycopy;
-    alias SimpleType!(short).arraycopy arraycopy;
-    alias SimpleType!(long).arraycopy arraycopy;
-    alias SimpleType!(uint).arraycopy arraycopy;
-    alias SimpleType!(ushort).arraycopy arraycopy;
-    alias SimpleType!(ubyte).arraycopy arraycopy;
-    alias SimpleType!(ulong).arraycopy arraycopy;
-    alias SimpleType!(char).arraycopy arraycopy;
-    alias SimpleType!(wchar).arraycopy arraycopy;
-    alias SimpleType!(Object).arraycopy arraycopy;
-    alias SimpleType!(void*).arraycopy arraycopy;
-
-    alias SimpleType!(int[]).arraycopy arraycopy;
-    alias SimpleType!(byte[]).arraycopy arraycopy;
-    alias SimpleType!(double[]).arraycopy arraycopy;
-    alias SimpleType!(float[]).arraycopy arraycopy;
-    alias SimpleType!(short[]).arraycopy arraycopy;
-    alias SimpleType!(long[]).arraycopy arraycopy;
-    alias SimpleType!(uint[]).arraycopy arraycopy;
-    alias SimpleType!(ushort[]).arraycopy arraycopy;
-    alias SimpleType!(ubyte[]).arraycopy arraycopy;
-    alias SimpleType!(ulong[]).arraycopy arraycopy;
-    alias SimpleType!(char[]).arraycopy arraycopy;
-    alias SimpleType!(wchar[]).arraycopy arraycopy;
-    alias SimpleType!(Object[]).arraycopy arraycopy;
-    alias SimpleType!(void*[]).arraycopy arraycopy;
-    alias SimpleType!(void*[]).arraycopy arraycopy;
+    static void arraycopy(T)(T[] src, uint srcPos, T[] dest, uint destPos, uint len)
+    {
+        return SimpleType!(T).arraycopy(src, srcPos, dest, destPos, len);
+    }
 
     static long currentTimeMillis(){
         return Clock.now().ticks() / 10000;

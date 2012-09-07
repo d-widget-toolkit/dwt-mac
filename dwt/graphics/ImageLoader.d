@@ -14,10 +14,12 @@
 module dwt.graphics.ImageLoader;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.InputStream;
+import dwt.dwthelper.OutputStream;
 
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.graphics.ImageData;
 import dwt.graphics.ImageLoaderEvent;
 import dwt.graphics.ImageLoaderListener;

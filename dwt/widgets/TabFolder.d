@@ -22,12 +22,29 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.dwthelper.System;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSTabView;
+import dwt.internal.cocoa.NSTabViewItem;
+import dwt.internal.cocoa.SWTTabView;
+import dwt.internal.cocoa.OS;
+import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.Event;
 import dwt.widgets.TabItem;
 import dwt.widgets.TypedListener;
+import dwt.widgets.Widget;
+import dwt.graphics.Image;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.events.SelectionListener;
 
 /**
  * Instances of this class implement the notebook user interface
@@ -173,7 +190,7 @@ void createHandle () {
     widget.init ();
     widget.setDelegate(widget);
     if ((style & DWT.BOTTOM) !is 0) {
-        widget.setTabViewType(OS.NSBottomTabsBezelBorder);
+        widget.setTabViewType(cast(NSTabViewType)OS.NSBottomTabsBezelBorder);
     }
     view = widget;
 }
@@ -223,7 +240,7 @@ void destroyItem (TabItem item) {
 
 Widget findTooltip (NSPoint pt) {
     pt = view.convertPoint_fromView_ (pt, null);
-    NSTabViewItem nsItem = ((NSTabView)view).tabViewItemAtPoint (pt);
+    NSTabViewItem nsItem = (cast(NSTabView)view).tabViewItemAtPoint (pt);
     if (nsItem !is null) {
         for (int i = 0; i < itemCount; i++) {
             TabItem item = items [i];
@@ -235,7 +252,7 @@ Widget findTooltip (NSPoint pt) {
 
 Widget findTooltip (NSPoint pt) {
     pt = view.convertPoint_fromView_ (pt, null);
-    NSTabViewItem nsItem = ((NSTabView)view).tabViewItemAtPoint (pt);
+    NSTabViewItem nsItem = (cast(NSTabView)view).tabViewItemAtPoint (pt);
     if (nsItem !is null) {
         for (int i = 0; i < itemCount; i++) {
             TabItem item = items [i];
@@ -605,11 +622,7 @@ void setSelection (int index, bool notify, bool force) {
 }
 
 void setSmallSize () {
-    ((NSTabView)view).setControlSize (OS.NSSmallControlSize);
-}
-
-void setSmallSize () {
-    ((NSTabView)view).setControlSize (OS.NSSmallControlSize);
+    (cast(NSTabView)view).setControlSize (cast(NSControlSize)OS.NSSmallControlSize);
 }
 
 bool traversePage (bool next) {
@@ -663,7 +676,7 @@ void tabView_didSelectTabViewItem(objc.id id, objc.SEL sel, objc.id tabView, obj
         if (control !is null) {
             NSView topView = control.topView ();
             if (topView.superview () is null) {
-                contentView ().addSubview (topView, OS.NSWindowBelow, null);
+                contentView ().addSubview (topView, cast(NSWindowOrderingMode)OS.NSWindowBelow, null);
             }
         }
         if (item.nsItem.id is tabViewItem) {
