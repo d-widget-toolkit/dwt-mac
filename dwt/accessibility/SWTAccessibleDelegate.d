@@ -262,7 +262,7 @@ class SWTAccessibleDelegate : NSObject {
         if (parameterizedAttributeNames !is null) parameterizedAttributeNames.release();
         parameterizedAttributeNames = null;
 
-        if (delegateJniRef !is 0) OS.DeleteGlobalRef(delegateJniRef);
+        if (delegateJniRef !is null) OS.DeleteGlobalRef(delegateJniRef);
         delegateJniRef = null;
         OS.object_setInstanceVariable(this.id, SWT_OBJECT, null);
     }

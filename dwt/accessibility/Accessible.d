@@ -171,7 +171,7 @@ public class Accessible {
     public void addAccessibleListener(AccessibleListener listener) {
         checkWidget();
         if (listener is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
-        accessibleListeners.addElement(listener);
+        accessibleListeners ~= listener;
     }
 
     /**
@@ -198,7 +198,7 @@ public class Accessible {
     public void addAccessibleControlListener(AccessibleControlListener listener) {
         checkWidget();
         if (listener is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
-        accessibleControlListeners.addElement(listener);
+        accessibleControlListeners ~= listener;
     }
 
     /**
@@ -227,7 +227,7 @@ public class Accessible {
     public void addAccessibleTextListener (AccessibleTextListener listener) {
         checkWidget ();
         if (listener is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
-        accessibleTextListeners.addElement (listener);
+        accessibleTextListeners ~= listener;
     }
 
     public cocoa.id internal_accessibilityActionDescription(NSString action, int childID) {
@@ -240,8 +240,8 @@ public class Accessible {
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.childID = childID;
         event.detail = -1;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getRole(event);
         }
 
@@ -290,8 +290,8 @@ public class Accessible {
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.childID = childID;
         event.detail = -1;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getRole(event);
         }
 
@@ -315,7 +315,7 @@ public class Accessible {
             }
         }
 
-        if (accessibleTextListeners.size() > 0) {
+        if (accessibleTextListeners.length > 0) {
             for (int i = 0; i < baseTextAttributes.length; i++) {
                 if (!returnValue.containsObject(baseTextAttributes[i])) {
                     returnValue.addObject(baseTextAttributes[i]);
@@ -440,8 +440,8 @@ public class Accessible {
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.childID = ACC.CHILDID_MULTIPLE; // set to invalid value, to test if the application sets it in getFocus()
         event.accessible = null;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getFocus(event);
         }
 
@@ -473,8 +473,8 @@ public class Accessible {
 
         // Set an impossible value to determine if anything responded to the event.
         event.childID = ACC.CHILDID_MULTIPLE;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getChildAtPoint(event);
         }
 
@@ -507,7 +507,7 @@ public class Accessible {
 
         NSMutableArray returnValue = NSMutableArray.arrayWithCapacity(4);
 
-        if (accessibleTextListeners.size() > 0) {
+        if (accessibleTextListeners.length > 0) {
             for (int i = 0; i < baseParameterizedAttributes.length; i++) {
                 if (!returnValue.containsObject(baseParameterizedAttributes[i])) {
                     returnValue.addObject(baseParameterizedAttributes[i]);
@@ -574,8 +574,8 @@ public class Accessible {
         cocoa.id returnValue = null;
         AccessibleEvent event = new AccessibleEvent(this);
         event.childID = childID;
-        for (int i = 0; i < accessibleListeners.size(); i++) {
-            AccessibleListener listener = accessibleListeners.elementAt(i);
+        for (int i = 0; i < accessibleListeners.length; i++) {
+            AccessibleListener listener = accessibleListeners[i];
             listener.getHelp(event);
         }
 
@@ -591,8 +591,8 @@ public class Accessible {
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.childID = childID;
         event.detail = -1;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getRole(event);
         }
         if (event.detail !is -1) {
@@ -610,8 +610,8 @@ public class Accessible {
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.childID = childID;
         event.detail = -1;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getRole(event);
         }
         if (event.detail !is -1) {
@@ -630,8 +630,8 @@ public class Accessible {
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.childID = childID;
         event.detail = -1;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getRole(event);
         }
         if (event.detail !is -1) {
@@ -662,16 +662,16 @@ public class Accessible {
         AccessibleControlEvent roleEvent = new AccessibleControlEvent(this);
         roleEvent.childID = childID;
         roleEvent.detail = -1;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getRole(roleEvent);
         }
         if (roleEvent.detail !is ACC.ROLE_LABEL) {
             AccessibleEvent event = new AccessibleEvent(this);
             event.childID = childID;
             event.result = null;
-            for (int i = 0; i < accessibleListeners.size(); i++) {
-                AccessibleListener listener = accessibleListeners.elementAt(i);
+            for (int i = 0; i < accessibleListeners.length; i++) {
+                AccessibleListener listener = accessibleListeners[i];
                 listener.getName(event);
             }
 
@@ -687,8 +687,8 @@ public class Accessible {
         event.childID = childID;
         event.detail = -1;
         event.result = null; //TODO: could pass the OS value to the app
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getRole(event);
             listener.getValue(event);
         }
@@ -720,8 +720,8 @@ public class Accessible {
         case ACC.ROLE_TABITEM:  // 1 = selected, 0 = not selected
             AccessibleControlEvent ace = new AccessibleControlEvent(this);
             ace.childID = -4;
-            for (int i = 0; i < accessibleControlListeners.size(); i++) {
-                AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+            for (int i = 0; i < accessibleControlListeners.length; i++) {
+                AccessibleControlListener listener = accessibleControlListeners[i];
                 listener.getSelection(ace);
             }
             if (ace.childID >= ACC.CHILDID_SELF) {
@@ -743,8 +743,8 @@ public class Accessible {
             AccessibleEvent e = new AccessibleEvent(this);
             e.childID = childID;
             e.result = null;
-            for (int i = 0; i < accessibleListeners.size(); i++) {
-                AccessibleListener listener = accessibleListeners.elementAt(i);
+            for (int i = 0; i < accessibleListeners.length; i++) {
+                AccessibleListener listener = accessibleListeners[i];
                 listener.getName(e);
             }
             if (e.result !is null) {
@@ -762,8 +762,8 @@ public class Accessible {
     cocoa.id getEnabledAttribute (int childID) {
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.detail = -1;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getState(event);
         }
 
@@ -774,8 +774,8 @@ public class Accessible {
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.childID = ACC.CHILDID_MULTIPLE; // set to invalid value, to test if the application sets it in getFocus()
         event.accessible = null;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getFocus(event);
         }
 
@@ -819,13 +819,13 @@ public class Accessible {
             AccessibleControlEvent event = new AccessibleControlEvent(this);
             event.childID = childID;
             event.detail = -1; // set to impossible value to test if app resets
-            for (int i = 0; i < accessibleControlListeners.size(); i++) {
-                AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+            for (int i = 0; i < accessibleControlListeners.length; i++) {
+                AccessibleControlListener listener = accessibleControlListeners[i];
                 listener.getChildCount(event);
             }
             if (event.detail > 0) {
-                for (int i = 0; i < accessibleControlListeners.size(); i++) {
-                    AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+                for (int i = 0; i < accessibleControlListeners.length; i++) {
+                    AccessibleControlListener listener = accessibleControlListeners[i];
                     listener.getChildren(event);
                 }
                 Object [] appChildren = event.children;
@@ -836,7 +836,7 @@ public class Accessible {
                     for (int i = 0; i < appChildren.length; i++) {
                         Object child = appChildren[i];
                         if (auto c = cast(Integer) child) {
-                            cocoa.id accChild = childIDToOs(c).intValue();
+                            cocoa.id accChild = childIDToOs(c.intValue);
                             childArray.addObject(accChild);
                         } else {
                             childArray.addObject((cast(Accessible)child).control.view);
@@ -863,13 +863,13 @@ public class Accessible {
             AccessibleControlEvent event = new AccessibleControlEvent(this);
             event.childID = childID;
             event.detail = -1; // set to impossible value to test if app resets
-            for (int i = 0; i < accessibleControlListeners.size(); i++) {
-                AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+            for (int i = 0; i < accessibleControlListeners.length; i++) {
+                AccessibleControlListener listener = accessibleControlListeners[i];
                 listener.getChildCount(event);
             }
             if (event.detail > 0) {
-                for (int i = 0; i < accessibleControlListeners.size(); i++) {
-                    AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+                for (int i = 0; i < accessibleControlListeners.length; i++) {
+                    AccessibleControlListener listener = accessibleControlListeners[i];
                     listener.getChildren(event);
                 }
                 Object [] appChildren = event.children;
@@ -883,8 +883,8 @@ public class Accessible {
                             int subChildID = c.intValue();
                             event.childID = subChildID;
                             event.detail = -1;
-                            for (int j = 0; j < accessibleControlListeners.size(); j++) {
-                                AccessibleControlListener listener = accessibleControlListeners.elementAt(j);
+                            for (int j = 0; j < accessibleControlListeners.length; j++) {
+                                AccessibleControlListener listener = accessibleControlListeners[j];
                                 listener.getRole(event);
                             }
 
@@ -925,8 +925,8 @@ public class Accessible {
         event.childID = childID;
         event.width = -1;
 
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getLocation(event);
         }
 
@@ -963,8 +963,8 @@ public class Accessible {
         event.childID = childID;
         event.width = -1;
 
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getLocation(event);
         }
 
@@ -988,8 +988,8 @@ public class Accessible {
         event.childID = childID;
         event.result = null;
         cocoa.id returnValue = null;
-        for (int i = 0; i < accessibleListeners.size(); i++) {
-            AccessibleListener listener = accessibleListeners.elementAt(i);
+        for (int i = 0; i < accessibleListeners.length; i++) {
+            AccessibleListener listener = accessibleListeners[i];
             listener.getDescription(event);
         }
 
@@ -1009,15 +1009,15 @@ public class Accessible {
         AccessibleControlEvent controlEvent = new AccessibleControlEvent(this);
         controlEvent.childID = childID;
         controlEvent.result = null;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getValue(controlEvent);
         }
         AccessibleTextEvent textEvent = new AccessibleTextEvent(this);
         textEvent.childID = childID;
         textEvent.offset = -1;
-        for (int i = 0; i < accessibleTextListeners.size(); i++) {
-            AccessibleTextListener listener = accessibleTextListeners.elementAt(i);
+        for (int i = 0; i < accessibleTextListeners.length; i++) {
+            AccessibleTextListener listener = accessibleTextListeners[i];
             listener.getCaretOffset(textEvent);
         }
         if (controlEvent.result !is null && textEvent.offset !is -1) {
@@ -1032,13 +1032,13 @@ public class Accessible {
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.childID = childID;
         event.result = null;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getValue(event);
         }
         String appValue = event.result;
         if (appValue !is null) {
-            returnValue = NSNumber.numberWithInt(appValue.length());
+            returnValue = NSNumber.numberWithInt(appValue.length);
         }
         return returnValue;
     }
@@ -1052,8 +1052,8 @@ public class Accessible {
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.childID = childID;
         event.result = null;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getValue(event);
         }
         if (event.result !is null) {
@@ -1071,8 +1071,8 @@ public class Accessible {
         event.childID = childID;
         event.offset = -1;
         event.length = -1;
-        for (int i = 0; i < accessibleTextListeners.size(); i++) {
-            AccessibleTextListener listener = accessibleTextListeners.elementAt(i);
+        for (int i = 0; i < accessibleTextListeners.length; i++) {
+            AccessibleTextListener listener = accessibleTextListeners[i];
             listener.getSelectionRange(event);
         }
         int offset = event.offset;
@@ -1081,8 +1081,8 @@ public class Accessible {
             AccessibleControlEvent event2 = new AccessibleControlEvent(this);
             event2.childID = event.childID;
             event2.result = null;
-            for (int i = 0; i < accessibleControlListeners.size(); i++) {
-                AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+            for (int i = 0; i < accessibleControlListeners.length; i++) {
+                AccessibleControlListener listener = accessibleControlListeners[i];
                 listener.getValue(event2);
             }
             String appValue = event2.result;
@@ -1099,8 +1099,8 @@ public class Accessible {
         event.childID = childID;
         event.offset = -1;
         event.length = 0;
-        for (int i = 0; i < accessibleTextListeners.size(); i++) {
-            AccessibleTextListener listener = accessibleTextListeners.elementAt(i);
+        for (int i = 0; i < accessibleTextListeners.length; i++) {
+            AccessibleTextListener listener = accessibleTextListeners[i];
             listener.getSelectionRange(event);
         }
         if (event.offset !is -1) {
@@ -1121,8 +1121,8 @@ public class Accessible {
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.childID = childID;
         event.result = null;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getValue(event);
         }
         String appValue = event.result;
@@ -1141,8 +1141,8 @@ public class Accessible {
         event.offset = -1;
         event.length = 0;
 
-        for (int i = 0; i < accessibleTextListeners.size(); i++) {
-            AccessibleTextListener listener = accessibleTextListeners.elementAt(i);
+        for (int i = 0; i < accessibleTextListeners.length; i++) {
+            AccessibleTextListener listener = accessibleTextListeners[i];
             listener.getSelectionRange(event);
         }
 
@@ -1161,8 +1161,8 @@ public class Accessible {
         AccessibleControlEvent event = new AccessibleControlEvent(this);
         event.childID = childID;
         event.result = null;
-        for (int i = 0; i < accessibleControlListeners.size(); i++) {
-            AccessibleControlListener listener = accessibleControlListeners.elementAt(i);
+        for (int i = 0; i < accessibleControlListeners.length; i++) {
+            AccessibleControlListener listener = accessibleControlListeners[i];
             listener.getValue(event);
         }
 
@@ -1170,7 +1170,7 @@ public class Accessible {
 
         if (event.result !is null) {
             range.location = 0;
-            range.length = event.result.length();
+            range.length = event.result.length;
         } else {
             return null;
 //          range.location = range.length = 0;
@@ -1181,7 +1181,7 @@ public class Accessible {
 
     int lineNumberForOffset (String text, int offset) {
         int lineNumber = 1;
-        int length = text.length();
+        int length = text.length;
         for (int i = 0; i < offset; i++) {
             switch (text.charAt (i)) {
                 case '\r':
@@ -1202,7 +1202,7 @@ public class Accessible {
         range.location = -1;
         int line = 1;
         int count = 0;
-        int length = text.length ();
+        int length = text.length;
         for (int i = 0; i < length; i++) {
             if (line is lineNumber) {
                 if (count is 0) {
@@ -1246,7 +1246,12 @@ public class Accessible {
     public void removeAccessibleListener(AccessibleListener listener) {
         checkWidget();
         if (listener is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
-        accessibleListeners.removeElement(listener);
+        foreach (i, l; accessibleListeners) {
+            if (l is listener) {
+                accessibleListeners = accessibleListeners[0 .. i] ~ accessibleListeners[i + 1 .. $];
+                break;
+            }
+        }
     }
 
     /**
@@ -1271,7 +1276,12 @@ public class Accessible {
     public void removeAccessibleControlListener(AccessibleControlListener listener) {
         checkWidget();
         if (listener is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
-        accessibleControlListeners.removeElement(listener);
+        foreach (i, l; accessibleControlListeners) {
+            if (l is listener) {
+                accessibleListeners = accessibleListeners[0 .. i] ~ accessibleListeners[i + 1 .. $];
+                break;
+            }
+        }
     }
 
     /**
@@ -1298,7 +1308,12 @@ public class Accessible {
     public void removeAccessibleTextListener (AccessibleTextListener listener) {
         checkWidget ();
         if (listener is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
-        accessibleTextListeners.removeElement (listener);
+        foreach (i, l; accessibleTextListeners) {
+            if (l is listener) {
+                accessibleListeners = accessibleListeners[0 .. i] ~ accessibleListeners[i + 1 .. $];
+                break;
+            }
+        }
     }
 
     static NSArray retainedAutoreleased(NSArray inObject) {
