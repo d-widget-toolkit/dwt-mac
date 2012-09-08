@@ -222,7 +222,7 @@ public override String toString() {
     int index = str.indexOf('{');
     if( index is str.length ) index = -1;
     str = str[ index + 1 .. $ ];
-    if (str.length() > 1) buffer.format("{}", ", ");
+    if (str.length > 1) buffer.format("{}", ", ");
     buffer.format("{}", str);
     return buffer.toString();
 }

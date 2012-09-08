@@ -160,7 +160,7 @@ String shortenText(GC gc, String text, int width) {
 String shortenText(GC gc, String text, int width, String ellipses) {
     if (gc.textExtent(text, FLAGS).x <= width) return text;
     int ellipseWidth = gc.textExtent(ellipses, FLAGS).x;
-    int length = text.length();
+    int length = text.length;
     TextLayout layout = new TextLayout(getDisplay());
     layout.setText(text);
     int end = layout.getPreviousOffset(length, DWT.MOVEMENT_CLUSTER);
@@ -854,9 +854,9 @@ int preferredWidth(GC gc, bool isSelected, bool minimum) {
     if (minimum) {
         int minChars = parent.minChars;
         text = minChars is 0 ? null : getText();
-        if (text !is null && text.length() > minChars) {
+        if (text !is null && text.length > minChars) {
             if (useEllipses()) {
-                int end = minChars < ELLIPSIS.length() + 1 ? minChars : minChars - ELLIPSIS.length();
+                int end = minChars < ELLIPSIS.length + 1 ? minChars : minChars - ELLIPSIS.length;
                 text = text[ 0 .. end ];
                 if (minChars > ELLIPSIS.length + 1) text ~= ELLIPSIS;
             } else {

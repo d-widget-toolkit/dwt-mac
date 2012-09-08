@@ -13,6 +13,7 @@
 module dwt.custom.SashFormLayout;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 import dwt.DWT;
 import dwt.custom.SashForm;

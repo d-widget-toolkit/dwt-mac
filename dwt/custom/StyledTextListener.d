@@ -12,6 +12,8 @@
  *******************************************************************************/
 module dwt.custom.StyledTextListener;
 
+import dwt.dwthelper.System;
+import dwt.dwthelper.Runnable;
 import dwt.custom.BidiSegmentEvent;
 import dwt.custom.BidiSegmentListener;
 import dwt.custom.ExtendedModifyEvent;
@@ -31,6 +33,8 @@ import dwt.custom.TextChangedEvent;
 import dwt.custom.TextChangeListener;
 import dwt.custom.TextChangingEvent;
 import dwt.custom.VerifyKeyListener;
+import dwt.custom.CaretListener;
+import dwt.custom.CaretEvent;
 import dwt.events.VerifyEvent;
 import dwt.internal.SWTEventListener;
 import dwt.widgets.Event;

@@ -13,6 +13,7 @@
 module dwt.custom.AnimatedProgress;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.Runnable;
 
 import dwt.DWT;
 import dwt.DWTException;

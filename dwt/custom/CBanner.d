@@ -127,7 +127,7 @@ public this(Composite parent, int style) {
         public void handleEvent(Event e) {
             switch (e.type) {
                 case DWT.Dispose:
-                    onDispose(); break;
+                    onDispose(e); break;
                 case DWT.MouseDown:
                     onMouseDown (e.x, e.y); break;
                 case DWT.MouseExit:
