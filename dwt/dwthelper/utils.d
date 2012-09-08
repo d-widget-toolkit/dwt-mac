@@ -485,7 +485,7 @@ int utf8AdjustOffset( String str, int offset ){
 }
 
 bool CharacterIsDefined( dchar ch ){
-    return (ch in tango.text.UnicodeData.unicodeData) !is null;
+    return Utf.isValid(ch);
 }
 dchar CharacterFirstToLower( String str ){
     int consumed;

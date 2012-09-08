@@ -8,6 +8,7 @@ import tango.io.Stdout;
 import tango.io.model.IFile;
 import tango.io.stream.Format;
 import tango.stdc.locale;
+import tango.stdc.string;
 import tango.stdc.stdlib : exit;
 import tango.sys.Environment;
 import tango.time.Clock;
