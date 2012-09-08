@@ -19,11 +19,17 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
 import dwt.internal.cocoa.NSOpenGLContext;
 import dwt.internal.cocoa.NSOpenGLPixelFormat;
+import dwt.internal.cocoa.NSNotificationCenter;
+import dwt.internal.cocoa.NSOpenGLView;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import dwt.widgets.Composite;
 import dwt.widgets.Canvas;
+import dwt.widgets.Listener;
+import dwt.widgets.Event;
 import dwt.opengl.GLData;
 
 /**
@@ -131,7 +137,7 @@ public this (Composite parent, int style, GLData data) {
     setData(GLCONTEXT_KEY, context);
     NSNotificationCenter.defaultCenter().addObserver(view,  OS.sel_updateOpenGLContext_, OS.NSViewGlobalFrameDidChangeNotification, view);
 
-    Listener listener = new class (glView, pixelFormat) Listener {
+    Listener listener = new class (cast(NSOpenGLView)view, pixelFormat) Listener {
         NSOpenGLView glView;
         NSOpenGLPixelFormat pixelFormat;
 
@@ -176,12 +182,12 @@ public GLData getGLData () {
     checkWidget ();
     GLData data = new GLData ();
     int /*long*/ [] value = new int /*long*/ [1];
-    pixelFormat.getValues(value, OS.NSOpenGLPFADoubleBuffer, 0);
+    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFADoubleBuffer, 0);
     data.doubleBuffer = value [0] !is 0;
-    pixelFormat.getValues(value, OS.NSOpenGLPFAStereo, 0);
+    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFAStereo, 0);
     data.stereo = value [0] !is 0;
 
-    pixelFormat.getValues(value, OS.NSOpenGLPFAAlphaSize, 0);
+    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFAAlphaSize, 0);
     data.alphaSize = cast(int/*64*/)value [0];
 
     /*
@@ -189,7 +195,7 @@ public GLData getGLData () {
      * in the size of the color component. For compatibility we split the color size less any alpha
      * into thirds and allocate a third to each color.
      */
-    pixelFormat.getValues(value, OS.NSOpenGLPFAColorSize, 0);
+    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFAColorSize, 0);
 
     int colorSize = (cast(int/*64*/)(value[0] - data.alphaSize)) / 3;
 
@@ -197,9 +203,9 @@ public GLData getGLData () {
     data.greenSize = colorSize;
     data.blueSize = colorSize;
 
-    pixelFormat.getValues(value, OS.NSOpenGLPFADepthSize, 0);
+    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFADepthSize, 0);
     data.depthSize = cast(int/*64*/)value [0];
-    pixelFormat.getValues(value, OS.NSOpenGLPFAStencilSize, 0);
+    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFAStencilSize, 0);
     data.stencilSize = cast(int/*64*/)value [0];
 
     /*
@@ -207,7 +213,7 @@ public GLData getGLData () {
      * has an alpha if the color values for the accumulation buffer were set. Allocate the values evenly
      * in that case.
      */
-    pixelFormat.getValues(value, OS.NSOpenGLPFAAccumSize, 0);
+    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFAAccumSize, 0);
 
     int accumColorSize = cast(int/*64*/)(value[0]) / 4;
     data.accumRedSize = accumColorSize;
@@ -215,9 +221,9 @@ public GLData getGLData () {
     data.accumBlueSize = accumColorSize;
     data.accumAlphaSize = accumColorSize;
 
-    pixelFormat.getValues(value, OS.NSOpenGLPFASampleBuffers, 0);
+    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFASampleBuffers, 0);
     data.sampleBuffers = cast(int/*64*/)value [0];
-    pixelFormat.getValues(value, OS.NSOpenGLPFASamples, 0);
+    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFASamples, 0);
     data.samples = cast(int/*64*/)value [0];
     return data;
 }

@@ -13,6 +13,7 @@
  *******************************************************************************/
 module dwt.opengl.GLData;
 
+import tango.text.convert.Format;
 import dwt.dwthelper.utils;
 
 import dwt.opengl.GLCanvas;
