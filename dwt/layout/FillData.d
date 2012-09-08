@@ -16,6 +16,7 @@ module dwt.layout.FillData;
 
 
 
+import dwt.DWT;
 import dwt.widgets.Control;
 import dwt.graphics.Point;
 

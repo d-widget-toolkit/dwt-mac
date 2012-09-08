@@ -12,12 +12,15 @@
  *******************************************************************************/
 module dwt.layout.FormLayout;
 
+import dwt.DWT;
 import dwt.layout.FormAttachment;
 import dwt.layout.FormData;
 import dwt.widgets.Control;
+import dwt.widgets.Scrollable;
 import dwt.widgets.Composite;
 import dwt.widgets.Layout;
 import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
 
 
 
