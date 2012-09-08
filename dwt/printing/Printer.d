@@ -19,11 +19,29 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSData;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSString;
 import dwt.internal.cocoa.NSPrinter;
 import dwt.internal.cocoa.NSPrintInfo;
 import dwt.internal.cocoa.NSPrintOperation;
 import dwt.internal.cocoa.NSView;
 import dwt.internal.cocoa.NSWindow;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.NSAutoreleasePool;
+import dwt.internal.cocoa.NSKeyedUnarchiver;
+import dwt.internal.cocoa.NSThread;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSNumber;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSBezierPath;
+import dwt.internal.cocoa.NSMutableDictionary;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSAffineTransform;
+import dwt.internal.cocoa.SWTPrinterView;
+import dwt.internal.cocoa.OS;
 import Carbon = dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
@@ -231,7 +249,7 @@ protected void create(DeviceData deviceData) {
             printer.retain();
             printInfo.setPrinter(printer);
         }
-        printInfo.setOrientation(data.orientation is PrinterData.LANDSCAPE ? OS.NSLandscapeOrientation : OS.NSPortraitOrientation);
+        printInfo.setOrientation(cast(NSPrintingOrientation)(data.orientation is PrinterData.LANDSCAPE ? OS.NSLandscapeOrientation : OS.NSPortraitOrientation));
         NSMutableDictionary dict = printInfo.dictionary();
         if (data.collate !is false) dict.setValue(NSNumber.numberWithBool(data.collate), OS.NSPrintMustCollate);
         if (data.copyCount !is 1) dict.setValue(NSNumber.numberWithInt(data.copyCount), OS.NSPrintCopies);
@@ -244,15 +262,15 @@ protected void create(DeviceData deviceData) {
         * the user chooses the preview button.  The fix is to reset the job disposition.
         */
         NSString job = printInfo.jobDisposition();
-        if (job.isEqual(new NSString(OS.NSPrintPreviewJob()))) {
+        if (job.isEqual(new NSString(OS.NSPrintPreviewJob))) {
             printInfo.setJobDisposition(job);
         }
         NSRect rect = NSRect();
         window = cast(NSWindow)(new NSWindow()).alloc();
         window.initWithContentRect(rect, OS.NSBorderlessWindowMask, OS.NSBackingStoreBuffered, false);
         String className = "SWTPrinterView"; //$NON-NLS-1$
-        if (OS.objc_lookUpClass(className) is 0) {
-            int /*long*/ cls = OS.objc_allocateClassPair(OS.class_NSView, className, 0);
+        if (OS.objc_lookUpClass(className) is null) {
+            auto cls = OS.objc_allocateClassPair(OS.class_NSView, className, 0);
             OS.class_addMethod(cls, OS.sel_isFlipped, OS.isFlipped_CALLBACK(), "@:");
             OS.objc_registerClassPair(cls);
         }
@@ -321,7 +339,7 @@ public objc.id internal_new_GC(GCData data) {
             NSSize size = printInfo.paperSize();
             size.width = (size.width * (dpi.x / screenDPI.x)) / scaling;
             size.height = (size.height * dpi.y / screenDPI.y) / scaling;
-            data.size = size;
+            data.size = &size;
             isGCCreated = true;
         }
         return operation.context().id;
@@ -390,7 +408,7 @@ public bool startJob(String jobName) {
     NSAutoreleasePool pool = null;
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
-        if (jobName !is null && jobName.length() !is 0) {
+        if (jobName !is null && jobName.length !is 0) {
             operation.setJobTitle(NSString.stringWith(jobName));
         }
         printInfo.setUpPrintOperationDefaultValues();
@@ -493,10 +511,10 @@ public bool startPage() {
         rect.height = paperSize.height;
         view.beginPageInRect(rect, NSPoint());
         NSRect imageBounds = printInfo.imageablePageBounds();
-        imageBounds.x /= scaling;
-        imageBounds.y /= scaling;
-        imageBounds.width /= scaling;
-        imageBounds.height /= scaling;
+        imageBounds.x = imageBounds.x / scaling;
+        imageBounds.y = imageBounds.y / scaling;
+        imageBounds.width = imageBounds.width / scaling;
+        imageBounds.height = imageBounds.height / scaling;
         NSBezierPath.bezierPathWithRect(imageBounds).setClip();
         NSAffineTransform transform = NSAffineTransform.transform();
         transform.translateXBy(imageBounds.x, imageBounds.y);
