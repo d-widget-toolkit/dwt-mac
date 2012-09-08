@@ -15,8 +15,8 @@ module dwt.custom.CBanner;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.custom.CBannerLayout;
 import dwt.graphics.Color;
 import dwt.graphics.Cursor;
@@ -127,7 +127,7 @@ public this(Composite parent, int style) {
         public void handleEvent(Event e) {
             switch (e.type) {
                 case DWT.Dispose:
-                    onDispose(); break;
+                    onDispose(e); break;
                 case DWT.MouseDown:
                     onMouseDown (e.x, e.y); break;
                 case DWT.MouseExit:

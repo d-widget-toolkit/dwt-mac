@@ -16,11 +16,14 @@ import dwt.dwthelper.utils;
 
 
 import dwt.DWT;
+import dwt.dwthelper.File;
 import dwt.dwthelper.FileInputStream;
 import dwt.dwthelper.FileOutputStream;
 import dwt.dwthelper.InflaterInputStream;
 import dwt.dwthelper.BufferedInputStream;
 import dwt.dwthelper.ResourceBundle;
+import dwt.dwthelper.InputStream;
+import dwt.dwthelper.OutputStream;
 
 import Math = tango.math.Math;
 import Unicode = tango.text.Unicode;
@@ -242,7 +245,7 @@ public static bool isLetterOrDigit(dchar c) {
  * @return true when the character is a Unicode space character
  */
 public static bool isSpaceChar(dchar c) {
-    return Character.isSpace(c);
+    return Unicode.isSpace(c);
 }
 
 /**

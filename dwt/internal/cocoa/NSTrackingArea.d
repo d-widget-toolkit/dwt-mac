@@ -15,6 +15,7 @@ import cocoa = dwt.internal.cocoa.id;
 import dwt.internal.cocoa.NSDictionary;
 import dwt.internal.cocoa.NSObject;
 import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 

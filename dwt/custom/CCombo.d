@@ -14,8 +14,8 @@ module dwt.custom.CCombo;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.accessibility.ACC;
 import dwt.accessibility.AccessibleAdapter;
 import dwt.accessibility.AccessibleControlAdapter;
@@ -156,12 +156,12 @@ public this (Composite parent, int style) {
                  arrowEvent (event);
                  return;
              }
-             if (CCombo.this is event.widget) {
+             if (this.outer is event.widget) {
                  comboEvent (event);
                  return;
              }
              if (getShell () is event.widget) {
-                 getDisplay().asyncExec(new Runnable() {
+                 getDisplay().asyncExec(new class() Runnable {
                      public void run() {
                          if (isDisposed ()) return;
                          handleFocus (DWT.FocusOut);
@@ -364,9 +364,9 @@ void arrowEvent (Event event) {
     }
 }
 protected void checkSubclass () {
-    String name = this.classinfo.name ();
+    String name = this.classinfo.name;
     int index = name.lastIndexOf ('.');
-    if (!name.substring (0, index + 1).equals (PACKAGE_PREFIX)) {
+    if (name.substring (0, index + 1) != PACKAGE_PREFIX) {
         DWT.error (DWT.ERROR_INVALID_SUBCLASS);
     }
 }
@@ -526,7 +526,7 @@ public void deselect (int index) {
     checkWidget ();
     if (0 <= index && index < list.getItemCount () &&
             index is list.getSelectionIndex() &&
-            text.getText().equals(list.getItem(index))) {
+            text.getText() == list.getItem(index)) {
         text.setText("");  //$NON-NLS-1$
         list.deselect (index);
     }
@@ -1196,7 +1196,7 @@ void popupEvent(Event event) {
              * In Windows, hiding the popup during the deactivate causes the deactivate
              * to be called twice and the selection event to be disappear.
              */
-            if (!"carbon".equals(DWT.getPlatform())) {
+            if ("carbon" != DWT.getPlatform()) {
                 Point point = arrow.toControl(getDisplay().getCursorLocation());
                 Point size = arrow.getSize();
                 Rectangle rect = new Rectangle(0, 0, size.x, size.y);
@@ -1632,7 +1632,7 @@ public void setVisibleItemCount (int count) {
 }
 String stripMnemonic (String string) {
     int index = 0;
-    int length_ = string.length ();
+    int length_ = string.length;
     do {
         while ((index < length_) && (string.charAt(index) !is '&')) index++;
         if (++index >= length_) return string;

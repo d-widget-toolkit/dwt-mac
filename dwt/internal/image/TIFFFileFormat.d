@@ -12,10 +12,13 @@
  *******************************************************************************/
 module dwt.internal.image.TIFFFileFormat;
 
+import dwt.DWT;
 import dwt.internal.image.TIFFRandomFileAccess;
 import dwt.internal.image.TIFFDirectory;
-import java.io.*;
 import dwt.internal.image.FileFormat;
+import dwt.internal.image.LEDataInputStream;
+import dwt.graphics.ImageLoader;
+import dwt.graphics.ImageData;
 
 import tango.core.Exception;
 

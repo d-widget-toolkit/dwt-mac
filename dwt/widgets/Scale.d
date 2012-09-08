@@ -22,9 +22,20 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSSlider;
+import dwt.internal.cocoa.NSControl;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.SWTSlider;
+import dwt.internal.cocoa.OS;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.TypedListener;
+import dwt.graphics.Point;
+import dwt.events.SelectionListener;
 
 /**
  * Instances of the receiver represent a selectable user
@@ -127,10 +138,10 @@ public Point computeSize (int wHint, int hHint, bool changed) {
     float /*double*/ thickness = widget.knobThickness();
     int width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT;
     if ((style & DWT.HORIZONTAL) !is 0) {
-        height = (int)Math.ceil(thickness);
+        height = cast(int)Math.ceil(thickness);
         width = height * 10;
     } else {
-        width = (int)Math.ceil(thickness);
+        width = cast(int)Math.ceil(thickness);
         height = width * 10;
     }
     if (wHint !is DWT.DEFAULT) width = wHint;
@@ -140,7 +151,7 @@ public Point computeSize (int wHint, int hHint, bool changed) {
 
 void createHandle () {
     state |= THEME_BACKGROUND;
-    NSRect rect = NSRect();
+    NSSlider widget = cast(NSSlider)(new SWTSlider()).alloc();
     widget.init();
     widget.setMaxValue(100);
     widget.setTarget(widget);
@@ -265,13 +276,6 @@ public void removeSelectionListener(SelectionListener listener) {
     if (eventTable is null) return;
     eventTable.unhook(DWT.Selection, listener);
     eventTable.unhook(DWT.DefaultSelection,listener);
-}
-
-void sendSelection () {
-    NSEvent currEvent = NSApplication.sharedApplication().currentEvent();
-
-    if (currEvent.type() !is OS.NSLeftMouseUp)
-        postEvent (DWT.Selection);
 }
 
 void sendSelection () {

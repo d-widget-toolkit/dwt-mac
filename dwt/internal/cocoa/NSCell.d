@@ -92,7 +92,7 @@ public NSColor highlightColorWithFrame(NSRect cellFrame, NSView controlView) {
 }
 
 public NSUInteger hitTestForEvent(NSEvent event, NSRect cellFrame, NSView controlView) {
-    return OS.objc_msgSend(this.id, OS.sel_hitTestForEvent_inRect_ofView_, event !is null ? event.id : null, cellFrame, controlView !is null ? controlView.id : null);
+    return cast(NSUInteger)OS.objc_msgSend(this.id, OS.sel_hitTestForEvent_inRect_ofView_, event !is null ? event.id : null, cellFrame, controlView !is null ? controlView.id : null);
 }
 
 public NSImage image() {
@@ -115,7 +115,7 @@ public bool isHighlighted() {
 }
 
 public NSInteger nextState() {
-    return OS.objc_msgSend(this.id, OS.sel_nextState);
+    return cast(NSInteger)OS.objc_msgSend(this.id, OS.sel_nextState);
 }
 
 public void setAlignment(NSTextAlignment mode) {

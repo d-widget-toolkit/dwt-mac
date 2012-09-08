@@ -15,6 +15,7 @@ module dwt.events.FocusAdapter;
 import dwt.dwthelper.utils;
 
 
+import dwt.events.FocusEvent;
 import dwt.events.FocusListener;
 
 /**

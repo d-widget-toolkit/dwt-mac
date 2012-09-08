@@ -14,6 +14,7 @@
 module dwt.internal.theme.GroupDrawData;
 
 import dwt.dwthelper.utils;
+import dwt.graphics.Rectangle;
 
 
 

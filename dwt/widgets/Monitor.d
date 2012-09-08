@@ -14,6 +14,7 @@
 module dwt.widgets.Monitor;
 
 import dwt.dwthelper.utils;
+import dwt.graphics.Rectangle;
 
 
 

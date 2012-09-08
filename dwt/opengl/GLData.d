@@ -13,7 +13,10 @@
  *******************************************************************************/
 module dwt.opengl.GLData;
 
+import tango.text.convert.Format;
 import dwt.dwthelper.utils;
+
+import dwt.opengl.GLCanvas;
 
 /**
  * The GLData class is a device-independent description
@@ -126,14 +129,6 @@ public class GLData {
      * are preferred.
      */
     public int samples;
-
-    /**
-     * Another GLCanvas whose texture namespace and display lists
-     * should be shared.
-     *
-     * @since 3.5
-     */
-    public GLCanvas shareContext;
 
     /**
      * Another GLCanvas whose texture namespace and display lists

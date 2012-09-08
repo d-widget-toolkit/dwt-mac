@@ -21,6 +21,19 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSDate;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSWindow;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSScreen;
+import dwt.internal.cocoa.NSBezierPath;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.OS;
 import Carbon = dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;
 import dwt.widgets.Composite;
@@ -29,6 +42,11 @@ import dwt.widgets.Display;
 import dwt.widgets.Event;
 import dwt.widgets.TypedListener;
 import dwt.widgets.Widget;
+import dwt.graphics.Cursor;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.events.ControlListener;
+import dwt.events.KeyListener;
 
 /**
  *  Instances of this class implement rubber banding rectangles that are
@@ -382,14 +400,14 @@ void drawRectangles (NSWindow window, Rectangle [] rects, bool erase) {
     } else {
         parentOrigin = new Point (0, 0);
     }
-    context.setCompositingOperation(erase ? OS.NSCompositeClear : OS.NSCompositeSourceOver);
-    NSRect rectFrame = new NSRect();
-    NSPoint globalPoint = new NSPoint();
+    context.setCompositingOperation(cast(NSCompositingOperation)(erase ? OS.NSCompositeClear : OS.NSCompositeSourceOver));
+    NSRect rectFrame = NSRect();
+    NSPoint globalPoint = NSPoint();
     float /*double*/ screenHeight = display.getPrimaryFrame().height;
     for (int i=0; i<rects.length; i++) {
         Rectangle rect = rects [i];
         rectFrame.x = rect.x + parentOrigin.x;
-        rectFrame.y = screenHeight - (int)((rect.y + parentOrigin.y) + rect.height);
+        rectFrame.y = screenHeight - cast(int)((rect.y + parentOrigin.y) + rect.height);
         rectFrame.width = rect.width;
         rectFrame.height = rect.height;
         globalPoint.x = rectFrame.x;
@@ -399,12 +417,12 @@ void drawRectangles (NSWindow window, Rectangle [] rects, bool erase) {
         rectFrame.y = globalPoint.y;
 
         if (erase) {
-            rectFrame.width++;
-            rectFrame.height++;
+            rectFrame.width = rectFrame.width + 1;
+            rectFrame.height = rectFrame.height + 1;
             NSBezierPath.fillRect(rectFrame);
         } else {
-            rectFrame.x += 0.5f;
-            rectFrame.y += 0.5f;
+            rectFrame.x = rectFrame.x + 0.5f;
+            rectFrame.y = rectFrame.y + 0.5f;
             NSBezierPath.strokeRect(rectFrame);
         }
     }
@@ -766,7 +784,7 @@ public bool open () {
     NSGraphicsContext context = window.graphicsContext();
     NSGraphicsContext.static_saveGraphicsState();
     NSGraphicsContext.setCurrentContext(context);
-    context.setCompositingOperation(OS.NSCompositeClear);
+    context.setCompositingOperation(cast(NSCompositingOperation)OS.NSCompositeClear);
     frame.x = frame.y = 0;
     NSBezierPath.fillRect(frame);
     NSGraphicsContext.static_restoreGraphicsState();
@@ -792,7 +810,7 @@ public bool open () {
     NSApplication application = NSApplication.sharedApplication();
     NSEvent currentEvent = application.currentEvent();
     if (currentEvent !is null) {
-        switch (currentEvent.type()) {
+        switch (cast(int)currentEvent.type()) {
             case OS.NSLeftMouseDown:
             case OS.NSLeftMouseDragged:
             case OS.NSRightMouseDown:
@@ -801,7 +819,6 @@ public bool open () {
             case OS.NSOtherMouseDragged:
                 down = true;
             default:
-        }
         }
     }
     if (down) {
@@ -827,7 +844,7 @@ public bool open () {
             NSEvent event = application.nextEventMatchingMask(0, NSDate.distantFuture(), OS.NSDefaultRunLoopMode, true);
             if (event is null) continue;
         NSEventType type = event.type();
-            switch (type) {
+            switch (cast(int)type) {
                 case OS.NSLeftMouseUp:
                 case OS.NSRightMouseUp:
                 case OS.NSOtherMouseUp:
@@ -845,7 +862,7 @@ public bool open () {
             default:
             }
             bool dispatch = true;
-            switch (type) {
+            switch (cast(int)type) {
                 case OS.NSLeftMouseDown:
                 case OS.NSLeftMouseUp:
                 case OS.NSRightMouseDown:

@@ -16,14 +16,15 @@ module dwt.graphics.Font;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.graphics.Device;
 import dwt.graphics.FontData;
 import dwt.graphics.Point;
 import dwt.graphics.Resource;
 import Carbon = dwt.internal.c.Carbon;
+import dwt.internal.objc.cocoa.Cocoa;
 import dwt.internal.cocoa.NSAutoreleasePool;
 import dwt.internal.cocoa.NSFont;
 import dwt.internal.cocoa.NSFontManager;
@@ -339,19 +340,19 @@ void init_(String name, float height, int style, String nsName) {
                 int traits = 0;
                 if ((style & DWT.ITALIC) !is 0) traits |= OS.NSItalicFontMask;
                 if ((style & DWT.BOLD) !is 0) traits |= OS.NSBoldFontMask;
-                handle = manager.convertFont(nsFont, traits);
+                handle = manager.convertFont(nsFont, cast(NSFontTraitMask)traits);
                 if ((style & DWT.ITALIC) !is 0 && (handle is null || (manager.traitsOfFont(handle) & OS.NSItalicFontMask) is 0)) {
                     traits &= ~OS.NSItalicFontMask;
                     handle = null;
                     if ((style & DWT.BOLD) !is 0) {
-                        handle = manager.convertFont(nsFont, traits);
+                        handle = manager.convertFont(nsFont, cast(NSFontTraitMask)traits);
                     }
                 }
                 if ((style & DWT.BOLD) !is 0 && handle is null) {
                     traits &= ~OS.NSBoldFontMask;
                     if ((style & DWT.ITALIC) !is 0) {
                         traits |= OS.NSItalicFontMask;
-                        handle = manager.convertFont(nsFont, traits);
+                        handle = manager.convertFont(nsFont, cast(NSFontTraitMask)traits);
                     }
                 }
                 if (handle is null) handle = nsFont;
@@ -394,8 +395,8 @@ public bool isDisposed() {
  * @return a string representation of the receiver
  */
 public String toString () {
-	if (isDisposed()) return "Font {*DISPOSED*}";
-	return Format("{}{}{}", "Font {" + handle + "}");
+    if (isDisposed()) return "Font {*DISPOSED*}";
+    return Format("{}{}{}", "Font {", handle, "}");
 }
 
 }

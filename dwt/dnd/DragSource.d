@@ -14,11 +14,12 @@
 module dwt.dnd.DragSource;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.dnd.DND;
 import dwt.dnd.DNDEvent;
 import dwt.dnd.DNDListener;
@@ -28,13 +29,13 @@ import dwt.dnd.TableDragSourceEffect;
 import dwt.dnd.Transfer;
 import dwt.dnd.TransferData;
 import dwt.dnd.TreeDragSourceEffect;
+import dwt.dnd.FileTransfer;
 import dwt.graphics.Color;
 import dwt.graphics.GC;
 import dwt.graphics.Image;
 import dwt.graphics.ImageData;
 import dwt.graphics.Point;
 import dwt.internal.C;
-import dwt.internal.Callback;
 import dwt.internal.cocoa.NSApplication;
 import dwt.internal.cocoa.NSArray;
 import dwt.internal.cocoa.NSData;
@@ -148,7 +149,7 @@ public class DragSource : Widget {
     static String types = "*\0";
     static size_t size = C.PTR_SIZEOF, align_ = C.PTR_SIZEOF is 4 ? 2 : 3;
     static const String SWT_OBJECT = "SWT_OBJECT\0";
-    static objc.IMP proc2 = 0, proc3 = 0, proc4 = 0, proc5 = 0, proc6 = 0;
+    static objc.IMP proc2 = null, proc3 = null, proc4 = null, proc5 = null, proc6 = null;
 
     static this () {
         String className = "SWTDragSourceDelegate";
@@ -157,7 +158,7 @@ public class DragSource : Widget {
         objc.IMP proc3 = cast(objc.IMP) &dragSourceProc3;
         objc.IMP proc4 = cast(objc.IMP) &dragSourceProc4;
         objc.IMP proc5 = cast(objc.IMP) &dragSourceProc5;
-        objc.IMP proc5 = cast(objc.IMP) &dragSourceProc6;
+        objc.IMP proc6 = cast(objc.IMP) &dragSourceProc6;
 
         objc.Class cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSObject, className, 0);
         OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
@@ -302,13 +303,13 @@ public this(Control control, int style) {
         version (D_LP64)
         {
             auto proc4Types = "@:@{NSPoint=dd}";
-            auto operationProcTypes = "@:@{NSPoint=dd}Q");
+            auto operationProcTypes = "@:@{NSPoint=dd}Q";
         }
 
         else
         {
             auto proc4Types = "@:@{NSPoint=ff}";
-            auto operationProcTypes = "@:@{NSPoint=ff}I");
+            auto operationProcTypes = "@:@{NSPoint=ff}I";
         }
 
         // Add the NSDraggingSource overrides.
@@ -365,22 +366,22 @@ public void addDragListener(DragSourceListener listener) {
 void callSuper(objc.id id, objc.SEL sel, objc.id arg0, NSPoint arg1, objc.id arg2) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
-    super_struct.super_class = OS.objc_msgSend(id, OS.sel_superclass);
-    OS.objc_msgSendSuper(super_struct, sel, arg0, arg1, arg2);
+    super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
+    OS.objc_msgSendSuper(&super_struct, sel, arg0, arg1, arg2);
 }
 
 void callSuper(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
-    super_struct.super_class = OS.objc_msgSend(id, OS.sel_superclass);
-    OS.objc_msgSendSuper(super_struct, sel, arg0, arg1);
+    super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
+    OS.objc_msgSendSuper(&super_struct, sel, arg0, arg1);
 }
 
 objc.id callSuperObject(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2, objc.id arg3) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
-    super_struct.super_class = OS.objc_msgSend(id, OS.sel_superclass);
-    return OS.objc_msgSendSuper(super_struct, sel, arg0, arg1, arg2, arg3);
+    super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
+    return OS.objc_msgSendSuper(&super_struct, sel, arg0, arg1, arg2, arg3);
 }
 
 protected void checkSubclass () {
@@ -464,13 +465,13 @@ void dragOutlineViewStart(Event dragDetectEvent) {
 }
 
 void draggedImage_beganAt(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
-    if (new NSObject(id).isKindOfClass(OS.class_NSTableView)) {
+    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView.isa)) {
         callSuper(id, sel, arg0, arg1);
     }
 }
 
 void draggedImage_endedAt_operation(objc.id id, objc.SEL sel, objc.id arg0, NSPoint arg1, objc.id arg2) {
-    int swtOperation = osOpToOp(arg2);
+    int swtOperation = osOpToOp(cast(NSDragOperation)arg2);
     Event event = new DNDEvent();
     event.widget = this;
     event.time = cast(int)System.currentTimeMillis();
@@ -479,17 +480,17 @@ void draggedImage_endedAt_operation(objc.id id, objc.SEL sel, objc.id arg0, NSPo
     notifyListeners(DND.DragEnd, event);
     dragImageFromListener = null;
 
-    if (new NSObject(id).isKindOfClass(OS.class_NSTableView)) {
+    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView.isa)) {
         callSuper(id, sel, arg0, arg1, arg2);
     }
 }
 
 objc.id dragImageForRowsWithIndexes_tableColumns_event_offset(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2, objc.id arg3) {
     if (dragImageFromListener !is null) {
-        NSPoint point = new NSPoint();
+        NSPoint point = NSPoint();
         point.x = dragOffset.x;
         point.y = dragOffset.y;
-        OS.memmove(arg3, point, NSPoint.sizeof);
+        OS.memmove(arg3, &point, NSPoint.sizeof);
         return dragImageFromListener.handle.id;
     } else {
         return callSuperObject(id, sel, arg0, arg1, arg2, arg3);
@@ -511,13 +512,13 @@ static objc.id dragSourceProc2(objc.id id, objc.SEL sel) {
     if (widget is null) return null;
     DragSource ds = null;
 
-    if (widget instanceof DragSource) {
-        ds = (DragSource)widget;
+    if (cast(DragSource)widget) {
+        ds = cast(DragSource)widget;
     } else {
-        ds = (DragSource)widget.getData(DND.DRAG_SOURCE_KEY);
+        ds = cast(DragSource)widget.getData(DND.DRAG_SOURCE_KEY);
     }
 
-    if (ds is null) return 0;
+    if (ds is null) return null;
 
     if (sel is OS.sel_ignoreModifierKeysWhileDragging) {
         return (ds.ignoreModifierKeysWhileDragging(id, sel) ? cast(objc.id ) 1 : null);
@@ -536,13 +537,13 @@ static objc.id dragSourceProc3(objc.id id, objc.SEL sel, objc.id arg0) {
     if (auto w = cast(DragSource) widget) {
         ds = w;
     } else {
-        ds = (cast(DragSource)widget).getData(DND.DRAG_SOURCE_KEY);
+        ds = cast(DragSource)widget.getData(DND.DRAG_SOURCE_KEY);
     }
 
     if (ds is null) return null;
 
     if (sel is OS.sel_draggingSourceOperationMaskForLocal_) {
-        return ds.draggingSourceOperationMaskForLocal(id, sel, arg0);
+        return cast(objc.id)ds.draggingSourceOperationMaskForLocal(id, sel, arg0);
     }
 
     return null;
@@ -590,10 +591,10 @@ static objc.id dragSourceProc5(objc.id id, objc.SEL sel, objc.id arg0, objc.id a
     if (sel is OS.sel_draggedImage_endedAt_operation_) {
         NSPoint point = NSPoint();
         OS.memmove(&point, arg1, NSPoint.sizeof);
-        ds.draggedImage_endedAt_operation(id, sel, arg0, point, arg2);
+        ds.draggedImage_endedAt_operation(id, sel, arg0, point, cast(objc.id)arg2);
     }
 
-    return 0;
+    return null;
 }
 
 static objc.id dragSourceProc6(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2, objc.id arg3) {
@@ -609,13 +610,13 @@ static objc.id dragSourceProc6(objc.id id, objc.SEL sel, objc.id arg0, objc.id a
         ds = cast(DragSource) widget.getData(DND.DRAG_SOURCE_KEY);
     }
 
-    if (ds is null) return 0;
+    if (ds is null) return null;
 
     if (sel is OS.sel_dragImageForRowsWithIndexes_tableColumns_event_offset_) {
         return ds.dragImageForRowsWithIndexes_tableColumns_event_offset(id, sel, arg0, arg1, arg2, arg3);
     }
 
-    return 0;
+    return null;
 }
 }
 
@@ -657,7 +658,7 @@ public DragSourceListener[] getDragListeners() {
     for (int i = 0; i < length_; i++) {
         Listener listener = listeners[i];
         if (auto li = cast(DNDListener) listener) {
-            dragListeners[count] = cast(DragSourceListener) (li).getEventListener();
+            dragListeners[count] = cast(DragSourceListener) li.getEventListener();
             count++;
         }
     }
@@ -865,7 +866,7 @@ DNDEvent startDrag(Event dragEvent) {
                 nativeTypeArray.addObject(NSString.stringWith(typeNames[j]));
             }
 
-            if (transfer instanceof FileTransfer) {
+            if (cast(FileTransfer)transfer) {
                 fileTrans = transfer;
             }
         }

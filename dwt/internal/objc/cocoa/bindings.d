@@ -64,7 +64,7 @@ void CGDataProviderRelease (CGDataProviderRef provider);
 
 
 // CGDirectDisplay.h
-CGRect CGDisplayBounds (CGDirectDisplayID display);
+CGRect CGDisplayBounds (CGDirectDisplayID display, CGRect rect);
 void* CGDisplayBaseAddress (CGDirectDisplayID display);
 size_t CGDisplayBitsPerPixel (CGDirectDisplayID display);
 size_t CGDisplayBitsPerSample (CGDirectDisplayID display);
@@ -133,9 +133,12 @@ NSInteger NSNumberOfColorComponents (id colorSpaceName);
 
 
 // NSGeometry.h
-NSRect NSIntersectionRect (NSRect aRect, NSRect bRect);
 bool NSEqualRects (NSRect aRect, NSRect bRect);
 bool NSPointInRect (NSPoint aPoint, NSRect aRect);
+NSRect NSIntersectionRect (NSRect aRect, NSRect bRect);
+NSRect NSIntersectionRect (NSRect arg0, NSRect arg1, NSRect arg2) {
+    return NSIntersectionRect(arg1, arg2);
+}
 
 
 

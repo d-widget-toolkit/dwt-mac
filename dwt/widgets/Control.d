@@ -24,11 +24,41 @@ import cocoa = dwt.internal.cocoa.id;
 
 import tango.core.Thread;
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
 import dwt.dwthelper.System;
+import dwt.accessibility.ACC;
 import Carbon = dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSRange;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSControl;
+import dwt.internal.cocoa.NSObject;
+import dwt.internal.cocoa.NSBezierPath;
+import dwt.internal.cocoa.NSAffineTransform;
+import dwt.internal.cocoa.NSInputManager;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSAttributedString;
+import dwt.internal.cocoa.NSMutableDictionary;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.NSMutableArray;
+import dwt.internal.cocoa.NSMutableParagraphStyle;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSWindow;
+import dwt.internal.cocoa.NSNumber;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSDate;
+import dwt.internal.cocoa.NSCell;
+import dwt.internal.cocoa.NSTrackingArea;
+import dwt.internal.cocoa.OS;
+import dwt.accessibility.Accessible;
 import dwt.widgets.Composite;
 import dwt.widgets.Decorations;
 import dwt.widgets.Display;
@@ -39,6 +69,29 @@ import dwt.widgets.Monitor;
 import dwt.widgets.Shell;
 import dwt.widgets.TypedListener;
 import dwt.widgets.Widget;
+import dwt.graphics.Drawable;
+import dwt.graphics.Image;
+import dwt.graphics.Font;
+import dwt.graphics.Cursor;
+import dwt.graphics.Region;
+import dwt.graphics.Point;
+import dwt.graphics.Color;
+import dwt.graphics.Rectangle;
+import dwt.graphics.GCData;
+import dwt.graphics.GC;
+import dwt.events.ControlListener;
+import dwt.events.DragDetectListener;
+import dwt.events.FocusListener;
+import dwt.events.HelpListener;
+import dwt.events.KeyListener;
+import dwt.events.MenuDetectListener;
+import dwt.events.MouseListener;
+import dwt.events.MouseTrackListener;
+import dwt.events.MouseMoveListener;
+import dwt.events.MouseWheelListener;
+import dwt.events.PaintListener;
+import dwt.events.TraverseListener;
+import dwt.events.MouseEvent;
 
 /**
  * Control is the abstract superclass of all windowed user interface classes.
@@ -89,16 +142,11 @@ public abstract class Control : Widget , Drawable {
     Cursor cursor;
     Region region;
     NSBezierPath regionPath;
-    int /*long*/ visibleRgn;
+    Carbon.RgnHandle visibleRgn;
     Accessible accessible;
 
     final static int CLIPPING = 1 << 10;
     final static int VISIBLE_REGION = 1 << 12;
-
-    /**
-     * Magic number comes from experience. There's no API for this value in Cocoa or Carbon.
-     */
-    static final int DEFAULT_DRAG_HYSTERESIS = 5;
 
     /**
      * Magic number comes from experience. There's no API for this value in Cocoa or Carbon.
@@ -145,19 +193,10 @@ public this (Composite parent, int style) {
     createWidget ();
 }
 
-bool acceptsFirstMouse (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+bool acceptsFirstMouse (objc.id id, objc.SEL sel, objc.id theEvent) {
     Shell shell = getShell ();
     if ((shell.style & DWT.ON_TOP) !is 0) return true;
     return super.acceptsFirstMouse (id, sel, theEvent);
-}
-
-int /*long*/ accessibilityActionNames(int /*long*/ id, int /*long*/ sel) {
-    if (accessible !is null) {
-        NSArray returnValue = accessible.internal_accessibilityActionNames(ACC.CHILDID_SELF);
-        if (returnValue !is null) return returnValue.id;
-    }
-
-    return super.accessibilityActionNames(id, sel);
 }
 
 objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
@@ -177,7 +216,7 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
             extraAttributes.addObject(OS.NSAccessibilityDescriptionAttribute);
             extraAttributes.addObject(OS.NSAccessibilityTitleAttribute);
 
-            for (int i = (int)/*64*/extraAttributes.count() - 1; i >= 0; i--) {
+            for (int i = cast(int)/*64*/extraAttributes.count() - 1; i >= 0; i--) {
                 NSString attribute = new NSString(extraAttributes.objectAtIndex(i).id);
                 if (accessible.internal_accessibilityAttributeValue(attribute, ACC.CHILDID_SELF) is null) {
                     extraAttributes.removeObjectAtIndex(i);
@@ -217,7 +256,7 @@ objc.id accessibilityParameterizedAttributeNames(objc.id id, objc.SEL sel) {
     return super.accessibilityParameterizedAttributeNames(id, sel);
 }
 
-int /*long*/ accessibilityFocusedUIElement(int /*long*/ id, int /*long*/ sel) {
+objc.id accessibilityFocusedUIElement(objc.id id, objc.SEL sel) {
     cocoa.id returnValue = null;
     if (id is view.id || (cast(NSControl)view && (cast(NSControl)view).cell() !is null && (cast(NSControl)view).cell().id is id)) {
         if (accessible !is null) {
@@ -639,28 +678,28 @@ public void addTraverseListener (TraverseListener listener) {
     addListener (DWT.Traverse,typedListener);
 }
 
-bool becomeFirstResponder (int /*long*/ id, int /*long*/ sel) {
+bool becomeFirstResponder (objc.id id, objc.SEL sel) {
     if ((state & DISABLED) !is 0) return false;
     return super.becomeFirstResponder (id, sel);
 }
 
-void calculateVisibleRegion (NSView view, int /*long*/ visibleRgn, bool clipChildren) {
-    int /*long*/ tempRgn = OS.NewRgn ();
+void calculateVisibleRegion (NSView view, Carbon.RgnHandle visibleRgn, bool clipChildren) {
+    auto tempRgn = OS.NewRgn ();
     if (!view.isHiddenOrHasHiddenAncestor() && isDrawing()) {
-        int /*long*/ childRgn = OS.NewRgn ();
+        auto childRgn = OS.NewRgn ();
         NSWindow window = view.window ();
         NSView contentView = window.contentView();
         NSView frameView = contentView.superview();
         NSRect bounds = contentView.visibleRect();
         bounds = contentView.convertRect_toView_(bounds, view);
-        short[] rect = new short[4];
-        OS.SetRect(rect, (short)bounds.x, (short)bounds.y, (short)(bounds.x + bounds.width), (short)(bounds.y + bounds.height));
+        auto rect = new Carbon.Rect();
+        OS.SetRect(rect, cast(short)bounds.x, cast(short)bounds.y, cast(short)(bounds.x + bounds.width), cast(short)(bounds.y + bounds.height));
         OS.RectRgn(visibleRgn, rect);
         NSView tempView = view, lastControl = null;
         while (tempView.id !is frameView.id) {
             bounds = tempView.visibleRect();
             bounds = tempView.convertRect_toView_(bounds, view);
-            OS.SetRect(rect, (short)bounds.x, (short)bounds.y, (short)(bounds.x + bounds.width), (short)(bounds.y + bounds.height));
+            OS.SetRect(rect, cast(short)bounds.x, cast(short)bounds.y, cast(short)(bounds.x + bounds.width), cast(short)(bounds.y + bounds.height));
             OS.RectRgn(tempRgn, rect);
             OS.SectRgn (tempRgn, visibleRgn, visibleRgn);
             if (OS.EmptyRgn (visibleRgn)) break;
@@ -673,7 +712,7 @@ void calculateVisibleRegion (NSView view, int /*long*/ visibleRgn, bool clipChil
                     if (child.isHidden()) continue;
                     bounds = child.visibleRect();
                     bounds = child.convertRect_toView_(bounds, view);
-                    OS.SetRect(rect, (short)bounds.x, (short)bounds.y, (short)(bounds.x + bounds.width), (short)(bounds.y + bounds.height));
+                    OS.SetRect(rect, cast(short)bounds.x, cast(short)bounds.y, cast(short)(bounds.x + bounds.width), cast(short)(bounds.y + bounds.height));
                     OS.RectRgn(tempRgn, rect);
                     OS.UnionRgn (tempRgn, childRgn, childRgn);
                 }
@@ -837,7 +876,7 @@ NSView contentView () {
 }
 
 NSAttributedString createString (String string, Font font, float /*double*/ [] foreground, int style, bool enabled, bool mnemonics) {
-    NSMutableDictionary dict = ((NSMutableDictionary)new NSMutableDictionary().alloc()).initWithCapacity(5);
+    NSMutableDictionary dict = (cast(NSMutableDictionary)(new NSMutableDictionary()).alloc()).initWithCapacity(5);
     if (font is null) font = this.font !is null ? this.font : defaultFont();
     dict.setObject (font.handle, OS.NSFontAttributeName);
     addTraits(dict, font);
@@ -850,24 +889,24 @@ NSAttributedString createString (String string, Font font, float /*double*/ [] f
         dict.setObject (NSColor.disabledControlTextColor (), OS.NSForegroundColorAttributeName);
     }
     if (style !is 0) {
-        NSMutableParagraphStyle paragraphStyle = (NSMutableParagraphStyle)new NSMutableParagraphStyle ().alloc ().init ();
-        paragraphStyle.setLineBreakMode (OS.NSLineBreakByClipping);
+        NSMutableParagraphStyle paragraphStyle = cast(NSMutableParagraphStyle)(new NSMutableParagraphStyle ()).alloc ().init ();
+        paragraphStyle.setLineBreakMode (cast(NSLineBreakMode)OS.NSLineBreakByClipping);
         int alignment = DWT.LEFT;
         if ((style & DWT.CENTER) !is 0) {
             alignment = OS.NSCenterTextAlignment;
         } else if ((style & DWT.RIGHT) !is 0) {
             alignment = OS.NSRightTextAlignment;
         }
-        paragraphStyle.setAlignment (alignment);
+        paragraphStyle.setAlignment (cast(NSTextAlignment)alignment);
         dict.setObject (paragraphStyle, OS.NSParagraphStyleAttributeName);
         paragraphStyle.release ();
     }
-    int length = string.length ();
+    int length = string.length;
     char [] chars = new char [length];
     string.getChars (0, chars.length, chars, 0);
     if (mnemonics) length = fixMnemonic (chars);
-    NSString str = ((NSString)new NSString().alloc()).initWithCharacters(chars, length);
-    NSAttributedString attribStr = ((NSAttributedString) new NSAttributedString ().alloc ()).initWithString (str, dict);
+    NSString str = NSString.stringWith(chars[0 .. length]);
+    NSAttributedString attribStr = (cast(NSAttributedString) (new NSAttributedString ()).alloc ()).initWithString (str, dict);
     str.release();
     dict.release();
     return attribStr;
@@ -1609,17 +1648,21 @@ Control [] getPath () {
 
 NSBezierPath getPath(Region region) {
     if (region is null) return null;
-    return getPath(region.handle);
+    return getPath(cast(Carbon.RgnHandle)region.handle);
 }
 
-NSBezierPath getPath(int /*long*/ region) {
-    Callback callback = new Callback(this, "regionToRects", 4);
+private extern (C) {
+    alias int function(ushort message, Carbon.RgnHandle rgn, Carbon.Rect* rect, void* refCon) GetPathCallback;
+}
+NSBezierPath getPath(Carbon.RgnHandle region) {
+/+  Callback callback = new Callback(this, "regionToRects", 4);
     if (callback.getAddress() is 0) DWT.error(DWT.ERROR_NO_MORE_CALLBACKS);
++/  auto callback = cast(objc.IMP) &regionToRects;
     NSBezierPath path = NSBezierPath.bezierPath();
     path.retain();
-    OS.QDRegionToRects(region, OS.kQDParseRegionFromTopLeft, callback.getAddress(), path.id);
-    callback.dispose();
-    if (path.isEmpty()) path.appendBezierPathWithRect(new NSRect());
+    OS.QDRegionToRects(region, OS.kQDParseRegionFromTopLeft, cast(GetPathCallback)callback/+.getAddress()+/, path.id);
+/+  callback.dispose();
++/  if (path.isEmpty()) path.appendBezierPathWithRect(NSRect());
     return path;
 }
 
@@ -1722,12 +1765,12 @@ public bool getVisible () {
     return (state & HIDDEN) is 0;
 }
 
-int /*long*/ getVisibleRegion () {
-    if (visibleRgn is 0) {
+Carbon.RgnHandle getVisibleRegion () {
+    if (visibleRgn is null) {
         visibleRgn = OS.NewRgn ();
         calculateVisibleRegion (view, visibleRgn, true);
     }
-    int /*long*/ result = OS.NewRgn ();
+    auto result = OS.NewRgn ();
     OS.CopyRgn (visibleRgn, result);
     return result;
 }
@@ -1742,15 +1785,15 @@ bool hasFocus () {
 
 objc.id hitTest (objc.id id, objc.SEL sel, NSPoint point) {
     if ((state & DISABLED) !is 0) return null;
-    if (!isActive ()) return 0;
+    if (!isActive ()) return null;
     if (regionPath !is null) {
-        NSView superview = new NSView(id).superview();
+        NSView superview = (new NSView(id)).superview();
         if (superview !is null) {
             NSPoint pt = superview.convertPoint_toView_(point, view);
             if (!view.isFlipped ()) {
                 pt.y = view.bounds().height - pt.y;
             }
-            if (!regionPath.containsPoint(pt)) return 0;
+            if (!regionPath.containsPoint(pt)) return null;
         }
     }
     return super.hitTest(id, sel, point);
@@ -1760,6 +1803,7 @@ bool imeInComposition () {
     return false;
 }
 
+bool insertText (objc.id id, objc.SEL sel, objc.id string) {
     if (view.window ().firstResponder ().id is id) {
         Shell s = this.getShell();
         NSEvent nsEvent = NSApplication.sharedApplication ().currentEvent ();
@@ -1856,8 +1900,8 @@ public void internal_dispose_GC (objc.id context, GCData data) {
     display.removeContext (data);
     if (data !is null) {
         if (data.paintRect is null) graphicsContext.flushGraphics ();
-        if (data.visibleRgn !is 0) OS.DisposeRgn(data.visibleRgn);
-        data.visibleRgn = 0;
+        if (data.visibleRgn !is null) OS.DisposeRgn(data.visibleRgn);
+        data.visibleRgn = null;
     }
 }
 
@@ -1887,9 +1931,6 @@ bool isActive () {
 bool isDescribedByLabel () {
     return true;
 }
-
-bool isDrawing () {
-    return getDrawing() && parent.isDrawing();
 
 bool isDrawing () {
     return getDrawing() && parent.isDrawing();
@@ -1948,10 +1989,10 @@ public bool isFocusControl () {
 }
 
 bool isObscured () {
-    int /*long*/ visibleRgn = getVisibleRegion(), boundsRgn = OS.NewRgn();
-    short[] rect = new short[4];
+    auto visibleRgn = getVisibleRegion(), boundsRgn = OS.NewRgn();
+    auto rect = new Carbon.Rect();
     NSRect bounds = view.visibleRect();
-    OS.SetRect(rect, (short)bounds.x, (short)bounds.y, (short)(bounds.x + bounds.width), (short)(bounds.y + bounds.height));
+    OS.SetRect(rect, cast(short)bounds.x, cast(short)bounds.y, cast(short)(bounds.x + bounds.width), cast(short)(bounds.y + bounds.height));
     OS.RectRgn(boundsRgn, rect);
     OS.DiffRgn(boundsRgn, visibleRgn, boundsRgn);
     bool obscured = !OS.EmptyRgn (boundsRgn);
@@ -2102,7 +2143,7 @@ void markLayout (bool changed, bool all) {
 }
 
 objc.id menuForEvent (objc.id id, objc.SEL sel, objc.id theEvent) {
-    if (!isEnabled ()) return 0;
+    if (!isEnabled ()) return null;
 
     NSPoint pt = NSEvent.mouseLocation();
     pt.y = cast(int) (display.getPrimaryFrame().height - pt.y);
@@ -2121,7 +2162,7 @@ objc.id menuForEvent (objc.id id, objc.SEL sel, objc.id theEvent) {
             menu.setLocation (event.x, event.y);
         }
         menu.setVisible(true);
-        return 0;
+        return null;
     }
     return super.menuForEvent (id, sel, theEvent);
 }
@@ -2144,18 +2185,18 @@ void scrollWheel (objc.id id, objc.SEL sel, objc.id theEvent) {
     super.scrollWheel(id, sel, theEvent);
 }
 
-bool isEventView (int /*long*/ id) {
+bool isEventView (objc.id id) {
     return true;
 }
 
-bool mouseEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent, int type) {
-    if (!display.sendEvent) return true;
-    display.sendEvent = false;
+bool mouseEvent (objc.id id, objc.SEL sel, objc.id theEvent, int type) {
+    if (!display.sendEvent_) return true;
+    display.sendEvent_ = false;
     if (!isEventView (id)) return true;
     bool dragging = false;
     bool[] consume = null;
     NSEvent nsEvent = new NSEvent(theEvent);
-    int nsType = (int)/*64*/nsEvent.type();
+    int nsType = cast(int)/*64*/nsEvent.type();
     NSInputManager manager = NSInputManager.currentInputManager ();
     if (manager !is null && manager.wantsToHandleMouseEvents ()) {
         if (manager.handleMouseEvent (nsEvent)) {
@@ -2170,7 +2211,7 @@ bool mouseEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent, int t
                 if (!view.isFlipped ()) {
                     location.y = view.bounds().height - location.y;
                 }
-                dragging = dragDetect((int)location.x, (int)location.y, false, consume);
+                dragging = dragDetect(cast(int)location.x, cast(int)location.y, false, consume);
             }
             break;
         case OS.NSLeftMouseDragged:
@@ -2193,6 +2234,7 @@ bool mouseEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent, int t
     return true;
 }
 
+void mouseDown(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!mouseEvent(id, sel, theEvent, DWT.MouseDown)) return;
     if (!mouseEvent(id, sel, theEvent, DWT.MouseDown)) return;
     bool tracking = isEventView (id);
@@ -2202,42 +2244,42 @@ bool mouseEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent, int t
     if (tracking) display.trackingControl = null;
 }
 
-void mouseUp(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void mouseUp(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!mouseEvent(id, sel, theEvent, DWT.MouseUp)) return;
     super.mouseUp(id, sel, theEvent);
 }
 
-void mouseDragged(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void mouseDragged(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!mouseEvent(id, sel, theEvent, DWT.MouseMove)) return;
     super.mouseDragged(id, sel, theEvent);
 }
 
-void rightMouseDown(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void rightMouseDown(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!mouseEvent(id, sel, theEvent, DWT.MouseDown)) return;
     super.rightMouseDown(id, sel, theEvent);
 }
 
-void rightMouseUp(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void rightMouseUp(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!mouseEvent(id, sel, theEvent, DWT.MouseUp)) return;
     super.rightMouseUp(id, sel, theEvent);
 }
 
-void rightMouseDragged(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void rightMouseDragged(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!mouseEvent(id, sel, theEvent, DWT.MouseMove)) return;
     super.rightMouseDragged(id, sel, theEvent);
 }
 
-void otherMouseDown(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void otherMouseDown(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!mouseEvent(id, sel, theEvent, DWT.MouseDown)) return;
     super.otherMouseDown(id, sel, theEvent);
 }
 
-void otherMouseUp(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void otherMouseUp(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!mouseEvent(id, sel, theEvent, DWT.MouseUp)) return;
     super.otherMouseUp(id, sel, theEvent);
 }
 
-void otherMouseDragged(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void otherMouseDragged(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!mouseEvent(id, sel, theEvent, DWT.MouseMove)) return;
     super.otherMouseDragged(id, sel, theEvent);
 }
@@ -2457,24 +2499,24 @@ public void redraw (int x, int y, int width, int height, bool all) {
     view.setNeedsDisplayInRect(rect);
 }
 
-int /*long*/ regionToRects(int /*long*/ message, int /*long*/ rgn, int /*long*/ r, int /*long*/ path) {
-    NSPoint pt = new NSPoint();
-    short[] rect = new short[4];
+objc.id regionToRects(int /*long*/ message, Carbon.RgnHandle rgn, objc.id r, objc.id path) {
+    auto pt = new NSPoint();
+    auto rect = new Carbon.Rect();
     if (message is OS.kQDRegionToRectsMsgParse) {
-        OS.memmove(rect, r, rect.length * 2);
-        pt.x = rect[1];
-        pt.y = rect[0];
+        OS.memmove(rect, r, rect.sizeof);
+        pt.x = rect.left;
+        pt.y = rect.top;
         OS.objc_msgSend(path, OS.sel_moveToPoint_, pt);
-        pt.x = rect[3];
+        pt.x = rect.right;
         OS.objc_msgSend(path, OS.sel_lineToPoint_, pt);
-        pt.x = rect[3];
-        pt.y = rect[2];
+        pt.x = rect.right;
+        pt.y = rect.bottom;
         OS.objc_msgSend(path, OS.sel_lineToPoint_, pt);
-        pt.x = rect[1];
+        pt.x = rect.left;
         OS.objc_msgSend(path, OS.sel_lineToPoint_, pt);
         OS.objc_msgSend(path, OS.sel_closePath);
     }
-    return 0;
+    return null;
 }
 
 void register () {
@@ -2526,8 +2568,8 @@ void releaseWidget () {
         menu.dispose ();
     }
     menu = null;
-    if (visibleRgn !is 0) OS.DisposeRgn (visibleRgn);
-    visibleRgn = 0;
+    if (visibleRgn !is null) OS.DisposeRgn (visibleRgn);
+    visibleRgn = null;
     layoutData = null;
     if (accessible !is null) {
         accessible.internal_dispose_Accessible ();
@@ -2823,12 +2865,12 @@ void removeRelation () {
     if (!isDescribedByLabel()) return;
     NSObject accessibleElement = focusView();
 
-    if (accessibleElement instanceof NSControl) {
-        NSControl viewAsControl = (NSControl) accessibleElement;
+    if (cast(NSControl)accessibleElement) {
+        NSControl viewAsControl = cast(NSControl) accessibleElement;
         if (viewAsControl.cell() !is null) accessibleElement = viewAsControl.cell();
     }
 
-    accessibleElement.accessibilitySetOverrideValue(accessibleElement, OS.NSAccessibilityTitleUIElementAttribute);
+    accessibleElement.accessibilitySetOverrideValue(accessibleElement.id, OS.NSAccessibilityTitleUIElementAttribute);
 }
 
 
@@ -2857,24 +2899,24 @@ public void removeTraverseListener(TraverseListener listener) {
 }
 
 void resetVisibleRegion () {
-    if (visibleRgn !is 0) {
+    if (visibleRgn !is null) {
         OS.DisposeRgn (visibleRgn);
-        visibleRgn = 0;
+        visibleRgn = null;
     }
     GCData[] gcs = display.contexts;
     if (gcs !is null) {
-        int /*long*/ visibleRgn = 0;
+        Carbon.RgnHandle visibleRgn = null;
         for (int i=0; i<gcs.length; i++) {
             GCData data = gcs [i];
             if (data !is null) {
                 if (data.view is view) {
-                    if (visibleRgn is 0) visibleRgn = getVisibleRegion ();
+                    if (visibleRgn is null) visibleRgn = getVisibleRegion ();
                     data.state &= ~VISIBLE_REGION;
                     OS.CopyRgn (visibleRgn, data.visibleRgn);
                 }
             }
         }
-        if (visibleRgn !is 0) OS.DisposeRgn (visibleRgn);
+        if (visibleRgn !is null) OS.DisposeRgn (visibleRgn);
     }
 }
 
@@ -3233,7 +3275,6 @@ public void setEnabled (bool enabled) {
             control = display.getFocusControl ();
             fixFocus_ = isFocusAncestor (control);
         }
-        }
     }
     if (enabled) {
         state &= ~DISABLED;
@@ -3481,7 +3522,7 @@ public bool setParent (Composite parent) {
     NSView topView = topView ();
     topView.retain();
     topView.removeFromSuperview();
-    parent.contentView().addSubview(topView, OS.NSWindowBelow, null);
+    parent.contentView().addSubview(topView, cast(NSWindowOrderingMode)OS.NSWindowBelow, null);
     topView.release();
     this.parent = parent;
     return true;
@@ -3617,9 +3658,9 @@ public void setSize (Point size) {
 }
 
 void setSmallSize () {
-    if (view instanceof NSControl) {
-        NSCell cell = ((NSControl)view).cell();
-        if (cell !is null) cell.setControlSize (OS.NSSmallControlSize);
+    if (cast(NSControl)view) {
+        NSCell cell = (cast(NSControl)view).cell();
+        if (cell !is null) cell.setControlSize (cast(NSControlSize)OS.NSSmallControlSize);
     }
 }
 
@@ -3704,7 +3745,6 @@ public void setVisible (bool visible) {
             control = display.getFocusControl ();
             fixFocus_ = isFocusAncestor (control);
         }
-        }
     }
     topView().setHidden(!visible);
     invalidateVisibleRegion();
@@ -3722,10 +3762,10 @@ public void setVisible (bool visible) {
 
 void setZOrder () {
     NSView topView = topView ();
-    parent.contentView().addSubview(topView, OS.NSWindowBelow, null);
+    parent.contentView().addSubview(topView, cast(NSWindowOrderingMode)OS.NSWindowBelow, null);
 }
 
-bool shouldDelayWindowOrderingForEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+bool shouldDelayWindowOrderingForEvent (objc.id id, objc.SEL sel, objc.id theEvent) {
     Shell shell = getShell ();
     if ((shell.style & DWT.ON_TOP) !is 0) return false;
     return super.shouldDelayWindowOrderingForEvent (id, sel, theEvent);
@@ -3765,7 +3805,7 @@ void setZOrder (Control sibling, bool above) {
     NSView otherView = sibling is null ? null : sibling.topView ();
     view.retain();
     view.removeFromSuperview();
-    parent.contentView().addSubview(view, above ? OS.NSWindowAbove : OS.NSWindowBelow, otherView);
+    parent.contentView().addSubview(view, cast(NSWindowOrderingMode)(above ? OS.NSWindowAbove : OS.NSWindowBelow), otherView);
     view.release();
     invalidateVisibleRegion();
 
@@ -4138,11 +4178,11 @@ void updateBackgroundMode () {
     }
 }
 
-void resetCursorRects (int /*long*/ id, int /*long*/ sel) {
+void resetCursorRects (objc.id id, objc.SEL sel) {
     if (isEnabled ()) callSuper (id, sel);
 }
 
-void updateTrackingAreas (int /*long*/ id, int /*long*/ sel) {
+void updateTrackingAreas (objc.id id, objc.SEL sel) {
     if (isEnabled ()) callSuper (id, sel);
 }
 

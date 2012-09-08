@@ -20,11 +20,39 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSCell;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSRange;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSTextField;
+import dwt.internal.cocoa.NSTextFieldCell;
+import dwt.internal.cocoa.NSNumberFormatter;
+import dwt.internal.cocoa.NSStepper;
+import dwt.internal.cocoa.NSAttributedString;
+import dwt.internal.cocoa.NSText;
+import dwt.internal.cocoa.SWTView;
+import dwt.internal.cocoa.SWTStepper;
+import dwt.internal.cocoa.SWTTextField;
+import dwt.internal.cocoa.OS;
 import Carbon = dwt.internal.c.Carbon;
 import objc = dwt.internal.objc.runtime;
+import dwt.internal.objc.cocoa.Cocoa;
 import dwt.widgets.Composite;
 import dwt.widgets.Event;
 import dwt.widgets.TypedListener;
+import dwt.graphics.Font;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.events.ModifyListener;
+import dwt.events.SelectionListener;
+import dwt.events.VerifyListener;
+
 
 /**
  * Instances of this class are selectable user interface
@@ -66,17 +94,17 @@ public class Spinner : Composite {
      *
      * @since 3.4
      */
-    public static final int LIMIT;
+    public static final int LIMIT = 0x7FFFFFFF;
 
     /*
     * These values can be different on different platforms.
     * Therefore they are not initialized in the declaration
     * to stop the compiler from inlining.
     */
-    static {
+/+  static {
         LIMIT = 0x7FFFFFFF;
     }
-
++/
 /**
  * Constructs a new instance of this class given its parent
  * and a style value describing its behavior and appearance.
@@ -231,11 +259,11 @@ public Point computeSize (int wHint, int hHint, bool changed) {
     height += frameRect.height - cellRect.height;
     width += GAP;
     size = buttonView.cell ().cellSize ();
-    width += (int)/*64*/size.width;
+    width += cast(int)/*64*/size.width;
     height = Math.max (height, size.height);
     if (wHint !is DWT.DEFAULT) width = wHint;
     if (hHint !is DWT.DEFAULT) height = hHint;
-    Rectangle trim = computeTrim (0, 0, (int)Math.ceil (width), (int)Math.ceil (height));
+    Rectangle trim = computeTrim (0, 0, cast(int)Math.ceil (width), cast(int)Math.ceil (height));
     return new Point (trim.width, trim.height);
 }
 
@@ -270,11 +298,12 @@ void createHandle () {
     buttonWidget.setTarget(buttonWidget);
     buttonWidget.setAction(OS.sel_sendSelection);
     buttonWidget.setMaxValue(100);
+    NSTextField textWidget = cast(NSTextField)(new SWTTextField()).alloc();
     textWidget.initWithFrame(NSRect());
     textWidget.init();
     //  textWidget.setTarget(widget);
     textWidget.setEditable((style & DWT.READ_ONLY) is 0);
-    textFormatter = (NSNumberFormatter)new NSNumberFormatter().alloc();
+    textFormatter = cast(NSNumberFormatter)(new NSNumberFormatter()).alloc();
     textFormatter.init();
     widget.addSubview(textWidget);
     widget.addSubview(buttonWidget);
@@ -437,10 +466,10 @@ int getSelectionText (bool[] parseFail) {
                 int startIndex = string.startsWith ("+") || string.startsWith ("-") ? 1 : 0;
                 String wholePart = startIndex !is index ? string.substring (startIndex, index) : "0";
                 String decimalPart = string.substring (index + 1);
-                if (decimalPart.length () > digits) {
+                if (decimalPart.length > digits) {
                     decimalPart = decimalPart.substring (0, digits);
                 } else {
-                    int i = digits - decimalPart.length ();
+                    int i = digits - decimalPart.length;
                     for (int j = 0; j < i; j++) {
                         decimalPart = decimalPart ~ "0";
                     }
@@ -482,7 +511,7 @@ int getSelectionText (bool[] parseFail) {
  */
 public String getText () {
     checkWidget ();
-    NSString str = new NSTextFieldCell (textView.cell ()).title ();
+    NSString str = (new NSTextFieldCell (textView.cell ())).title ();
     return str.getString ();
 }
 
@@ -644,7 +673,7 @@ void resized () {
     NSRect frame = view.frame();
     buttonFrame.x = frame.width - buttonFrame.width;
     buttonFrame.y = (frame.height - buttonFrame.height) / 2;
-    int textHeight = (int)Math.min(textSize.height, frame.height);
+    int textHeight = cast(int)Math.min(textSize.height, frame.height);
     frame.x = 0;
     frame.y = (frame.height - textHeight) / 2;
     frame.size.width -= buttonFrame.width + GAP;
@@ -676,11 +705,11 @@ bool sendKeyEvent (NSEvent nsEvent, int type) {
         bool [] parseFail = new bool [1];
         int value = getSelectionText (parseFail);
         if (parseFail [0]) {
-            value = (int)buttonView.doubleValue();
+            value = cast(int)buttonView.doubleValue();
         }
         int newValue = value + delta;
-        int max = (int)buttonView.maxValue();
-        int min = (int)buttonView.minValue();
+        int max = cast(int)buttonView.maxValue();
+        int min = cast(int)buttonView.minValue();
         if ((style & DWT.WRAP) !is 0) {
             if (newValue > max) newValue = min;
             if (newValue < min) newValue = max;
@@ -693,7 +722,7 @@ bool sendKeyEvent (NSEvent nsEvent, int type) {
         bool [] parseFail = new bool [1];
         int value = getSelectionText (parseFail);
         if (!parseFail [0]) {
-            int pos = (int)buttonView.doubleValue();
+            int pos = cast(int)buttonView.doubleValue();
             if (pos !is value) setSelection (value, true, false, true);
         }
     }
@@ -714,7 +743,7 @@ void updateBackground () {
     } else {
         nsColor = NSColor.textBackgroundColor ();
     }
-    ((NSTextField) textView).setBackgroundColor (nsColor);
+    (cast(NSTextField) textView).setBackgroundColor (nsColor);
 }
 
 /**
@@ -757,7 +786,7 @@ void setForeground (float /*double*/ [] color) {
     } else {
         nsColor = NSColor.colorWithDeviceRed (color [0], color [1], color [2], 1);
     }
-    ((NSTextField) textView).setTextColor (nsColor);
+    (cast(NSTextField) textView).setTextColor (nsColor);
 }
 
 /**
@@ -869,7 +898,7 @@ void setSelection (int value, bool setPos, bool setText, bool notify) {
         String string = String_.valueOf (value);
         if (digits > 0) {
             String decimalSeparator = textFormatter.decimalSeparator().getString();
-            int index = string.length () - digits;
+            int index = string.length - digits;
             StringBuffer buffer = new StringBuffer ();
             if (index > 0) {
                 buffer.append (string.substring (0, index));
@@ -890,9 +919,9 @@ void setSelection (int value, bool setPos, bool setText, bool notify) {
             if (string is null) return;
         }
         textView.setStringValue(NSString.stringWith(string));
-        NSRange selection = new NSRange();
+        NSRange selection = NSRange();
         selection.location = 0;
-        selection.length = string.length();
+        selection.length = string.length;
         NSText fieldEditor = textView.currentEditor();
         if (fieldEditor !is null) fieldEditor.setSelectedRange(selection);
         sendEvent (DWT.Modify);
@@ -901,8 +930,8 @@ void setSelection (int value, bool setPos, bool setText, bool notify) {
 }
 
 void setSmallSize () {
-    textView.cell ().setControlSize (OS.NSSmallControlSize);
-    buttonView.cell ().setControlSize (OS.NSSmallControlSize);
+    textView.cell ().setControlSize (cast(NSControlSize)OS.NSSmallControlSize);
+    buttonView.cell ().setControlSize (cast(NSControlSize)OS.NSSmallControlSize);
 }
 
 /**
@@ -971,31 +1000,31 @@ public void setValues (int selection, int minimum, int maximum, int digits, int 
     setSelection (selection, true, true, false);
 }
 
-bool shouldChangeTextInRange_replacementString(int /*long*/ id, int /*long*/ sel, int /*long*/ affectedCharRange, int /*long*/ replacementString) {
-    NSRange range = new NSRange();
-    OS.memmove(range, affectedCharRange, NSRange.sizeof);
+bool shouldChangeTextInRange_replacementString(objc.id id, objc.SEL sel, objc.id affectedCharRange, objc.id replacementString) {
+    NSRange range = NSRange();
+    OS.memmove(&range, affectedCharRange, NSRange.sizeof);
     bool result = callSuperBoolean(id, sel, range, replacementString);
     if (hooks (DWT.Verify)) {
-        String text = new NSString(replacementString).getString();
+        String text = (new NSString(replacementString)).getString();
         NSEvent currentEvent = display.application.currentEvent();
         int /*long*/ type = currentEvent.type();
         if (type !is OS.NSKeyDown && type !is OS.NSKeyUp) currentEvent = null;
-        String newText = verifyText(text, (int)/*64*/range.location, (int)/*64*/(range.location+range.length), currentEvent);
+        String newText = verifyText(text, cast(int)/*64*/range.location, cast(int)/*64*/(range.location+range.length), currentEvent);
         if (newText is null) return false;
         if (text !is newText) {
-            int length = newText.length();
+            int length = newText.length;
             NSText fieldEditor = textView.currentEditor ();
             if (fieldEditor !is null) {
                 NSRange selectedRange = fieldEditor.selectedRange();
                 if (textLimit !is LIMIT) {
                     int /*long*/ charCount = fieldEditor.string().length();
                     if (charCount - selectedRange.length + length > textLimit) {
-                        length = (int)/*64*/(textLimit - charCount + selectedRange.length);
+                        length = cast(int)/*64*/(textLimit - charCount + selectedRange.length);
                     }
                 }
                 char [] buffer = new char [length];
                 newText.getChars (0, buffer.length, buffer, 0);
-                NSString nsstring = NSString.stringWithCharacters (buffer, buffer.length);
+                NSString nsstring = NSString.stringWith (buffer[0 .. length]);
                 fieldEditor.replaceCharactersInRange (fieldEditor.selectedRange (), nsstring);
                 result = false;
             }
@@ -1005,26 +1034,27 @@ bool shouldChangeTextInRange_replacementString(int /*long*/ id, int /*long*/ sel
     return result;
 }
 
+void textDidChange (objc.id id, objc.SEL sel, objc.id aNotification) {
     super.textDidChange (id, sel, aNotification);
     bool [] parseFail = new bool [1];
     int value = getSelectionText (parseFail);
     if (!parseFail [0]) {
-        int pos = (int)buttonView.doubleValue();
+        int pos = cast(int)buttonView.doubleValue();
         if (value !is pos) {
             setSelection (value, true, false, true);
         }
     }
-    }
     postEvent (DWT.Modify);
 }
 
-NSRange textView_willChangeSelectionFromCharacterRange_toCharacterRange (int /*long*/ id, int /*long*/ sel, int /*long*/ aTextView, int /*long*/ oldSelectedCharRange, int /*long*/ newSelectedCharRange) {
+NSRange textView_willChangeSelectionFromCharacterRange_toCharacterRange (objc.id id, objc.SEL sel, objc.id aTextView, objc.id oldSelectedCharRange, objc.id newSelectedCharRange) {
     /* allow the selection change to proceed */
-    NSRange result = new NSRange ();
-    OS.memmove(result, newSelectedCharRange, NSRange.sizeof);
+    NSRange result = NSRange ();
+    OS.memmove(&result, newSelectedCharRange, NSRange.sizeof);
     return result;
 }
 
+void textDidEndEditing(objc.id id, objc.SEL sel, objc.id aNotification) {
     bool [] parseFail = new bool [1];
     int value = getSelectionText (parseFail);
     if (parseFail [0]) {
@@ -1036,8 +1066,8 @@ NSRange textView_willChangeSelectionFromCharacterRange_toCharacterRange (int /*l
 
 void updateCursorRects (bool enabled) {
     super.updateCursorRects (enabled);
-    updateCursorRects (enabled, textView);
-    updateCursorRects (enabled, buttonView);
+    super.updateCursorRects (enabled, textView);
+    super.updateCursorRects (enabled, buttonView);
 }
 
 String verifyText (String string, int start, int end, NSEvent keyEvent) {
@@ -1055,11 +1085,11 @@ String verifyText (String string, int start, int end, NSEvent keyEvent) {
         }
         index = 0;
     }
-    while (index < string.length ()) {
+    while (index < string.length) {
         if (!Character.isDigit (string.charAt (index))) break;
         index++;
     }
-    event.doit = index is string.length ();
+    event.doit = index is string.length;
     /*
      * It is possible (but unlikely), that application
      * code could have disposed the widget in the verify

@@ -16,9 +16,8 @@ module dwt.accessibility.SWTAccessibleDelegate;
 import dwt.dwthelper.utils;
 
 import dwt.accessibility.Accessible;
-import dwt.SWT;
+import dwt.DWT;
 import dwt.internal.C;
-import dwt.internal.Callback;
 import dwt.internal.cocoa.NSArray;
 import dwt.internal.cocoa.NSObject;
 import dwt.internal.cocoa.NSPoint;
@@ -263,7 +262,7 @@ class SWTAccessibleDelegate : NSObject {
         if (parameterizedAttributeNames !is null) parameterizedAttributeNames.release();
         parameterizedAttributeNames = null;
 
-        if (delegateJniRef !is 0) OS.DeleteGlobalRef(delegateJniRef);
+        if (delegateJniRef !is null) OS.DeleteGlobalRef(delegateJniRef);
         delegateJniRef = null;
         OS.object_setInstanceVariable(this.id, SWT_OBJECT, null);
     }

@@ -81,7 +81,7 @@ public class ST {
      *
      * @since 3.5
      */
-    public static final int TOGGLE_BLOCKSELECTION = 16777226;
+    public static const int TOGGLE_BLOCKSELECTION = 16777226;
 
     /**
      *  Bullet style dot.

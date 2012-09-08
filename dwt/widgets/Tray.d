@@ -16,7 +16,9 @@ module dwt.widgets.Tray;
 
 
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 import dwt.widgets.Display;
 import dwt.widgets.Widget;
 import dwt.widgets.TrayItem;

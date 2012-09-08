@@ -18,6 +18,9 @@ import tango.core.Exception;
 import dwt.DWTError;
 import dwt.DWTException;
 import dwt.dwthelper.utils;
+import dwt.internal.Platform;
+import dwt.internal.Compatibility;
+import dwt.internal.Library;
 
 /**
  * This class provides access to a small number of DWT system-wide
@@ -1260,25 +1263,6 @@ public class DWT {
     public static const int SHEET = 1 << 28;
 
     /**
-     * Style constant for sheet window behavior (value is 1&lt;&lt;28).
-     * <p>
-     * A sheet window is a window intended to be used as a temporary modal
-     * dialog that is attached to a parent window. It is typically used to
-     * prompt the user before proceeding. The window trim, positioning and
-     * general look of a sheet window is platform specific. For example,
-     * on the Macintosh, at the time this documentation was written, the
-     * window title is not visible.
-     * <br>Note that this is a <em>HINT</em>.
-     * </p><p><b>Used By:</b><ul>
-     * <li><code>Dialog</code> and subclasses</li>
-     * <li><code>Shell</code> and subclasses</li>
-     * </ul></p>
-     *
-     * @since 3.5
-     */
-    public static final int SHEET = 1 << 28;
-
-    /**
      * Trim style convenience constant for the most common top level shell appearance
      * (value is CLOSE|TITLE|MIN|MAX|RESIZE).
      * <p><b>Used By:</b><ul>
@@ -1612,24 +1596,6 @@ public class DWT {
      * @since 3.5
      */
     public static const int UNDERLINE_LINK = 4;
-
-    /**
-     * Style constant to indicate link underline (value is 0).
-     * <p>
-     * If the text color or the underline color are not set in the range
-     * the usage of <code>UNDERLINE_LINK</code> will change these colors
-     * to the preferred link color of the platform.<br>
-     * Note that clients that use this style, such as <code>StyledText</code>,
-     * will include code to track the mouse and change the cursor to the hand
-     * cursor when mouse is over the link.
-     * </p>
-     * <p><b>Used By:</b><ul>
-     * <li><code>TextStyle</code></li>
-     * </ul></p>
-     *
-     * @since 3.5
-     */
-    public static final int UNDERLINE_LINK = 4;
 
     /**
      * Style constant to indicate solid border (value is 1).
@@ -2570,41 +2536,6 @@ public class DWT {
 
 
     /**
-     * The style constant for "search" icon. This style constant is
-     * used with <code>Text</code> in combination with <code>DWT.SEARCH
-     * </code> (value is 1&lt;&lt;9).
-     * <br>Note that this is a <em>HINT</em>.
-     *
-     * <p><b>Used By:</b><ul>
-     * <li><code>Text</code></li>
-     * </ul></p>
-     *
-     * @see #SEARCH
-     * @see #ICON_CANCEL
-     *
-     * @since 3.5
-     */
-    public static final int ICON_SEARCH = 1 << 9;
-
-    /**
-     * The style constant for "cancel" icon. This style constant is
-     * used with <code>Text</code> in combination with <code>DWT.SEARCH
-     * </code> (value is 1&lt;&lt;8).
-     * <br>Note that this is a <em>HINT</em>.
-     *
-     * <p><b>Used By:</b><ul>
-     * <li><code>Text</code></li>
-     * </ul></p>
-     *
-     * @see #SEARCH
-     * @see #ICON_SEARCH
-     *
-     * @since 3.5
-     */
-    public static final int ICON_CANCEL = 1 << 8;
-
-
-    /**
      * The <code>MessageBox</code> style constant for an OK button;
      * valid combinations are OK, OK|CANCEL
      * (value is 1&lt;&lt;5).
@@ -3256,32 +3187,6 @@ public class DWT {
     public static const int ERROR_INVALID_RETURN_VALUE = 51;
 
     /**
-     * DWT error constant indicating that an attempt was made to
-     * use an BrowserFunction object which had already been disposed
-     * (value is 49).
-     *
-     * @since 3.5
-     */
-    public static final int ERROR_FUNCTION_DISPOSED = 49;
-
-    /**
-     * DWT error constant indicating that an exception happened
-     * when evaluating a javascript expression
-     * (value is 50).
-     *
-     * @since 3.5
-     */
-    public static final int ERROR_FAILED_EVALUATE = 50;
-
-    /**
-     * DWT error constant indicating that an invalid value was returned
-     * (value is 51).
-     *
-     * @since 3.5
-     */
-    public static final int ERROR_INVALID_RETURN_VALUE = 51;
-
-    /**
      * Constant indicating that an image or operation is of type bitmap  (value is 0).
      */
     public static const int BITMAP = 0;
@@ -3897,7 +3802,7 @@ public static String getPlatform () {
  * @return the DWT version number
  */
 public static int getVersion () {
-    return Library.SWT_VERSION;
+    return Library.DWT_VERSION;
 }
 
 /**

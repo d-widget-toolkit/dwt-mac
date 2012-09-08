@@ -102,7 +102,7 @@ protected String[] getTypeNames() {
 
 bool checkHTML(Object object) {
     auto o = stringcast(object);
-    return (object !is null && o && o.length() > 0);
+    return (object !is null && o && o.length > 0);
 }
 
 protected bool validate(Object object) {

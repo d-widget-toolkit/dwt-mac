@@ -14,6 +14,7 @@ module dwt.internal.image.JPEGFixedSizeSegment;
 
 
 
+import dwt.DWT;
 import dwt.internal.image.JPEGSegment;
 import dwt.internal.image.LEDataInputStream;
 

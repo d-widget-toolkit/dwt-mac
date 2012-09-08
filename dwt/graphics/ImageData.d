@@ -15,10 +15,11 @@
 module dwt.graphics.ImageData;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.graphics.Device;
 import dwt.graphics.GC;
 import dwt.graphics.Image;
@@ -232,7 +233,7 @@ public final class ImageData : CloneableCompatibility {
             if (b == 0) continue;
             int inc = 0;
             for (int bit = 0x10000; (bit >>= b) != 0;) inc |= bit;
-            for (int v = 0, p = 0; v < 0x10000; v+= inc) data[p++] = (byte)(v >> 8);
+            for (int v = 0, p = 0; v < 0x10000; v+= inc) data[p++] = cast(byte)(v >> 8);
         }
         ONE_TO_ONE_MAPPING = ANY_TO_EIGHT[8];
     }
@@ -1798,8 +1799,8 @@ static void blit(int op,
     int destRedMask, int destGreenMask, int destBlueMask,
     bool flipX, bool flipY) {
 
-    static_this();
-
+/+  static_this();
++/
     if ((destWidth <= 0) || (destHeight <= 0) || (alphaMode is ALPHA_TRANSPARENT)) return;
 
     // these should be supplied as params later

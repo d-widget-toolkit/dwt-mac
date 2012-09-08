@@ -172,9 +172,9 @@ public this(String string) {
     if (end is -1) return;
     String version2 = string.substring(start, end);
 
-    if (platform.equals("COCOA") && version2.equals("1")) {
+    if (platform == "COCOA" && version2 == "1") {
         start = end + 1;
-        end = string.length();
+        end = string.length;
         if (start < end) nsName = string.substring(start, end);
     }
 }
@@ -219,7 +219,7 @@ public int opEquals (Object object) {
     if (object is this) return true;
     if (!( null !is cast(FontData)object )) return false;
     FontData data = cast(FontData)object;
-    return name.equals(data.name) && height is data.height && style is data.style;
+    return name == data.name && height is data.height && style is data.style;
 }
 
 alias opEquals equals;
@@ -272,7 +272,7 @@ public String getLocale () {
     }
 
     String result = buffer.toString ();
-    int length = result.length ();
+    int length = result.length;
     if (length > 0) {
         if (result.charAt (length - 1) is sep) {
             result = result.substring (0, length - 1);
@@ -367,7 +367,7 @@ public void setLocale(String locale) {
     lang = country = variant = null;
     if (locale !is null) {
         char sep = '_';
-        int length = locale.length();
+        int length = locale.length;
         int firstSep, secondSep;
 
         firstSep = locale.indexOf(sep);

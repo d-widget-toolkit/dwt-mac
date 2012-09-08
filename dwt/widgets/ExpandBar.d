@@ -19,6 +19,8 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.dwthelper.System;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.Display;
@@ -27,6 +29,14 @@ import dwt.widgets.ExpandItem;
 import dwt.widgets.Listener;
 import dwt.widgets.ScrollBar;
 import dwt.widgets.TypedListener;
+import dwt.graphics.GC;
+import dwt.graphics.Image;
+import dwt.graphics.Font;
+import dwt.graphics.Color;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.graphics.FontMetrics;
+import dwt.events.ExpandListener;
 
 /**
  * Instances of this class support the layout of selectable

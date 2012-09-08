@@ -14,8 +14,8 @@ module dwt.custom.ScrolledComposite;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.custom.ScrolledCompositeLayout;
 import dwt.events.DisposeEvent;
 import dwt.events.DisposeListener;

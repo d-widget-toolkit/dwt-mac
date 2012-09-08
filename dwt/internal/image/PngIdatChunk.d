@@ -14,10 +14,12 @@ module dwt.internal.image.PngIdatChunk;
 
 
 
+import dwt.DWT;
 import dwt.internal.image.PngFileReadState;
 import dwt.internal.image.PngIhdrChunk;
 import dwt.internal.image.PngChunk;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 class PngIdatChunk : PngChunk {
 

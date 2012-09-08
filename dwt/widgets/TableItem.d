@@ -21,12 +21,28 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSCell;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSTableView;
+import dwt.internal.cocoa.NSAttributedString;
+import dwt.internal.cocoa.NSObject;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
+import dwt.internal.cocoa.objc_super;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Event;
 import dwt.widgets.Item;
 import dwt.widgets.Table;
 import dwt.widgets.TableColumn;
+import dwt.widgets.Tree;
+import dwt.graphics.Image;
+import dwt.graphics.Color;
+import dwt.graphics.Rectangle;
+import dwt.graphics.Font;
+import dwt.graphics.GC;
 
 /**
  * Instances of this class represent a selectable user interface object
@@ -157,16 +173,16 @@ int calculateWidth (int index, GC gc) {
     }
 
     /* This code is inlined for performance */
-    objc_super super_struct = new objc_super();
+    objc_super super_struct = objc_super();
     super_struct.receiver = cell.id;
-    super_struct.super_class = OS.objc_msgSend(cell.id, OS.sel_superclass);
-    NSSize size = new NSSize();
-    OS.objc_msgSendSuper_stret(size, super_struct, OS.sel_cellSize);
+    super_struct.super_class = cast(objc.Class)OS.objc_msgSend(cell.id, OS.sel_superclass);
+    NSSize size = NSSize();
+    OS.objc_msgSendSuper_stret(&size, &super_struct, OS.sel_cellSize);
     if (image !is null) size.width += parent.imageBounds.width + Table.IMAGE_GAP;
 //  cell.setImage (image !is null ? image.handle : null);
 //  NSSize size = cell.cellSize ();
 
-    int width = (int)Math.ceil (size.width);
+    int width = cast(int)Math.ceil (size.width);
     bool sendMeasure = true;
     if ((parent.style & DWT.VIRTUAL) !is 0) {
         sendMeasure = cached;
@@ -177,8 +193,8 @@ int calculateWidth (int index, GC gc) {
         event.item = this;
         event.index = index;
         event.gc = gc;
-        NSTableView widget = (NSTableView)parent.view;
-        int height = (int)widget.rowHeight ();
+        NSTableView widget = cast(NSTableView)parent.view;
+        int height = cast(int)widget.rowHeight ();
         event.width = width;
         event.height = height;
         parent.sendEvent (DWT.MeasureItem, event);
@@ -484,7 +500,7 @@ public Rectangle getImageBounds (int index) {
         index = parent.indexOf (column.nsColumn);
     }
     NSRect rect = tableView.frameOfCellAtColumn (index, parent.indexOf (this));
-    rect.x += Tree.IMAGE_GAP;
+    rect.x = rect.x + Tree.IMAGE_GAP;
     if (image !is null) {
         rect.width = parent.imageBounds.width;
     } else {
@@ -591,12 +607,12 @@ public Rectangle getTextBounds (int index) {
         index = parent.indexOf (column.nsColumn);
     }
     NSRect rect = tableView.frameOfCellAtColumn (index, parent.indexOf (this));
-    rect.x += Tree.TEXT_GAP;
-    rect.width -= Tree.TEXT_GAP;
+    rect.x = rect.x + Tree.TEXT_GAP;
+    rect.width = rect.width - Tree.TEXT_GAP;
     if (image !is null) {
         int offset = parent.imageBounds.width + Tree.IMAGE_GAP;
-        rect.x += offset;
-        rect.width -= offset;
+        rect.x = rect.x + offset;
+        rect.width = rect.width - offset;
     }
     return new Rectangle(cast(int) rect.x, cast(int) rect.y, cast(int) rect.width, cast(int) rect.height);
 }
@@ -604,8 +620,8 @@ public Rectangle getTextBounds (int index) {
 void redraw (int columnIndex) {
     if (parent.currentItem is this || !isDrawing()) return;
     /* redraw the full item if columnIndex is -1 */
-    NSTableView tableView = (NSTableView) parent.view;
-    NSRect rect = null;
+    NSTableView tableView = cast(NSTableView) parent.view;
+    NSRect rect;
     if (columnIndex is -1 || parent.hooks (DWT.MeasureItem) || parent.hooks (DWT.EraseItem) || parent.hooks (DWT.PaintItem)) {
         rect = tableView.rectOfRow (parent.indexOf (this));
     } else {

@@ -7,6 +7,33 @@
  */
 module dwt.internal.c.Carbon;
 
+enum
+{
+    kCFNumberFormatterNoStyle = 0,
+    kCFNumberFormatterDecimalStyle = 1,
+    kCFNumberFormatterCurrencyStyle = 2,
+    kCFNumberFormatterPercentStyle = 3,
+    kCFNumberFormatterScientificStyle = 4,
+    kCFNumberFormatterSpellOutStyle = 5
+}
+
+static if ((void*).sizeof > int.sizeof) // 64bit target
+	alias ulong UniCharCount;
+else
+	alias uint UniCharCount;
+
+// CABase.h
+static if ((void*).sizeof > int.sizeof) // 64bit target
+    alias double CGFloat;
+else
+    alias float CGFloat;
+
+// CFBase.h
+static if ((void*).sizeof > int.sizeof) // 64bit target
+    alias long CFIndex;
+else
+    alias int CFIndex;
+
 import dwt.dwthelper.utils;
 import bindings = dwt.internal.c.bindings;
 import dwt.internal.cocoa.CGRect;
@@ -88,12 +115,6 @@ alias ResType* ResTypePtr;
 
 alias wchar UniChar;
 
-static if ((void*).sizeof > int.sizeof) // 64bit target
-	alias ulong UniCharCount;
-
-else
-	alias uint UniCharCount;
-
 struct UnsignedWide
 {
     uint hi;
@@ -155,28 +176,7 @@ alias bindings.GetThemeMetric GetThemeMetric;
 alias OptionBits ATSOptionFlags;
 alias uint ATSFontContainerRef;
 
-enum ATSFontContext : uint
-{
-    kATSFontContextUnspecified = 0,
-    kATSFontContextGlobal = 1,
-    kATSFontContextLocal = 2
-}
-
-enum ATSFontFormat : uint
-{
-    kATSFontFilterCurrentVersion = 0
-}
-
 alias bindings.ATSFontActivateFromFileReference ATSFontActivateFromFileReference;
-
-
-
-// CABase.h
-static if ((void*).sizeof > int.sizeof) // 64bit target
-    alias double CGFloat;
-
-else
-    alias float CGFloat;
 
 
 
@@ -184,13 +184,6 @@ else
 alias bindings.GetCurrentButtonState GetCurrentButtonState;
 
 
-
-// CFBase.h
-static if ((void*).sizeof > int.sizeof) // 64bit target
-    alias long CFIndex;
-
-else
-    alias int CFIndex;
 
 alias void* CFTypeRef;
 struct __CFAllocator;
@@ -239,16 +232,6 @@ enum CFNumberFormatterRoundingMode
     kCFNumberFormatterRoundHalfEven = 4,
     kCFNumberFormatterRoundHalfDown = 5,
     kCFNumberFormatterRoundHalfUp = 6
-}
-
-enum
-{
-    kCFNumberFormatterNoStyle = 0,
-    kCFNumberFormatterDecimalStyle = 1,
-    kCFNumberFormatterCurrencyStyle = 2,
-    kCFNumberFormatterPercentStyle = 3,
-    kCFNumberFormatterScientificStyle = 4,
-    kCFNumberFormatterSpellOutStyle = 5
 }
 
 
@@ -312,17 +295,6 @@ alias uint CFStringEncoding;
 
 // CFURL.h
 alias bindings.CFURLCreateStringByAddingPercentEscapes CFURLCreateStringByAddingPercentEscapes;
-
-
-
-// CGColorSpace.h
-alias void* CGColorSpace;
-alias CGColorSpace* CGColorSpaceRef;
-
-
-
-// CGError.h
-alias int CGError;
 
 
 
@@ -515,8 +487,3 @@ struct UCKeyboardLayout
 }
 
 alias bindings.UCKeyTranslate UCKeyTranslate;
-
-
-
-// Unknown
-alias bindings.call call;

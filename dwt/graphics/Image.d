@@ -14,11 +14,12 @@
 module dwt.graphics.Image;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.graphics.Color;
 import dwt.graphics.Device;
 import dwt.graphics.Drawable;
@@ -277,10 +278,10 @@ public this(Device device, Image srcImage, int flag) {
         handle = cast(NSImage)(new NSImage()).alloc();
         handle = handle.initWithSize(size);
         NSBitmapImageRep rep = cast(NSBitmapImageRep)(new NSBitmapImageRep()).alloc();
-        rep = rep.initWithBitmapDataPlanes(null, width, height, srcRep.bitsPerSample(), srcRep.samplesPerPixel(), srcRep.samplesPerPixel() is 4, srcRep.isPlanar(), OS.NSDeviceRGBColorSpace, OS.NSAlphaFirstBitmapFormat | OS.NSAlphaNonpremultipliedBitmapFormat, srcRep.bytesPerRow(), srcRep.bitsPerPixel());
+        rep = rep.initWithBitmapDataPlanes(null, width, height, srcRep.bitsPerSample(), srcRep.samplesPerPixel(), srcRep.samplesPerPixel() is 4, srcRep.isPlanar(), OS.NSDeviceRGBColorSpace, cast(NSBitmapFormat)(OS.NSAlphaFirstBitmapFormat | OS.NSAlphaNonpremultipliedBitmapFormat), srcRep.bytesPerRow(), srcRep.bitsPerPixel());
         handle.addRepresentation(rep);
         rep.release();
-        handle.setCacheMode(OS.NSImageCacheNever);
+        handle.setCacheMode(cast(NSImageCacheMode)OS.NSImageCacheNever);
 
         ubyte* data = rep.bitmapData();
         OS.memmove(data, srcRep.bitmapData(), width * height * 4);
@@ -561,7 +562,7 @@ public this(Device device, String filename) {
     try {
         if (filename is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
         initNative(filename);
-        if (this.handle is null) init(new ImageData(filename));
+        if (this.handle is null) init_(new ImageData(filename));
         init_();
     } finally {
         if (pool !is null) pool.release();
@@ -573,8 +574,9 @@ void createAlpha () {
     NSAutoreleasePool pool = null;
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
+        NSSize size = handle.size();
         NSBitmapImageRep imageRep = getRepresentation();
-        NSInteger height = size.height;
+        NSInteger height = cast(NSInteger)size.height;
         NSInteger bpr = imageRep.bytesPerRow();
         NSInteger dataSize = height * bpr;
         byte[] srcData = new byte[dataSize];
@@ -729,7 +731,7 @@ public ImageData getImageData() {
             /* Get the icon mask data */
             int maskPad = 2;
             auto maskBpl = (((width + 7) / 8) + (maskPad - 1)) / maskPad * maskPad;
-            byte[] maskData = new byte[(int)/*64*/(height * maskBpl)];
+            byte[] maskData = new byte[cast(int)/*64*/(height * maskBpl)];
             int offset = 0, maskOffset = 0;
             for (int y = 0; y<height; y++) {
                 for (int x = 0; x<width; x++) {
@@ -785,7 +787,7 @@ public static Image cocoa_new(Device device, int type, NSImage nsImage) {
 
 NSBitmapImageRep getRepresentation () {
     NSImageRep rep = handle.bestRepresentationForDevice(null);
-    if (!rep.isKindOfClass(OS.class_NSBitmapImageRep)) {
+    if (!rep.isKindOfClass(OS.class_NSBitmapImageRep.isa)) {
         DWT.error(DWT.ERROR_UNSPECIFIED);
     }
     return new NSBitmapImageRep(rep);
@@ -821,11 +823,11 @@ void init_(int width, int height) {
     size.height = height;
     handle = handle.initWithSize(size);
     NSBitmapImageRep rep = cast(NSBitmapImageRep)(new NSBitmapImageRep()).alloc();
-    rep = rep.initWithBitmapDataPlanes(null, width, height, 8, 3, false, false, OS.NSDeviceRGBColorSpace, OS.NSAlphaFirstBitmapFormat | OS.NSAlphaNonpremultipliedBitmapFormat, width * 4, 32);
+    rep = rep.initWithBitmapDataPlanes(null, width, height, 8, 3, false, false, OS.NSDeviceRGBColorSpace, cast(NSBitmapFormat)(OS.NSAlphaFirstBitmapFormat | OS.NSAlphaNonpremultipliedBitmapFormat), width * 4, 32);
     OS.memset(rep.bitmapData(), 0xFF, width * height * 4);
     handle.addRepresentation(rep);
     rep.release();
-    handle.setCacheMode(OS.NSImageCacheNever);
+    handle.setCacheMode(cast(NSImageCacheMode)OS.NSImageCacheNever);
 }
 
 void init_(ImageData image) {
@@ -935,18 +937,18 @@ void init_(ImageData image) {
     size.height = height;
     handle = handle.initWithSize(size);
     NSBitmapImageRep rep = cast(NSBitmapImageRep)(new NSBitmapImageRep()).alloc();
-    rep = rep.initWithBitmapDataPlanes(null, width, height, 8, hasAlpha ? 4 : 3, hasAlpha, false, OS.NSDeviceRGBColorSpace, OS.NSAlphaFirstBitmapFormat | OS.NSAlphaNonpremultipliedBitmapFormat, bpr, 32);
+    rep = rep.initWithBitmapDataPlanes(null, width, height, 8, hasAlpha ? 4 : 3, hasAlpha, false, OS.NSDeviceRGBColorSpace, cast(NSBitmapFormat)(OS.NSAlphaFirstBitmapFormat | OS.NSAlphaNonpremultipliedBitmapFormat), bpr, 32);
     OS.memmove(rep.bitmapData(), buffer.ptr, dataSize);
     handle.addRepresentation(rep);
     rep.release();
-    handle.setCacheMode(OS.NSImageCacheNever);
+    handle.setCacheMode(cast(NSImageCacheMode)OS.NSImageCacheNever);
 }
 
 void initNative(String filename) {
     NSAutoreleasePool pool = null;
     NSImage nativeImage = null;
 
-    if (!NSThread.isMainThread()) pool = (NSAutoreleasePool) new NSAutoreleasePool().alloc().init();
+    if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         nativeImage = new NSImage();
         nativeImage.alloc();
@@ -962,7 +964,7 @@ void initNative(String filename) {
         }
 
         NSImageRep nativeRep = nativeImage.bestRepresentationForDevice(null);
-        if (!nativeRep.isKindOfClass(OS.class_NSBitmapImageRep)) {
+        if (!nativeRep.isKindOfClass(OS.class_NSBitmapImageRep.isa)) {
             return;
         }
 
@@ -971,23 +973,23 @@ void initNative(String filename) {
 
         bool hasAlpha = nativeRep.hasAlpha();
         int bpr = width * 4;
-        handle = (NSImage)new NSImage().alloc();
-        NSSize size = new NSSize();
+        handle = cast(NSImage)(new NSImage()).alloc();
+        NSSize size = NSSize();
         size.width = width;
         size.height = height;
         handle = handle.initWithSize(size);
-        NSBitmapImageRep rep = (NSBitmapImageRep)new NSBitmapImageRep().alloc();
-        rep = rep.initWithBitmapDataPlanes(0, width, height, 8, hasAlpha ? 4 : 3, hasAlpha, false, OS.NSDeviceRGBColorSpace, OS.NSAlphaFirstBitmapFormat | OS.NSAlphaNonpremultipliedBitmapFormat, bpr, 32);
+        NSBitmapImageRep rep = cast(NSBitmapImageRep)(new NSBitmapImageRep()).alloc();
+        rep = rep.initWithBitmapDataPlanes(null, width, height, 8, hasAlpha ? 4 : 3, hasAlpha, false, OS.NSDeviceRGBColorSpace, cast(NSBitmapFormat)(OS.NSAlphaFirstBitmapFormat | OS.NSAlphaNonpremultipliedBitmapFormat), bpr, 32);
         handle.addRepresentation(rep);
         rep.release();
-        handle.setCacheMode(OS.NSImageCacheNever);
-        NSRect rect = new NSRect();
+        handle.setCacheMode(cast(NSImageCacheMode)OS.NSImageCacheNever);
+        NSRect rect = NSRect();
         rect.width = width;
         rect.height = height;
 
         /* Compute the pixels */
         CGColorSpaceRef colorspace = OS.CGColorSpaceCreateDeviceRGB();
-        CGContextRef ctx = OS.CGBitmapContextCreate(rep.bitmapData(), width, height, 8, bpr, colorspace, OS.kCGImageAlphaNoneSkipFirst);
+        CGContextRef ctx = OS.CGBitmapContextCreate(rep.bitmapData(), width, height, 8, bpr, colorspace, cast(CGBitmapInfo)OS.kCGImageAlphaNoneSkipFirst);
         OS.CGColorSpaceRelease(colorspace);
         NSGraphicsContext.static_saveGraphicsState();
         NSGraphicsContext.setCurrentContext(NSGraphicsContext.graphicsContextWithGraphicsPort(ctx, false));
@@ -1002,23 +1004,23 @@ void initNative(String filename) {
             size_t bitmapBytesPerRow = width;
             size_t bitmapByteCount = bitmapBytesPerRow * height;
             void* alphaBitmapData = OS.malloc(bitmapByteCount);
-            CGContextRef alphaBitmapCtx = OS.CGBitmapContextCreate(alphaBitmapData, width, height, 8, bitmapBytesPerRow, 0, OS.kCGImageAlphaOnly);
+            CGContextRef alphaBitmapCtx = OS.CGBitmapContextCreate(alphaBitmapData, width, height, 8, bitmapBytesPerRow, null, cast(CGBitmapInfo)OS.kCGImageAlphaOnly);
             NSGraphicsContext.static_saveGraphicsState();
             NSGraphicsContext.setCurrentContext(NSGraphicsContext.graphicsContextWithGraphicsPort(alphaBitmapCtx, false));
             nativeRep.drawInRect(rect);
             NSGraphicsContext.static_restoreGraphicsState();
-            byte[] alphaData = new byte[(int)/*64*/bitmapByteCount];
-            OS.memmove(alphaData, alphaBitmapData, bitmapByteCount);
+            byte[] alphaData = new byte[cast(int)/*64*/bitmapByteCount];
+            OS.memmove(alphaData.ptr, alphaBitmapData, bitmapByteCount);
             OS.free(alphaBitmapData);
             OS.CGContextRelease(alphaBitmapCtx);
 
             /* Merge the alpha values with the pixels */
             byte[] srcData = new byte[height * bpr];
-            OS.memmove(srcData, rep.bitmapData(), srcData.length);
+            OS.memmove(srcData.ptr, rep.bitmapData(), srcData.length);
             for (int a = 0, p = 0; a < alphaData.length; a++, p += 4) {
                 srcData[p] = alphaData[a];
             }
-            OS.memmove(rep.bitmapData(), srcData, srcData.length);
+            OS.memmove(rep.bitmapData(), srcData.ptr, srcData.length);
 
             // If the alpha has only 0 or 255 (-1) for alpha values, compute the transparent pixel color instead
             // of a continuous alpha range.
@@ -1031,9 +1033,9 @@ void initNative(String filename) {
             this.alpha = -1;
             if (i is alphaData.length && transparentOffset !is -1) {
                 NSColor color = rep.colorAtX(transparentOffset % width, transparentOffset / width);
-                int red = (int) (color.redComponent() * 255);
-                int green = (int) (color.greenComponent() * 255);
-                int blue = (int) (color.blueComponent() * 255);
+                int red = cast(int) (color.redComponent() * 255);
+                int green = cast(int) (color.greenComponent() * 255);
+                int blue = cast(int) (color.blueComponent() * 255);
                 this.transparentPixel = (red << 16) + (green << 8) + blue;
             } else {
                 this.alphaData = alphaData;
@@ -1126,7 +1128,7 @@ public void internal_dispose_GC (objc.id context, GCData data) {
     NSAutoreleasePool pool = null;
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
-        if (context !is 0) {
+        if (context !is null) {
             NSGraphicsContext contextObj = new NSGraphicsContext(context);
             contextObj.release();
         }
@@ -1190,20 +1192,20 @@ public void setBackground(Color color) {
     if (color.isDisposed()) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     if (transparentPixel is -1) return;
     NSAutoreleasePool pool = null;
-    if (!NSThread.isMainThread()) pool = (NSAutoreleasePool) new NSAutoreleasePool().alloc().init();
+    if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
-        byte red = (byte)((transparentPixel >> 16) & 0xFF);
-        byte green = (byte)((transparentPixel >> 8) & 0xFF);
-        byte blue = (byte)((transparentPixel >> 0) & 0xFF);
-        byte newRed = (byte)((int)(color.handle[0] * 255) & 0xFF);
-        byte newGreen = (byte)((int)(color.handle[1] * 255) & 0xFF);
-        byte newBlue = (byte)((int)(color.handle[2] * 255) & 0xFF);
+        byte red = cast(byte)((transparentPixel >> 16) & 0xFF);
+        byte green = cast(byte)((transparentPixel >> 8) & 0xFF);
+        byte blue = cast(byte)((transparentPixel >> 0) & 0xFF);
+        byte newRed = cast(byte)(cast(int)(color.handle[0] * 255) & 0xFF);
+        byte newGreen = cast(byte)(cast(int)(color.handle[1] * 255) & 0xFF);
+        byte newBlue = cast(byte)(cast(int)(color.handle[2] * 255) & 0xFF);
         NSBitmapImageRep imageRep = getRepresentation();
         NSInteger bpr = imageRep.bytesPerRow();
         ubyte* data = imageRep.bitmapData();
-        byte[] line = new byte[(int)bpr];
+        byte[] line = new byte[cast(int)bpr];
         for (int i = 0, offset = 0; i < height; i++, offset += bpr) {
-            OS.memmove(line, data + offset, bpr);
+            OS.memmove(line.ptr, data + offset, bpr);
             for (int j = 0; j  < line.length; j += 4) {
                 if (line[j+ 1] is red && line[j + 2] is green && line[j + 3] is blue) {
                     line[j + 1] = newRed;
@@ -1211,7 +1213,7 @@ public void setBackground(Color color) {
                     line[j + 3] = newBlue;
                 }
             }
-            OS.memmove(data + offset, line, bpr);
+            OS.memmove(data + offset, line.ptr, bpr);
         }
         transparentPixel = (newRed & 0xFF) << 16 | (newGreen & 0xFF) << 8 | (newBlue & 0xFF);
     } finally {

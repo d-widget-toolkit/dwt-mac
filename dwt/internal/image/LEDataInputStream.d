@@ -184,7 +184,7 @@ final class LEDataInputStream : InputStream{
     public void unread(byte[] b) {
         int len = b.length;
         if (len > pos) throw new IOException("cannot unread");
-        position -= l;
+        position -= len;
         pos -= len;
         System.arraycopy(b, 0, buf, pos, len);
     }

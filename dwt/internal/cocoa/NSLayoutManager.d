@@ -82,7 +82,7 @@ public NSUInteger getGlyphs(NSGlyph* glyphArray, NSRange glyphRange) {
 }
 
 public NSUInteger getGlyphsInRange(NSRange glyphRange, NSGlyph* glyphBuffer, NSUInteger* charIndexBuffer, NSGlyphInscription* inscribeBuffer, bool* elasticBuffer, ubyte* bidiLevelBuffer) {
-    return OS.objc_msgSend(this.id, OS.sel_getGlyphsInRange_glyphs_characterIndexes_glyphInscriptions_elasticBits_bidiLevels_, glyphRange, glyphBuffer, charIndexBuffer, inscribeBuffer, elasticBuffer, bidiLevelBuffer);
+    return cast(NSUInteger)OS.objc_msgSend(this.id, OS.sel_getGlyphsInRange_glyphs_characterIndexes_glyphInscriptions_elasticBits_bidiLevels_, glyphRange, glyphBuffer, charIndexBuffer, inscribeBuffer, elasticBuffer, bidiLevelBuffer);
 }
 
 public NSUInteger glyphIndexForCharacterAtIndex(NSUInteger charIndex) {
@@ -128,7 +128,7 @@ public NSUInteger numberOfGlyphs() {
 }
 
 public NSRectArray rectArrayForCharacterRange(NSRange charRange, NSRange selCharRange, NSTextContainer container, NSUInteger* rectCount) {
-    return OS.objc_msgSend(this.id, OS.sel_rectArrayForCharacterRange_withinSelectedCharacterRange_inTextContainer_rectCount_, charRange, selCharRange, container !is null ? container.id : null, rectCount);
+    return cast(NSRectArray)OS.objc_msgSend(this.id, OS.sel_rectArrayForCharacterRange_withinSelectedCharacterRange_inTextContainer_rectCount_, charRange, selCharRange, container !is null ? container.id : null, rectCount);
 }
 
 public void removeTemporaryAttribute(NSString attrName, NSRange charRange) {

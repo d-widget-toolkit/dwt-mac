@@ -22,11 +22,20 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSScroller;
+import dwt.internal.cocoa.SWTScroller;
+import dwt.internal.cocoa.OS;
 import Carbon = dwt.internal.c.Carbon;
+import dwt.internal.objc.cocoa.Cocoa;
+import dwt.internal.cocoa.NSFont;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.Event;
 import dwt.widgets.TypedListener;
+import dwt.graphics.Point;
+import dwt.events.SelectionListener;
 
 /**
  * Instances of this class are selectable user interface
@@ -167,10 +176,10 @@ public Point computeSize (int wHint, int hHint, bool changed) {
     checkWidget();
     int width = 0, height = 0;
     if ((style & DWT.HORIZONTAL) !is 0) {
-        height = (int)NSScroller.scrollerWidthForControlSize(((NSScroller)view).controlSize());
+        height = cast(int)NSScroller.scrollerWidthForControlSize((cast(NSScroller)view).controlSize());
         width = height * 10;
     } else {
-        width = (int)NSScroller.scrollerWidthForControlSize(((NSScroller)view).controlSize());
+        width = cast(int)NSScroller.scrollerWidthForControlSize((cast(NSScroller)view).controlSize());
         height = width * 10;
     }
     if (wHint !is DWT.DEFAULT) width = wHint;
@@ -282,7 +291,7 @@ public int getSelection () {
     checkWidget();
     NSScroller widget = cast(NSScroller)view;
     double value = widget.doubleValue();
-    return (int)(0.5f + ((maximum - thumb - minimum) * value + minimum));
+    return cast(int)(0.5f + ((maximum - thumb - minimum) * value + minimum));
 }
 
 /**
@@ -330,7 +339,7 @@ void sendSelection () {
     Event event = new Event();
     NSScrollerPart hitPart = (cast(NSScroller)view).hitPart();
     int value = getSelection ();
-    switch (hitPart) {
+    switch (cast(int)hitPart) {
         case OS.NSScrollerDecrementLine:
             event.detail = DWT.ARROW_UP;
             value -= increment;
@@ -465,7 +474,7 @@ public void setSelection (int value) {
 
 void setSmallSize () {
     /* This code is intentionally comment */
-//  ((NSScroller)view).setControlSize (OS.NSSmallControlSize);
+//  (cast(NSScroller)view).setControlSize (OS.NSSmallControlSize);
 }
 
 void updateBar (int selection, int minimum, int maximum, int thumb) {

@@ -29,6 +29,7 @@ import dwt.internal.cocoa.NSString;
 import dwt.internal.cocoa.NSText;
 import dwt.internal.cocoa.NSToolbar;
 import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSEvent;
 import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
@@ -204,7 +205,7 @@ public static CGFloat minFrameWidthWithTitle(NSString aTitle, NSUInteger aStyle)
 
 public NSSize minSize() {
     NSSize result = NSSize();
-    OS.objc_msgSend_stret(result, this.id, OS.sel_minSize);
+    OS.objc_msgSend_stret(&result, this.id, OS.sel_minSize);
     return result;
 }
 
@@ -328,13 +329,13 @@ public void setToolbar(NSToolbar toolbar) {
     OS.objc_msgSend(this.id, OS.sel_setToolbar_, toolbar !is null ? toolbar.id : null);
 }
 
-public NSButton standardWindowButton(NSWindingButton b) {
+public NSButton standardWindowButton(NSWindowButton b) {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_standardWindowButton_, b);
     return result !is null ? new NSButton(result) : null;
 }
 
 public NSUInteger styleMask() {
-    return OS.objc_msgSend(this.id, OS.sel_styleMask);
+    return cast(NSUInteger)OS.objc_msgSend(this.id, OS.sel_styleMask);
 }
 
 public void toggleToolbarShown(cocoa.id sender) {
@@ -347,7 +348,7 @@ public NSToolbar toolbar() {
 }
 
 public NSInteger windowNumber() {
-    return OS.objc_msgSend(this.id, OS.sel_windowNumber);
+    return cast(NSInteger)OS.objc_msgSend(this.id, OS.sel_windowNumber);
 }
 
 public void zoom(cocoa.id sender) {
