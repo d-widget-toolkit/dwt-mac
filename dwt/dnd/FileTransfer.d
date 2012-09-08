@@ -132,7 +132,7 @@ bool checkFile(Object object) {
     if (object is null || !o || o.array.length is 0) return false;
     String[] strings = o.array;
     for (int i = 0; i < strings.length; i++) {
-        if (strings[i] is null || strings[i].length() is 0) return false;
+        if (strings[i] is null || strings[i].length is 0) return false;
     }
     return true;
 }

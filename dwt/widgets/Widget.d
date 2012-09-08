@@ -880,7 +880,7 @@ objc.id hitTestForEvent (objc.id id, objc.SEL sel, objc.id event, NSRect rect, o
     return null;
 }
 
-int /*long*/ hitTestForEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ event, NSRect rect, int /*long*/ controlView) {
+objc.id hitTestForEvent (objc.id id, objc.SEL sel, objc.id event, NSRect rect, objc.id controlView) {
     return 0;
 }
 
@@ -1507,9 +1507,6 @@ void setFrameSize (objc.id id, objc.SEL sel, NSSize size) {
 void setImage (objc.id id, objc.SEL sel, objc.id arg0) {
 }
 
-void setImage (int /*long*/ id, int /*long*/ sel, int /*long*/ arg0) {
-}
-
 bool setInputState (Event event, NSEvent nsEvent, int type) {
     if (nsEvent is null) return true;
     NSUInteger modifierFlags = nsEvent.modifierFlags();
@@ -1841,7 +1838,7 @@ objc.id nextState(objc.id id, objc.SEL sel) {
     return callSuperObject(id, sel);
 }
 
-void updateOpenGLContext(objc.id id, objc.SEL sel, int /*long*/ notification) {
+void updateOpenGLContext(objc.id id, objc.SEL sel, objc.id notification) {
 }
 
 

@@ -18,6 +18,7 @@ import dwt.dwthelper.utils;
 import dwt.dnd.ByteArrayTransfer;
 import dwt.dnd.DND;
 import dwt.dnd.TransferData;
+import dwt.internal.objc.cocoa.Cocoa;
 import dwt.internal.cocoa.NSString;
 import dwt.internal.cocoa.NSURL;
 import dwt.internal.cocoa.OS;
@@ -77,7 +78,7 @@ public void javaToNative (Object object, TransferData transferData){
     }
     String url = stringcast(object);
     NSString nsString = NSString.stringWith(url);
-    NSString escapedString = nsString.stringByAddingPercentEscapesUsingEncoding(OS.NSUTF8StringEncoding);
+    NSString escapedString = nsString.stringByAddingPercentEscapesUsingEncoding(cast(NSStringEncoding)OS.NSUTF8StringEncoding);
     transferData.data = NSURL.URLWithString(escapedString);
 }
 
@@ -108,7 +109,7 @@ protected String[] getTypeNames(){
 
 bool checkURL(Object object) {
     auto o = stringcast(object);
-    return object !is null && o && o.length() > 0;
+    return object !is null && o && o.length > 0;
 }
 
 protected bool validate(Object object) {
