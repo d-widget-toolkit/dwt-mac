@@ -94,7 +94,7 @@ String getName () {
 	String string = this.classinfo.name;
 	int index = string.lastIndexOf ('.');
 	if (index == -1) return string;
-	return string[index + 1 .. string.length ()];
+	return string[index + 1 .. string.length];
 }
 
 /**
