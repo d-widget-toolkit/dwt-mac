@@ -67,6 +67,7 @@ public final class GCData {
     public Image image;
 
     public NSColor fg, bg;
+    public CGFloat drawXOffset, drawYOffset;
     public NSRect* paintRect;
     public NSBezierPath path;
     public NSAffineTransform transform, inverseTransform;

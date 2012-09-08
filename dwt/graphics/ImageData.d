@@ -15,6 +15,7 @@
 module dwt.graphics.ImageData;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 
 import dwt.DWT;
@@ -1798,8 +1799,8 @@ static void blit(int op,
     int destRedMask, int destGreenMask, int destBlueMask,
     bool flipX, bool flipY) {
 
-    static_this();
-
+/+  static_this();
++/
     if ((destWidth <= 0) || (destHeight <= 0) || (alphaMode is ALPHA_TRANSPARENT)) return;
 
     // these should be supplied as params later

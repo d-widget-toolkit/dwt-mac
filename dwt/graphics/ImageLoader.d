@@ -162,16 +162,16 @@ public ImageData[] load(String filename) {
     //if (filename is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     InputStream stream = null;
     try {
-        stream = Compatibility.newFileInputStream(filename);
-        return load(stream);
-    } catch (IOException e) {
-        DWT.error(DWT.ERROR_IO, e);
-    } finally {
         try {
-            if (stream !is null) stream.close();
+            stream = Compatibility.newFileInputStream(filename);
+            return load(stream);
         } catch (IOException e) {
-            // Ignore error
+            DWT.error(DWT.ERROR_IO, e);
+        } finally {
+            if (stream !is null) stream.close();
         }
+    } catch (IOException e) {
+        // Ignore error
     }
     return null;
 }
@@ -277,7 +277,7 @@ public void save(String filename, int format) {
  */
 public void addImageLoaderListener(ImageLoaderListener listener) {
     if (listener is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
-    imageLoaderListeners.addElement(listener);
+    imageLoaderListeners ~= listener;
 }
 
 /**
@@ -295,7 +295,12 @@ public void addImageLoaderListener(ImageLoaderListener listener) {
 public void removeImageLoaderListener(ImageLoaderListener listener) {
     if (listener is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
     if (imageLoaderListeners.length is 0 ) return;
-    imageLoaderListeners.removeElement(listener);
+    foreach (i, l; imageLoaderListeners) {
+        if (l is listener) {
+            imageLoaderListeners = imageLoaderListeners[0 .. i] ~ imageLoaderListeners[i + 1 .. $];
+            break;
+        }
+    }
 }
 
 /**
@@ -308,7 +313,7 @@ public void removeImageLoaderListener(ImageLoaderListener listener) {
  * @see #removeImageLoaderListener(ImageLoaderListener)
  */
 public bool hasListeners() {
-    return imageLoaderListeners !is null && imageLoaderListeners.size() > 0;
+    return imageLoaderListeners !is null && imageLoaderListeners.length > 0;
 }
 
 /**
@@ -319,9 +324,9 @@ public bool hasListeners() {
  */
 public void notifyListeners(ImageLoaderEvent event) {
     if (!hasListeners()) return;
-    size_t size = imageLoaderListeners.size();
+    size_t size = imageLoaderListeners.length;
     for (size_t i = 0; i < size; i++) {
-        ImageLoaderListener listener = imageLoaderListeners.elementAt(i);
+        ImageLoaderListener listener = imageLoaderListeners[i];
         listener.imageDataLoaded(event);
     }
 }

@@ -13,6 +13,8 @@
  *******************************************************************************/
 module dwt.graphics.Device;
 
+import tango.text.convert.Format;
+
 import dwt.DWT;
 import dwt.DWTException;
 import dwt.dwthelper.System;
@@ -26,6 +28,14 @@ import dwt.graphics.FontData;
 import dwt.graphics.GCData;
 import dwt.graphics.Point;
 import dwt.graphics.Rectangle;
+import dwt.graphics.Cursor;
+import dwt.graphics.GC;
+import dwt.graphics.Image;
+import dwt.graphics.Path;
+import dwt.graphics.Pattern;
+import dwt.graphics.Region;
+import dwt.graphics.TextLayout;
+import dwt.graphics.Transform;
 import dwt.internal.Compatibility;
 import Carbon = dwt.internal.c.Carbon;
 import dwt.internal.cocoa.NSArray;
@@ -404,9 +414,9 @@ public FontData[] getFontList (String faceName, bool scalable) {
         NSUInteger fontCount = fonts.count();
         for (NSUInteger j = 0; j < fontCount; j++) {
             NSArray fontDetails = new NSArray(fonts.objectAtIndex(j));
-            String nsName = (new NSString)(fontDetails.objectAtIndex(0)).getString();
-            NSInteger weight = (new NSNumber)(fontDetails.objectAtIndex(2)).integerValue();
-            NSInteger traits = (new NSNumber)(fontDetails.objectAtIndex(3)).integerValue();
+            String nsName = (new NSString(fontDetails.objectAtIndex(0))).getString();
+            NSInteger weight = (new NSNumber(fontDetails.objectAtIndex(2))).integerValue();
+            NSInteger traits = (new NSNumber(fontDetails.objectAtIndex(3))).integerValue();
             int style = DWT.NORMAL;
             if ((traits & OS.NSItalicFontMask) !is 0) style |= DWT.ITALIC;
             if (weight is 9) style |= DWT.BOLD;
@@ -550,8 +560,8 @@ protected void init_ () {
     COLOR_WHITE = new Color (this, 0xFF,0xFF,0xFF);
 
     paragraphStyle = cast(NSMutableParagraphStyle)(new NSMutableParagraphStyle()).alloc().init();
-    paragraphStyle.setAlignment(OS.NSLeftTextAlignment);
-    paragraphStyle.setLineBreakMode(OS.NSLineBreakByClipping);
+    paragraphStyle.setAlignment(cast(NSTextAlignment)OS.NSLeftTextAlignment);
+    paragraphStyle.setLineBreakMode(cast(NSLineBreakMode)OS.NSLineBreakByClipping);
     NSArray tabs = new NSArray((new NSArray()).alloc().init());
     paragraphStyle.setTabStops(tabs);
     tabs.release();
@@ -637,8 +647,8 @@ public bool loadFont (String path) {
     if (fsRepresentation !is null) {
         byte [] fsRef = new byte [80];
         bool [] isDirectory = new bool[1];
-        if (OS.FSPathMakeRef (fsRepresentation, fsRef, isDirectory) is OS.noErr) {
-            result = OS.ATSFontActivateFromFileReference (fsRef, OS.kATSFontContextLocal, OS.kATSFontFormatUnspecified, 0, OS.kATSOptionFlagsDefault, null) is OS.noErr;
+        if (OS.FSPathMakeRef (cast(ubyte*)fsRepresentation, cast(Carbon.FSRef*)fsRef.ptr, isDirectory.ptr) is OS.noErr) {
+            result = OS.ATSFontActivateFromFileReference (cast(Carbon.FSRef*)fsRef.ptr, cast(ATSFontContext)OS.kATSFontContextLocal, cast(ATSFontFormat)OS.kATSFontFormatUnspecified, null, OS.kATSOptionFlagsDefault, null) is OS.noErr;
         }
     }
 
@@ -701,13 +711,14 @@ void printErrors () {
                 if (regions !is 0) string ~= Format("{}{}", regions , " Region(s), ");
                 if (textLayouts !is 0) string ~= Format("{}{}", textLayouts , " TextLayout(s), ");
                 if (transforms !is 0) string ~= Format("{}{}", transforms , " Transforms(s), ");
-                if (string.length () !is 0) {
-                    string = string.substring (0, string.length () - 2);
+                if (string.length !is 0) {
+                    string = string.substring (0, string.length - 2);
                     System.out_.println (string);
                 }
-                for (int i=0; i<errors.length; i++) {
-                    if (errors [i] !is null) errors [i].printStackTrace (System.Out);
-                }
+              for (int i=0; i<errors.length; i++) {
+                    if (errors [i] !is null) System.out_.println (errors [i].toString());
+/+                  if (errors [i] !is null) errors [i].printStackTrace (System.Out);
++/              }
             }
         }
     }

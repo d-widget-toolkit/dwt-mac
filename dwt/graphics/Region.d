@@ -336,7 +336,7 @@ public bool contains(int x, int y) {
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         Carbon.Point point = Carbon.Point(cast(short)x, cast(short)y);
-        return OS.PtInRgn(point, handle);
+        return Carbon.PtInRgn(point, handle);
     } finally {
         if (pool !is null) pool.release();
     }
@@ -366,8 +366,8 @@ NSAffineTransform transform;
 void convertRgn(NSAffineTransform transform) {
     auto data = RegionData!(Carbon.RgnHandle)(this);
     Carbon.RgnHandle newRgn = OS.NewRgn();
-    Carbon.RegionToRectsUPP proc = &Region.convertRgn_;
-    data.regionHandle = newRgn;
+    Carbon.RegionToRectsUPP proc = cast(Carbon.RegionToRectsUPP)&Region.convertRgn_;
+    data.data = newRgn;
     this.transform = transform;
     OS.QDRegionToRects(handle, OS.kQDParseRegionFromTopLeft, proc, &data);
     this.transform = null;

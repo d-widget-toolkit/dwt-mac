@@ -14,6 +14,7 @@
 module dwt.graphics.Path;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 import dwt.DWT;
 import dwt.DWTError;
@@ -443,11 +444,11 @@ public bool contains(float x, float y, GC gc, bool outline) {
             void* pixel = OS.malloc(4);
             if (pixel is null) DWT.error(DWT.ERROR_NO_HANDLES);
             int[] buffer = [0xFFFFFFFF];
-            OS.memmove(pixel, buffer, 4);
+            OS.memmove(pixel, buffer.ptr, 4);
             CGColorSpaceRef colorspace = OS.CGColorSpaceCreateDeviceRGB();
-            CGContextRef context = OS.CGBitmapContextCreate(pixel, 1, 1, 8, 4, colorspace, OS.kCGImageAlphaNoneSkipFirst);
+            CGContextRef context = OS.CGBitmapContextCreate(pixel, 1, 1, 8, 4, colorspace, cast(CGBitmapInfo)(OS.kCGImageAlphaNoneSkipFirst));
             OS.CGColorSpaceRelease(colorspace);
-            if (context is 0) {
+            if (context is null) {
                 OS.free(pixel);
                 DWT.error(DWT.ERROR_NO_HANDLES);
             }
@@ -458,14 +459,14 @@ public bool contains(float x, float y, GC gc, bool outline) {
                 case DWT.CAP_FLAT: capStyle = OS.kCGLineCapButt; break;
                 case DWT.CAP_SQUARE: capStyle = OS.kCGLineCapSquare; break;
             }
-            OS.CGContextSetLineCap(context, capStyle);
+            OS.CGContextSetLineCap(context, cast(CGLineCap)capStyle);
             int joinStyle = 0;
             switch (data.lineJoin) {
                 case DWT.JOIN_MITER: joinStyle = OS.kCGLineJoinMiter; break;
                 case DWT.JOIN_ROUND: joinStyle = OS.kCGLineJoinRound; break;
                 case DWT.JOIN_BEVEL: joinStyle = OS.kCGLineJoinBevel; break;
             }
-            OS.CGContextSetLineJoin(context, joinStyle);
+            OS.CGContextSetLineJoin(context, cast(CGLineJoin)joinStyle);
             OS.CGContextSetLineWidth(context, data.lineWidth);
             OS.CGContextTranslateCTM(context, -x + 0.5f, -y + 0.5f);
             CGMutablePathRef path = GC.createCGPathRef(handle);
@@ -473,7 +474,7 @@ public bool contains(float x, float y, GC gc, bool outline) {
             OS.CGPathRelease(path);
             OS.CGContextStrokePath(context);
             OS.CGContextRelease(context);
-            OS.memmove(buffer, pixel, 4);
+            OS.memmove(buffer.ptr, pixel, 4);
             OS.free(pixel);
             return buffer[0] !is 0xFFFFFFFF;
         } else {
@@ -612,7 +613,7 @@ public PathData getPathData() {
         NSPoint pt = NSPoint();
         for (NSInteger i = 0; i < count; i++) {
             NSBezierPathElement element = handle.elementAtIndex(i, points);
-            switch (element) {
+            switch (cast(int)element) {
                 case OS.NSMoveToBezierPathElement:
                     types[typeCount++] = DWT.PATH_MOVE_TO;
                     OS.memmove(&pt, points, NSPoint.sizeof);

@@ -232,7 +232,7 @@ public bool isDisposed() {
  */
 public String toString() {
     if (isDisposed()) return "Pattern {*DISPOSED*}";
-    return Format("{}{}{}", "Pattern {" , (color != null ? color.id : gradient.id) , "}");
+    return Format("{}{}{}", "Pattern {" , (color !is null ? color.id : gradient.id) , "}");
 }
 
 }
