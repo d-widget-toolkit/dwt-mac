@@ -19,6 +19,8 @@ import dwt.DWTError;
 import dwt.DWTException;
 import dwt.dwthelper.utils;
 import dwt.internal.Platform;
+import dwt.internal.Compatibility;
+import dwt.internal.Library;
 
 /**
  * This class provides access to a small number of DWT system-wide
@@ -3800,7 +3802,7 @@ public static String getPlatform () {
  * @return the DWT version number
  */
 public static int getVersion () {
-    return Library.SWT_VERSION;
+    return Library.DWT_VERSION;
 }
 
 /**

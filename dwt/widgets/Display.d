@@ -4933,7 +4933,7 @@ static objc.id windowProc3(objc.id id, objc.SEL sel, objc.id arg0) {
     } else if (sel is OS.sel_setObjectValue_) {
         widget.setObjectValue(id, sel, arg0);
     } else if (sel is OS.sel_updateOpenGLContext_) {
-        widget.updateOpenGLContext(id, sel, cast(int)arg0);
+        widget.updateOpenGLContext(id, sel, arg0);
     }
     return null;
 }

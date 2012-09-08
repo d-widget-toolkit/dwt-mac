@@ -218,7 +218,7 @@ public this(Table parent, int style) {
         public void handleEvent(Event event) {
             switch (event.type) {
                 case DWT.Dispose :
-                    tc.dispose(event);
+                    tc.dispose();
                     break;
                 case DWT.FocusIn :
                 case DWT.FocusOut :
@@ -489,7 +489,7 @@ void paint(Event event) {
         x += imageSize.width;
     }
     String text = row.getText(columnIndex);
-    if (text.length() > 0) {
+    if (text.length > 0) {
         Rectangle bounds = row.getBounds(columnIndex);
         Point extent = gc.stringExtent(text);
         // Temporary code - need a better way to determine table trim

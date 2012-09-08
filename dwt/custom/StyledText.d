@@ -162,7 +162,7 @@ public class StyledText : Canvas {
     static const int DEFAULT_HEIGHT = 64;
     static const int V_SCROLL_RATE = 50;
     static const int H_SCROLL_RATE = 10;
-    static final int CaretMoved = 3011;
+    static const int CaretMoved = 3011;
 
     static const int ExtendedModify = 3000;
     static const int LineGetBackground = 3001;

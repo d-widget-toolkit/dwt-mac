@@ -880,10 +880,6 @@ objc.id hitTestForEvent (objc.id id, objc.SEL sel, objc.id event, NSRect rect, o
     return null;
 }
 
-objc.id hitTestForEvent (objc.id id, objc.SEL sel, objc.id event, NSRect rect, objc.id controlView) {
-    return 0;
-}
-
 bool hooks (int eventType) {
     if (eventTable is null) return false;
     return eventTable.hooks (eventType);

@@ -13,6 +13,7 @@
 module dwt.custom.TableTreeEditor;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.Runnable;
 
 
 import dwt.DWT;
