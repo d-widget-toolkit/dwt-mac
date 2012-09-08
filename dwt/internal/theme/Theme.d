@@ -13,7 +13,13 @@
  *******************************************************************************/
 module dwt.internal.theme.Theme;
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.graphics.Image;
+import dwt.graphics.Rectangle;
+import dwt.graphics.Point;
+import dwt.graphics.GC;
+import dwt.graphics.Device;
 
 
 

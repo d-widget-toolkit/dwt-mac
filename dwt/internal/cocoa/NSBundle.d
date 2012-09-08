@@ -72,7 +72,7 @@ public static NSBundle mainBundle() {
 
 public objc.id objectForInfoDictionaryKey(NSString key) {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_objectForInfoDictionaryKey_, key !is null ? key.id : null);
-    return result !is null ? new id(result) : null;
+    return result !is null ? result : null;
 }
 
 public NSString pathForResource(NSString name, NSString ext) {

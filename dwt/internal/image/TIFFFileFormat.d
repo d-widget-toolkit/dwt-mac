@@ -12,6 +12,7 @@
  *******************************************************************************/
 module dwt.internal.image.TIFFFileFormat;
 
+import dwt.DWT;
 import dwt.internal.image.TIFFRandomFileAccess;
 import dwt.internal.image.TIFFDirectory;
 import dwt.internal.image.FileFormat;

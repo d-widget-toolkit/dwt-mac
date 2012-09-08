@@ -14,6 +14,7 @@ module dwt.internal.image.TIFFModifiedHuffmanCodec;
 
 
 
+import dwt.DWT;
 /*
 * Decoder for
 * - CCITT Group 3 1-Dimensional Modified Huffman run length encoding

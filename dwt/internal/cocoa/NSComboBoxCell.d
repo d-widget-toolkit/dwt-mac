@@ -14,6 +14,7 @@ import dwt.dwthelper.utils;
 import cocoa = dwt.internal.cocoa.id;
 import dwt.internal.cocoa.NSArray;
 import dwt.internal.cocoa.NSTextFieldCell;
+import dwt.internal.cocoa.OS;
 import objc = dwt.internal.objc.runtime;
 
 

@@ -45,7 +45,7 @@ public this(cocoa.id id) {
 }
 
 public NSUInteger characterIndexForInsertionAtPoint(NSPoint point) {
-    return OS.objc_msgSend(this.id, OS.sel_characterIndexForInsertionAtPoint_, point);
+    return cast(NSUInteger)OS.objc_msgSend(this.id, OS.sel_characterIndexForInsertionAtPoint_, point);
 }
 
 public NSParagraphStyle defaultParagraphStyle() {

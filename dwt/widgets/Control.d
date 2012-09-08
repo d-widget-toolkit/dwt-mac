@@ -31,7 +31,6 @@ import dwt.accessibility.ACC;
 import Carbon = dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
-import dwt.internal.Callback;
 import dwt.internal.cocoa.NSFont;
 import dwt.internal.cocoa.NSSize;
 import dwt.internal.cocoa.NSPoint;
@@ -1656,13 +1655,14 @@ private extern (C) {
     alias int function(ushort message, Carbon.RgnHandle rgn, Carbon.Rect* rect, void* refCon) GetPathCallback;
 }
 NSBezierPath getPath(Carbon.RgnHandle region) {
-    Callback callback = new Callback(this, "regionToRects", 4);
+/+  Callback callback = new Callback(this, "regionToRects", 4);
     if (callback.getAddress() is 0) DWT.error(DWT.ERROR_NO_MORE_CALLBACKS);
++/  auto callback = cast(objc.IMP) &regionToRects;
     NSBezierPath path = NSBezierPath.bezierPath();
     path.retain();
-    OS.QDRegionToRects(region, OS.kQDParseRegionFromTopLeft, cast(GetPathCallback)callback.getAddress(), path.id);
-    callback.dispose();
-    if (path.isEmpty()) path.appendBezierPathWithRect(NSRect());
+    OS.QDRegionToRects(region, OS.kQDParseRegionFromTopLeft, cast(GetPathCallback)callback/+.getAddress()+/, path.id);
+/+  callback.dispose();
++/  if (path.isEmpty()) path.appendBezierPathWithRect(NSRect());
     return path;
 }
 

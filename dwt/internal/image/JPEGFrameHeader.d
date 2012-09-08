@@ -14,10 +14,12 @@ module dwt.internal.image.JPEGFrameHeader;
 
 
 
+import dwt.DWT;
 import dwt.internal.image.JPEGVariableSizeSegment;
 import dwt.internal.image.JPEGFileFormat;
 import dwt.internal.image.LEDataInputStream;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 final class JPEGFrameHeader : JPEGVariableSizeSegment {
     int maxVFactor;

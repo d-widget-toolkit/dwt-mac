@@ -12,12 +12,16 @@
  *******************************************************************************/
 module dwt.internal.image.JPEGDecoder;
 
-
+import dwt.DWT;
 import dwt.dwthelper.InputStream;
 import dwt.internal.image.LEDataInputStream;
 import dwt.graphics.ImageLoader;
+import dwt.graphics.ImageLoaderEvent;
 import dwt.graphics.ImageData;
+import dwt.graphics.PaletteData;
+import dwt.graphics.RGB;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 import tango.core.Exception;
 import tango.util.Convert;

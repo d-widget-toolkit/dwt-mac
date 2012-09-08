@@ -134,7 +134,7 @@ public static NSString stringWithCharacters(/*const*/wchar* characters, NSUInteg
 
 public static NSString stringWithFormat(NSString stringWithFormat) {
     objc.id result = OS.objc_msgSend(OS.class_NSString, OS.sel_stringWithFormat_, stringWithFormat !is null ? stringWithFormat.id : null);
-    return result !is mull ? new NSString(result) : null;
+    return result !is null ? new NSString(result) : null;
 }
 
 public static NSString stringWithUTF8String(/*const*/char* nullTerminatedCString) {

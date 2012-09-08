@@ -60,7 +60,7 @@ public class Library {
 static int parseVersion(String version_) {
     if (version_ is null) return 0;
     int major = 0, minor = 0, micro = 0;
-    int length = version_.length(), index = 0, start = 0;
+    int length = version_.length, index = 0, start = 0;
     while (index < length && Character.isDigit(version_.charAt(index))) index++;
     try {
         if (start < length) major = Integer.parseInt(version_.substring(start, index));

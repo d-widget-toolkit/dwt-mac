@@ -20,6 +20,7 @@ import dwt.internal.image.WinBMPFileFormat;
 import dwt.internal.image.LEDataInputStream;
 import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 import tango.core.Exception;
 

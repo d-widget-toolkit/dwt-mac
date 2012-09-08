@@ -55,11 +55,11 @@ public NSObject alloc() {
 
 public cocoa.id accessibilityAttributeValue(NSString attribute, cocoa.id parameter) {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_accessibilityAttributeValue_forParameter_, attribute !is null ? attribute.id : null, parameter !is null ? parameter.id : null);
-    return result !is null ? new id(result) : null;
+    return result !is null ? new cocoa.id(result) : null;
 }
 
 public bool accessibilitySetOverrideValue(objc.id value, NSString attribute) {
-    return OS.objc_msgSend_bool(this.id, OS.sel_accessibilitySetOverrideValue_forAttribute_, value !is null ? value.id : null, attribute !is null ? attribute.id : null);
+    return OS.objc_msgSend_bool(this.id, OS.sel_accessibilitySetOverrideValue_forAttribute_, value !is null ? value : null, attribute !is null ? attribute.id : null);
 }
 
 public void draggedImage(NSImage image, NSPoint screenPoint, NSDragOperation operation) {

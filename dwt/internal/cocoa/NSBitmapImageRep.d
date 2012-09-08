@@ -96,7 +96,7 @@ public NSBitmapImageRep initWithData(NSData data) {
 
 public NSBitmapImageRep initWithFocusedViewRect(NSRect rect) {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_initWithFocusedViewRect_, rect);
-    return result is this.id ? this : (result !is 0 ? new NSBitmapImageRep(result) : null);
+    return result is this.id ? this : (result !is null ? new NSBitmapImageRep(result) : null);
 }
 
 public bool isPlanar () {

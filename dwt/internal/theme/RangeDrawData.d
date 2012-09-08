@@ -14,6 +14,8 @@
 module dwt.internal.theme.RangeDrawData;
 
 import dwt.dwthelper.utils;
+import dwt.graphics.Rectangle;
+import dwt.graphics.Point;
 
 
 

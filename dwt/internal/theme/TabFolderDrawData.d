@@ -13,7 +13,9 @@
  *******************************************************************************/
 module dwt.internal.theme.TabFolderDrawData;
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.graphics.Rectangle;
 
 
 

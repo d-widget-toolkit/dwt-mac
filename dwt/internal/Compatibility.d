@@ -16,6 +16,7 @@ import dwt.dwthelper.utils;
 
 
 import dwt.DWT;
+import dwt.dwthelper.File;
 import dwt.dwthelper.FileInputStream;
 import dwt.dwthelper.FileOutputStream;
 import dwt.dwthelper.InflaterInputStream;
@@ -244,7 +245,7 @@ public static bool isLetterOrDigit(dchar c) {
  * @return true when the character is a Unicode space character
  */
 public static bool isSpaceChar(dchar c) {
-    return Character.isSpace(c);
+    return Unicode.isSpace(c);
 }
 
 /**

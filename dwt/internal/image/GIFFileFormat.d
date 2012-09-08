@@ -12,6 +12,7 @@
  *******************************************************************************/
 module dwt.internal.image.GIFFileFormat;
 
+import dwt.DWT;
 import dwt.internal.image.FileFormat;
 import dwt.graphics.PaletteData;
 import dwt.internal.image.LEDataInputStream;
@@ -22,6 +23,7 @@ import dwt.graphics.ImageLoader;
 import dwt.graphics.ImageData;
 import tango.core.Exception;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 
 final class GIFFileFormat : FileFormat {

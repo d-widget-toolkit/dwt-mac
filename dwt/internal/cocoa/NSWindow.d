@@ -205,7 +205,7 @@ public static CGFloat minFrameWidthWithTitle(NSString aTitle, NSUInteger aStyle)
 
 public NSSize minSize() {
     NSSize result = NSSize();
-    OS.objc_msgSend_stret(result, this.id, OS.sel_minSize);
+    OS.objc_msgSend_stret(&result, this.id, OS.sel_minSize);
     return result;
 }
 
@@ -335,7 +335,7 @@ public NSButton standardWindowButton(NSWindowButton b) {
 }
 
 public NSUInteger styleMask() {
-    return OS.objc_msgSend(this.id, OS.sel_styleMask);
+    return cast(NSUInteger)OS.objc_msgSend(this.id, OS.sel_styleMask);
 }
 
 public void toggleToolbarShown(cocoa.id sender) {
@@ -348,7 +348,7 @@ public NSToolbar toolbar() {
 }
 
 public NSInteger windowNumber() {
-    return OS.objc_msgSend(this.id, OS.sel_windowNumber);
+    return cast(NSInteger)OS.objc_msgSend(this.id, OS.sel_windowNumber);
 }
 
 public void zoom(cocoa.id sender) {

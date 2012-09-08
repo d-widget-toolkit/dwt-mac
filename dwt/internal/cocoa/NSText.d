@@ -58,7 +58,7 @@ public NSFont font() {
 }
 
 public void paste(objc.id sender) {
-    OS.objc_msgSend(this.id, OS.sel_paste_, sender !is null ? sender.id : null);
+    OS.objc_msgSend(this.id, OS.sel_paste_, sender !is null ? sender : null);
 }
 
 public void replaceCharactersInRange(NSRange range, NSString aString) {

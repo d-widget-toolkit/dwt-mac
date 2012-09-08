@@ -13,6 +13,7 @@ module dwt.internal.cocoa.WebScriptObject;
 import dwt.dwthelper.utils;
 import cocoa = dwt.internal.cocoa.id;
 import dwt.internal.cocoa.NSObject;
+import dwt.internal.cocoa.OS;
 import objc = dwt.internal.objc.runtime;
 
 public class WebScriptObject : NSObject {
