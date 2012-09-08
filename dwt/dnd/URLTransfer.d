@@ -107,7 +107,7 @@ protected String[] getTypeNames(){
 }
 
 bool checkURL(Object object) {
-    auto o = stringcast(object),
+    auto o = stringcast(object);
     return object !is null && o && o.length() > 0;
 }
 

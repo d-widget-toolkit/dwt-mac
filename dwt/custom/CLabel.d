@@ -15,8 +15,8 @@ module dwt.custom.CLabel;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.accessibility.ACC;
 import dwt.accessibility.Accessible;
 import dwt.accessibility.AccessibleAdapter;

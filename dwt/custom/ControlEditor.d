@@ -15,7 +15,7 @@ module dwt.custom.ControlEditor;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.graphics.Rectangle;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;

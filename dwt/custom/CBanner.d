@@ -15,8 +15,8 @@ module dwt.custom.CBanner;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.custom.CBannerLayout;
 import dwt.graphics.Color;
 import dwt.graphics.Cursor;

@@ -14,8 +14,8 @@ module dwt.custom.AnimatedProgress;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.events.ControlAdapter;
 import dwt.events.ControlEvent;
 import dwt.events.DisposeEvent;

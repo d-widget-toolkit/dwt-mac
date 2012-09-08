@@ -15,7 +15,7 @@ module dwt.custom.CBannerLayout;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.custom.CBanner;
 import dwt.custom.CLayoutData;
 import dwt.graphics.Point;

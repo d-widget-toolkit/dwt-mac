@@ -16,6 +16,9 @@ module dwt.layout.FillData;
 
 
 
+import dwt.widgets.Control;
+import dwt.graphics.Point;
+
 class FillData {
 
     int defaultWidth = -1, defaultHeight = -1;

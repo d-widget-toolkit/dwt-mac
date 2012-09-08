@@ -14,8 +14,8 @@ module dwt.custom.CCombo;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.accessibility.ACC;
 import dwt.accessibility.AccessibleAdapter;
 import dwt.accessibility.AccessibleControlAdapter;
@@ -156,12 +156,12 @@ public this (Composite parent, int style) {
                  arrowEvent (event);
                  return;
              }
-             if (CCombo.this is event.widget) {
+             if (this.outer is event.widget) {
                  comboEvent (event);
                  return;
              }
              if (getShell () is event.widget) {
-                 getDisplay().asyncExec(new Runnable() {
+                 getDisplay().asyncExec(new class() Runnable {
                      public void run() {
                          if (isDisposed ()) return;
                          handleFocus (DWT.FocusOut);

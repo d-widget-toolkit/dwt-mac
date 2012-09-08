@@ -15,7 +15,12 @@ module dwt.layout.FillLayout;
 
 
 
+import dwt.DWT;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Layout;
 import dwt.layout.FillData;
+import dwt.graphics.Point;
 
 import tango.util.Convert;
 import dwt.dwthelper.utils;

@@ -16,9 +16,9 @@ module dwt.dnd.DragSource;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.dnd.DND;
 import dwt.dnd.DNDEvent;
 import dwt.dnd.DNDListener;
@@ -148,7 +148,7 @@ public class DragSource : Widget {
     static String types = "*\0";
     static size_t size = C.PTR_SIZEOF, align_ = C.PTR_SIZEOF is 4 ? 2 : 3;
     static const String SWT_OBJECT = "SWT_OBJECT\0";
-    static objc.IMP proc2 = 0, proc3 = 0, proc4 = 0, proc5 = 0, proc6 = 0;
+    static objc.IMP proc2 = null, proc3 = null, proc4 = null, proc5 = null, proc6 = null;
 
     static this () {
         String className = "SWTDragSourceDelegate";
@@ -302,13 +302,13 @@ public this(Control control, int style) {
         version (D_LP64)
         {
             auto proc4Types = "@:@{NSPoint=dd}";
-            auto operationProcTypes = "@:@{NSPoint=dd}Q");
+            auto operationProcTypes = "@:@{NSPoint=dd}Q";
         }
 
         else
         {
             auto proc4Types = "@:@{NSPoint=ff}";
-            auto operationProcTypes = "@:@{NSPoint=ff}I");
+            auto operationProcTypes = "@:@{NSPoint=ff}I";
         }
 
         // Add the NSDraggingSource overrides.
@@ -464,7 +464,7 @@ void dragOutlineViewStart(Event dragDetectEvent) {
 }
 
 void draggedImage_beganAt(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
-    if (new NSObject(id).isKindOfClass(OS.class_NSTableView)) {
+    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView)) {
         callSuper(id, sel, arg0, arg1);
     }
 }
@@ -479,7 +479,7 @@ void draggedImage_endedAt_operation(objc.id id, objc.SEL sel, objc.id arg0, NSPo
     notifyListeners(DND.DragEnd, event);
     dragImageFromListener = null;
 
-    if (new NSObject(id).isKindOfClass(OS.class_NSTableView)) {
+    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView)) {
         callSuper(id, sel, arg0, arg1, arg2);
     }
 }
@@ -511,13 +511,13 @@ static objc.id dragSourceProc2(objc.id id, objc.SEL sel) {
     if (widget is null) return null;
     DragSource ds = null;
 
-    if (widget instanceof DragSource) {
-        ds = (DragSource)widget;
+    if (cast(DragSource)widget) {
+        ds = cast(DragSource)widget;
     } else {
-        ds = (DragSource)widget.getData(DND.DRAG_SOURCE_KEY);
+        ds = cast(DragSource)widget.getData(DND.DRAG_SOURCE_KEY);
     }
 
-    if (ds is null) return 0;
+    if (ds is null) return null;
 
     if (sel is OS.sel_ignoreModifierKeysWhileDragging) {
         return (ds.ignoreModifierKeysWhileDragging(id, sel) ? cast(objc.id ) 1 : null);
@@ -865,7 +865,7 @@ DNDEvent startDrag(Event dragEvent) {
                 nativeTypeArray.addObject(NSString.stringWith(typeNames[j]));
             }
 
-            if (transfer instanceof FileTransfer) {
+            if (cast(FileTransfer)transfer) {
                 fileTrans = transfer;
             }
         }

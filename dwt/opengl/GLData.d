@@ -15,6 +15,8 @@ module dwt.opengl.GLData;
 
 import dwt.dwthelper.utils;
 
+import dwt.opengl.GLCanvas;
+
 /**
  * The GLData class is a device-independent description
  * of the pixel format attributes of a GL drawable.
@@ -126,14 +128,6 @@ public class GLData {
      * are preferred.
      */
     public int samples;
-
-    /**
-     * Another GLCanvas whose texture namespace and display lists
-     * should be shared.
-     *
-     * @since 3.5
-     */
-    public GLCanvas shareContext;
 
     /**
      * Another GLCanvas whose texture namespace and display lists

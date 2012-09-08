@@ -15,8 +15,8 @@ module dwt.custom.SashForm;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.custom.SashFormLayout;
 import dwt.custom.SashFormData;
 import dwt.graphics.Color;

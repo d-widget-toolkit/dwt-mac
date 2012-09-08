@@ -13,18 +13,39 @@
  *******************************************************************************/
 module dwt.program.Program;
 
+import tango.text.convert.Format;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 
 import dwt.internal.C;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSURL;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSBundle;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSWorkspace;
+import dwt.internal.cocoa.NSAutoreleasePool;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSBitmapImageRep;
+import dwt.internal.cocoa.NSImageRep;
+import dwt.internal.cocoa.NSFileManager;
+import dwt.internal.cocoa.NSEnumerator;
+import dwt.internal.cocoa.NSDirectoryEnumerator;
+import dwt.internal.cocoa.NSImage;
+import dwt.internal.cocoa.NSMutableSet;
+import dwt.internal.cocoa.NSDictionary;
+import dwt.internal.cocoa.OS;
 import cocoa = dwt.internal.cocoa.id;
 
 import dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
+import dwt.graphics.PaletteData;
+import dwt.graphics.ImageData;
 
 /**
  * Instances of this class represent programs and
@@ -62,7 +83,7 @@ this () {
  */
 public static Program findProgram (String extension) {
     if (extension is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
-    if (extension.length () is 0) return null;
+    if (extension.length is 0) return null;
     if (extension.charAt(0) !is '.') extension = "." ~ extension;
     NSAutoreleasePool pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
@@ -77,14 +98,13 @@ public static Program findProgram (String extension) {
         if (!workspace.getInfoForFile(fullPath, appName, type)) return null;
         fileManager.removeItemAtPath(fullPath, null);
         objc.id buffer = appName;
-        int /*long*/ [] buffer2 = new int /*long*/[1];
-            NSString appPath = new NSString(buffer);
+        objc.id buffer2;
         OS.memmove(buffer2, type, C.PTR_SIZEOF);
         OS.free(appName);
         OS.free(type);
-        if (buffer [0] !is 0) {
-            NSString appPath = new NSString(buffer[0]);
-            NSString appType = new NSString(buffer2[0]);
+        if (buffer !is null) {
+            NSString appPath = new NSString(buffer);
+            NSString appType = new NSString(buffer2);
             NSBundle bundle = NSBundle.bundleWithPath(appPath);
             if (bundle !is null) {
                 NSString textEditId = NSString.stringWith("com.apple.TextEdit");
@@ -96,7 +116,7 @@ public static Program findProgram (String extension) {
                 // text edit says it can handle.
                 NSString CFBundleDocumentTypes = NSString.stringWith("CFBundleDocumentTypes");
                 NSString CFBundleTypeExtensions = NSString.stringWith("CFBundleTypeExtensions");
-                id id = infoDictionary.objectForKey(CFBundleDocumentTypes);
+                auto id = infoDictionary.objectForKey(CFBundleDocumentTypes);
                 if (id !is null) {
                     NSDictionary documentTypes = new NSDictionary(id.id);
                     NSEnumerator documentTypesEnumerator = documentTypes.objectEnumerator();
@@ -106,7 +126,7 @@ public static Program findProgram (String extension) {
                         if (supportedExtensions !is null) {
                             NSEnumerator supportedExtensionsEnumerator = supportedExtensions.objectEnumerator();
                             if (supportedExtensionsEnumerator !is null) {
-                                id ext = null;
+                                cocoa.id ext = null;
                                 while((ext = supportedExtensionsEnumerator.nextObject()) !is null) {
                                     NSString strExt = new NSString(ext);
                                     if (appType.isEqual(strExt)) return getProgram (bundle);
@@ -137,7 +157,7 @@ public static String [] getExtensions () {
         NSWorkspace workspace = NSWorkspace.sharedWorkspace();
         NSString CFBundleDocumentTypes = NSString.stringWith("CFBundleDocumentTypes");
         NSString CFBundleTypeExtensions = NSString.stringWith("CFBundleTypeExtensions");
-        NSArray array = new NSArray(OS.NSSearchPathForDirectoriesInDomains(OS.NSAllApplicationsDirectory, OS.NSAllDomainsMask, true));
+        NSArray array = new NSArray(OS.NSSearchPathForDirectoriesInDomains(cast(NSSearchPathDirectory)OS.NSAllApplicationsDirectory, cast(NSSearchPathDomainMask)OS.NSAllDomainsMask, true));
         NSUInteger count = array.count();
         for (NSUInteger i = 0; i < count; i++) {
             NSString path = new NSString(array.objectAtIndex(i));
@@ -191,14 +211,14 @@ static Program getProgram(NSBundle bundle) {
     NSString CFBundleDisplayName = NSString.stringWith("CFBundleDisplayName");
     NSString fullPath = bundle.bundlePath();
     NSString identifier = bundle.bundleIdentifier();
-    cocoa.id bundleName = bundle.objectForInfoDictionaryKey(CFBundleDisplayName);
+    auto bundleName = bundle.objectForInfoDictionaryKey(CFBundleDisplayName);
     if (bundleName is null) {
         bundleName = bundle.objectForInfoDictionaryKey(CFBundleName);
     }
     if (bundleName is null) {
-        bundleName = fullPath.lastPathComponent().stringByDeletingPathExtension();
+        bundleName = fullPath.lastPathComponent().stringByDeletingPathExtension().id;
     }
-    NSString name = new NSString(bundleName.id);
+    NSString name = new NSString(bundleName);
     Program program = new Program();
     program.name = name.getString();
     program.fullPath = fullPath.getString();
@@ -218,7 +238,7 @@ public static Program [] getPrograms () {
     try {
         Program[] vector;
         NSWorkspace workspace = NSWorkspace.sharedWorkspace();
-        NSArray array = new NSArray(OS.NSSearchPathForDirectoriesInDomains(OS.NSAllApplicationsDirectory, OS.NSAllDomainsMask, true));
+        NSArray array = new NSArray(OS.NSSearchPathForDirectoriesInDomains(cast(NSSearchPathDirectory)OS.NSAllApplicationsDirectory, cast(NSSearchPathDomainMask)OS.NSAllDomainsMask, true));
         NSUInteger count = array.count();
         for (NSUInteger i = 0; i < count; i++) {
             NSString path = new NSString(array.objectAtIndex(i));
@@ -231,7 +251,7 @@ public static Program [] getPrograms () {
                     NSString fullPath = path.stringByAppendingPathComponent(new NSString(id.id));
                     if (workspace.isFilePackageAtPath(fullPath)) {
                         NSBundle bundle = NSBundle.bundleWithPath(fullPath);
-                        if (bundle !is null) vector.addElement(getProgram(bundle));
+                        if (bundle !is null) vector ~= getProgram(bundle);
                     }
                 }
             }
@@ -309,7 +329,7 @@ public bool execute (String fileName) {
             return workspace.openURLs(urls, NSString.stringWith(identifier), NSWorkspaceLaunchOptions.init, null, null);
         } else {
             if (fileName.startsWith (PREFIX_FILE)) {
-                fileName = fileName.substring (PREFIX_FILE.length ());
+                fileName = fileName.substring (PREFIX_FILE.length);
             }
             NSString fullPath = NSString.stringWith (fileName);
             return workspace.openFile (fullPath, NSString.stringWith (name));

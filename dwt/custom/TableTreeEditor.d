@@ -15,7 +15,7 @@ module dwt.custom.TableTreeEditor;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.custom.ControlEditor;
 import dwt.custom.TableTree;
 import dwt.custom.TableTreeItem;

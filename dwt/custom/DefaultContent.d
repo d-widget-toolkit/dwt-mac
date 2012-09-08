@@ -14,8 +14,8 @@ module dwt.custom.DefaultContent;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.custom.StyledText;
 import dwt.custom.StyledTextContent;
 import dwt.custom.StyledTextEvent;

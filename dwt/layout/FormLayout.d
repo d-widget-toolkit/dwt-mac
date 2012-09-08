@@ -14,6 +14,10 @@ module dwt.layout.FormLayout;
 
 import dwt.layout.FormAttachment;
 import dwt.layout.FormData;
+import dwt.widgets.Control;
+import dwt.widgets.Composite;
+import dwt.widgets.Layout;
+import dwt.graphics.Point;
 
 
 

@@ -14,7 +14,7 @@ module dwt.custom.SashFormLayout;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.custom.SashForm;
 import dwt.custom.SashFormData;
 import dwt.graphics.Point;

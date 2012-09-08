@@ -15,6 +15,7 @@ module dwt.custom.TextChangedEvent;
 import dwt.dwthelper.utils;
 
 import dwt.custom.StyledTextContent;
+import dwt.events.TypedEvent;
 
 /**
  * This event is sent by the StyledTextContent implementor when a change to

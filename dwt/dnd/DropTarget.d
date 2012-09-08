@@ -15,9 +15,9 @@ module dwt.dnd.DropTarget;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.graphics.Point;
 import dwt.dnd.DND;
 import dwt.dnd.DNDEvent;
@@ -472,7 +472,7 @@ static objc.id dropTargetProc6(objc.id id, objc.SEL sel, objc.id arg0, objc.id a
     if (display is null || display.isDisposed()) return null;
     Widget widget = display.findWidget(id);
     if (widget is null) return null;
-    DropTarget dt = (DropTarget)widget.getData(DND.DROP_TARGET_KEY);
+    DropTarget dt = cast(DropTarget)widget.getData(DND.DROP_TARGET_KEY);
     if (dt is null) return null;
 
     if (sel is OS.sel_outlineView_acceptDrop_item_childIndex_) {
@@ -762,7 +762,7 @@ NSDragOperation outlineView_validateDrop_proposedItem_proposedChildIndex(objc.id
     NSPoint pt = sender.draggingLocation();
     pt = widget.convertPoint_fromView_(pt, null);
     Tree tree = cast(Tree)getControl();
-    TreeItem childItem = tree.getItem(new Point((int)pt.x, (int)pt.y));
+    TreeItem childItem = tree.getItem(new Point(cast(int)pt.x, cast(int)pt.y));
     if (feedback is 0 || childItem is null) {
         widget.setDropItem(null, -1);
     } else {
@@ -776,7 +776,7 @@ NSDragOperation outlineView_validateDrop_proposedItem_proposedChildIndex(objc.id
                 parentID = parentItem.handle;
                 childIndex = parentItem.indexOf(childItem);
             } else {
-                childIndex = ((Tree)getControl()).indexOf(childItem);
+                childIndex = (cast(Tree)getControl()).indexOf(childItem);
             }
             if ((feedback & DND.FEEDBACK_INSERT_AFTER) !is 0) {
                 widget.setDropItem(parentID, childIndex + 1);

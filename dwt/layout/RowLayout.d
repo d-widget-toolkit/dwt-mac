@@ -15,7 +15,12 @@ module dwt.layout.RowLayout;
 
 
 
+import dwt.DWT;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Layout;
 import dwt.layout.RowData;
+import dwt.graphics.Point;
 import tango.util.Convert;
 import Math = tango.math.Math;
 import dwt.dwthelper.utils;

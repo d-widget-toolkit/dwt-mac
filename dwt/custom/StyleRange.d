@@ -14,7 +14,7 @@ module dwt.custom.StyleRange;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.custom.StyleRange;
 import dwt.custom.TextChangedEvent;
 import dwt.custom.TextChangingEvent;

@@ -19,6 +19,8 @@ import dwt.dwthelper.utils;
 
 import dwt.printing.Printer;
 import dwt.printing.PrinterData;
+import dwt.widgets.Dialog;
+import dwt.widgets.Shell;
 
 
 
@@ -42,8 +44,8 @@ public class PrintDialog : Dialog {
     int returnCode;
 
     // the following Callbacks are never freed
-    static Callback dialogCallback5;
-    static final byte[] DWT_OBJECT = {'S', 'W', 'T', '_', 'O', 'B', 'J', 'E', 'C', 'T', '\0'};
+/+  static Callback dialogCallback5;
++/  static final byte[] DWT_OBJECT = ['S', 'W', 'T', '_', 'O', 'B', 'J', 'E', 'C', 'T', '\0'];
 
 /**
  * Constructs a new instance of this class given only its parent.
@@ -170,8 +172,8 @@ public PrinterData open() {
     if (printerData.fileName !is null && printerData.fileName.length() > 0) {
         dict.setValue(NSString.stringWith(printerData.fileName), OS.NSPrintSavePath);
     }
-    dict.setValue(NSNumber.numberWithBool(printerData.scope is PrinterData.ALL_PAGES), OS.NSPrintAllPages);
-    if (printerData.scope is PrinterData.PAGE_RANGE) {
+    dict.setValue(NSNumber.numberWithBool(printerData.scope_ is PrinterData.ALL_PAGES), OS.NSPrintAllPages);
+    if (printerData.scope_ is PrinterData.PAGE_RANGE) {
         dict.setValue(NSNumber.numberWithInt(printerData.startPage), OS.NSPrintFirstPage);
         dict.setValue(NSNumber.numberWithInt(printerData.endPage), OS.NSPrintLastPage);
     }
@@ -179,20 +181,20 @@ public PrinterData open() {
     int response;
     if ((getStyle () & DWT.SHEET) !is 0) {
         initClasses();
-        SWTPrintPanelDelegate delegate = (SWTPrintPanelDelegate)new SWTPrintPanelDelegate().alloc().init();
+        SWTPrintPanelDelegate delegate_ = cast(SWTPrintPanelDelegate)(new SWTPrintPanelDelegate()).alloc().init();
         int /*long*/ jniRef = OS.NewGlobalRef(this);
         if (jniRef is 0) DWT.error(DWT.ERROR_NO_HANDLES);
-        OS.object_setInstanceVariable(delegate.id, DWT_OBJECT, jniRef);
+        OS.object_setInstanceVariable(delegate_.id, DWT_OBJECT, jniRef);
         returnCode = -1;
         Shell parent = getParent();
-        panel.beginSheetWithPrintInfo(printInfo, parent.view.window(), delegate, OS.sel_panelDidEnd_returnCode_contextInfo_, 0);
+        panel.beginSheetWithPrintInfo(printInfo, parent.view.window(), delegate_, OS.sel_panelDidEnd_returnCode_contextInfo_, 0);
         NSApplication application = NSApplication.sharedApplication();
         while (returnCode is -1) application.run();
-        if (delegate !is null) delegate.release();
+        if (delegate_ !is null) delegate_.release();
         if (jniRef !is 0) OS.DeleteGlobalRef(jniRef);
         response = returnCode;
     } else {
-        response = (int)/*64*/panel.runModalWithPrintInfo(printInfo);
+        response = cast(int)/*64*/panel.runModalWithPrintInfo(printInfo);
     }
     if (response !is OS.NSCancelButton) {
         NSPrinter printer = printInfo.printer();
@@ -210,7 +212,7 @@ public PrinterData open() {
         }
         data.collate = (new NSNumber(dict.objectForKey(OS.NSPrintMustCollate))).intValue() !is 0;
         data.collate = false; //TODO: Only set to false if the printer does the collate internally (most printers do)
-        data.copyCount = new NSNumber(dict.objectForKey(OS.NSPrintCopies)).intValue();
+    	data.copyCount = (new NSNumber(dict.objectForKey(OS.NSPrintCopies))).intValue();
         data.copyCount = 1; //TODO: Only set to 1 if the printer does the copy internally (most printers do)
         data.orientation = printInfo.orientation() is OS.NSLandscapeOrientation ? PrinterData.LANDSCAPE : PrinterData.PORTRAIT;
         NSData nsData = NSKeyedArchiver.archivedDataWithRootObject(printInfo);
@@ -250,7 +252,7 @@ static int /*long*/ dialogProc(int /*long*/ id, int /*long*/ sel, int /*long*/ a
     OS.object_getInstanceVariable(id, DWT_OBJECT, jniRef);
     if (jniRef[0] is 0) return 0;
     if (sel is OS.sel_panelDidEnd_returnCode_contextInfo_) {
-        PrintDialog dialog = (PrintDialog)OS.JNIGetObject(jniRef[0]);
+        PrintDialog dialog = cast(PrintDialog)OS.JNIGetObject(jniRef[0]);
         if (dialog is null) return 0;
         dialog.panelDidEnd_returnCode_contextInfo(id, sel, arg0, arg1, arg2);
     }
@@ -266,15 +268,15 @@ void initClasses () {
     if (dialogProc5 is 0) DWT.error (DWT.ERROR_NO_MORE_CALLBACKS);
 
     byte[] types = {'*','\0'};
-    int size = C.PTR_SIZEOF, align = C.PTR_SIZEOF is 4 ? 2 : 3;
+    int size = C.PTR_SIZEOF, align_ = C.PTR_SIZEOF is 4 ? 2 : 3;
     int /*long*/ cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
-    OS.class_addIvar(cls, DWT_OBJECT, size, (byte)align, types);
+    OS.class_addIvar(cls, DWT_OBJECT, size, cast(byte)align_, types);
     OS.class_addMethod(cls, OS.sel_panelDidEnd_returnCode_contextInfo_, dialogProc5, "@:@i@");
     OS.objc_registerClassPair(cls);
 }
 
 void panelDidEnd_returnCode_contextInfo(int /*long*/ id, int /*long*/ sel, int /*long*/ alert, int /*long*/ returnCode, int /*long*/ contextInfo) {
-    this.returnCode = (int)/*64*/returnCode;
+    this.returnCode = cast(int)/*64*/returnCode;
     NSApplication application = NSApplication.sharedApplication();
     application.stop(null);
 }

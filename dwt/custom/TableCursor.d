@@ -14,8 +14,8 @@ module dwt.custom.TableCursor;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.accessibility.ACC;
 import dwt.accessibility.AccessibleAdapter;
 import dwt.accessibility.AccessibleControlAdapter;
@@ -321,12 +321,12 @@ public this(Table parent, int style) {
         vBar.addListener(DWT.Selection, resizeListener);
     }
 
-    getAccessible().addAccessibleControlListener(new AccessibleControlAdapter() {
+    getAccessible().addAccessibleControlListener(new class AccessibleControlAdapter {
         public void getRole(AccessibleControlEvent e) {
             e.detail = ACC.ROLE_TABLECELL;
         }
     });
-    getAccessible().addAccessibleListener(new AccessibleAdapter() {
+    getAccessible().addAccessibleListener(new class AccessibleAdapter {
         public void getName(AccessibleEvent e) {
             if (row is null) return;
             int columnIndex = column is null ? 0 : table.indexOf(column);

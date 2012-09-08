@@ -13,6 +13,10 @@
 module dwt.layout.GridLayout;
 
 import dwt.layout.GridData;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Layout;
+import dwt.graphics.Point;
 
 
 

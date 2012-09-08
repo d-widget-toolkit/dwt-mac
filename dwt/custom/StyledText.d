@@ -13,11 +13,12 @@
 module dwt.custom.StyledText;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.Runnable;
 
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.accessibility.ACC;
 import dwt.accessibility.Accessible;
 import dwt.accessibility.AccessibleAdapter;
@@ -46,6 +47,7 @@ import dwt.custom.TextChangedEvent;
 import dwt.custom.TextChangeListener;
 import dwt.custom.TextChangingEvent;
 import dwt.custom.VerifyKeyListener;
+import dwt.custom.CaretListener;
 import dwt.dnd.Clipboard;
 import dwt.dnd.DND;
 import dwt.dnd.RTFTransfer;
@@ -158,7 +160,6 @@ public class StyledText : Canvas {
     static const int DEFAULT_HEIGHT = 64;
     static const int V_SCROLL_RATE = 50;
     static const int H_SCROLL_RATE = 10;
-    static final int CaretMoved = 3011;
     static final int CaretMoved = 3011;
 
     static const int ExtendedModify = 3000;
@@ -1879,8 +1880,8 @@ bool copySelection(int type) {
             if (text.length() > 0) {
                 //TODO RTF support
                 TextTransfer plainTextTransfer = TextTransfer.getInstance();
-                Object[] data = new Object[]{text};
-                Transfer[] types = new Transfer[]{plainTextTransfer};
+                Object[] data = [cast(Object)text];
+                Transfer[] types = [cast(Transfer)plainTextTransfer];
                 clipboard.setContents(data, types, type);
                 return true;
             }
@@ -2182,7 +2183,7 @@ public void cut() {
     // Fixes bug 21030.
     if (copySelection(DND.CLIPBOARD)) {
         if (blockSelection && blockXLocation !is -1) {
-            insertBlockSelectionText((char)0, DWT.NULL);
+            insertBlockSelectionText(cast(char)0, DWT.NULL);
         } else {
             doDelete();
         }
@@ -4719,7 +4720,7 @@ public int[] getSelectionRanges() {
         }
         return ranges;
     }
-    return new int[] {selection.x, selection.y - selection.x};
+    return [selection.x, selection.y - selection.x];
 }
 /**
  * Returns the receiver's selection background color.
@@ -5557,7 +5558,7 @@ void insertBlockSelectionText(char key, int action) {
     int right = rect.width;
     int[] trailing = new int[1];
     int offset = 0, delta = 0;
-    String text = key !is 0 ? new String(new char[] {key}) : "";
+    String text = key !is 0 ? [key] : "";
     int length = text.length();
     for (int lineIndex = firstLine; lineIndex <= lastLine; lineIndex++) {
         String line = content.getLine(lineIndex);
@@ -6634,7 +6635,7 @@ bool invokeBlockAction(int action) {
         case ST.DELETE_PREVIOUS:
         case ST.DELETE_NEXT:
             if (blockXLocation !is -1) {
-                insertBlockSelectionText((char)0, action);
+                insertBlockSelectionText(cast(char)0, action);
                 return true;
             }
             return false;
@@ -8937,20 +8938,17 @@ void setSelection(int start, int length, bool sendEvent) {
         (length < 0 && selectionAnchor !is selection.y)) {
         if (blockSelection && doBlock) {
             setBlockSelectionOffset(start, end, sendEvent);
-        clearSelection(sendEvent);
-        if (length < 0) {
-            selectionAnchor = selection.y = end;
         } else {
             clearSelection(sendEvent);
             if (length < 0) {
                 selectionAnchor = selection.y = end;
                 selection.x = start;
                 setCaretOffset(start, PREVIOUS_OFFSET_TRAILING);
-        } else {
-            selectionAnchor = selection.x = start;
+            } else {
+                selectionAnchor = selection.x = start;
                 selection.y = end;
                 setCaretOffset(end, PREVIOUS_OFFSET_TRAILING);
-        }
+            }
             internalRedrawRange(selection.x, selection.y - selection.x);
         }
     }

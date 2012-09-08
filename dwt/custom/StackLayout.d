@@ -15,7 +15,7 @@ module dwt.custom.StackLayout;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.graphics.Point;
 import dwt.graphics.Rectangle;
 import dwt.widgets.Composite;

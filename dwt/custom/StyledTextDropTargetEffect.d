@@ -14,7 +14,7 @@ module dwt.custom.StyledTextDropTargetEffect;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.custom.StyledText;
 import dwt.custom.StyledTextContent;
 import dwt.dnd.DND;

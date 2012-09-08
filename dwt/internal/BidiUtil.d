@@ -14,6 +14,7 @@
 module dwt.internal.BidiUtil;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.Runnable;
 
 import dwt.graphics.GC;
 import dwt.widgets.Control;

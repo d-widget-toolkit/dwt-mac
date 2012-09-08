@@ -15,8 +15,8 @@ module dwt.custom.TableTree;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.custom.TableTreeItem;
 import dwt.events.SelectionEvent;
 import dwt.events.SelectionListener;

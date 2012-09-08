@@ -15,8 +15,9 @@ module dwt.dnd.TreeDragSourceEffect;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.dnd.DragSourceEffect;
+import dwt.dnd.DragSourceEvent;
 import dwt.graphics.Image;
 import dwt.internal.cocoa.NSApplication;
 import dwt.internal.cocoa.NSEvent;
