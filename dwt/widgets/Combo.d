@@ -173,11 +173,12 @@ public this (Composite parent, int style) {
  */
 public void add (String string) {
     checkWidget ();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     NSString str = NSString.stringWith(string);
     if ((style & DWT.READ_ONLY) !is 0) {
         NSPopUpButton widget = cast(NSPopUpButton)view;
-        int /*long*/ selection = widget.indexOfSelectedItem();
+        NSInteger selection = widget.indexOfSelectedItem();
         NSMenu nsMenu = widget.menu();
         NSMenuItem nsItem = cast(NSMenuItem)(new NSMenuItem()).alloc();
         NSString empty = NSString.stringWith("");
@@ -215,13 +216,14 @@ public void add (String string) {
  */
 public void add (String string, int index) {
     checkWidget ();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     int count = getItemCount ();
     if (0 > index || index > count) error (DWT.ERROR_INVALID_RANGE);
     NSString str = NSString.stringWith(string);
     if ((style & DWT.READ_ONLY) !is 0) {
         NSPopUpButton widget = cast(NSPopUpButton)view;
-        int /*long*/ selection = widget.indexOfSelectedItem();
+        NSInteger selection = widget.indexOfSelectedItem();
         NSMenu nsMenu = widget.menu();
         NSMenuItem nsItem = cast(NSMenuItem)(new NSMenuItem()).alloc();
         NSString empty = NSString.stringWith("");
@@ -398,7 +400,7 @@ public Point computeSize (int wHint, int hHint, bool changed) {
         ignoreVerify = true;
         NSComboBoxCell cell = new NSComboBoxCell (viewCell.id);
         NSArray array = cell.objectValues ();
-        int length = cast(int)/*64*/array.count ();
+        NSUInteger length = array.count ();
         if (length > 0) {
             cell = new NSComboBoxCell (cell.copy ());
             for (int i = 0; i < length; i++) {
@@ -567,7 +569,7 @@ public void deselectAll () {
         sendEvent (DWT.Modify);
     } else {
         NSComboBox widget = cast(NSComboBox)view;
-        int /*long*/ index = widget.indexOfSelectedItem();
+        NSInteger index = widget.indexOfSelectedItem();
         if (index !is -1) widget.deselectItemAtIndex(index);
     }
 }
@@ -580,7 +582,7 @@ bool dragDetect(int x, int y, bool filter, bool[] consume) {
             if (selectedRange.length > 0) {
                 NSPoint mouseLocation = NSEvent.mouseLocation();
                 NSTextView feAsTextView = new NSTextView(fieldEditor);
-                int /*long*/ charPosition = feAsTextView.characterIndexForInsertionAtPoint(mouseLocation);
+                NSUInteger charPosition = feAsTextView.characterIndexForInsertionAtPoint(mouseLocation);
                 if (charPosition !is OS.NSNotFound && charPosition >= selectedRange.location && charPosition < (selectedRange.location + selectedRange.length)) {
                     if (super.dragDetect(x, y, filter, consume)) {
                         if (consume !is null) consume[0] = true;
@@ -603,7 +605,7 @@ bool dragDetect(int x, int y, bool filter, bool[] consume) {
             if (selectedRange.length > 0) {
                 NSPoint mouseLocation = NSEvent.mouseLocation();
                 NSTextView feAsTextView = new NSTextView(fieldEditor);
-                int /*long*/ charPosition = feAsTextView.characterIndexForInsertionAtPoint(mouseLocation);
+                NSUInteger charPosition = feAsTextView.characterIndexForInsertionAtPoint(mouseLocation);
                 if (charPosition !is OS.NSNotFound && charPosition >= selectedRange.location && charPosition < (selectedRange.location + selectedRange.length)) {
                     if (super.dragDetect(x, y, filter, consume)) {
                         if (consume !is null) consume[0] = true;
@@ -672,9 +674,9 @@ public String getItem (int index) {
 public int getItemCount () {
     checkWidget ();
     if ((style & DWT.READ_ONLY) !is 0) {
-        return cast(int)/*64*/(cast(NSPopUpButton)view).numberOfItems();
+        return cast(NSInteger)(cast(NSPopUpButton)view).numberOfItems();
     } else {
-        return cast(int)/*64*/(cast(NSComboBox)view).numberOfItems();
+        return cast(NSInteger)(cast(NSComboBox)view).numberOfItems();
     }
 }
 
@@ -790,9 +792,9 @@ public Point getSelection () {
     } else {
         if (selectionRange is null) {
             NSString str = (new NSTextFieldCell ((cast(NSTextField) view).cell ())).title ();
-            return new Point(cast(int)/*64*/str.length (), cast(int)/*64*/str.length ());
+            return new Point(str.length (), str.length ());
         }
-        return new Point(cast(int)/*64*/selectionRange.location, cast(int)/*64*/(selectionRange.location + selectionRange.length));
+        return new Point(selectionRange.location, selectionRange.location + selectionRange.length);
     }
 }
 
@@ -810,9 +812,9 @@ public Point getSelection () {
 public int getSelectionIndex () {
     checkWidget ();
     if ((style & DWT.READ_ONLY) !is 0) {
-        return cast(int)/*64*/(cast(NSPopUpButton)view).indexOfSelectedItem();
+        return cast(NSInteger)(cast(NSPopUpButton)view).indexOfSelectedItem();
     } else {
-        return cast(int)/*64*/(cast(NSComboBox)view).indexOfSelectedItem();
+        return cast(NSInteger)(cast(NSComboBox)view).indexOfSelectedItem();
     }
 }
 
@@ -917,7 +919,7 @@ public int getVisibleItemCount () {
     if ((style & DWT.READ_ONLY) !is 0) {
         return getItemCount ();
     } else {
-        return cast(int)/*64*/(cast(NSComboBox)view).numberOfVisibleItems();
+        return cast(NSInteger)(cast(NSComboBox)view).numberOfVisibleItems();
     }
 }
 
@@ -963,7 +965,8 @@ public int indexOf (String string) {
  */
 public int indexOf (String string, int start) {
     checkWidget();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     int count = getItemCount ();
     if (!(0 <= start && start < count)) return -1;
     for (int i=start; i<count; i++) {
@@ -1008,7 +1011,7 @@ void insertEditText (String string) {
     ignoreVerify = false;
 }
 
-bool isEventView (int /*long*/ id) {
+bool isEventView (objc.id id) {
     return true;
 }
 
@@ -1151,7 +1154,8 @@ public void remove (int start, int end) {
  */
 public void remove (String string) {
     checkWidget ();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     int index = indexOf (string, 0);
     if (index is -1) error (DWT.ERROR_INVALID_ARGUMENT);
     remove (index);
@@ -1387,6 +1391,7 @@ void setForeground (Carbon.CGFloat [] color) {
  */
 public void setItem (int index, String string) {
     checkWidget ();
+    // DWT extension: allow null for zero length string
     //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     int count = getItemCount ();
     if (0 > index || index >= count) error (DWT.ERROR_INVALID_RANGE);
@@ -1544,7 +1549,8 @@ public void setSelection (Point selection) {
  */
 public void setText (String string) {
     checkWidget ();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     setText (string, true);
 }
 
@@ -1633,9 +1639,9 @@ bool shouldChangeTextInRange_replacementString(objc.id id, objc.SEL sel, NSRange
     if (hooks (DWT.Verify)) {
         String text = (new NSString(replacementString)).getString();
         NSEvent currentEvent = display.application.currentEvent();
-        int /*long*/ type = currentEvent.type();
+        NSEventType type = currentEvent.type();
         if (type !is OS.NSKeyDown && type !is OS.NSKeyUp) currentEvent = null;
-        String newText = verifyText(text, cast(int)/*64*/range.location, cast(int)/*64*/(range.location+range.length), currentEvent);
+        String newText = verifyText(text, range.location, range.location+range.length, currentEvent);
         if (newText is null) return false;
         if (text !is newText) {
             insertEditText(newText);

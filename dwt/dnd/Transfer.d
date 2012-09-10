@@ -73,7 +73,7 @@ abstract public bool isSupportedType(TransferData transferData);
  * @return the platform specific ids of the data types that can be converted using
  * this transfer agent
  */
-abstract int[] getTypeIds();
+abstract /+protected+/ int[] getTypeIds();
 
 /**
  * Returns the platform specific names of the  data types that can be converted
@@ -82,7 +82,7 @@ abstract int[] getTypeIds();
  * @return the platform specific names of the data types that can be converted
  * using this transfer agent.
  */
-abstract String[] getTypeNames();
+abstract /+protected+/ String[] getTypeNames();
 
 /**
  * Converts a java representation of data to a platform specific representation of
@@ -115,7 +115,7 @@ abstract String[] getTypeNames();
  *    <li>ERROR_INVALID_DATA - if object does not contain data in a valid format or is <code>null</code></li>
  * </ul>
  */
-abstract void javaToNative (Object object, TransferData transferData);
+abstract /+protected+/ void javaToNative (Object object, TransferData transferData);
 
 /**
  * Converts a platform specific representation of data to a java representation.
@@ -128,7 +128,7 @@ abstract void javaToNative (Object object, TransferData transferData);
  * <code>null</code> is returned.  The type of Object that is returned is
  * dependent on the <code>Transfer</code> subclass.
  */
-abstract Object nativeToJava(TransferData transferData);
+abstract /+protected+/ Object nativeToJava(TransferData transferData);
 
 /**
  * Registers a name for a data type and returns the associated unique identifier.
@@ -172,7 +172,7 @@ public static int registerType(String formatName) {
  *
  * @since 3.1
  */
-bool validate(Object object) {
+/+protected+/ bool validate(Object object) {
     return true;
 }
 }

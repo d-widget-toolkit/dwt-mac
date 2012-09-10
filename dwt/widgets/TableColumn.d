@@ -296,7 +296,7 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect cellRect, ob
         NSRect sourceRect = NSRect ();
         sourceRect.width = destRect.width;
         sourceRect.height = destRect.height;
-        image.handle.drawInRect (destRect, sourceRect, cast(NSCompositingOperation)OS.NSCompositeSourceOver, 1f);
+        image.handle.drawInRect (destRect, sourceRect, OS.NSCompositeSourceOver, 1f);
         if (isFlipped) context.restoreGraphicsState ();
         drawX += destRect.width;
     }
@@ -639,7 +639,8 @@ public void setResizable (bool resizable) {
 
 public void setText (String string) {
     checkWidget ();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     super.setText (string);
     char [] buffer = new char [text.length];
     text.getChars (0, buffer.length, buffer, 0);

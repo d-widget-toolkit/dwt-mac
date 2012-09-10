@@ -608,8 +608,8 @@ dchar _findMnemonic (String string) {
         if (++index >= length) return '\0';
         if (string.charAt(index) !is '&') {
             dchar[1] d; uint ate;
-            auto d2 = tango.text.convert.Utf.toString32( string[ index .. Math.min( index +4, string.length )], d, &ate );
-            auto d3 = tango.text.Unicode.toLower( d2, d2 );
+            dchar[] d2 = tango.text.convert.Utf.toString32( string[ index .. Math.min( index +4, string.length )], d, &ate );
+            dchar[] d3 = tango.text.Unicode.toLower( d2, d2 );
             return d3[0];
         }
         index++;

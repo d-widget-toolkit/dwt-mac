@@ -18,9 +18,9 @@ BOOL class_addProtocol(Class cls, Protocol* protocol);
 IMP class_getMethodImplementation(Class cls, SEL name);
 /*const*/ char* class_getName(Class cls);
 Class objc_allocateClassPair (Class superclass, /*const*/char* name, size_t extraBytes);
-id objc_getClass (/*const*/char* name);
+Class objc_getClass (/*const*/char* name);
 Protocol* objc_getProtocol(/*const*/ char* name);
-id objc_lookUpClass (/*const*/char* name);
+Class objc_lookUpClass (/*const*/char* name);
 void objc_registerClassPair (Class cls);
 Class object_getClass (id object);
 /*const*/char* object_getClassName (id obj);
@@ -37,7 +37,7 @@ Class class_getSuperclass (Class cls);
 IMP method_setImplementation (Method method, IMP imp);
 id class_createInstance (Class cls, size_t extraBytes);
 id objc_getMetaClass (char* name);
-void objc_msgSendSuper_stret(ARGS...)(void* stretAddr, objc_super* superContext, SEL theSelector, ARGS args);
+void objc_msgSendSuper_stret(void* stretAddr, objc_super* superContext, SEL theSelector, ...);
 
 void instrumentObjcMessageSends(bool val);
 

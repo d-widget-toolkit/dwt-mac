@@ -58,8 +58,8 @@ public cocoa.id accessibilityAttributeValue(NSString attribute, cocoa.id paramet
     return result !is null ? new cocoa.id(result) : null;
 }
 
-public bool accessibilitySetOverrideValue(objc.id value, NSString attribute) {
-    return OS.objc_msgSend_bool(this.id, OS.sel_accessibilitySetOverrideValue_forAttribute_, value !is null ? value : null, attribute !is null ? attribute.id : null);
+public bool accessibilitySetOverrideValue(cocoa.id value, NSString attribute) {
+    return OS.objc_msgSend_bool(value.id, OS.sel_accessibilitySetOverrideValue_forAttribute_, value !is null ? value : null, attribute !is null ? attribute.id : null);
 }
 
 public void draggedImage(NSImage image, NSPoint screenPoint, NSDragOperation operation) {
@@ -162,7 +162,7 @@ public void setValue(cocoa.id value, NSString key) {
 }
 
 public objc.Class superclass() {
-    return cast(objc.Class) OS.objc_msgSend(this.id, OS.sel_superclass);
+    return cast(objc.Class)OS.objc_msgSend(this.id, OS.sel_superclass);
 }
 
 public void useCredential(NSURLCredential credential, NSURLAuthenticationChallenge challenge) {

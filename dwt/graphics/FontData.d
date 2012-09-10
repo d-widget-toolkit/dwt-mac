@@ -123,6 +123,7 @@ public this () {
  * @see #toString
  */
 public this(String string) {
+    // DWT extension: allow null for zero length string
     //if (string is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     int start = 0;
     int end = string.indexOf('|');
@@ -409,6 +410,7 @@ public void setLocale(String locale) {
  * @see #getName
  */
 public void setName(String name) {
+    // DWT extension: allow null for zero length string
     //if (name is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     this.name = name;
     nsName = null;

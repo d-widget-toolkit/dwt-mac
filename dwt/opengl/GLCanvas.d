@@ -181,21 +181,21 @@ public this (Composite parent, int style, GLData data) {
 public GLData getGLData () {
     checkWidget ();
     GLData data = new GLData ();
-    int /*long*/ [] value = new int /*long*/ [1];
-    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFADoubleBuffer, 0);
+    GLint [] value = new GLint [1];
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFADoubleBuffer, 0);
     data.doubleBuffer = value [0] !is 0;
-    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFAStereo, 0);
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFAStereo, 0);
     data.stereo = value [0] !is 0;
 
-    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFAAlphaSize, 0);
-    data.alphaSize = cast(int/*64*/)value [0];
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFAAlphaSize, 0);
+    data.alphaSize = value [0];
 
     /*
      * Feature in Cocoa: NSOpenGL/CoreOpenGL only supports specifying the total number of bits
      * in the size of the color component. For compatibility we split the color size less any alpha
      * into thirds and allocate a third to each color.
      */
-    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFAColorSize, 0);
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFAColorSize, 0);
 
     int colorSize = (cast(int/*64*/)(value[0] - data.alphaSize)) / 3;
 
@@ -203,17 +203,17 @@ public GLData getGLData () {
     data.greenSize = colorSize;
     data.blueSize = colorSize;
 
-    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFADepthSize, 0);
-    data.depthSize = cast(int/*64*/)value [0];
-    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFAStencilSize, 0);
-    data.stencilSize = cast(int/*64*/)value [0];
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFADepthSize, 0);
+    data.depthSize = value [0];
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFAStencilSize, 0);
+    data.stencilSize = value [0];
 
     /*
      * Feature(?) in Cocoa: NSOpenGL/CoreOpenGL doesn't support setting an accumulation buffer alpha, but
      * has an alpha if the color values for the accumulation buffer were set. Allocate the values evenly
      * in that case.
      */
-    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFAAccumSize, 0);
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFAAccumSize, 0);
 
     int accumColorSize = cast(int/*64*/)(value[0]) / 4;
     data.accumRedSize = accumColorSize;
@@ -221,10 +221,10 @@ public GLData getGLData () {
     data.accumBlueSize = accumColorSize;
     data.accumAlphaSize = accumColorSize;
 
-    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFASampleBuffers, 0);
-    data.sampleBuffers = cast(int/*64*/)value [0];
-    pixelFormat.getValues(value.ptr, cast(NSOpenGLPixelFormatAttribute)OS.NSOpenGLPFASamples, 0);
-    data.samples = cast(int/*64*/)value [0];
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFASampleBuffers, 0);
+    data.sampleBuffers = value [0];
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFASamples, 0);
+    data.samples = value [0];
     return data;
 }
 

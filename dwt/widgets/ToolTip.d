@@ -592,7 +592,8 @@ public void setLocation (Point location) {
  */
 public void setMessage (String string) {
     checkWidget ();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (layoutMessage !is null) layoutMessage.dispose();
     layoutMessage = null;
     if (string.length !is 0) {
@@ -618,6 +619,7 @@ public void setMessage (String string) {
  */
 public void setText (String string) {
     checkWidget ();
+    // DWT extension: allow null for zero length string
     //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (layoutText !is null) layoutText.dispose ();
     layoutText = null;

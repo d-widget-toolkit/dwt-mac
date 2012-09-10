@@ -255,14 +255,14 @@ objc.id callSuper(objc.id id, objc.SEL sel, objc.id arg0, NSRect arg1, objc.id a
     return OS.objc_msgSendSuper(&super_struct, sel, arg0, arg1, arg2);
 }
 
-boolean callSuperBoolean(objc.id id, objc.SEL sel) {
+bool callSuperBoolean(objc.id id, objc.SEL sel) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
     return OS.objc_msgSendSuper_bool(&super_struct, sel);
 }
 
-boolean canBecomeKeyWindow (objc.id id, objc.SEL sel) {
+bool canBecomeKeyWindow (objc.id id, objc.SEL sel) {
     return callSuperBoolean (id, sel);
 }
 
@@ -284,7 +284,7 @@ NSSize cellSizeForBounds (objc.id id, objc.SEL sel, NSRect cellFrame) {
     return result;
 }
 
-boolean callSuperBoolean(objc.id id, objc.SEL sel, objc.id arg0) {
+bool callSuperBoolean(objc.id id, objc.SEL sel, objc.id arg0) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
@@ -312,7 +312,7 @@ objc.id callSuperObject(objc.id id, objc.SEL sel, objc.id arg0) {
     return OS.objc_msgSendSuper(&super_struct, sel, arg0);
 }
 
-boolean canDragRowsWithIndexes_atPoint(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
+bool canDragRowsWithIndexes_atPoint(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
     // Trees/tables are not draggable unless explicitly told they are.
     return false;
 }
@@ -327,14 +327,14 @@ objc.id columnAtPoint(objc.id id, objc.SEL sel, NSPoint point) {
     return OS.objc_msgSendSuper(&super_struct, sel, point);
 }
 
-boolean acceptsFirstMouse (objc.id id, objc.SEL sel, objc.id theEvent) {
+bool acceptsFirstMouse (objc.id id, objc.SEL sel, objc.id theEvent) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
     return OS.objc_msgSendSuper_bool(&super_struct, sel, theEvent);
 }
 
-boolean acceptsFirstResponder (objc.id id, objc.SEL sel) {
+bool acceptsFirstResponder (objc.id id, objc.SEL sel) {
     return callSuperBoolean(id, sel);
 }
 
@@ -346,7 +346,7 @@ void becomeKeyWindow (objc.id id, objc.SEL sel) {
     callSuper(id, sel);
 }
 
-boolean resignFirstResponder (objc.id id, objc.SEL sel) {
+bool resignFirstResponder (objc.id id, objc.SEL sel) {
     return callSuperBoolean(id, sel);
 }
 
@@ -760,6 +760,7 @@ public Object getData () {
  */
 public Object getData (String key) {
     checkWidget();
+    // DWT extension: allow null for zero length string
     //if (key is null) error (DWT.ERROR_NULL_ARGUMENT);
     if ((state & KEYED_DATA) !is 0) {
         Object [] table = (cast(ArrayWrapperObject) data).array;
@@ -1027,7 +1028,7 @@ bool shouldDelayWindowOrderingForEvent (objc.id id, objc.SEL sel, objc.id theEve
     return OS.objc_msgSendSuper_bool(&super_struct, sel, theEvent);
 }
 
-boolean menuHasKeyEquivalent_forEvent_target_action(objc.id id, objc.SEL sel, objc.id menu, objc.id event, objc.id target, objc.id action) {
+bool menuHasKeyEquivalent_forEvent_target_action(objc.id id, objc.SEL sel, objc.id menu, objc.id event, objc.id target, objc.id action) {
     return true;
 }
 
@@ -1059,8 +1060,8 @@ void menuDidClose(objc.id id, objc.SEL sel, objc.id menu) {
 void menuWillOpen(objc.id id, objc.SEL sel, objc.id menu) {
 }
 
-void noResponderFor(objc.id id, objc.SEL sel, objc.id selector) {
-    callSuper(id, sel, selector);
+void noResponderFor(objc.id id, objc.SEL sel, objc.SEL selector) {
+    callSuper(id, sel, cast(objc.id)selector);
 }
 
 NSInteger numberOfRowsInTableView(objc.id id, objc.SEL sel, objc.id aTableView) {
@@ -1434,6 +1435,7 @@ public void setData (Object data) {
  */
 public void setData (String key, Object value) {
     checkWidget();
+    // DWT extension: allow null for zero length string
     //if (key is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (GLCONTEXT_KEY.equals (key)) {
         setOpenGLContext(value);
@@ -1511,7 +1513,7 @@ bool setInputState (Event event, NSEvent nsEvent, int type) {
     if ((modifierFlags & OS.NSControlKeyMask) !is 0) event.stateMask |= DWT.CONTROL;
     if ((modifierFlags & OS.NSCommandKeyMask) !is 0) event.stateMask |= DWT.COMMAND;
     //TODO multiple mouse buttons pressed
-    switch (cast(int)nsEvent.type()) {
+    switch (nsEvent.type()) {
         case OS.NSLeftMouseDragged:
         case OS.NSRightMouseDragged:
         case OS.NSOtherMouseDragged:
@@ -1613,7 +1615,7 @@ bool setKeyState (Event event, int type, NSEvent nsEvent) {
                         UniCharCount maxStringLength = 256;
                         wchar [] output = new wchar [maxStringLength];
                         UniCharCount [] actualStringLength = new UniCharCount [1];
-                        OS.UCKeyTranslate (cast(UCKeyboardLayout*) uchrPtr, cast(ushort)keyCode, cast(ushort)OS.kUCKeyActionDown, cast(uint) 0, cast(uint)keyboardType, cast(uint) 0, cast(uint*) display.deadKeyState.ptr, maxStringLength, actualStringLength.ptr, output.ptr);
+                        OS.UCKeyTranslate (cast(UCKeyboardLayout*) uchrPtr, cast(ushort)keyCode, OS.kUCKeyActionDown, cast(uint) 0, cast(uint)keyboardType, cast(uint) 0, cast(uint*) display.deadKeyState.ptr, maxStringLength, actualStringLength.ptr, output.ptr);
                         if (actualStringLength[0] < 1) {
                             // part of a multi-key key
                             event.keyCode = 0;

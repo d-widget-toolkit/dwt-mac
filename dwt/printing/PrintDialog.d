@@ -192,12 +192,12 @@ public PrinterData open() {
         dict.setValue(NSNumber.numberWithInt(printerData.startPage), OS.NSPrintFirstPage);
         dict.setValue(NSNumber.numberWithInt(printerData.endPage), OS.NSPrintLastPage);
     }
-    panel.setOptions(cast(NSPrintPanelOptions)(OS.NSPrintPanelShowsPageSetupAccessory | panel.options()));
+    panel.setOptions(OS.NSPrintPanelShowsPageSetupAccessory | panel.options());
     int response;
     if ((getStyle () & DWT.SHEET) !is 0) {
         initClasses();
         SWTPrintPanelDelegate delegate_ = cast(SWTPrintPanelDelegate)(new SWTPrintPanelDelegate()).alloc().init();
-        auto jniRef = OS.NewGlobalRef(this);
+        void* jniRef = OS.NewGlobalRef(this);
         if (jniRef is null) DWT.error(DWT.ERROR_NO_HANDLES);
         OS.object_setInstanceVariable(delegate_.id, DWT_OBJECT, jniRef);
         returnCode = -1;
@@ -209,7 +209,7 @@ public PrinterData open() {
         if (jniRef !is null) OS.DeleteGlobalRef(jniRef);
         response = returnCode;
     } else {
-        response = cast(int)/*64*/panel.runModalWithPrintInfo(printInfo);
+        response = panel.runModalWithPrintInfo(printInfo);
     }
     if (response !is OS.NSCancelButton) {
         NSPrinter printer = printInfo.printer();
@@ -282,8 +282,8 @@ void initClasses () {
     if (dialogProc5 is null) DWT.error (DWT.ERROR_NO_MORE_CALLBACKS);
 
     char[] types = ['*','\0'];
-    int size = C.PTR_SIZEOF, align_ = C.PTR_SIZEOF is 4 ? 2 : 3;
-    auto cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
+    size_t size = C.PTR_SIZEOF, align_ = C.PTR_SIZEOF is 4 ? 2 : 3;
+    objc.Class cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
     OS.class_addIvar(cls, DWT_OBJECT, size, cast(byte)align_, types);
     OS.class_addMethod(cls, OS.sel_panelDidEnd_returnCode_contextInfo_, dialogProc5, "@:@i@");
     OS.objc_registerClassPair(cls);

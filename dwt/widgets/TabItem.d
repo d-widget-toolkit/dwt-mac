@@ -305,7 +305,7 @@ public void setControl (Control control) {
     if (oldControl !is null) {
         NSView topView = oldControl.topView ();
         if (topView.superview () is null) {
-            parent.contentView ().addSubview (topView, cast(NSWindowOrderingMode)OS.NSWindowBelow, null);
+            parent.contentView ().addSubview (topView, OS.NSWindowBelow, null);
         }
     }
 }
@@ -345,7 +345,8 @@ public void setImage (Image image) {
  */
 public void setText (String string) {
     checkWidget ();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     int index = parent.indexOf (this);
     if (index is -1) return;
     super.setText (string);

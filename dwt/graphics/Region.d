@@ -336,7 +336,7 @@ public bool contains(int x, int y) {
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         Carbon.Point point = Carbon.Point(cast(short)x, cast(short)y);
-        return Carbon.PtInRgn(point, handle);
+        return OS.PtInRgn(point, handle);
     } finally {
         if (pool !is null) pool.release();
     }
@@ -364,7 +364,7 @@ public bool contains(Point pt) {
 
 NSAffineTransform transform;
 void convertRgn(NSAffineTransform transform) {
-    auto data = RegionData!(Carbon.RgnHandle)(this);
+    RegionData!(Carbon.RgnHandle) data = RegionData!(Carbon.RgnHandle)(this);
     Carbon.RgnHandle newRgn = OS.NewRgn();
     Carbon.RegionToRectsUPP proc = cast(Carbon.RegionToRectsUPP)&Region.convertRgn_;
     data.data = newRgn;
@@ -466,7 +466,7 @@ public Rectangle getBounds() {
 }
 
 NSBezierPath getPath() {
-    auto data = RegionData!(objc.id)(this);
+    RegionData!(objc.id) data = RegionData!(objc.id)(this);
     NSBezierPath path = NSBezierPath.bezierPath();
     path.retain();
     data.data = path.id;

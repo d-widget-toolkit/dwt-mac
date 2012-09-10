@@ -148,6 +148,7 @@ import dwt.events.SelectionListener;
 public class Tree : Composite {
 
     alias Composite.computeSize computeSize;
+    alias Composite.updateCursorRects updateCursorRects;
 
     NSTableColumn firstColumn, checkColumn;
     NSTextFieldCell dataCell;
@@ -334,15 +335,14 @@ NSSize cellSize (objc.id id, objc.SEL sel) {
     NSImage image = (new NSCell(id)).image();
     if (image !is null) size.width += imageBounds.width + IMAGE_GAP;
     if (hooks(DWT.MeasureItem)) {
-        objc.id outValue;
-        void* outP = &outValue;
-        OS.object_getInstanceVariable(id, Display.SWT_ROW, outP);
-        TreeItem item = cast(TreeItem) display.getWidget (outValue);
-        OS.object_getInstanceVariable(id, Display.SWT_COLUMN, outP);
-        auto tableColumn = outValue;
+        void* outValue;
+        OS.object_getInstanceVariable(id, Display.SWT_ROW, outValue);
+        TreeItem item = cast(TreeItem) display.getWidget (cast(objc.id)outValue);
+        OS.object_getInstanceVariable(id, Display.SWT_COLUMN, outValue);
+        cocoa.id tableColumn = cast(cocoa.id)outValue;
         int columnIndex = 0;
         for (int i=0; i<columnCount; i++) {
-            if (columns [i].nsColumn.id is tableColumn) {
+            if (columns [i].nsColumn is tableColumn) {
                 columnIndex = i;
                 break;
             }
@@ -358,8 +358,8 @@ bool canDragRowsWithIndexes_atPoint(objc.id id, objc.SEL sel, objc.id arg0, objc
     NSOutlineView tree = cast(NSOutlineView)view;
 
     // If the current row is not selected and the user is not attempting to modify the selection, select the row first.
-    int /*long*/ row = tree.rowAtPoint(clickPoint);
-    int /*long*/ modifiers = NSApplication.sharedApplication().currentEvent().modifierFlags();
+    NSInteger row = tree.rowAtPoint(clickPoint);
+    NSUInteger modifiers = NSApplication.sharedApplication().currentEvent().modifierFlags();
 
     bool drag = (state & DRAG_DETECT) !is 0 && hooks (DWT.DragDetect);
     if (drag) {
@@ -552,7 +552,7 @@ public Point computeSize (int wHint, int hHint, bool changed) {
         width = wHint;
     }
     if (hHint is DWT.DEFAULT) {
-        height = cast(int)/*64*/(cast(NSOutlineView) view).numberOfRows () * getItemHeight () + getHeaderHeight ();
+        height = (cast(NSOutlineView) view).numberOfRows () * getItemHeight () + getHeaderHeight ();
     } else {
         height = hHint;
     }
@@ -629,12 +629,12 @@ void createHandle () {
     widget.setAutosaveExpandedItems (true);
     widget.setDataSource (widget);
     widget.setDelegate (widget);
-    widget.setColumnAutoresizingStyle (cast(NSTableViewColumnAutoresizingStyle)OS.NSTableViewNoColumnAutoresizing);
+    widget.setColumnAutoresizingStyle (OS.NSTableViewNoColumnAutoresizing);
     NSSize spacing = NSSize();
     spacing.width = spacing.height = CELL_GAP;
     widget.setIntercellSpacing(spacing);
     widget.setDoubleAction (OS.sel_sendDoubleSelection);
-    if (!hasBorder ()) widget.setFocusRingType (cast(NSFocusRingType)OS.NSFocusRingTypeNone);
+    if (!hasBorder ()) widget.setFocusRingType (OS.NSFocusRingTypeNone);
 
     headerView = cast(NSTableHeaderView)(new SWTTableHeaderView ()).alloc ().init ();
     widget.setHeaderView (null);
@@ -648,12 +648,12 @@ void createHandle () {
         widget.setOutlineTableColumn (checkColumn);
         checkColumn.setResizingMask (OS.NSTableColumnNoResizing);
         checkColumn.setEditable (false);
-        auto cls = NSButton.cellClass (); /* use our custom cell class */
+        objc.Class cls = NSButton.cellClass (); /* use our custom cell class */
         buttonCell = new NSButtonCell (OS.class_createInstance (cls, 0));
         buttonCell.init ();
         checkColumn.setDataCell (buttonCell);
-        buttonCell.setButtonType (cast(NSButtonType)OS.NSSwitchButton);
-        buttonCell.setImagePosition (cast(NSCellImagePosition)OS.NSImageOnly);
+        buttonCell.setButtonType (OS.NSSwitchButton);
+        buttonCell.setImagePosition (OS.NSImageOnly);
         buttonCell.setAllowsMixedState (true);
         checkColumn.setWidth (getCheckColumnWidth ());
     }
@@ -673,7 +673,7 @@ void createHandle () {
     widget.addTableColumn (firstColumn);
     widget.setOutlineTableColumn (firstColumn);
     dataCell = cast(NSTextFieldCell)(new SWTImageTextCell ()).alloc ().init ();
-    dataCell.setLineBreakMode(cast(NSLineBreakMode)OS.NSLineBreakByClipping);
+    dataCell.setLineBreakMode(OS.NSLineBreakByClipping);
     firstColumn.setDataCell (dataCell);
 
     scrollView = scrollWidget;
@@ -837,7 +837,7 @@ public void deselect (TreeItem item) {
     if (item is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (item.isDisposed ()) error (DWT.ERROR_INVALID_ARGUMENT);
     NSOutlineView widget = cast(NSOutlineView)view;
-    int /*long*/ row = widget.rowForItem(item.handle);
+    NSInteger row = widget.rowForItem(item.handle);
     ignoreSelect = true;
     widget.deselectRow (row);
     ignoreSelect = false;
@@ -931,7 +931,7 @@ void destroyItem (TreeColumn column) {
     }
 
     NSArray array = (cast(NSOutlineView)view).tableColumns ();
-    NSUInteger arraySize = cast(int)/*64*/array.count ();
+    NSUInteger arraySize = array.count ();
     for (NSUInteger i = oldIndex; i < arraySize; i++) {
         objc.id columnId = array.objectAtIndex (i).id;
         for (int j = 0; j < columnCount; j++) {
@@ -984,17 +984,16 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect rect, objc.i
     NSTextFieldCell cell = new NSTextFieldCell (id);
 
     NSOutlineView widget = cast(NSOutlineView)this.view;
-    objc.id outValue;
-    void* outP = &outValue;
-    OS.object_getInstanceVariable(id, Display.SWT_ROW, outP);
-    TreeItem item = cast(TreeItem) display.getWidget (outValue);
-    auto rowIndex = widget.rowForItem(item.handle);
-    OS.object_getInstanceVariable(id, Display.SWT_COLUMN, outP);
-    auto tableColumn = outValue;
-    auto nsColumnIndex = widget.tableColumns().indexOfObjectIdenticalTo(new cocoa.id(tableColumn));
+    void* outValue;
+    OS.object_getInstanceVariable(id, Display.SWT_ROW, outValue);
+    TreeItem item = cast(TreeItem) display.getWidget (cast(objc.id)outValue);
+    NSInteger rowIndex = widget.rowForItem(item.handle);
+    OS.object_getInstanceVariable(id, Display.SWT_COLUMN, outValue);
+    cocoa.id tableColumn = cast(cocoa.id)outValue;
+    NSInteger nsColumnIndex = widget.tableColumns().indexOfObjectIdenticalTo(tableColumn);
     int columnIndex = 0;
     for (int i=0; i<columnCount; i++) {
-        if (columns [i].nsColumn.id is tableColumn) {
+        if (columns [i].nsColumn is tableColumn) {
             columnIndex = i;
             break;
         }
@@ -1028,7 +1027,7 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect rect, objc.i
         NSRect rowRect = widget.rectOfRow (rowIndex);
         cellRect.width = rowRect.width;
     }
-    float /*double*/ offsetX = 0, offsetY = 0;
+    Cocoa.CGFloat offsetX = 0, offsetY = 0;
     if (hooksPaint || hooksErase) {
         NSRect frameCell = widget.frameOfCellAtColumn(nsColumnIndex, rowIndex);
         offsetX = rect.x - frameCell.x;
@@ -1116,7 +1115,8 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect rect, objc.i
         context.saveGraphicsState ();
         NSRect contentRect = cell.titleRectForBounds (rect);
         GCData data = new GCData ();
-        data.paintRect = &contentRect;
+        data.paintRectStruct = contentRect;
+        data.paintRect = &data.paintRectStruct;
         GC gc = GC.cocoa_new (this, data);
         gc.setClipping (cast(int)(contentRect.x - offsetX), cast(int)(contentRect.y - offsetY), cast(int)contentRect.width, cast(int)contentRect.height);
         Rectangle itemRect = insertItem.getImageBounds(0).union_(insertItem.getBounds());
@@ -1145,7 +1145,7 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect rect, objc.i
             transform.scaleXBy(1, -1);
             transform.translateXBy(0, -(destRect.height + 2 * destRect.y));
             transform.concat();
-            image.drawInRect(destRect, srcRect, cast(NSCompositingOperation)OS.NSCompositeSourceOver, 1);
+            image.drawInRect(destRect, srcRect, OS.NSCompositeSourceOver, 1);
             context.restoreGraphicsState();
             int imageWidth = imageBounds.width + IMAGE_GAP;
             rect.x = rect.x + imageWidth;
@@ -1159,7 +1159,7 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect rect, objc.i
             * foreground color to black when the cell is highlighted. The text
             * still draws white.  The fix is to draw the text and not call super.
             */
-            float /*double*/ [] color = userForeground.handle;
+            Cocoa.CGFloat [] color = userForeground.handle;
             if (color[0] is 0 && color[1] is 0 && color[2] is 0 && color[3] is 1) {
                 NSMutableAttributedString newStr = new NSMutableAttributedString(cell.attributedStringValue().mutableCopy());
                 NSRange range = NSRange();
@@ -1203,8 +1203,7 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect rect, objc.i
         transform.concat();
 
         GCData data = new GCData ();
-        data.paintRect = &cellRect;
-        data.paintRect = &data.paintRectStruct;
+        data.paintRectStruct = cellRect;
         data.paintRect = &data.paintRectStruct;
         GC gc = GC.cocoa_new (this, data);
         gc.setFont (item.getFont (columnIndex));
@@ -1297,10 +1296,10 @@ Widget findTooltip (NSPoint pt) {
     NSTableHeaderView headerView = widget.headerView();
     if (headerView !is null) {
         pt = headerView.convertPoint_fromView_ (pt, null);
-        int /*long*/ index = headerView.columnAtPoint (pt);
+        NSInteger index = headerView.columnAtPoint (pt);
         if (index !is -1) {
             NSArray nsColumns = widget.tableColumns ();
-            auto nsColumn = nsColumns.objectAtIndex (index);
+            cocoa.id nsColumn = nsColumns.objectAtIndex (index);
             for (int i = 0; i < columnCount; i++) {
                 TreeColumn column = columns [i];
                 if (column.nsColumn.id is nsColumn.id) {
@@ -1588,7 +1587,7 @@ public TreeItem getItem (Point point) {
     if (row is -1) return null;
     NSRect rect = widget.frameOfOutlineCellAtRow(row);
     if (OS.NSPointInRect(pt, rect)) return null;
-    auto id = widget.itemAtRow(row);
+    cocoa.id id = widget.itemAtRow(row);
     Widget item = display.getWidget (id.id);
     if (item !is null && cast(TreeItem) item) {
         return cast(TreeItem)item;
@@ -1818,9 +1817,9 @@ public TreeItem getTopItem () {
     point.x = rect.x;
     point.y = rect.y;
     NSOutlineView outlineView = cast(NSOutlineView)view;
-    int /*long*/ index = outlineView.rowAtPoint (point);
+    NSInteger index = outlineView.rowAtPoint (point);
     if (index is -1) return null; /* empty */
-    auto item = outlineView.itemAtRow (index);
+    cocoa.id item = outlineView.itemAtRow (index);
     return cast(TreeItem)display.getWidget (item.id);
 }
 
@@ -1841,10 +1840,9 @@ objc.id hitTestForEvent (objc.id id, objc.SEL sel, objc.id event, NSRect rect, o
 }
 
 objc.id image (objc.id id, objc.SEL sel) {
-    objc.id image;
-    void* imageP = &image;
-    OS.object_getInstanceVariable(id, Display.SWT_IMAGE, imageP);
-    return image;
+    void* image;
+    OS.object_getInstanceVariable(id, Display.SWT_IMAGE, image);
+    return cast(objc.id)image;
 }
 
 NSRect imageRectForBounds (objc.id id, objc.SEL sel, NSRect cellFrame) {
@@ -1941,7 +1939,7 @@ objc.id menuForEvent(objc.id id, objc.SEL sel, objc.id theEvent) {
 
         // select the row that was clicked before showing the menu for the event
         NSPoint mousePoint = view.convertPoint_fromView_(event.locationInWindow(), null);
-        int /*long*/ row = tree.rowAtPoint(mousePoint);
+        NSInteger row = tree.rowAtPoint(mousePoint);
 
         // figure out if the row that was just clicked on is currently selected
         if (selectedRowIndexes.containsIndex(row) is false) {
@@ -1961,9 +1959,9 @@ void mouseDown (objc.id id, objc.SEL sel, objc.id theEvent) {
         NSTableView widget = cast(NSTableView)view;
         widget.setAllowsColumnReordering(false);
         NSPoint pt = headerView.convertPoint_fromView_((new NSEvent(theEvent)).locationInWindow(), null);
-        int /*long*/ nsIndex = headerView.columnAtPoint(pt);
+        NSInteger nsIndex = headerView.columnAtPoint(pt);
         if (nsIndex !is -1) {
-            auto nsColumn = widget.tableColumns().objectAtIndex(nsIndex);
+            cocoa.id nsColumn = widget.tableColumns().objectAtIndex(nsIndex);
             for (int i = 0; i < columnCount; i++) {
                 if (columns[i].nsColumn.id is nsColumn.id) {
                     widget.setAllowsColumnReordering(columns[i].movable);
@@ -1990,7 +1988,7 @@ void mouseDown (objc.id id, objc.SEL sel, objc.id theEvent) {
  */
 objc.id nextState (objc.id id, objc.SEL sel) {
     NSOutlineView outlineView = cast(NSOutlineView)view;
-    int index = cast(int)/*64*/outlineView.selectedRow ();
+    NSInteger index = outlineView.selectedRow ();
     TreeItem item = cast(TreeItem)display.getWidget (outlineView.itemAtRow (index).id);
     if (item.grayed) {
         return cast(objc.id)(item.checked ? OS.NSOffState : OS.NSMixedState);
@@ -2000,7 +1998,7 @@ objc.id nextState (objc.id id, objc.SEL sel) {
 
 objc.id outlineView_child_ofItem (objc.id id, objc.SEL sel, objc.id outlineView, objc.id index, objc.id itemID) {
     TreeItem parent = cast(TreeItem) display.getWidget (itemID);
-    TreeItem item = _getItem (parent, cast(int)/*64*/index, true);
+    TreeItem item = _getItem (parent, cast(NSInteger)index, true);
     return item.handle.id;
 }
 
@@ -2087,7 +2085,7 @@ void outlineView_willDisplayCell_forTableColumn_item (objc.id id, objc.SEL sel, 
         dict.setObject (font.handle, OS.NSFontAttributeName);
         addTraits(dict, font);
         NSMutableParagraphStyle paragraphStyle = cast(NSMutableParagraphStyle)(new NSMutableParagraphStyle ()).alloc ().init ();
-        paragraphStyle.setLineBreakMode (cast(NSLineBreakMode)OS.NSLineBreakByClipping);
+        paragraphStyle.setLineBreakMode (OS.NSLineBreakByClipping);
         paragraphStyle.setAlignment (cast(NSTextAlignment)alignment);
         dict.setObject (paragraphStyle, OS.NSParagraphStyleAttributeName);
         paragraphStyle.release ();
@@ -2177,7 +2175,7 @@ void outlineView_setObjectValue_forTableColumn_byItem (objc.id id, objc.SEL sel,
     }
 }
 
-bool outlineView_writeItems_toPasteboard(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1, int /*long*/ arg2) {
+bool outlineView_writeItems_toPasteboard(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2) {
     return sendMouseEvent(NSApplication.sharedApplication().currentEvent(), DWT.DragDetect, true);
 }
 
@@ -2388,7 +2386,7 @@ public void select (TreeItem item) {
     checkItems ();
     showItem (item);
     NSOutlineView outlineView = cast(NSOutlineView) view;
-    int /*long*/ row = outlineView.rowForItem (item.handle);
+    NSInteger row = outlineView.rowForItem (item.handle);
     NSIndexSet set = cast(NSIndexSet)(new NSIndexSet()).alloc();
     set = set.initWithIndex(row);
     ignoreSelect = true;
@@ -2399,12 +2397,12 @@ public void select (TreeItem item) {
 
 void sendDoubleSelection() {
     NSOutlineView outlineView = cast(NSOutlineView)view;
-    int rowIndex = cast(int)/*64*/outlineView.clickedRow ();
+    NSInteger rowIndex = outlineView.clickedRow ();
     if (rowIndex !is -1) {
         if ((style & DWT.CHECK) !is 0) {
             NSArray columns = outlineView.tableColumns ();
-            int columnIndex = cast(int)/*64*/outlineView.clickedColumn ();
-            auto column = columns.objectAtIndex (columnIndex);
+            NSInteger columnIndex = outlineView.clickedColumn ();
+            cocoa.id column = columns.objectAtIndex (columnIndex);
             if (column.id is checkColumn.id) return;
         }
         TreeItem item = cast(TreeItem) display.getWidget (outlineView.itemAtRow (rowIndex).id);
@@ -2436,7 +2434,8 @@ void sendMeasureItem (TreeItem item, int columnIndex, NSSize size) {
     NSSize spacing = widget.intercellSpacing();
     int itemHeight = cast(int)Math.ceil (widget.rowHeight() + spacing.height);
     GCData data = new GCData ();
-    data.paintRect = &widget.frame ();
+    data.paintRectStruct = widget.frame ();
+    data.paintRect = &data.paintRectStruct;
     GC gc = GC.cocoa_new (this, data);
     gc.setFont (item.getFont (columnIndex));
     Event event = new Event ();
@@ -2722,8 +2721,8 @@ void setItemCount (TreeItem parentItem, int count) {
 
 void setItemHeight (Image image, NSFont font, bool set) {
     if (font is null) font = getFont ().handle;
-    float /*double*/ ascent = font.ascender ();
-    float /*double*/ descent = -font.descender () + font.leading ();
+    Cocoa.CGFloat ascent = font.ascender ();
+    Cocoa.CGFloat descent = -font.descender () + font.leading ();
     int height = cast(int)Math.ceil (ascent + descent) + 1;
     Rectangle bounds = image !is null ? image.getBounds () : imageBounds;
     if (bounds !is null) {
@@ -2875,7 +2874,7 @@ public void setSelection (TreeItem [] items) {
 
 void setSmallSize () {
     if (checkColumn is null) return;
-    checkColumn.dataCell ().setControlSize (cast(NSControlSize)OS.NSSmallControlSize);
+    checkColumn.dataCell ().setControlSize (OS.NSSmallControlSize);
     checkColumn.setWidth (getCheckColumnWidth ());
 }
 
@@ -2957,7 +2956,7 @@ public void setTopItem (TreeItem item) {
     checkItems ();
     showItem (item, false);
     NSOutlineView widget = cast(NSOutlineView) view;
-    int /*long*/ row = widget.rowForItem (item.handle);
+    NSInteger row = widget.rowForItem (item.handle);
     if (row is -1) return;
     NSPoint pt = NSPoint();
     pt.x = scrollView.contentView().bounds().x;
@@ -3056,9 +3055,9 @@ public void showSelection () {
 }
 
 void updateCursorRects (bool enabled) {
-    super.updateCursorRects (enabled);
+    updateCursorRects (enabled);
     if (headerView is null) return;
-    super.updateCursorRects (enabled, cast(NSTableHeaderView)headerView);
+    updateCursorRects (enabled, cast(NSTableHeaderView)headerView);
 }
 
 }

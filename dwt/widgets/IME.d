@@ -121,8 +121,8 @@ objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, NSRangePointer r
     sendEvent (DWT.ImeComposition, event);
     NSRange range = NSRange ();
     OS.memmove (&range, rangePtr, NSRange.sizeof);
-    int start = cast(int)/*64*/range.location;
-    int end = cast(int)/*64*/(range.location + range.length);
+    NSUInteger start = range.location;
+    NSUInteger end = range.location + range.length;
     if (event.start <= start && start <= event.end && event.start <= end && end <= event.end) {
         NSString str = NSString.stringWith (event.text.substring(start - event.start, end - event.start));
         NSAttributedString attriStr = (cast(NSAttributedString)(new NSAttributedString()).alloc()).initWithString(str, null);
@@ -370,7 +370,7 @@ bool hasMarkedText (objc.id id, objc.SEL sel) {
 bool insertText (objc.id id, objc.SEL sel, objc.id string) {
     if (startOffset is -1) return true;
     NSString str = new NSString (string);
-    if (str.isKindOfClass (cast(objc.Class) OS.objc_getClass ("NSAttributedString"))) {
+    if (str.isKindOfClass (OS.objc_getClass ("NSAttributedString"))) {
         str = (new NSAttributedString (string)).string ();
     }
     NSUInteger length = str.length ();
@@ -475,7 +475,7 @@ bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, objc
         end = event.end;
     }
     NSString str = new NSString (string);
-    if (str.isKindOfClass (cast(objc.Class) OS.objc_getClass ("NSAttributedString"))) {
+    if (str.isKindOfClass (OS.objc_getClass ("NSAttributedString"))) {
         NSAttributedString attribStr = new NSAttributedString (string);
         str = attribStr.string ();
         NSUInteger length = str.length ();
@@ -489,8 +489,8 @@ bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, objc
             NSDictionary attribs = attribStr.attributesAtIndex(i, ptr, rangeLimit);
             OS.memmove (&effectiveRange, ptr, NSRange.sizeof);
             i = effectiveRange.location + effectiveRange.length;
-            ranges [rangeCount * 2] = cast(int)/*64*/effectiveRange.location;
-            ranges [rangeCount * 2 + 1] = cast(int)/*64*/(effectiveRange.location + effectiveRange.length - 1);
+            ranges [rangeCount * 2] = effectiveRange.location;
+            ranges [rangeCount * 2 + 1] = effectiveRange.location + effectiveRange.length - 1;
             styles [rangeCount++] = getStyle (attribs);
         }
         OS.free (ptr);
@@ -510,7 +510,7 @@ bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, objc
     }
     NSRange range = NSRange ();
     OS.memmove (&range, selRange, NSRange.sizeof);
-    caretOffset = cast(int)/*64*/range.location;
+    caretOffset = range.location;
     Event event = new Event ();
     event.detail = DWT.COMPOSITION_CHANGED;
     event.start = startOffset;

@@ -137,7 +137,7 @@ void destroy() {
  */
 public bool equals(Object object) {
     if (object is this) return true;
-    auto o = cast(Color)object;
+    Color o = cast(Color)object;
     if (!o) return false;
     Color color = o;
     CGFloat[] rgbColor = color.handle;

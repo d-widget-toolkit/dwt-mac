@@ -80,6 +80,9 @@ import dwt.events.VerifyListener;
  * @noextend This class is not intended to be subclassed by clients.
  */
 public class Spinner : Composite {
+
+    alias Composite.updateCursorRects updateCursorRects;
+
     NSTextField textView;
     NSNumberFormatter textFormatter;
     NSStepper buttonView;
@@ -259,7 +262,7 @@ public Point computeSize (int wHint, int hHint, bool changed) {
     height += frameRect.height - cellRect.height;
     width += GAP;
     size = buttonView.cell ().cellSize ();
-    width += cast(int)/*64*/size.width;
+    width += size.width;
     height = Math.max (height, size.height);
     if (wHint !is DWT.DEFAULT) width = wHint;
     if (hHint !is DWT.DEFAULT) height = hHint;
@@ -537,7 +540,7 @@ public int getTextLimit () {
     return textLimit;
 }
 
-bool isEventView (int /*long*/ id) {
+bool isEventView (objc.id id) {
     return true;
 }
 
@@ -779,7 +782,7 @@ void setFont(NSFont font) {
     textView.setFont(font);
 }
 
-void setForeground (float /*double*/ [] color) {
+void setForeground (Cocoa.CGFloat [] color) {
     NSColor nsColor;
     if (color is null) {
         nsColor = NSColor.textColor ();
@@ -914,7 +917,7 @@ void setSelection (int value, bool setPos, bool setText, bool notify) {
         }
         NSCell cell = new NSCell(textView.cell());
         if (hooks (DWT.Verify) || filters (DWT.Verify)) {
-            int length = cast(int)/*64*/cell.title().length();
+            NSUInteger length = cell.title().length();
             string = verifyText (string, 0, length, null);
             if (string is null) return;
         }
@@ -930,8 +933,8 @@ void setSelection (int value, bool setPos, bool setText, bool notify) {
 }
 
 void setSmallSize () {
-    textView.cell ().setControlSize (cast(NSControlSize)OS.NSSmallControlSize);
-    buttonView.cell ().setControlSize (cast(NSControlSize)OS.NSSmallControlSize);
+    textView.cell ().setControlSize (OS.NSSmallControlSize);
+    buttonView.cell ().setControlSize (OS.NSSmallControlSize);
 }
 
 /**
@@ -1007,9 +1010,9 @@ bool shouldChangeTextInRange_replacementString(objc.id id, objc.SEL sel, objc.id
     if (hooks (DWT.Verify)) {
         String text = (new NSString(replacementString)).getString();
         NSEvent currentEvent = display.application.currentEvent();
-        int /*long*/ type = currentEvent.type();
+        NSEventType type = currentEvent.type();
         if (type !is OS.NSKeyDown && type !is OS.NSKeyUp) currentEvent = null;
-        String newText = verifyText(text, cast(int)/*64*/range.location, cast(int)/*64*/(range.location+range.length), currentEvent);
+        String newText = verifyText(text, range.location, range.location+range.length, currentEvent);
         if (newText is null) return false;
         if (text !is newText) {
             int length = newText.length;
@@ -1017,9 +1020,9 @@ bool shouldChangeTextInRange_replacementString(objc.id id, objc.SEL sel, objc.id
             if (fieldEditor !is null) {
                 NSRange selectedRange = fieldEditor.selectedRange();
                 if (textLimit !is LIMIT) {
-                    int /*long*/ charCount = fieldEditor.string().length();
+                    NSUInteger charCount = fieldEditor.string().length();
                     if (charCount - selectedRange.length + length > textLimit) {
-                        length = cast(int)/*64*/(textLimit - charCount + selectedRange.length);
+                        length = textLimit - charCount + selectedRange.length;
                     }
                 }
                 char [] buffer = new char [length];
@@ -1065,9 +1068,9 @@ void textDidEndEditing(objc.id id, objc.SEL sel, objc.id aNotification) {
 }
 
 void updateCursorRects (bool enabled) {
-    super.updateCursorRects (enabled);
-    super.updateCursorRects (enabled, textView);
-    super.updateCursorRects (enabled, buttonView);
+    updateCursorRects (enabled);
+    updateCursorRects (enabled, textView);
+    updateCursorRects (enabled, buttonView);
 }
 
 String verifyText (String string, int start, int end, NSEvent keyEvent) {

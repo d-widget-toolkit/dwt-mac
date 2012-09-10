@@ -85,7 +85,7 @@ public static ImageData[] load(InputStream is_, ImageLoader loader) {
         if (FORMATS[i] != null) {
             try {
                 Class clazz = Class_forName(FORMAT_PACKAGE ~ '.' ~ FORMATS[i] ~ '.' ~ FORMATS[i] ~ FORMAT_SUFFIX);
-                auto instance = clazz.create();
+                Object instance = clazz.create();
                 if (cast(FileFormat) instance) {
                     fileFormat = cast(FileFormat) instance;
                     if (fileFormat.isFileFormat(stream)) {

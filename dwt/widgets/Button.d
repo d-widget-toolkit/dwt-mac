@@ -87,6 +87,7 @@ public class Button : Control {
     alias Control.setBackground setBackground;
     alias Control.setForeground setForeground;
     alias Control.computeSize computeSize;
+    alias Control.createString createString;
 
     Image image;
     bool grayed;
@@ -249,7 +250,7 @@ public Point computeSize (int wHint, int hHint, bool changed) {
 }
 
 NSAttributedString createString() {
-    NSAttributedString attribStr = super.createString(text, null, foreground, style, true, true);
+    NSAttributedString attribStr = createString(text, null, foreground, style, true, true);
     attribStr.autorelease();
     return attribStr;
 }
@@ -271,10 +272,10 @@ void createHandle () {
     int type = OS.NSMomentaryLightButton;
     if ((style & DWT.PUSH) !is 0) {
         if ((style & DWT.FLAT) !is 0) {
-            widget.setBezelStyle(cast(NSBezelStyle)OS.NSShadowlessSquareBezelStyle);
+            widget.setBezelStyle(OS.NSShadowlessSquareBezelStyle);
 //          if ((style & DWT.BORDER) is 0) widget.setShowsBorderOnlyWhileMouseInside(true);
         } else {
-            widget.setBezelStyle(cast(NSBezelStyle)OS.NSRoundedBezelStyle);
+            widget.setBezelStyle(OS.NSRoundedBezelStyle);
         }
     } else if ((style & DWT.CHECK) !is 0) {
         type = OS.NSSwitchButton;
@@ -283,17 +284,17 @@ void createHandle () {
     } else if ((style & DWT.TOGGLE) !is 0) {
         type = OS.NSPushOnPushOffButton;
         if ((style & DWT.FLAT) !is 0) {
-            widget.setBezelStyle(cast(NSBezelStyle)OS.NSShadowlessSquareBezelStyle);
+            widget.setBezelStyle(OS.NSShadowlessSquareBezelStyle);
 //          if ((style & DWT.BORDER) is 0) widget.setShowsBorderOnlyWhileMouseInside(true);
         } else {
-            widget.setBezelStyle(cast(NSBezelStyle)OS.NSRoundedBezelStyle);
+            widget.setBezelStyle(OS.NSRoundedBezelStyle);
         }
     } else if ((style & DWT.ARROW) !is 0) {
-        widget.setBezelStyle(cast(NSBezelStyle)OS.NSShadowlessSquareBezelStyle);
+        widget.setBezelStyle(OS.NSShadowlessSquareBezelStyle);
     }
     widget.setButtonType(cast(NSButtonType)type);
     widget.setTitle(NSString.stringWith(""));
-    widget.setImagePosition(cast(NSCellImagePosition)OS.NSImageLeft);
+    widget.setImagePosition(OS.NSImageLeft);
     widget.setTarget(widget);
     widget.setAction(OS.sel_sendSelection);
     view = widget;
@@ -338,8 +339,8 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect cellRect, ob
     if (image !is null && ((style & (DWT.CHECK|DWT.RADIO)) !is 0)) {
         NSSize imageSize = image.handle.size();
         NSCell nsCell = new NSCell(id);
-        float /*double*/ x = 0;
-        float /*double*/ y = (imageSize.height - cellRect.height)/2f;
+        Cocoa.CGFloat x = 0;
+        Cocoa.CGFloat y = (imageSize.height - cellRect.height)/2f;
         NSRect imageRect = nsCell.imageRectForBounds(cellRect);
         NSSize stringSize = (cast(NSButton)view).attributedTitle().size();
         switch (style & (DWT.LEFT|DWT.RIGHT|DWT.CENTER)) {
@@ -363,7 +364,7 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect cellRect, ob
         transform.scaleXBy(1, -1);
         transform.translateXBy(0, -imageSize.height);
         transform.concat();
-        image.handle.drawInRect(destRect, NSRect(), cast(NSCompositingOperation)OS.NSCompositeSourceOver, 1);
+        image.handle.drawInRect(destRect, NSRect(), OS.NSCompositeSourceOver, 1);
         NSGraphicsContext.static_restoreGraphicsState();
     }
 
@@ -704,7 +705,7 @@ void setFont (NSFont font) {
     }
 }
 
-void setForeground (float /*double*/ [] color) {
+void setForeground (Cocoa.CGFloat [] color) {
     (cast(NSButton)view).setAttributedTitle(createString());
 }
 
@@ -848,7 +849,8 @@ public void setSelection (bool selected) {
  */
 public void setText (String string) {
     checkWidget();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if ((style & DWT.ARROW) !is 0) return;
     text = string;
     (cast(NSButton)view).setAttributedTitle(createString());
@@ -877,7 +879,7 @@ void updateAlignment () {
     NSButton widget = cast(NSButton)view;
     if ((style & (DWT.PUSH | DWT.TOGGLE)) !is 0) {
         if (text.length !is 0 && image !is null) {
-            widget.setImagePosition(cast(NSCellImagePosition)OS.NSImageLeft);
+            widget.setImagePosition(OS.NSImageLeft);
         } else {
             widget.setImagePosition(cast(NSCellImagePosition)(text.length !is 0 ? OS.NSNoImage : OS.NSImageOnly));
         }

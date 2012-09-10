@@ -78,7 +78,7 @@ public void javaToNative (Object object, TransferData transferData){
     }
     String url = stringcast(object);
     NSString nsString = NSString.stringWith(url);
-    NSString escapedString = nsString.stringByAddingPercentEscapesUsingEncoding(cast(NSStringEncoding)OS.NSUTF8StringEncoding);
+    NSString escapedString = nsString.stringByAddingPercentEscapesUsingEncoding(OS.NSUTF8StringEncoding);
     transferData.data = NSURL.URLWithString(escapedString);
 }
 
@@ -108,7 +108,7 @@ protected String[] getTypeNames(){
 }
 
 bool checkURL(Object object) {
-    auto o = stringcast(object);
+    String o = stringcast(object);
     return object !is null && o && o.length > 0;
 }
 

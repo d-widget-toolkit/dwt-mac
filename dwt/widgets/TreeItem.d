@@ -282,7 +282,7 @@ int calculateWidth (int index, GC gc) {
     /* This code is inlined for performance */
     objc_super super_struct = objc_super();
     super_struct.receiver = cell.id;
-    super_struct.super_class = cast(objc.Class)OS.objc_msgSend(cell.id, OS.sel_superclass);
+    super_struct.super_class = cast(objc.Class) OS.objc_msgSend(cell.id, OS.sel_superclass);
     NSSize size = NSSize();
     OS.objc_msgSendSuper_stret(&size, &super_struct, OS.sel_cellSize);
     if (image !is null) size.width += parent.imageBounds.width + Table.IMAGE_GAP;
@@ -395,7 +395,7 @@ public void clearAll (bool all) {
 
 void clearSelection () {
     NSOutlineView widget = cast(NSOutlineView) parent.view;
-    int /*long*/ row = widget.rowForItem (handle);
+    NSInteger row = widget.rowForItem (handle);
     if (widget.isRowSelected(row)) widget.deselectRow (row);
     if (items !is null && getExpanded ()) {
         for (int i = 0; i < items.length; i++) {
@@ -1448,7 +1448,8 @@ public void setText (String [] strings) {
  */
 public void setText (int index, String string) {
     checkWidget ();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (index is 0) {
         if (string.equals (text)) return;
         width = -1;

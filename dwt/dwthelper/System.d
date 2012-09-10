@@ -75,7 +75,7 @@ template SimpleType(T) {
         }
     }
 
-    static void arraycopy(T[] src, uint srcPos, T[] dest, uint destPos, uint len)
+    static void arraycopy(T[] src, size_t srcPos, T[] dest, size_t destPos, size_t len)
     {
         if(len is 0) return;
 
@@ -120,7 +120,7 @@ struct Err
 
 class System {
 
-    static void arraycopy(T)(T[] src, uint srcPos, T[] dest, uint destPos, uint len)
+    static void arraycopy(T)(T[] src, size_t srcPos, T[] dest, size_t destPos, size_t len)
     {
         return SimpleType!(T).arraycopy(src, srcPos, dest, destPos, len);
     }

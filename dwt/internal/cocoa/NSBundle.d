@@ -70,9 +70,9 @@ public static NSBundle mainBundle() {
     return result !is null ? new NSBundle(result) : null;
 }
 
-public objc.id objectForInfoDictionaryKey(NSString key) {
+public cocoa.id objectForInfoDictionaryKey(NSString key) {
     objc.id result = OS.objc_msgSend(this.id, OS.sel_objectForInfoDictionaryKey_, key !is null ? key.id : null);
-    return result !is null ? result : null;
+    return result !is null ? new cocoa.id(result) : null;
 }
 
 public NSString pathForResource(NSString name, NSString ext) {

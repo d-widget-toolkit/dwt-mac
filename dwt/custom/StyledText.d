@@ -806,7 +806,7 @@ public class StyledText : Canvas {
      */
     int getColorIndex(Color color, int defaultIndex) {
         if (color is null) return defaultIndex;
-        int index = colorTable.countUntil(color);
+        int index = colorTable.indexOf(color);
         if (index is -1) {
             index = colorTable.length;
             colorTable ~= color;
@@ -822,7 +822,7 @@ public class StyledText : Canvas {
      *  or "defaultIndex" if "color" is null.
      */
     int getFontIndex(Font font) {
-        int index = fontTable.countUntil(font);
+        int index = fontTable.indexOf(font);
         if (index is -1) {
             index = fontTable.length;
             fontTable ~= font;
@@ -2824,7 +2824,7 @@ void doMouseLocationChange(int x, int y, bool select) {
 		x = Math.max(leftMargin, Math.min(x, clientAreaWidth - rightMargin));
 		y = Math.max(topMargin, Math.min(y, clientAreaHeight - bottomMargin));
 		if (doubleClickEnabled && clickCount > 1) {
-			boolean wordSelect = (clickCount & 1) == 0;
+			bool wordSelect = (clickCount & 1) == 0;
 			if (wordSelect) {
 				Point left = getPointAtOffset(doubleClickSelection.x);
 				int[] trailing = new int[1]; 
@@ -3580,7 +3580,7 @@ public bool getBidiColoring() {
  * 
  * @since 3.5
  */
-public boolean getBlockSelection() {
+public bool getBlockSelection() {
 	checkWidget();
 	return blockSelection;
 }
@@ -5972,7 +5972,7 @@ void handleMouseDown(Event event) {
 
     //paste clipboard selection
     if (event.button is 2) {
-        auto o = cast(ArrayWrapperString)getClipboardContent(DND.SELECTION_CLIPBOARD);
+        ArrayWrapperString o = cast(ArrayWrapperString)getClipboardContent(DND.SELECTION_CLIPBOARD);
         String text = o.array;
         if (text !is null && text.length > 0) {
             // position cursor
@@ -6788,7 +6788,7 @@ public void paste(){
 	String text = stringcast(getClipboardContent(DND.CLIPBOARD));
 	if (text !is null && text.length > 0) {
 		if (blockSelection) {
-			boolean fillWithSpaces = isFixedLineHeight() && renderer.fixedPitch;
+			bool fillWithSpaces = isFixedLineHeight() && renderer.fixedPitch;
 			int offset = insertBlockSelectionText(text, fillWithSpaces);
 			setCaretOffset(offset, DWT.DEFAULT);
 			clearBlockSelection(true, true);
@@ -9116,7 +9116,7 @@ public void setStyleRanges(int[] ranges, StyleRange[] styles) {
         setStyleRanges(0, 0, ranges, styles, true);
     }
 }
-void setStyleRanges(int start, int length, int[] ranges, StyleRange[] styles, boolean reset) {
+void setStyleRanges(int start, int length, int[] ranges, StyleRange[] styles, bool reset) {
 	int charCount = content.getCharCount();
 	int end = start + length;
 	if (start > end || start < 0) {
@@ -9130,7 +9130,7 @@ void setStyleRanges(int start, int length, int[] ranges, StyleRange[] styles, bo
 			if (ranges.length != styles.length << 1) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
 		}
 		int lastOffset = 0;
-		boolean variableHeight = false; 
+		bool variableHeight = false; 
 		for (int i = 0; i < styles.length; i ++) {
 			if (styles[i] is null) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
 			int rangeStart, rangeLength;
@@ -9538,7 +9538,7 @@ void updateCaretVisibility() {
 		} else {
 			Point location = caret.getLocation();
 			Point size = caret.getSize();
-			boolean visible = 
+			bool visible = 
 				topMargin <= location.y + size.y && location.y <= clientAreaHeight - bottomMargin &&
 				leftMargin <= location.x + size.x && location.x <= clientAreaWidth - rightMargin;
 			caret.setVisible(visible);

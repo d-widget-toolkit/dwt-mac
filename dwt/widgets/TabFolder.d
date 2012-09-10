@@ -190,7 +190,7 @@ void createHandle () {
     widget.init ();
     widget.setDelegate(widget);
     if ((style & DWT.BOTTOM) !is 0) {
-        widget.setTabViewType(cast(NSTabViewType)OS.NSBottomTabsBezelBorder);
+        widget.setTabViewType(OS.NSBottomTabsBezelBorder);
     }
     view = widget;
 }
@@ -622,7 +622,7 @@ void setSelection (int index, bool notify, bool force) {
 }
 
 void setSmallSize () {
-    (cast(NSTabView)view).setControlSize (cast(NSControlSize)OS.NSSmallControlSize);
+    (cast(NSTabView)view).setControlSize (OS.NSSmallControlSize);
 }
 
 bool traversePage (bool next) {
@@ -676,7 +676,7 @@ void tabView_didSelectTabViewItem(objc.id id, objc.SEL sel, objc.id tabView, obj
         if (control !is null) {
             NSView topView = control.topView ();
             if (topView.superview () is null) {
-                contentView ().addSubview (topView, cast(NSWindowOrderingMode)OS.NSWindowBelow, null);
+                contentView ().addSubview (topView, OS.NSWindowBelow, null);
             }
         }
         if (item.nsItem.id is tabViewItem) {

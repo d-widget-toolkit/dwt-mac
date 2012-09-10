@@ -67,7 +67,7 @@ class SWTAccessibleDelegate : NSObject {
         byte[] types = ['*','\0'];
         size_t size = C.PTR_SIZEOF, align_ = C.PTR_SIZEOF is 4 ? 2 : 3;
 
-        objc.Class cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSObject, className, 0);
+        objc.Class cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
         OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, cast(char[])types);
 
         // Add the NSAccessibility overrides

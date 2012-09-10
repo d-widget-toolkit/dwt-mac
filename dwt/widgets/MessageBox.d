@@ -171,12 +171,12 @@ public String getMessage () {
  */
 public int open () {
     NSAlert alert = cast(NSAlert) (new NSAlert()).alloc().init();
-    NSAlertStyle alertType = cast(NSAlertStyle)OS.NSInformationalAlertStyle;
-    if ((style & DWT.ICON_ERROR) !is 0) alertType = cast(NSAlertStyle)OS.NSCriticalAlertStyle;
-    if ((style & DWT.ICON_INFORMATION) !is 0) alertType = cast(NSAlertStyle)OS.NSInformationalAlertStyle;
-    if ((style & DWT.ICON_QUESTION) !is 0) alertType = cast(NSAlertStyle)OS.NSInformationalAlertStyle;
-    if ((style & DWT.ICON_WARNING) !is 0) alertType = cast(NSAlertStyle)OS.NSWarningAlertStyle;
-    if ((style & DWT.ICON_WORKING) !is 0) alertType = cast(NSAlertStyle)OS.NSInformationalAlertStyle;
+    NSAlertStyle alertType = OS.NSInformationalAlertStyle;
+    if ((style & DWT.ICON_ERROR) !is 0) alertType = OS.NSCriticalAlertStyle;
+    if ((style & DWT.ICON_INFORMATION) !is 0) alertType = OS.NSInformationalAlertStyle;
+    if ((style & DWT.ICON_QUESTION) !is 0) alertType = OS.NSInformationalAlertStyle;
+    if ((style & DWT.ICON_WARNING) !is 0) alertType = OS.NSWarningAlertStyle;
+    if ((style & DWT.ICON_WORKING) !is 0) alertType = OS.NSInformationalAlertStyle;
     alert.setAlertStyle(alertType);
 
     int mask = (DWT.YES | DWT.NO | DWT.OK | DWT.CANCEL | DWT.ABORT | DWT.RETRY | DWT.IGNORE);
@@ -368,6 +368,7 @@ void panelDidEnd_returnCode_contextInfo(objc.id id, objc.SEL sel, objc.id alert,
  * </ul>
  */
 public void setMessage (String string) {
+    // DWT extension: allow null for zero length string
     //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     message = string;
 }

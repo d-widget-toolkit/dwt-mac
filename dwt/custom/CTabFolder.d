@@ -2012,10 +2012,10 @@ void onFocus(Event event) {
     }
 }
 bool onMnemonic (Event event, bool doit) {
-    auto key = event.character;
+    char key = event.character;
     for (int i = 0; i < items.length; i++) {
         if (items[i] !is null) {
-            auto mnemonic = _findMnemonic (items[i].getText ());
+            char mnemonic = _findMnemonic (items[i].getText ());
             if (mnemonic !is '\0') {
                 if ( CharacterToLower(key) is mnemonic) {
                     if (doit) setSelection(i, true);

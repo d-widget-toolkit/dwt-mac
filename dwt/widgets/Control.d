@@ -136,7 +136,7 @@ public abstract class Control : Widget , Drawable {
     Object layoutData;
     int drawCount;
     Menu menu;
-    float /*double*/ [] foreground, background;
+    Cocoa.CGFloat [] foreground, background;
     Image backgroundImage;
     Font font;
     Cursor cursor;
@@ -684,15 +684,15 @@ bool becomeFirstResponder (objc.id id, objc.SEL sel) {
 }
 
 void calculateVisibleRegion (NSView view, Carbon.RgnHandle visibleRgn, bool clipChildren) {
-    auto tempRgn = OS.NewRgn ();
+    Carbon.RgnHandle tempRgn = OS.NewRgn ();
     if (!view.isHiddenOrHasHiddenAncestor() && isDrawing()) {
-        auto childRgn = OS.NewRgn ();
+        Carbon.RgnHandle childRgn = OS.NewRgn ();
         NSWindow window = view.window ();
         NSView contentView = window.contentView();
         NSView frameView = contentView.superview();
         NSRect bounds = contentView.visibleRect();
         bounds = contentView.convertRect_toView_(bounds, view);
-        auto rect = new Carbon.Rect();
+        Carbon.Rect* rect = new Carbon.Rect();
         OS.SetRect(rect, cast(short)bounds.x, cast(short)bounds.y, cast(short)(bounds.x + bounds.width), cast(short)(bounds.y + bounds.height));
         OS.RectRgn(visibleRgn, rect);
         NSView tempView = view, lastControl = null;
@@ -705,7 +705,7 @@ void calculateVisibleRegion (NSView view, Carbon.RgnHandle visibleRgn, bool clip
             if (OS.EmptyRgn (visibleRgn)) break;
             if (clipChildren || tempView.id !is view.id) {
                 NSArray subviews = tempView.subviews();
-                int /*long*/ count = subviews.count();
+                NSUInteger count = subviews.count();
                 for (int i = 0; i < count; i++) {
                     NSView child = new NSView (subviews.objectAtIndex(count - i - 1));
                     if (lastControl !is null && child.id is lastControl.id) break;
@@ -875,7 +875,7 @@ NSView contentView () {
     return view;
 }
 
-NSAttributedString createString (String string, Font font, float /*double*/ [] foreground, int style, bool enabled, bool mnemonics) {
+NSAttributedString createString (String string, Font font, Cocoa.CGFloat [] foreground, int style, bool enabled, bool mnemonics) {
     NSMutableDictionary dict = (cast(NSMutableDictionary)(new NSMutableDictionary()).alloc()).initWithCapacity(5);
     if (font is null) font = this.font !is null ? this.font : defaultFont();
     dict.setObject (font.handle, OS.NSFontAttributeName);
@@ -890,7 +890,7 @@ NSAttributedString createString (String string, Font font, float /*double*/ [] f
     }
     if (style !is 0) {
         NSMutableParagraphStyle paragraphStyle = cast(NSMutableParagraphStyle)(new NSMutableParagraphStyle ()).alloc ().init ();
-        paragraphStyle.setLineBreakMode (cast(NSLineBreakMode)OS.NSLineBreakByClipping);
+        paragraphStyle.setLineBreakMode (OS.NSLineBreakByClipping);
         int alignment = DWT.LEFT;
         if ((style & DWT.CENTER) !is 0) {
             alignment = OS.NSCenterTextAlignment;
@@ -966,7 +966,7 @@ void doCommandBySelector (objc.id id, objc.SEL sel, objc.SEL selector) {
              * during this keystroke. This rule does not apply if the command key
              * is down, because we likely triggered the current key sequence via flagsChanged.
              */
-            int /*long*/ modifiers = nsEvent.modifierFlags();
+            NSUInteger modifiers = nsEvent.modifierFlags();
             if (s.keyInputHappened is false || (modifiers & OS.NSCommandKeyMask) !is 0) {
                 s.keyInputHappened = true;
                 bool [] consume = new bool [1];
@@ -1080,9 +1080,9 @@ bool dragDetect (int x, int y, bool filter, bool [] consume) {
      */
     NSApplication application = NSApplication.sharedApplication();
     bool dragging = false;
-    int /*long*/ eventType = OS.NSLeftMouseDown;
-    float /*double*/ dragX = x;
-    float /*double*/ dragY = y;
+    NSEventType eventType = OS.NSLeftMouseDown;
+    Cocoa.CGFloat dragX = x;
+    Cocoa.CGFloat dragY = y;
 
     /**
      * To check for an actual drag we need to pull off mouse moved and mouse up events
@@ -1158,7 +1158,7 @@ void enableWidget (bool enabled) {
     updateCursorRects (isEnabled ());
 }
 
-bool equals(float /*double*/ [] color1, float /*double*/ [] color2) {
+bool equals(Cocoa.CGFloat [] color1, Cocoa.CGFloat [] color2) {
     if (color1 is color2) return true;
     if (color1 is null) return color2 is null;
     if (color2 is null) return color1 is null;
@@ -1195,8 +1195,8 @@ void fillBackground (NSView view, NSGraphicsContext context, NSRect rect, int im
         return;
     }
 
-    float /*double*/ [] background = control.background;
-    float /*double*/ alpha;
+    Cocoa.CGFloat [] background = control.background;
+    Cocoa.CGFloat alpha;
     if (background is null) {
         background = control.defaultBackground ().handle;
         alpha = getThemeAlpha ();
@@ -1657,10 +1657,10 @@ private extern (C) {
 NSBezierPath getPath(Carbon.RgnHandle region) {
 /+  Callback callback = new Callback(this, "regionToRects", 4);
     if (callback.getAddress() is 0) DWT.error(DWT.ERROR_NO_MORE_CALLBACKS);
-+/  auto callback = cast(objc.IMP) &regionToRects;
++/  auto callback = &regionToRects;
     NSBezierPath path = NSBezierPath.bezierPath();
     path.retain();
-    OS.QDRegionToRects(region, OS.kQDParseRegionFromTopLeft, cast(GetPathCallback)callback/+.getAddress()+/, path.id);
+    OS.QDRegionToRects(region, OS.kQDParseRegionFromTopLeft, callback/+.getAddress()+/, path.id);
 /+  callback.dispose();
 +/  if (path.isEmpty()) path.appendBezierPathWithRect(NSRect());
     return path;
@@ -1770,7 +1770,7 @@ Carbon.RgnHandle getVisibleRegion () {
         visibleRgn = OS.NewRgn ();
         calculateVisibleRegion (view, visibleRgn, true);
     }
-    auto result = OS.NewRgn ();
+    Carbon.RgnHandle result = OS.NewRgn ();
     OS.CopyRgn (visibleRgn, result);
     return result;
 }
@@ -1808,10 +1808,10 @@ bool insertText (objc.id id, objc.SEL sel, objc.id string) {
         Shell s = this.getShell();
         NSEvent nsEvent = NSApplication.sharedApplication ().currentEvent ();
         if (nsEvent !is null) {
-            int /*long*/ type = nsEvent.type ();
+            NSEventType type = nsEvent.type ();
             if ((!s.keyInputHappened && type is OS.NSKeyDown) || type is OS.NSSystemDefined) {
                 NSString str = new NSString (string);
-                if (str.isKindOfClass (cast(objc.Class)OS.objc_getClass ("NSAttributedString"))) {
+                if (str.isKindOfClass (OS.objc_getClass ("NSAttributedString"))) {
                     str = (new NSAttributedString (string)).string ();
                 }
                 NSUInteger length = str.length ();
@@ -1989,8 +1989,8 @@ public bool isFocusControl () {
 }
 
 bool isObscured () {
-    auto visibleRgn = getVisibleRegion(), boundsRgn = OS.NewRgn();
-    auto rect = new Carbon.Rect();
+    Carbon.RgnHandle visibleRgn = getVisibleRegion(), boundsRgn = OS.NewRgn();
+    Carbon.Rect* rect = new Carbon.Rect();
     NSRect bounds = view.visibleRect();
     OS.SetRect(rect, cast(short)bounds.x, cast(short)bounds.y, cast(short)(bounds.x + bounds.width), cast(short)(bounds.y + bounds.height));
     OS.RectRgn(boundsRgn, rect);
@@ -2196,7 +2196,7 @@ bool mouseEvent (objc.id id, objc.SEL sel, objc.id theEvent, int type) {
     bool dragging = false;
     bool[] consume = null;
     NSEvent nsEvent = new NSEvent(theEvent);
-    int nsType = cast(int)/*64*/nsEvent.type();
+    NSEventType nsType = nsEvent.type();
     NSInputManager manager = NSInputManager.currentInputManager ();
     if (manager !is null && manager.wantsToHandleMouseEvents ()) {
         if (manager.handleMouseEvent (nsEvent)) {
@@ -2499,9 +2499,9 @@ public void redraw (int x, int y, int width, int height, bool all) {
     view.setNeedsDisplayInRect(rect);
 }
 
-objc.id regionToRects(int /*long*/ message, Carbon.RgnHandle rgn, objc.id r, objc.id path) {
-    auto pt = new NSPoint();
-    auto rect = new Carbon.Rect();
+extern (C) static int regionToRects(ushort message, Carbon.RgnHandle rgn, Carbon.Rect* r, void* path) {
+    NSPoint* pt = new NSPoint();
+    Carbon.Rect* rect = new Carbon.Rect();
     if (message is OS.kQDRegionToRectsMsgParse) {
         OS.memmove(rect, r, rect.sizeof);
         pt.x = rect.left;
@@ -2516,7 +2516,7 @@ objc.id regionToRects(int /*long*/ message, Carbon.RgnHandle rgn, objc.id r, obj
         OS.objc_msgSend(path, OS.sel_lineToPoint_, pt);
         OS.objc_msgSend(path, OS.sel_closePath);
     }
-    return null;
+    return 0;
 }
 
 void register () {
@@ -2870,7 +2870,7 @@ void removeRelation () {
         if (viewAsControl.cell() !is null) accessibleElement = viewAsControl.cell();
     }
 
-    accessibleElement.accessibilitySetOverrideValue(accessibleElement.id, OS.NSAccessibilityTitleUIElementAttribute);
+    accessibleElement.accessibilitySetOverrideValue(accessibleElement, OS.NSAccessibilityTitleUIElementAttribute);
 }
 
 
@@ -2976,7 +2976,7 @@ bool sendMouseEvent (NSEvent nsEvent, int type, bool send) {
         case DWT.MouseUp:
         case DWT.MouseDoubleClick:
         case DWT.DragDetect:
-            int button = cast(int)/*64*/nsEvent.buttonNumber();
+            NSInteger button = nsEvent.buttonNumber();
             switch (button) {
                 case 0: event.button = 1; break;
                 case 1: event.button = 3; break;
@@ -2993,7 +2993,7 @@ bool sendMouseEvent (NSEvent nsEvent, int type, bool send) {
             break;
         default:
     }
-    if (event.button !is 0) event.count = cast(int)/*64*/nsEvent.clickCount();
+    if (event.button !is 0) event.count = nsEvent.clickCount();
     NSPoint windowPoint;
     NSView view = eventView ();
     if (nsEvent is null || nsEvent.type() is OS.NSMouseMoved) {
@@ -3046,7 +3046,7 @@ public void setBackground (Color color) {
     if (color !is null) {
         if (color.isDisposed()) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     }
-    float /*double*/ [] background = color !is null ? color.handle : null;
+    Cocoa.CGFloat [] background = color !is null ? color.handle : null;
     if (equals (background, this.background)) return;
     this.background = background;
     updateBackground ();
@@ -3181,7 +3181,7 @@ public void setCapture (bool capture) {
     checkWidget();
 }
 
-void setClipRegion (float /*double*/ x, float /*double*/ y) {
+void setClipRegion (Cocoa.CGFloat x, Cocoa.CGFloat y) {
     if (regionPath !is null) {
         NSAffineTransform transform = NSAffineTransform.transform();
         transform.translateXBy(-x, -y);
@@ -3357,14 +3357,14 @@ public void setForeground (Color color) {
     if (color !is null) {
         if (color.isDisposed()) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     }
-    float /*double*/ [] foreground = color !is null ? color.handle : null;
+    Cocoa.CGFloat [] foreground = color !is null ? color.handle : null;
     if (equals (foreground, this.foreground)) return;
     this.foreground = foreground;
     setForeground (foreground);
     redrawWidget (view, false);
 }
 
-void setForeground (float /*double*/ [] color) {
+void setForeground (Cocoa.CGFloat [] color) {
 }
 
 void setFrameOrigin (objc.id id, objc.SEL sel, NSPoint point) {
@@ -3522,7 +3522,7 @@ public bool setParent (Composite parent) {
     NSView topView = topView ();
     topView.retain();
     topView.removeFromSuperview();
-    parent.contentView().addSubview(topView, cast(NSWindowOrderingMode)OS.NSWindowBelow, null);
+    parent.contentView().addSubview(topView, OS.NSWindowBelow, null);
     topView.release();
     this.parent = parent;
     return true;
@@ -3660,7 +3660,7 @@ public void setSize (Point size) {
 void setSmallSize () {
     if (cast(NSControl)view) {
         NSCell cell = (cast(NSControl)view).cell();
-        if (cell !is null) cell.setControlSize (cast(NSControlSize)OS.NSSmallControlSize);
+        if (cell !is null) cell.setControlSize (OS.NSSmallControlSize);
     }
 }
 
@@ -3762,7 +3762,7 @@ public void setVisible (bool visible) {
 
 void setZOrder () {
     NSView topView = topView ();
-    parent.contentView().addSubview(topView, cast(NSWindowOrderingMode)OS.NSWindowBelow, null);
+    parent.contentView().addSubview(topView, OS.NSWindowBelow, null);
 }
 
 bool shouldDelayWindowOrderingForEvent (objc.id id, objc.SEL sel, objc.id theEvent) {

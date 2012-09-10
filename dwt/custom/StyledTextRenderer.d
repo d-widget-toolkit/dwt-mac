@@ -676,7 +676,7 @@ int[] getRanges(int start, int length) {
 	}
 	return newRanges;
 }
-StyleRange[] getStyleRanges(int start, int length, boolean includeRanges) {
+StyleRange[] getStyleRanges(int start, int length, bool includeRanges) {
 	if (length is 0) return null;
 	StyleRange[] newStyles;
 	int end = start + length - 1;

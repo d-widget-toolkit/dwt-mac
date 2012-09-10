@@ -267,7 +267,7 @@ public static GC cocoa_new(Drawable drawable, GCData data) {
 objc.id applierFunc(objc.id info, objc.id elementPtr) {
     OS.memmove(&element, elementPtr, CGPathElement.sizeof);
     int type = 0, length = 1;
-    switch (cast(int)element.type) {
+    switch (element.type) {
         case OS.kCGPathElementMoveToPoint: type = DWT.PATH_MOVE_TO; break;
         case OS.kCGPathElementAddLineToPoint: type = DWT.PATH_LINE_TO; break;
         case OS.kCGPathElementAddQuadCurveToPoint: type = DWT.PATH_QUAD_TO; length = 2; break;
@@ -411,9 +411,9 @@ NSAutoreleasePool checkGC (int mask) {
     if ((state & LINE_JOIN) !is 0) {
         NSLineJoinStyle joinStyle;
         switch (data.lineJoin) {
-            case DWT.JOIN_MITER: joinStyle = cast(NSLineJoinStyle)OS.NSMiterLineJoinStyle; break;
-            case DWT.JOIN_ROUND: joinStyle = cast(NSLineJoinStyle)OS.NSRoundLineJoinStyle; break;
-            case DWT.JOIN_BEVEL: joinStyle = cast(NSLineJoinStyle)OS.NSBevelLineJoinStyle; break;
+            case DWT.JOIN_MITER: joinStyle = OS.NSMiterLineJoinStyle; break;
+            case DWT.JOIN_ROUND: joinStyle = OS.NSRoundLineJoinStyle; break;
+            case DWT.JOIN_BEVEL: joinStyle = OS.NSBevelLineJoinStyle; break;
             default:
         }
         path.setLineJoinStyle(joinStyle);
@@ -421,9 +421,9 @@ NSAutoreleasePool checkGC (int mask) {
     if ((state & LINE_CAP) !is 0) {
         NSLineCapStyle capStyle = cast(NSLineCapStyle)0;
         switch (data.lineCap) {
-            case DWT.CAP_ROUND: capStyle = cast(NSLineCapStyle)OS.NSRoundLineCapStyle; break;
-            case DWT.CAP_FLAT: capStyle = cast(NSLineCapStyle)OS.NSButtLineCapStyle; break;
-            case DWT.CAP_SQUARE: capStyle = cast(NSLineCapStyle)OS.NSSquareLineCapStyle; break;
+            case DWT.CAP_ROUND: capStyle = OS.NSRoundLineCapStyle; break;
+            case DWT.CAP_FLAT: capStyle = OS.NSButtLineCapStyle; break;
+            case DWT.CAP_SQUARE: capStyle = OS.NSSquareLineCapStyle; break;
             default:
         }
         path.setLineCapStyle(capStyle);
@@ -496,7 +496,7 @@ public void copyArea(Image image, int x, int y) {
             destRect.y = destY;
             destRect.width = destWidth;
             destRect.height = destHeight;
-            data.image.handle.drawInRect(destRect, srcRect, cast(NSCompositingOperation)OS.NSCompositeCopy, 1);
+            data.image.handle.drawInRect(destRect, srcRect, OS.NSCompositeCopy, 1);
             NSGraphicsContext.static_restoreGraphicsState();
             return;
         }
@@ -583,13 +583,13 @@ public void copyArea(Image image, int x, int y) {
 void copyArea (Image image, int x, int y, CGImageRef srcImage) {
     if (srcImage is null) return;
     NSBitmapImageRep rep = image.getRepresentation();
-    auto bpc = rep.bitsPerSample();
-    auto width = rep.pixelsWide();
-    auto height = rep.pixelsHigh();
-    auto bpr = rep.bytesPerRow();
-    auto alphaInfo = rep.hasAlpha() ? OS.kCGImageAlphaFirst : OS.kCGImageAlphaNoneSkipFirst;
-    auto colorspace = OS.CGColorSpaceCreateDeviceRGB();
-    auto context = OS.CGBitmapContextCreate(rep.bitmapData(), width, height, bpc, bpr, colorspace, cast(CGBitmapInfo)alphaInfo);
+    NSInteger bpc = rep.bitsPerSample();
+    NSInteger width = rep.pixelsWide();
+    NSInteger height = rep.pixelsHigh();
+    NSInteger bpr = rep.bytesPerRow();
+    Cocoa.CGBitmapInfo alphaInfo = rep.hasAlpha() ? OS.kCGImageAlphaFirst : OS.kCGImageAlphaNoneSkipFirst;
+    CGColorSpaceRef colorspace = OS.CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = OS.CGBitmapContextCreate(rep.bitmapData(), width, height, bpc, bpr, colorspace, cast(CGBitmapInfo)alphaInfo);
     OS.CGColorSpaceRelease(colorspace);
     if (context !is null) {
         CGRect rect = CGRect();
@@ -666,7 +666,7 @@ public void copyArea(int srcX, int srcY, int width, int height, int destX, int d
             destRect.y = destY;
             destRect.width = width;
             destRect.height = height;
-            imageHandle.drawInRect(destRect, srcRect, cast(NSCompositingOperation)OS.NSCompositeCopy, 1);
+            imageHandle.drawInRect(destRect, srcRect, OS.NSCompositeCopy, 1);
             handle.restoreGraphicsState();
             return;
         }
@@ -756,16 +756,16 @@ public void copyArea(int srcX, int srcY, int width, int height, int destX, int d
 }
 
 static CGMutablePathRef createCGPathRef(NSBezierPath nsPath) {
-    auto count = nsPath.elementCount();
+    NSInteger count = nsPath.elementCount();
     if (count > 0) {
-        auto cgPath = OS.CGPathCreateMutable();
+        CGMutablePathRef cgPath = OS.CGPathCreateMutable();
         if (cgPath is null) DWT.error(DWT.ERROR_NO_HANDLES);
-        auto points = OS.malloc(NSPoint.sizeof * 3);
+        NSPoint* points = cast(NSPoint*)OS.malloc(NSPoint.sizeof * 3);
         if (points is null) DWT.error(DWT.ERROR_NO_HANDLES);
-        auto pt = new Carbon.CGFloat[6];
+        Carbon.CGFloat[] pt = new Carbon.CGFloat[6];
         for (int i = 0; i < count; i++) {
-            auto element = nsPath.elementAtIndex(i, cast(NSPoint*)points);
-            switch (cast(int)element) {
+            NSBezierPathElement element = nsPath.elementAtIndex(i, points);
+            switch (element) {
                 case OS.NSMoveToBezierPathElement:
                     OS.memmove(pt.ptr, points, NSPoint.sizeof);
                     OS.CGPathMoveToPoint(cgPath, null, pt[0], pt[1]);
@@ -792,7 +792,7 @@ static CGMutablePathRef createCGPathRef(NSBezierPath nsPath) {
 
 
 NSBezierPath createNSBezierPath (CGMutablePathRef  cgPath) {
-    auto proc = cast(CGPathApplierFunction)&applierFunc;
+    CGPathApplierFunction proc = cast(CGPathApplierFunction)&applierFunc;
     count = typeCount = 0;
     element = CGPathElement();
     OS.CGPathApply(cgPath, null, proc);
@@ -1159,7 +1159,7 @@ void drawImage(Image srcImage, int srcX, int srcY, int srcWidth, int srcHeight, 
         destRect.y = destY;
         destRect.width = destWidth;
         destRect.height = destHeight;
-        imageHandle.drawInRect(destRect, srcRect, cast(NSCompositingOperation)OS.NSCompositeSourceOver, 1);
+        imageHandle.drawInRect(destRect, srcRect, OS.NSCompositeSourceOver, 1);
         handle.restoreGraphicsState();
     } finally {
         uncheckGC(pool);
@@ -1683,7 +1683,7 @@ public void drawText (String string, int x, int y, int flags) {
 	NSAutoreleasePool pool = checkGC(CLIPPING | TRANSFORM | FONT);
 	try {
 		handle.saveGraphicsState();
-		boolean mode = true;
+		bool mode = true;
 		switch (data.textAntialias) {
 			case DWT.DEFAULT:
 				/* Printer is off by default */
@@ -2207,8 +2207,8 @@ public void fillRoundRectangle(int x, int y, int width, int height, int arcWidth
 
 void strokePattern(NSBezierPath path, Pattern pattern) {
     handle.saveGraphicsState();
-    auto cgPath = createCGPathRef(path);
-    auto cgContext = cast(CGContext*)handle.graphicsPort();
+    CGMutablePathRef cgPath = createCGPathRef(path);
+    CGContext* cgContext = cast(CGContext*)handle.graphicsPort();
     OS.CGContextSaveGState(cgContext);
     initCGContext(cgContext);
     OS.CGContextAddPath(cgContext, cgPath);
@@ -2484,7 +2484,7 @@ public void getClipping(Region region) {
             NSPoint pt = NSPoint();
             for (NSInteger  i = 0; i < count; i++) {
                 NSBezierPathElement element = clip.elementAtIndex(i, points);
-                switch (cast(int)element) {
+                switch (element) {
                     case OS.NSMoveToBezierPathElement:
                         if (pointCount !is 0) clipRgn.add(pointArray, pointCount);
                         pointCount = 0;
@@ -2649,7 +2649,7 @@ public GCData getGCData() {
  */
 public int getInterpolation() {
     if (handle is null) DWT.error(DWT.ERROR_GRAPHIC_DISPOSED);
-    int interpolation = cast(int)/*64*/handle.imageInterpolation();
+    NSImageInterpolation interpolation = handle.imageInterpolation();
     switch (interpolation) {
         case OS.NSImageInterpolationDefault: return DWT.DEFAULT;
         case OS.NSImageInterpolationNone: return DWT.NONE;
@@ -3463,10 +3463,10 @@ public void setInterpolation(int interpolation) {
     if (handle is null) DWT.error(DWT.ERROR_GRAPHIC_DISPOSED);
     NSImageInterpolation quality = cast(NSImageInterpolation)0;
     switch (interpolation) {
-        case DWT.DEFAULT: quality = cast(NSImageInterpolation)OS.NSImageInterpolationDefault; break;
-        case DWT.NONE: quality = cast(NSImageInterpolation)OS.NSImageInterpolationNone; break;
-        case DWT.LOW: quality = cast(NSImageInterpolation)OS.NSImageInterpolationLow; break;
-        case DWT.HIGH: quality = cast(NSImageInterpolation)OS.NSImageInterpolationHigh; break;
+        case DWT.DEFAULT: quality = OS.NSImageInterpolationDefault; break;
+        case DWT.NONE: quality = OS.NSImageInterpolationNone; break;
+        case DWT.LOW: quality = OS.NSImageInterpolationLow; break;
+        case DWT.HIGH: quality = OS.NSImageInterpolationHigh; break;
         default:
             DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     }
@@ -3942,7 +3942,8 @@ public Point textExtent(String string) {
  */
 public Point textExtent(String string, int flags) {
     if (handle is null) DWT.error(DWT.ERROR_GRAPHIC_DISPOSED);
-    if (string is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     NSAutoreleasePool pool = checkGC(FONT);
     try {
         NSAttributedString str = createString(string, flags, false);

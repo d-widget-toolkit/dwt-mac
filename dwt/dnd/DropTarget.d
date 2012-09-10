@@ -166,10 +166,10 @@ void addDragHandlers() {
     OS.class_addMethod(cls, OS.sel_performDragOperation_, proc3Args, "@:@");
     OS.class_addMethod(cls, OS.sel_wantsPeriodicDraggingUpdates, proc2Args, "@:");
 
-    if (OS.class_getSuperclass(cls) is OS.class_NSOutlineView.isa) {
+    if (OS.class_getSuperclass(cls) is OS.class_NSOutlineView) {
         OS.class_addMethod(cls, OS.sel_outlineView_acceptDrop_item_childIndex_, proc6Args, "@:@@@i");
         OS.class_addMethod(cls, OS.sel_outlineView_validateDrop_proposedItem_proposedChildIndex_, proc6Args, "@:@@@i");
-    } else if (OS.class_getSuperclass(cls) is OS.class_NSTableView.isa) {
+    } else if (OS.class_getSuperclass(cls) is OS.class_NSTableView) {
         OS.class_addMethod(cls, OS.sel_tableView_acceptDrop_row_dropOperation_, proc6Args, "@:@@@i");
         OS.class_addMethod(cls, OS.sel_tableView_validateDrop_proposedRow_proposedDropOperation_, proc6Args, "@:@@@i");
     }
@@ -241,13 +241,13 @@ protected void checkSubclass () {
 }
 
 NSDragOperation draggingEntered(objc.id id, objc.SEL sel, NSObject sender) {
-    if (sender is null) return cast(NSDragOperation)OS.NSDragOperationNone;
+    if (sender is null) return OS.NSDragOperationNone;
 
     DNDEvent event = new DNDEvent();
     if (!setEventData(sender, event)) {
         keyOperation = -1;
         setDropNotAllowed();
-        return cast(NSDragOperation)OS.NSDragOperationNone;
+        return OS.NSDragOperationNone;
     }
 
     int allowedOperations = event.operations;
@@ -281,7 +281,7 @@ NSDragOperation draggingEntered(objc.id id, objc.SEL sel, NSObject sender) {
         clearDropNotAllowed();
     }
 
-    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView.isa)) {
+    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView)) {
         return cast(NSDragOperation)callSuper_(id, sel, sender.id);
     }
     return opToOsOp(selectedOperation);
@@ -298,20 +298,20 @@ void draggingExited(objc.id id, objc.SEL sel, NSObject sender) {
     event.detail = DND.DROP_NONE;
     notifyListeners(DND.DragLeave, event);
 
-    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView.isa)) {
+    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView)) {
         callSuper_(id, sel, sender.id);
     }
 }
 
 NSDragOperation draggingUpdated(objc.id id, objc.SEL sel, NSObject sender) {
-    if (sender is null) return cast(NSDragOperation)OS.NSDragOperationNone;
+    if (sender is null) return OS.NSDragOperationNone;
     int oldKeyOperation = keyOperation;
 
     DNDEvent event = new DNDEvent();
     if (!setEventData(sender, event)) {
         keyOperation = -1;
         setDropNotAllowed();
-        return cast(NSDragOperation)OS.NSDragOperationNone;
+        return OS.NSDragOperationNone;
     }
 
     int allowedOperations = event.operations;
@@ -353,7 +353,7 @@ NSDragOperation draggingUpdated(objc.id id, objc.SEL sel, NSObject sender) {
         clearDropNotAllowed();
     }
 
-    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView.isa)) {
+    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView)) {
         return cast(NSDragOperation)callSuper_(id, sel, sender.id);
     }
 
@@ -744,7 +744,7 @@ bool drop(NSObject sender) {
 }
 
 bool performDragOperation(objc.id id, objc.SEL sel, NSObject sender) {
-    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView.isa)) {
+    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView)) {
         return callSuper_(id, sel, sender.id) !is null;
     }
 
@@ -772,7 +772,7 @@ NSDragOperation outlineView_validateDrop_proposedItem_proposedChildIndex(objc.id
         } else {
             TreeItem parentItem = childItem.getParentItem();
             int childIndex;
-            SWTTreeItem parentID = null;
+            cocoa.id parentID = null;
             if (parentItem !is null) {
                 parentID = parentItem.handle;
                 childIndex = parentItem.indexOf(childItem);
@@ -972,7 +972,7 @@ NSDragOperation tableView_validateDrop_proposedRow_proposedDropOperation(objc.id
     //TODO stop scrolling and expansion when app does not set FEEDBACK_SCROLL and/or FEEDBACK_EXPAND
     NSTableView widget = new NSTableView(tableView);
     if (0 <= row && row < widget.numberOfRows()) {
-        widget.setDropRow(row, cast(NSTableViewDropOperation)OS.NSTableViewDropOn);
+        widget.setDropRow(row, OS.NSTableViewDropOn);
     }
     return opToOsOp(selectedOperation);
 }

@@ -82,7 +82,8 @@ this () {
  *  </ul>
  */
 public static Program findProgram (String extension) {
-    if (extension is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
+    // SWT extension: allow null string
+    //if (extension is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
     if (extension.length is 0) return null;
     if (extension.charAt(0) !is '.') extension = "." ~ extension;
     NSAutoreleasePool pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
@@ -116,7 +117,7 @@ public static Program findProgram (String extension) {
                 // text edit says it can handle.
                 NSString CFBundleDocumentTypes = NSString.stringWith("CFBundleDocumentTypes");
                 NSString CFBundleTypeExtensions = NSString.stringWith("CFBundleTypeExtensions");
-                auto id = infoDictionary.objectForKey(CFBundleDocumentTypes);
+                cocoa.id id = infoDictionary.objectForKey(CFBundleDocumentTypes);
                 if (id !is null) {
                     NSDictionary documentTypes = new NSDictionary(id.id);
                     NSEnumerator documentTypesEnumerator = documentTypes.objectEnumerator();
@@ -157,7 +158,7 @@ public static String [] getExtensions () {
         NSWorkspace workspace = NSWorkspace.sharedWorkspace();
         NSString CFBundleDocumentTypes = NSString.stringWith("CFBundleDocumentTypes");
         NSString CFBundleTypeExtensions = NSString.stringWith("CFBundleTypeExtensions");
-        NSArray array = new NSArray(OS.NSSearchPathForDirectoriesInDomains(cast(NSSearchPathDirectory)OS.NSAllApplicationsDirectory, cast(NSSearchPathDomainMask)OS.NSAllDomainsMask, true));
+        NSArray array = new NSArray(OS.NSSearchPathForDirectoriesInDomains(OS.NSAllApplicationsDirectory, OS.NSAllDomainsMask, true));
         NSUInteger count = array.count();
         for (NSUInteger i = 0; i < count; i++) {
             NSString path = new NSString(array.objectAtIndex(i));
@@ -211,14 +212,14 @@ static Program getProgram(NSBundle bundle) {
     NSString CFBundleDisplayName = NSString.stringWith("CFBundleDisplayName");
     NSString fullPath = bundle.bundlePath();
     NSString identifier = bundle.bundleIdentifier();
-    auto bundleName = bundle.objectForInfoDictionaryKey(CFBundleDisplayName);
+    cocoa.id bundleName = bundle.objectForInfoDictionaryKey(CFBundleDisplayName);
     if (bundleName is null) {
         bundleName = bundle.objectForInfoDictionaryKey(CFBundleName);
     }
     if (bundleName is null) {
-        bundleName = fullPath.lastPathComponent().stringByDeletingPathExtension().id;
+        bundleName = fullPath.lastPathComponent().stringByDeletingPathExtension();
     }
-    NSString name = new NSString(bundleName);
+    NSString name = new NSString(bundleName.id);
     Program program = new Program();
     program.name = name.getString();
     program.fullPath = fullPath.getString();
@@ -238,7 +239,7 @@ public static Program [] getPrograms () {
     try {
         Program[] vector;
         NSWorkspace workspace = NSWorkspace.sharedWorkspace();
-        NSArray array = new NSArray(OS.NSSearchPathForDirectoriesInDomains(cast(NSSearchPathDirectory)OS.NSAllApplicationsDirectory, cast(NSSearchPathDomainMask)OS.NSAllDomainsMask, true));
+        NSArray array = new NSArray(OS.NSSearchPathForDirectoriesInDomains(OS.NSAllApplicationsDirectory, OS.NSAllDomainsMask, true));
         NSUInteger count = array.count();
         for (NSUInteger i = 0; i < count; i++) {
             NSString path = new NSString(array.objectAtIndex(i));
@@ -276,7 +277,8 @@ public static Program [] getPrograms () {
  * </ul>
  */
 public static bool launch (String fileName) {
-    if (fileName is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
+    // SWT extension: allow null string
+    //if (fileName is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
     NSAutoreleasePool pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         NSString unescapedStr = NSString.stringWith("%"); //$NON-NLS-1$
@@ -314,7 +316,8 @@ public static bool launch (String fileName) {
  * </ul>
  */
 public bool execute (String fileName) {
-    if (fileName is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
+    // SWT extension: allow null string
+    //if (fileName is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     NSAutoreleasePool pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         NSWorkspace workspace = NSWorkspace.sharedWorkspace();
@@ -364,7 +367,7 @@ public ImageData getImageData () {
                 nsImage.setSize(size);
                 NSBitmapImageRep imageRep = null;
                 NSImageRep rep = nsImage.bestRepresentationForDevice(null);
-                if (rep.isKindOfClass(cast(objc.Class) OS.class_NSBitmapImageRep)) {
+                if (rep.isKindOfClass(OS.class_NSBitmapImageRep)) {
                     imageRep = new NSBitmapImageRep(rep.id);
                 }
                 if (imageRep !is null) {

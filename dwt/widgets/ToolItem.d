@@ -309,7 +309,7 @@ void createHandle () {
         button.setTarget(button);
         Font font = parent.font !is null ? parent.font : parent.defaultFont ();
         button.setFont(font.handle);
-        button.setImagePosition(cast(NSCellImagePosition)OS.NSImageOverlaps);
+        button.setImagePosition(OS.NSImageOverlaps);
         NSString emptyStr = NSString.stringWith("");
         button.setTitle(emptyStr);
         button.setEnabled(parent.getEnabled());
@@ -411,7 +411,7 @@ public Rectangle getBounds () {
     return new Rectangle(cast(int)rect.x, cast(int)rect.y, cast(int)rect.width, cast(int)rect.height);
 }
 
-void setClipRegion (float /*double*/ x, float /*double*/ y) {
+void setClipRegion (Cocoa.CGFloat x, Cocoa.CGFloat y) {
     NSRect frame = view.frame();
     parent.setClipRegion(frame.x + x, frame.y + y);
 }
@@ -919,16 +919,17 @@ public void setSelection (bool selected) {
  */
 public void setText (String string) {
     checkWidget();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if ((style & DWT.SEPARATOR) !is 0) return;
     super.setText (string);
     NSButton widget = cast(NSButton)button;
     widget.setAttributedTitle(createString());
     if (text.length !is 0 && image !is null) {
         if ((parent.style & DWT.RIGHT) !is 0) {
-            widget.setImagePosition(cast(NSCellImagePosition)OS.NSImageLeft);
+            widget.setImagePosition(OS.NSImageLeft);
         } else {
-            widget.setImagePosition(cast(NSCellImagePosition)OS.NSImageAbove);
+            widget.setImagePosition(OS.NSImageAbove);
         }
     } else {
         widget.setImagePosition(cast(NSCellImagePosition)(text.length !is 0 ? OS.NSNoImage : OS.NSImageOnly));
@@ -1019,9 +1020,9 @@ void updateImage (bool layout) {
     widget.setNeedsDisplay(true);
     if (text.length !is 0 && image !is null) {
         if ((parent.style & DWT.RIGHT) !is 0) {
-            widget.setImagePosition(cast(NSCellImagePosition)OS.NSImageLeft);
+            widget.setImagePosition(OS.NSImageLeft);
         } else {
-            (cast(NSButton)button).setImagePosition(cast(NSCellImagePosition)OS.NSImageAbove);
+            (cast(NSButton)button).setImagePosition(OS.NSImageAbove);
         }
     } else {
         widget.setImagePosition(cast(NSCellImagePosition)(text.length !is 0 ? OS.NSNoImage : OS.NSImageOnly));

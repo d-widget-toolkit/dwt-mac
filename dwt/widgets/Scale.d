@@ -135,7 +135,7 @@ static int checkStyle (int style) {
 public Point computeSize (int wHint, int hHint, bool changed) {
     checkWidget();
     NSSlider widget = cast(NSSlider)view;
-    float /*double*/ thickness = widget.knobThickness();
+    Cocoa.CGFloat thickness = widget.knobThickness();
     int width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT;
     if ((style & DWT.HORIZONTAL) !is 0) {
         height = cast(int)Math.ceil(thickness);

@@ -90,6 +90,7 @@ public class Composite : Scrollable {
     alias Scrollable.moveBelow moveBelow;
     alias Scrollable.setBounds setBounds;
     alias Scrollable.translateTraversal translateTraversal;
+    alias Scrollable.updateCursorRects updateCursorRects;
 
     Layout layout_;
     Control[] tabList;
@@ -136,13 +137,14 @@ public this (Composite parent, int style) {
 }
 
 Control [] _getChildren () {
-    auto vi = view.id;
+    objc.id vi = view.id;
     NSArray views = contentView().subviews();
     NSUInteger count = views.count();
     Control [] children = new Control [count];
     if (count is 0) return children;
     NSUInteger j = 0;
-    for (NSUInteger i=0; i<count; i++){auto o = views.objectAtIndex (count - i - 1).id;
+    for (NSUInteger i=0; i<count; i++){
+        objc.id o = views.objectAtIndex (count - i - 1).id;
         Widget widget = display.getWidget (views.objectAtIndex (count - i - 1).id);
         if (widget !is null && widget !is this && cast(Control) widget) {
             children [j++] = cast(Control) widget;
@@ -1019,15 +1021,12 @@ void updateBackgroundMode () {
 }
 
 void updateCursorRects (bool enabled) {
-    super.updateCursorRects (enabled);
+    updateCursorRects (enabled);
     Control [] children = _getChildren ();
     for (int i = 0; i < children.length; i++) {
         Control control = children [i];
         control.updateCursorRects (enabled && control.isEnabled ());
     }
-}
-void updateCursorRects (bool enabled, NSView widget) {
-    super.updateCursorRects(enabled, widget);
 }
 
 void updateLayout (bool all) {

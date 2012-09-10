@@ -74,6 +74,8 @@ import dwt.events.SelectionListener;
  * @noextend This class is not intended to be subclassed by clients.
  */
 public class Link : Control {
+    alias Control.updateCursorRects updateCursorRects;
+
     NSScrollView scrollView;
     String text;
     Point [] offsets;
@@ -233,7 +235,7 @@ void enableWidget (bool enabled) {
     NSTextView widget = cast(NSTextView)view;
     widget.setTextColor(nsColor);
     NSDictionary linkTextAttributes = widget.linkTextAttributes();
-    int count = cast(int)/*64*/linkTextAttributes.count();
+    NSUInteger count = linkTextAttributes.count();
     NSMutableDictionary dict = NSMutableDictionary.dictionaryWithCapacity(count);
     dict.setDictionary(linkTextAttributes);
     dict.setValue(enabled ? linkColor : nsColor, OS.NSForegroundColorAttributeName);
@@ -473,7 +475,7 @@ void setFont(NSFont font) {
     (cast(NSTextView) view).setFont(font);
 }
 
-void setForeground (float /*double*/ [] color) {
+void setForeground (Cocoa.CGFloat [] color) {
     if (!getEnabled ()) return;
     NSColor nsColor;
     if (color is null) {
@@ -484,7 +486,7 @@ void setForeground (float /*double*/ [] color) {
     (cast(NSTextView) view).setTextColor (nsColor);
 }
 
-void setForeground (float /*double*/ [] color) {
+void setForeground (Cocoa.CGFloat [] color) {
     if (!getEnabled ()) return;
     NSColor nsColor;
     if (color is null) {
@@ -521,7 +523,8 @@ void setForeground (float /*double*/ [] color) {
  */
 public void setText (String string) {
     checkWidget ();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (string == text) return;
     text = string;
     NSTextView widget = cast(NSTextView)view;
@@ -545,11 +548,11 @@ NSView topView () {
 }
 
 void updateCursorRects (bool enabled) {
-    super.updateCursorRects (enabled);
+    updateCursorRects (enabled);
     if (scrollView is null) return;
-    super.updateCursorRects (enabled, scrollView);
+    updateCursorRects (enabled, scrollView);
     NSClipView contentView = scrollView.contentView ();
-    super.updateCursorRects (enabled, contentView);
+    updateCursorRects (enabled, contentView);
     contentView.setDocumentCursor (enabled ? NSCursor.IBeamCursor () : null);
 }
 

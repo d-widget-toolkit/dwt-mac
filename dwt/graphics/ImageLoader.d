@@ -159,6 +159,7 @@ public ImageData[] load(InputStream stream) {
  * </ul>
  */
 public ImageData[] load(String filename) {
+    // DWT extension: allow null for zero length string
     //if (filename is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     InputStream stream = null;
     try {
@@ -242,7 +243,8 @@ public void save(OutputStream stream, int format) {
  * </ul>
  */
 public void save(String filename, int format) {
-    if (filename is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (filename is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     OutputStream stream = null;
     try {
         stream = Compatibility.newFileOutputStream(filename);

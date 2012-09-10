@@ -27,7 +27,7 @@ import tango.util.log.Trace;
 import tango.text.UnicodeData;
 //static import tango.util.collection.model.Seq;
 
-alias bool boolean;
+//alias bool boolean;
 alias char[] String;
 alias tango.text.Text.Text!(char) StringBuffer;
 
@@ -571,35 +571,35 @@ public String toUpperCase( String str ){
     return tango.text.Unicode.toUpper( str );
 }
 
-public int indexOf( String str, char searched ){
-    int res = tango.text.Util.locate( str, searched );
-    if( res is str.length ) res = -1;
-    return res;
-}
-
-public int indexOf( String str, char searched, int startpos ){
+public int indexOf () ( String str, char searched, int startpos ){
     int res = tango.text.Util.locate( str, searched, startpos );
     if( res is str.length ) res = -1;
     return res;
 }
 
-public int indexOf(String str, String ch){
+public int indexOf () (String str, String ch){
     return indexOf( str, ch, 0 );
 }
 
-public int indexOf(String str, String ch, int start){
+public int indexOf () (String str, String ch, int start){
     int res = tango.text.Util.locatePattern( str, ch, start );
     if( res is str.length ) res = -1;
     return res;
 }
 
-int countUntil (T) (T[] arr, T element)
+int indexOf (T) (T[] arr, T element)
 {
-    foreach (i, e ; arr)
-        if (e == element)
-            return i;
+    static if (is(T==String)) {
+        int res = tango.text.Util.locate( str, searched );
+        if( res is str.length ) res = -1;
+        return res;
+    } else {
+        foreach (i, e ; arr)
+            if (e == element)
+                return i;
 
-    return -1;
+        return -1;
+    }
 }
 
 public int lastIndexOf(String str, char ch){
@@ -1084,4 +1084,27 @@ Class Class_forName (String name)
        throw new ClassNotFoundException("Class not found " ~ name, __FILE__, __LINE__);
 
    return null;
+}
+
+void addElement(T)(ref T[] array, T element) {
+    array ~= element;
+}
+alias addElement add;
+
+void elementAt(T)(T[] array, size_t index) {
+    return array[index];
+}
+
+void size(T)(T[] array) {
+    return array.length;
+}
+alias size length;
+
+void removeElement(T)(ref T[] array, T element) {
+    foreach (i, e; array) {
+        if (e == element) {
+            array = array[0 .. i] ~ array[i + 1 .. $];
+            break;
+        }
+    }
 }

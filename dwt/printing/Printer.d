@@ -270,7 +270,7 @@ protected void create(DeviceData deviceData) {
         window.initWithContentRect(rect, OS.NSBorderlessWindowMask, OS.NSBackingStoreBuffered, false);
         String className = "SWTPrinterView"; //$NON-NLS-1$
         if (OS.objc_lookUpClass(className) is null) {
-            auto cls = OS.objc_allocateClassPair(OS.class_NSView, className, 0);
+            objc.Class cls = OS.objc_allocateClassPair(OS.class_NSView, className, 0);
             OS.class_addMethod(cls, OS.sel_isFlipped, OS.isFlipped_CALLBACK(), "@:");
             OS.objc_registerClassPair(cls);
         }
@@ -339,7 +339,8 @@ public objc.id internal_new_GC(GCData data) {
             NSSize size = printInfo.paperSize();
             size.width = (size.width * (dpi.x / screenDPI.x)) / scaling;
             size.height = (size.height * dpi.y / screenDPI.y) / scaling;
-            data.size = &size;
+            data.sizeStruct = size;
+            data.size = &data.sizeStruct;
             isGCCreated = true;
         }
         return operation.context().id;

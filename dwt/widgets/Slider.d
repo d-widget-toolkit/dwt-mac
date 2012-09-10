@@ -339,7 +339,7 @@ void sendSelection () {
     Event event = new Event();
     NSScrollerPart hitPart = (cast(NSScroller)view).hitPart();
     int value = getSelection ();
-    switch (cast(int)hitPart) {
+    switch (hitPart) {
         case OS.NSScrollerDecrementLine:
             event.detail = DWT.ARROW_UP;
             value -= increment;

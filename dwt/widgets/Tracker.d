@@ -403,7 +403,7 @@ void drawRectangles (NSWindow window, Rectangle [] rects, bool erase) {
     context.setCompositingOperation(cast(NSCompositingOperation)(erase ? OS.NSCompositeClear : OS.NSCompositeSourceOver));
     NSRect rectFrame = NSRect();
     NSPoint globalPoint = NSPoint();
-    float /*double*/ screenHeight = display.getPrimaryFrame().height;
+    Cocoa.CGFloat screenHeight = display.getPrimaryFrame().height;
     for (int i=0; i<rects.length; i++) {
         Rectangle rect = rects [i];
         rectFrame.x = rect.x + parentOrigin.x;
@@ -579,7 +579,7 @@ void mouse (NSEvent nsEvent) {
         }
         oldX = newX;  oldY = newY;
     }
-    switch (cast(int)/*64*/nsEvent.type()) {
+    switch (nsEvent.type()) {
         case OS.NSLeftMouseUp:
         case OS.NSRightMouseUp:
         case OS.NSOtherMouseUp:
@@ -757,7 +757,7 @@ public bool open () {
     NSArray screens = NSScreen.screens();
     Carbon.CGFloat minX = Float.MAX_VALUE, maxX = Float.MIN_VALUE;
     Carbon.CGFloat minY = Float.MAX_VALUE, maxY = Float.MIN_VALUE;
-    int count = cast(int)/*64*/screens.count();
+    NSUInteger count = screens.count();
     for (int i = 0; i < count; i++) {
         NSScreen screen = new NSScreen(screens.objectAtIndex(i));
         NSRect frame = screen.frame();
@@ -784,7 +784,7 @@ public bool open () {
     NSGraphicsContext context = window.graphicsContext();
     NSGraphicsContext.static_saveGraphicsState();
     NSGraphicsContext.setCurrentContext(context);
-    context.setCompositingOperation(cast(NSCompositingOperation)OS.NSCompositeClear);
+    context.setCompositingOperation(OS.NSCompositeClear);
     frame.x = frame.y = 0;
     NSBezierPath.fillRect(frame);
     NSGraphicsContext.static_restoreGraphicsState();
@@ -810,7 +810,7 @@ public bool open () {
     NSApplication application = NSApplication.sharedApplication();
     NSEvent currentEvent = application.currentEvent();
     if (currentEvent !is null) {
-        switch (cast(int)currentEvent.type()) {
+        switch (currentEvent.type()) {
             case OS.NSLeftMouseDown:
             case OS.NSLeftMouseDragged:
             case OS.NSRightMouseDown:
@@ -844,7 +844,7 @@ public bool open () {
             NSEvent event = application.nextEventMatchingMask(0, NSDate.distantFuture(), OS.NSDefaultRunLoopMode, true);
             if (event is null) continue;
         NSEventType type = event.type();
-            switch (cast(int)type) {
+            switch (type) {
                 case OS.NSLeftMouseUp:
                 case OS.NSRightMouseUp:
                 case OS.NSOtherMouseUp:
@@ -862,7 +862,7 @@ public bool open () {
             default:
             }
             bool dispatch = true;
-            switch (cast(int)type) {
+            switch (type) {
                 case OS.NSLeftMouseDown:
                 case OS.NSLeftMouseUp:
                 case OS.NSRightMouseDown:

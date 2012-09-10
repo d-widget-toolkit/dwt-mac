@@ -257,7 +257,7 @@ void _setVisible (bool visible) {
 
         // Hold on to window in case it is disposed while the popup is open.
         window.retain();
-        NSEvent nsEvent = NSEvent.otherEventWithType(cast(NSEventType)OS.NSApplicationDefined, location, 0, 0.0, window.windowNumber(), window.graphicsContext(), cast(short)0, 0, 0);
+        NSEvent nsEvent = NSEvent.otherEventWithType(OS.NSApplicationDefined, location, 0, 0.0, window.windowNumber(), window.graphicsContext(), cast(short)0, 0, 0);
         NSMenu.popUpContextMenu(nsMenu, nsEvent, shell.view);
         window.release();
     } else {

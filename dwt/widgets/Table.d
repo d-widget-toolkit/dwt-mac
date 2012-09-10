@@ -146,6 +146,7 @@ public class Table : Composite {
     alias Composite.setBounds setBounds;
     alias Composite.setFont setFont;
     alias Composite.setForeground setForeground;
+    alias Composite.updateCursorRects updateCursorRects;
 
     TableItem [] items;
     TableColumn [] columns;
@@ -287,13 +288,13 @@ NSSize cellSize (objc.id id, objc.SEL sel) {
     if (hooks(DWT.MeasureItem)) {
         void* outValue;
         OS.object_getInstanceVariable(id, Display.SWT_ROW, outValue);
-        int rowIndex = *(cast(int*)outValue);
-        TableItem item = _getItem(cast(int)/*64*/rowIndex);
+        int rowIndex = cast(NSInteger)outValue;
+        TableItem item = _getItem(rowIndex);
         OS.object_getInstanceVariable(id, Display.SWT_COLUMN, outValue);
-        auto tableColumn = outValue;
+        cocoa.id tableColumn = cast(cocoa.id)outValue;
         int columnIndex = 0;
         for (int i=0; i<columnCount; i++) {
-            if (columns [i].nsColumn.id is tableColumn) {
+            if (columns [i].nsColumn is tableColumn) {
                 columnIndex = i;
                 break;
             }
@@ -309,8 +310,8 @@ bool canDragRowsWithIndexes_atPoint(objc.id id, objc.SEL sel, objc.id arg0, objc
     NSTableView table = cast(NSTableView)view;
 
     // If the current row is not selected and the user is not attempting to modify the selection, select the row first.
-    auto row = table.rowAtPoint(clickPoint);
-    auto modifiers = NSApplication.sharedApplication().currentEvent().modifierFlags();
+    NSInteger row = table.rowAtPoint(clickPoint);
+    NSUInteger modifiers = NSApplication.sharedApplication().currentEvent().modifierFlags();
 
     bool drag = (state & DRAG_DETECT) !is 0 && hooks (DWT.DragDetect);
     if (drag) {
@@ -593,12 +594,12 @@ void createHandle () {
     widget.setAllowsColumnReordering (false);
     widget.setDataSource(widget);
     widget.setDelegate(widget);
-    widget.setColumnAutoresizingStyle (cast(NSTableViewColumnAutoresizingStyle)OS.NSTableViewNoColumnAutoresizing);
+    widget.setColumnAutoresizingStyle (OS.NSTableViewNoColumnAutoresizing);
     NSSize spacing = NSSize();
     spacing.width = spacing.height = CELL_GAP;
     widget.setIntercellSpacing(spacing);
     widget.setDoubleAction(OS.sel_sendDoubleSelection);
-    if (!hasBorder()) widget.setFocusRingType(cast(NSFocusRingType)OS.NSFocusRingTypeNone);
+    if (!hasBorder()) widget.setFocusRingType(OS.NSFocusRingTypeNone);
 
     headerView = cast(NSTableHeaderView)(new SWTTableHeaderView ()).alloc ().init ();
     widget.setHeaderView (null);
@@ -611,12 +612,12 @@ void createHandle () {
         widget.addTableColumn (checkColumn);
         checkColumn.setResizingMask(OS.NSTableColumnNoResizing);
         checkColumn.setEditable(false);
-        auto cls = NSButton.cellClass (); /* use our custom cell class */
+        objc.Class cls = NSButton.cellClass (); /* use our custom cell class */
         buttonCell = new NSButtonCell (OS.class_createInstance (cls, 0));
         buttonCell.init ();
         checkColumn.setDataCell (buttonCell);
-        buttonCell.setButtonType (cast(NSButtonType)OS.NSSwitchButton);
-        buttonCell.setImagePosition (cast(NSCellImagePosition)OS.NSImageOnly);
+        buttonCell.setButtonType (OS.NSSwitchButton);
+        buttonCell.setImagePosition (OS.NSImageOnly);
         buttonCell.setAllowsMixedState (true);
         checkColumn.setWidth(getCheckColumnWidth());
     }
@@ -635,7 +636,7 @@ void createHandle () {
     firstColumn.headerCell ().setTitle (str);
     widget.addTableColumn (firstColumn);
     dataCell = cast(NSTextFieldCell)(new SWTImageTextCell ()).alloc ().init ();
-    dataCell.setLineBreakMode(cast(NSLineBreakMode)OS.NSLineBreakByClipping);
+    dataCell.setLineBreakMode(OS.NSLineBreakByClipping);
     firstColumn.setDataCell (dataCell);
 
     scrollView = scrollWidget;
@@ -947,14 +948,14 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect rect, objc.i
     NSTableView widget = cast(NSTableView)this.view;
     void* outValue;
     OS.object_getInstanceVariable(id, Display.SWT_ROW, outValue);
-    int rowIndex = *(cast(int*)outValue);
-    TableItem item = _getItem(cast(int)/*64*/rowIndex);
+    int rowIndex = cast(NSInteger)outValue;
+    TableItem item = _getItem(rowIndex);
     OS.object_getInstanceVariable(id, Display.SWT_COLUMN, outValue);
-    auto tableColumn = outValue;
-    auto nsColumnIndex = widget.tableColumns().indexOfObjectIdenticalTo(cast(cocoa.id)tableColumn);
+    cocoa.id tableColumn = cast(cocoa.id)outValue;
+    NSUInteger nsColumnIndex = widget.tableColumns().indexOfObjectIdenticalTo(tableColumn);
     int columnIndex = 0;
     for (int i=0; i<columnCount; i++) {
-        if (columns [i].nsColumn.id is tableColumn) {
+        if (columns [i].nsColumn is tableColumn) {
             columnIndex = i;
             break;
         }
@@ -988,7 +989,7 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect rect, objc.i
         NSRect rowRect = widget.rectOfRow (rowIndex);
         cellRect.width = rowRect.width;
     }
-    float /*double*/ offsetX = 0, offsetY = 0;
+    Cocoa.CGFloat offsetX = 0, offsetY = 0;
     if (hooksPaint || hooksErase) {
         NSRect frameCell = widget.frameOfCellAtColumn(nsColumnIndex, rowIndex);
         offsetX = rect.x - frameCell.x;
@@ -1013,7 +1014,7 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect rect, objc.i
         transform.concat();
 
         GCData data = new GCData ();
-        data.paintRect = &cellRect;
+        data.paintRectStruct = cellRect;
         data.paintRect = &data.paintRectStruct;
         GC gc = GC.cocoa_new (this, data);
         gc.setFont (item.getFont (columnIndex));
@@ -1089,7 +1090,7 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect rect, objc.i
             transform.scaleXBy(1, -1);
             transform.translateXBy(0, -(destRect.height + 2 * destRect.y));
             transform.concat();
-            image.drawInRect(destRect, srcRect, cast(NSCompositingOperation)OS.NSCompositeSourceOver, 1);
+            image.drawInRect(destRect, srcRect, OS.NSCompositeSourceOver, 1);
             context.restoreGraphicsState();
             int imageWidth = imageBounds.width + IMAGE_GAP;
             rect.x = rect.x + imageWidth;
@@ -1103,7 +1104,7 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect rect, objc.i
             * foreground color to black when the cell is highlighted. The text
             * still draws white.  The fix is to draw the text and not call super.
             */
-            float /*double*/ [] color = userForeground.handle;
+            Cocoa.CGFloat [] color = userForeground.handle;
             if (color[0] is 0 && color[1] is 0 && color[2] is 0 && color[3] is 1) {
                 NSMutableAttributedString newStr = new NSMutableAttributedString(cell.attributedStringValue().mutableCopy());
                 NSRange range = NSRange();
@@ -1147,7 +1148,8 @@ void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect rect, objc.i
         transform.concat();
 
         GCData data = new GCData ();
-        data.paintRect = &cellRect;
+        data.paintRectStruct = cellRect;
+        data.paintRect = &data.paintRectStruct;
         GC gc = GC.cocoa_new (this, data);
         gc.setFont (item.getFont (columnIndex));
         if (drawSelection) {
@@ -1231,7 +1233,7 @@ Widget findTooltip (NSPoint pt) {
     NSTableHeaderView headerView = widget.headerView();
     if (headerView !is null) {
         pt = headerView.convertPoint_fromView_ (pt, null);
-        int /*long*/ index = headerView.columnAtPoint (pt);
+        NSInteger index = headerView.columnAtPoint (pt);
         if (index !is -1) {
             NSArray nsColumns = widget.tableColumns ();
             cocoa.id nsColumn = nsColumns.objectAtIndex (index);
@@ -1523,7 +1525,7 @@ public TableItem getItem (Point point) {
     NSPoint pt = NSPoint();
     pt.x = point.x;
     pt.y = point.y;
-    int row = cast(int)/*64*/widget.rowAtPoint(pt);
+    NSInteger row = widget.rowAtPoint(pt);
     if (row is -1) return null;
     return items[row];
 }
@@ -1918,7 +1920,7 @@ objc.id menuForEvent(objc.id id, objc.SEL sel, objc.id theEvent) {
 
         // select the row that was clicked before showing the menu for the event
         NSPoint mousePoint = view.convertPoint_fromView_(event.locationInWindow(), null);
-        int /*long*/ row = table.rowAtPoint(mousePoint);
+        NSInteger row = table.rowAtPoint(mousePoint);
 
         // figure out if the row that was just clicked on is currently selected
         if (selectedRowIndexes.containsIndex(row) is false) {
@@ -1937,9 +1939,9 @@ void mouseDown (objc.id id, objc.SEL sel, objc.id theEvent) {
         NSTableView widget = cast(NSTableView)view;
         widget.setAllowsColumnReordering(false);
         NSPoint pt = headerView.convertPoint_fromView_((new NSEvent(theEvent)).locationInWindow(), null);
-        auto nsIndex = headerView.columnAtPoint(pt);
+        NSInteger nsIndex = headerView.columnAtPoint(pt);
         if (nsIndex !is -1) {
-            auto nsColumn = widget.tableColumns().objectAtIndex(nsIndex);
+            cocoa.id nsColumn = widget.tableColumns().objectAtIndex(nsIndex);
             for (int i = 0; i < columnCount; i++) {
                 if (columns[i].nsColumn.id is nsColumn.id) {
                     widget.setAllowsColumnReordering(columns[i].movable);
@@ -1967,7 +1969,7 @@ void mouseDown (objc.id id, objc.SEL sel, objc.id theEvent) {
  */
 objc.id nextState (objc.id id, objc.SEL sel) {
     NSTableView tableView = cast(NSTableView)view;
-    int index = cast(int)/*64*/tableView.selectedRow ();
+    NSInteger index = tableView.selectedRow ();
     TableItem item = items[index];
     if (item.grayed) {
         return cast(objc.id)(item.checked ? OS.NSOffState : OS.NSMixedState);
@@ -2477,8 +2479,8 @@ public void setItemCount (int count) {
 
 void setItemHeight (Image image, NSFont font, bool set) {
     if (font is null) font = getFont ().handle;
-    float /*double*/ ascent = font.ascender ();
-    float /*double*/ descent = -font.descender () + font.leading ();
+    Cocoa.CGFloat ascent = font.ascender ();
+    Cocoa.CGFloat descent = -font.descender () + font.leading ();
     int height = cast(int)Math.ceil (ascent + descent) + 1;
     Rectangle bounds = image !is null ? image.getBounds () : imageBounds;
     if (bounds !is null) {
@@ -2741,7 +2743,7 @@ public void setSelection (TableItem [] items) {
 
 void setSmallSize () {
     if (checkColumn is null) return;
-    checkColumn.dataCell ().setControlSize (cast(NSControlSize)OS.NSSmallControlSize);
+    checkColumn.dataCell ().setControlSize (OS.NSSmallControlSize);
     checkColumn.setWidth (getCheckColumnWidth ());
 }
 
@@ -2908,12 +2910,12 @@ public void showSelection () {
 
 void sendDoubleSelection() {
     NSTableView tableView = cast(NSTableView)view;
-    int rowIndex = cast(int)/*64*/tableView.clickedRow ();
+    NSInteger rowIndex = tableView.clickedRow ();
     if (rowIndex !is -1) {
         if ((style & DWT.CHECK) !is 0) {
             NSArray columns = tableView.tableColumns ();
-            int columnIndex = cast(int)/*64*/tableView.clickedColumn ();
-            auto column = columns.objectAtIndex (columnIndex);
+            NSInteger columnIndex = tableView.clickedColumn ();
+            cocoa.id column = columns.objectAtIndex (columnIndex);
             if (column.id is checkColumn.id) return;
         }
         Event event = new Event ();
@@ -2944,7 +2946,8 @@ void sendMeasureItem (TableItem item, int columnIndex, NSSize size) {
     NSSize spacing = widget.intercellSpacing();
     int itemHeight = cast(int)Math.ceil (widget.rowHeight() + spacing.height);
     GCData data = new GCData ();
-    data.paintRect = &widget.frame ();
+    data.paintRectStruct = widget.frame ();
+    data.paintRect = &data.paintRectStruct;
     GC gc = GC.cocoa_new (this, data);
     gc.setFont (item.getFont (columnIndex));
     Event event = new Event ();
@@ -3022,7 +3025,7 @@ void tableViewColumnDidResize (objc.id id, objc.SEL sel, objc.id aNotification) 
 void tableViewSelectionDidChange (objc.id id, objc.SEL sel, objc.id aNotification) {
     if (ignoreSelect) return;
     NSTableView widget = cast(NSTableView) view;
-    int row = cast(int)/*64*/widget.selectedRow ();
+    NSInteger row = widget.selectedRow ();
     if(row is -1)
         postEvent (DWT.Selection);
     else {
@@ -3041,7 +3044,7 @@ void tableView_didClickTableColumn (objc.id id, objc.SEL sel, objc.id tableView,
 }
 
 objc.id tableView_objectValueForTableColumn_row (objc.id id, objc.SEL sel, objc.id aTableView, objc.id aTableColumn, objc.id rowIndex) {
-    int index = cast(int)/*64*/rowIndex;
+    int index = cast(NSInteger)rowIndex;
     TableItem item = _getItem (index);
     checkData (item, index);
     if (checkColumn !is null && aTableColumn is checkColumn.id) {
@@ -3063,7 +3066,7 @@ objc.id tableView_objectValueForTableColumn_row (objc.id id, objc.SEL sel, objc.
 
 void tableView_setObjectValue_forTableColumn_row (objc.id id, objc.SEL sel, objc.id aTableView, objc.id anObject, objc.id aTableColumn, objc.id rowIndex) {
     if (checkColumn !is null && aTableColumn is checkColumn.id)  {
-        TableItem item = items [cast(int)/*64*/rowIndex];
+        TableItem item = items [cast(NSInteger)rowIndex];
         item.checked = !item.checked;
         Event event = new Event ();
         event.detail = DWT.CHECK;
@@ -3080,7 +3083,7 @@ bool tableView_shouldEditTableColumn_row (objc.id id, objc.SEL sel, objc.id aTab
 
 void tableView_willDisplayCell_forTableColumn_row (objc.id id, objc.SEL sel, objc.id aTableView, objc.id cell, objc.id tableColumn, objc.id rowIndex) {
     if (checkColumn !is null && tableColumn is checkColumn.id) return;
-    TableItem item = items [cast(int)/*64*/rowIndex];
+    TableItem item = items [cast(NSInteger)rowIndex];
     int index = 0;
     for (int i=0; i<columnCount; i++) {
         if (columns [i].nsColumn.id is tableColumn) {
@@ -3125,7 +3128,7 @@ void tableView_willDisplayCell_forTableColumn_row (objc.id id, objc.SEL sel, obj
         dict.setObject (font.handle, OS.NSFontAttributeName);
         addTraits(dict, font);
         NSMutableParagraphStyle paragraphStyle = cast(NSMutableParagraphStyle)(new NSMutableParagraphStyle ()).alloc ().init ();
-        paragraphStyle.setLineBreakMode (cast(NSLineBreakMode)OS.NSLineBreakByClipping);
+        paragraphStyle.setLineBreakMode (OS.NSLineBreakByClipping);
         paragraphStyle.setAlignment (cast(NSTextAlignment)alignment);
         dict.setObject (paragraphStyle, OS.NSParagraphStyleAttributeName);
         paragraphStyle.release ();
@@ -3155,8 +3158,8 @@ NSRect titleRectForBounds (objc.id id, objc.SEL sel, NSRect cellFrame) {
 }
 
 void updateCursorRects (bool enabled) {
-    super.updateCursorRects (enabled);
+    updateCursorRects (enabled);
     if (headerView is null) return;
-    super.updateCursorRects (enabled, headerView);
+    updateCursorRects (enabled, headerView);
 }
 }

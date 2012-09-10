@@ -32,6 +32,7 @@ import dwt.internal.cocoa.NSMutableArray;
 import dwt.internal.cocoa.NSView;
 import dwt.internal.cocoa.SWTView;
 import dwt.internal.cocoa.OS;
+import dwt.internal.objc.cocoa.Cocoa;
 import cocoa = dwt.internal.cocoa.id;
 
 import objc = dwt.internal.objc.runtime;
@@ -157,7 +158,7 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
             extraAttributes.addObject(OS.NSAccessibilityDescriptionAttribute);
             extraAttributes.addObject(OS.NSAccessibilityTitleAttribute);
 
-            for (int i = cast(int)/*64*/extraAttributes.count() - 1; i >= 0; i--) {
+            for (NSInteger i = extraAttributes.count() - 1; i >= 0; i--) {
                 NSString attribute = new NSString(extraAttributes.objectAtIndex(i).id);
                 if (accessible.internal_accessibilityAttributeValue(attribute, ACC.CHILDID_SELF) !is null) {
                     ourAttributes.addObject(extraAttributes.objectAtIndex(i));

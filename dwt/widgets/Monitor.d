@@ -13,6 +13,7 @@
  *******************************************************************************/
 module dwt.widgets.Monitor;
 
+import objc = dwt.internal.objc.runtime;
 import dwt.dwthelper.utils;
 import dwt.graphics.Rectangle;
 
@@ -28,7 +29,7 @@ import dwt.graphics.Rectangle;
  * @since 3.0
  */
 public final class Monitor {
-    int /*long*/ handle;
+    objc.id handle;
     int x, y, width, height;
     int clientX, clientY, clientWidth, clientHeight;
 
@@ -89,7 +90,7 @@ public Rectangle getClientArea () {
  * @see #equals(Object)
  */
 public hash_t toHash () {
-    return cast(hash_t)/*64*/handle;
+    return cast(hash_t)handle;
 }
 
 alias toHash hashCode;

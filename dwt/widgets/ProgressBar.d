@@ -146,7 +146,7 @@ void _drawThemeProgressArea (objc.id id, objc.SEL sel, objc.id arg0) {
     * region of the progress bar before calling super.
     */
     if (visiblePath is null) {
-        auto visibleRegion = getVisibleRegion();
+        Carbon.RgnHandle visibleRegion = getVisibleRegion();
         visiblePath = getPath(visibleRegion);
         OS.DisposeRgn(visibleRegion);
     }
@@ -331,7 +331,7 @@ void resetVisibleRegion () {
     visiblePath = null;
 }
 
-void viewDidMoveToWindow(int /*long*/ id, int /*long*/ sel) {
+void viewDidMoveToWindow(objc.id id, objc.SEL sel) {
     /*
      * Bug in Cocoa. An indeterminate progress indicator doesn't start animating until it is in
      * a visible window.  Workaround is to catch when the bar has been added to a window and start

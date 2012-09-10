@@ -176,7 +176,8 @@ objc.id accessibilityAttributeValue (objc.id id, objc.SEL sel, objc.id arg0) {
  */
 public void add (String string) {
     checkWidget();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (itemCount is items.length) {
         String [] newItems = new String [itemCount + 4];
         System.arraycopy (items, 0, newItems, 0, items.length);
@@ -212,7 +213,8 @@ public void add (String string) {
  */
 public void add (String string, int index) {
     checkWidget();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (!(0 <= index && index <= itemCount)) error (DWT.ERROR_INVALID_RANGE);
     if (itemCount is items.length) {
         String [] newItems = new String [itemCount + 4];
@@ -308,13 +310,13 @@ void createHandle () {
     widget.setHeaderView(null);
     widget.setDelegate(widget);
     if ((style & DWT.H_SCROLL) !is 0) {
-        widget.setColumnAutoresizingStyle (cast(NSTableViewColumnAutoresizingStyle)OS.NSTableViewNoColumnAutoresizing);
+        widget.setColumnAutoresizingStyle (OS.NSTableViewNoColumnAutoresizing);
     }
     NSSize spacing = NSSize();
     spacing.width = spacing.height = CELL_GAP;
     widget.setIntercellSpacing(spacing);
     widget.setDoubleAction(OS.sel_sendDoubleSelection);
-    if (!hasBorder()) widget.setFocusRingType(cast(NSFocusRingType)OS.NSFocusRingTypeNone);
+    if (!hasBorder()) widget.setFocusRingType(OS.NSFocusRingTypeNone);
 
     column = cast(NSTableColumn)(new NSTableColumn()).alloc();
     column = column.initWithIdentifier(NSString.stringWith(Format("{}",++NEXT_ID)));
@@ -446,7 +448,7 @@ bool dragDetect(int x, int y, bool filter, bool[] consume) {
     NSPoint pt = NSPoint();
     pt.x = x;
     pt.y = y;
-    auto row = widget.rowAtPoint(pt);
+    NSInteger row = widget.rowAtPoint(pt);
     if (row is -1) return false;
     bool dragging = super.dragDetect(x, y, filter, consume);
     if (dragging) {
@@ -723,7 +725,8 @@ public int getTopIndex () {
  */
 public int indexOf (String item) {
     checkWidget();
-    if (item is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (item is null) error (DWT.ERROR_NULL_ARGUMENT);
     for (int i=0; i<itemCount; i++) {
         if (items [i] == item) return i;
     }
@@ -751,7 +754,8 @@ public int indexOf (String item) {
  */
 public int indexOf (String string, int start) {
     checkWidget();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     for (int i=start; i<itemCount; i++) {
         if (items [i] == string) return i;
     }
@@ -791,7 +795,7 @@ objc.id menuForEvent(objc.id id, objc.SEL sel, objc.id theEvent) {
 
     // select the row that was clicked before showing the menu for the event
     NSPoint mousePoint = view.convertPoint_fromView_(event.locationInWindow(), null);
-    auto row = table.rowAtPoint(mousePoint);
+    NSInteger row = table.rowAtPoint(mousePoint);
 
     // figure out if the row that was just clicked on is currently selected
     if (selectedRowIndexes.containsIndex(row) is false) {
@@ -819,7 +823,7 @@ objc.id menuForEvent(objc.id id, objc.SEL sel, objc.id theEvent) {
 
     // select the row that was clicked before showing the menu for the event
     NSPoint mousePoint = view.convertPoint_fromView_(event.locationInWindow(), null);
-    auto row = table.rowAtPoint(mousePoint);
+    NSInteger row = table.rowAtPoint(mousePoint);
 
     // figure out if the row that was just clicked on is currently selected
     if (selectedRowIndexes.containsIndex(row) is false) {
@@ -921,7 +925,8 @@ public void remove (int start, int end) {
  */
 public void remove (String string) {
     checkWidget();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     int index = indexOf (string, 0);
     if (index is -1) error (DWT.ERROR_INVALID_ARGUMENT);
     remove (index);
@@ -1207,6 +1212,7 @@ void setFont (NSFont font) {
  */
 public void setItem (int index, String string) {
     checkWidget();
+    // DWT extension: allow null for zero length string
     //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (!(0 <= index && index < itemCount)) error (DWT.ERROR_INVALID_RANGE);
     items [index] = string;
@@ -1250,7 +1256,7 @@ bool setScrollWidth (String item) {
     cell.setFont (font.handle);
     cell.setTitle (NSString.stringWith (item));
     NSSize size = cell.cellSize ();
-    float /*double*/ oldWidth = column.width ();
+    Cocoa.CGFloat oldWidth = column.width ();
     if (oldWidth < size.width) {
         column.setWidth (size.width);
         return true;
@@ -1264,7 +1270,7 @@ bool setScrollWidth () {
     NSCell cell = column.dataCell ();
     Font font = this.font !is null ? this.font : defaultFont ();
     cell.setFont (font.handle);
-    float /*double*/ width = 0;
+    Cocoa.CGFloat width = 0;
     for (int i = 0; i < itemCount; i++) {
         cell.setTitle (NSString.stringWith (items[i]));
         NSSize size = cell.cellSize ();
@@ -1497,7 +1503,7 @@ bool tableView_shouldEditTableColumn_row(objc.id id, objc.SEL sel, objc.id aTabl
 }
 
 objc.id tableView_objectValueForTableColumn_row(objc.id id, objc.SEL sel, objc.id aTableView, objc.id aTableColumn, objc.id rowIndex) {
-    NSAttributedString attribStr = createString(items[cast(int)/*64*/rowIndex], null, foreground, 0, true, false);
+    NSAttributedString attribStr = createString(items[cast(size_t)rowIndex], null, foreground, 0, true, false);
     return attribStr.id;
 }
 

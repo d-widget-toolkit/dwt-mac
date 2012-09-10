@@ -150,7 +150,7 @@ public String open () {
         application.beginSheet(panel, parent.window, null, null, null);
     }
     NSString dir = filterPath !is null ? NSString.stringWith(filterPath) : null;
-    int /*long*/ response = panel.runModalForDirectory(dir, null);
+    NSInteger response = panel.runModalForDirectory(dir, null);
     if (parent !is null && (style & DWT.SHEET) !is 0) {
         application.endSheet(panel, 0);
     }

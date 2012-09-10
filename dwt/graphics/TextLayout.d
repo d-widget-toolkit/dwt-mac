@@ -197,16 +197,16 @@ void computeRuns() {
     defaultFont.addTraits(attrStr, range);
     //TODO ascend descent wrap
     NSMutableParagraphStyle paragraph = cast(NSMutableParagraphStyle)(new NSMutableParagraphStyle()).alloc().init();
-    NSTextAlignment align_ = cast(NSTextAlignment)OS.NSLeftTextAlignment;
+    NSTextAlignment align_ = OS.NSLeftTextAlignment;
     if (justify) {
-        align_ = cast(NSTextAlignment)OS.NSJustifiedTextAlignment;
+        align_ = OS.NSJustifiedTextAlignment;
     } else {
         switch (alignment) {
             case DWT.CENTER:
-                align_ = cast(NSTextAlignment)OS.NSCenterTextAlignment;
+                align_ = OS.NSCenterTextAlignment;
                 break;
             case DWT.RIGHT:
-                align_ = cast(NSTextAlignment)OS.NSRightTextAlignment;
+                align_ = OS.NSRightTextAlignment;
             default:
         }
     }
@@ -220,7 +220,7 @@ void computeRuns() {
         for (int i = 0, pos = 0; i < count; i++) {
             pos += tabs[i];
             NSTextTab tab = cast(NSTextTab)(new NSTextTab()).alloc();
-            tab = tab.initWithType(cast(NSTextTabType)OS.NSLeftTabStopType, pos);
+            tab = tab.initWithType(OS.NSLeftTabStopType, pos);
             paragraph.addTabStop(tab);
             tab.release();
         }
@@ -320,7 +320,7 @@ void computeRuns() {
         bounds[numberOfLines] = layoutManager.lineFragmentUsedRectForGlyphAtIndex(index, rangePtr, true);
         if (numberOfLines < bounds.length - 1) bounds[numberOfLines].height = bounds[numberOfLines].height - spacing;
         OS.memmove(&lineRange, rangePtr, NSRange.sizeof);
-        offsets[numberOfLines] = cast(int)/*64*/lineRange.location;
+        offsets[numberOfLines] = lineRange.location;
         index = lineRange.location + lineRange.length;
     }
     if (numberOfLines is 0) {
@@ -330,7 +330,7 @@ void computeRuns() {
         bounds[0].height = Math.max(layoutManager.defaultLineHeightForFont(nsFont), ascent + descent);
     }
     OS.free(rangePtr);
-    offsets[numberOfLines] = cast(int)/*64*/textStorage.length();
+    offsets[numberOfLines] = textStorage.length();
     this.lineOffsets = offsets;
     this.lineBounds = bounds;
 }
@@ -513,9 +513,9 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                             range.location = Math.max(lineStart, start);
                             range.length = Math.min(lineEnd, end) + 1 - range.location;
                             if (range.length > 0) {
-                                auto pRectCount = cast(uint*)OS.malloc(C.PTR_SIZEOF);
+                                NSUInteger* pRectCount = cast(NSUInteger*)OS.malloc(C.PTR_SIZEOF);
                                 NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, pRectCount);
-                                auto rectCount = *pRectCount;
+                                NSUInteger rectCount = *pRectCount;
                                 NSRect rect = NSRect();
                                 gc.handle.saveGraphicsState();
                                 Carbon.CGFloat baseline = layoutManager.typesetter().baselineOffsetInLayoutManager(layoutManager, lineStart);
@@ -534,8 +534,8 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                                     switch (style.underlineStyle) {
                                         case DWT.UNDERLINE_ERROR: {
                                             path.setLineWidth(2f);
-                                            path.setLineCapStyle(cast(NSLineCapStyle)OS.NSRoundLineCapStyle);
-                                            path.setLineJoinStyle(cast(NSLineJoinStyle)OS.NSRoundLineJoinStyle);
+                                            path.setLineCapStyle(OS.NSRoundLineCapStyle);
+                                            path.setLineJoinStyle(OS.NSRoundLineJoinStyle);
                                             path.setLineDash([1.0f, 3.0f].ptr, 2, cast(Carbon.CGFloat) 0);
                                             point.x = underlineX;
                                             point.y = underlineY + 0.5f;
@@ -548,8 +548,8 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                                         case DWT.UNDERLINE_SQUIGGLE: {
                                             gc.handle.setShouldAntialias(false);
                                             path.setLineWidth(1.0f);
-                                            path.setLineCapStyle(cast(NSLineCapStyle)OS.NSButtLineCapStyle);
-                                            path.setLineJoinStyle(cast(NSLineJoinStyle)OS.NSMiterLineJoinStyle);
+                                            path.setLineCapStyle(OS.NSButtLineCapStyle);
+                                            path.setLineJoinStyle(OS.NSMiterLineJoinStyle);
                                             Carbon.CGFloat lineBottom = pt.y + rect.y + rect.height;
                                             float squigglyThickness = 1;
                                             float squigglyHeight = 2 * squigglyThickness;
@@ -1142,15 +1142,15 @@ int _getOffset (int offset, int movement, bool forward) {
             return untranslateOffset(offset);
         }
         case DWT.MOVEMENT_WORD: {
-            return untranslateOffset(cast(int)/*64*/textStorage.nextWordFromIndex(offset, forward));
+            return untranslateOffset(textStorage.nextWordFromIndex(offset, forward));
         }
         case DWT.MOVEMENT_WORD_END: {
             NSRange range = textStorage.doubleClickAtIndex(length is offset ? length - 1 : offset);
-            return untranslateOffset(cast(int)/*64*/(range.location + range.length));
+            return untranslateOffset(range.location + range.length);
         }
         case DWT.MOVEMENT_WORD_START: {
             NSRange range = textStorage.doubleClickAtIndex(length is offset ? length - 1 : offset);
-            return untranslateOffset(cast(int)/*64*/range.location);
+            return untranslateOffset(range.location);
         }
     }
     return untranslateOffset(offset);
@@ -1231,7 +1231,7 @@ public int getOffset(int x, int y, int[] trailing) {
         NSUInteger glyphIndex = layoutManager.glyphIndexForPoint(pt, textContainer, &partialFration);
         NSUInteger offset = layoutManager.characterIndexForGlyphAtIndex(glyphIndex);
     if (trailing !is null) trailing[0] = cast(int) Math.round(partialFration);
-        return Math.min(untranslateOffset(cast(int)/*64*/offset), length - 1);
+        return Math.min(untranslateOffset(offset), length - 1);
     } finally {
         if (pool !is null) pool.release();
     }
@@ -1920,7 +1920,8 @@ public void setTabs(int[] tabs) {
  */
 public void setText (String text) {
     checkLayout ();
-    if (text is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (text is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     if (text.equals(this.text)) return;
     NSAutoreleasePool pool = null;
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();

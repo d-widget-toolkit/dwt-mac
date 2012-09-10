@@ -37,7 +37,7 @@ public this(dwt.internal.cocoa.id.id id) {
     this.id = id !is null ? id.id : null;
 }
 
-public objc.id objc_getClass() {
+public objc.Class objc_getClass() {
     String name = this.classinfo.name;
     int index = name.lastIndexOf('.');
     if (index !is -1) name = name.substring(index + 1);

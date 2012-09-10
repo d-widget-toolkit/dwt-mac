@@ -560,8 +560,8 @@ protected void init_ () {
     COLOR_WHITE = new Color (this, 0xFF,0xFF,0xFF);
 
     paragraphStyle = cast(NSMutableParagraphStyle)(new NSMutableParagraphStyle()).alloc().init();
-    paragraphStyle.setAlignment(cast(NSTextAlignment)OS.NSLeftTextAlignment);
-    paragraphStyle.setLineBreakMode(cast(NSLineBreakMode)OS.NSLineBreakByClipping);
+    paragraphStyle.setAlignment(OS.NSLeftTextAlignment);
+    paragraphStyle.setLineBreakMode(OS.NSLineBreakByClipping);
     NSArray tabs = new NSArray((new NSArray()).alloc().init());
     paragraphStyle.setTabStops(tabs);
     tabs.release();
@@ -639,7 +639,8 @@ public bool isDisposed () {
  */
 public bool loadFont (String path) {
     checkDevice();
-    if (path is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (path is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     bool result = false;
     NSString nsPath = NSString.stringWith(path);
     char* fsRepresentation = nsPath.fileSystemRepresentation();
@@ -648,7 +649,7 @@ public bool loadFont (String path) {
         byte [] fsRef = new byte [80];
         bool [] isDirectory = new bool[1];
         if (OS.FSPathMakeRef (cast(ubyte*)fsRepresentation, cast(Carbon.FSRef*)fsRef.ptr, isDirectory.ptr) is OS.noErr) {
-            result = OS.ATSFontActivateFromFileReference (cast(Carbon.FSRef*)fsRef.ptr, cast(ATSFontContext)OS.kATSFontContextLocal, cast(ATSFontFormat)OS.kATSFontFormatUnspecified, null, OS.kATSOptionFlagsDefault, null) is OS.noErr;
+            result = OS.ATSFontActivateFromFileReference (cast(Carbon.FSRef*)fsRef.ptr, OS.kATSFontContextLocal, OS.kATSFontFormatUnspecified, null, OS.kATSOptionFlagsDefault, null) is OS.noErr;
         }
     }
 

@@ -872,7 +872,7 @@ void createDisplay (DeviceData data) {
         Carbon.ProcessSerialNumber psn;
         if (OS.GetCurrentProcess (&psn) is OS.noErr) {
             int pid = OS.getpid ();
-            auto ptr = getAppName().UTF8String();
+            char* ptr = getAppName().UTF8String();
             if (ptr !is null) OS.CPSSetProcessName (&psn, ptr);
             OS.TransformProcessType (&psn, cast(Carbon.ProcessApplicationTransformState)OS.kProcessTransformToForegroundApplication);
             OS.SetFrontProcess (&psn);
@@ -888,11 +888,11 @@ void createDisplay (DeviceData data) {
 
         String className = "SWTApplication";
         objc.Class cls;
-        if ((cls = cast(objc.Class) OS.objc_lookUpClass (className)) is null) {
+        if ((cls = OS.objc_lookUpClass (className)) is null) {
             objc.IMP proc2 = cast(objc.IMP) &applicationProc2;
             objc.IMP proc3 = cast(objc.IMP) &applicationProc3;
             objc.IMP proc6 = cast(objc.IMP) &applicationProc6;
-            cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSApplication, className, 0);
+            cls = OS.objc_allocateClassPair(OS.class_NSApplication, className, 0);
             OS.class_addMethod(cls, OS.sel_registerName("sendEvent:"), proc3, "@:@");
 
             static if ((void*).sizeof > int.sizeof) // 64bit target
@@ -911,7 +911,7 @@ void createDisplay (DeviceData data) {
     if (OS.objc_lookUpClass (className) is null) {
         objc.IMP appProc3 = cast(objc.IMP) &applicationProc3;
         if (appProc3 is null) error (DWT.ERROR_NO_MORE_CALLBACKS);
-        auto cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
+        objc.Class cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
         OS.class_addMethod(cls, OS.sel_applicationWillFinishLaunching_, appProc3, "@:@");
         OS.class_addMethod(cls, OS.sel_terminate_, appProc3, "@:@");
         OS.class_addMethod(cls, OS.sel_quitRequested_, appProc3, "@:@");
@@ -1363,6 +1363,7 @@ public static Display getDefault () {
  */
 public Object getData (String key) {
     checkDevice ();
+    // DWT extension: allow null for zero length string
     //if (key is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (keys is null) return null;
     for (int i=0; i<keys.length; i++) {
@@ -1936,7 +1937,7 @@ Widget getWidget (NSView view) {
 
 bool hasDefaultButton () {
     NSArray windows = application.windows();
-    int /*long*/ count = windows.count();
+    NSUInteger count = windows.count();
     for (int i = 0; i < count; i++) {
         NSWindow window  = new NSWindow(windows.objectAtIndex(i));
         if (window.defaultButtonCell() !is null) {
@@ -1990,11 +1991,11 @@ protected void init_ () {
 /+  cursorSetCallback = new Callback(this, "cursorSetProc", 2);
     auto cursorSetProc = cursorSetCallback.getAddress();
     if (cursorSetProc is null) error (DWT.ERROR_NO_MORE_CALLBACKS);
-    auto method = OS.class_getInstanceMethod(OS.class_NSCursor.isa, OS.sel_set);
+    auto method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
     if (method !is null) oldCursorSetProc = OS.method_setImplementation(method, cursorSetProc);
 +/
     objc.IMP cursorSetProc = cast(objc.IMP) &cursorSetProc;
-    objc.Method method = OS.class_getInstanceMethod(OS.class_NSCursor.isa, OS.sel_set);
+    objc.Method method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
     if (method !is null) oldCursorSetProc = OS.method_setImplementation(method, cursorSetProc);
 
 
@@ -2167,7 +2168,7 @@ void initClasses () {
     OS.objc_registerClassPair (cls);
 
     className = "SWTCanvasView";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSView, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     //NSTextInput protocol
     OS.class_addProtocol(cls, OS.objc_getProtocol("NSTextInput"));
@@ -2273,7 +2274,7 @@ void initClasses () {
     OS.objc_registerClassPair(cls);
 
     className = "SWTOutlineView";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSOutlineView, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSOutlineView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     OS.class_addMethod(cls, OS.sel_highlightSelectionInClipRect_, highlightSelectionInClipRectProc, "@:{NSRect}");
     OS.class_addMethod(cls, OS.sel_sendDoubleSelection, proc2, "@:");
@@ -2297,7 +2298,7 @@ void initClasses () {
     OS.objc_registerClassPair(cls);
 
     className = "SWTPanelDelegate";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSObject, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     OS.class_addMethod(cls, OS.sel_windowWillClose_, dialogProc3, "@:@");
     OS.class_addMethod(cls, OS.sel_changeColor_, dialogProc3, "@:@");
@@ -2321,7 +2322,7 @@ void initClasses () {
     NSPopUpButton.setCellClass(cls);
 
     className = "SWTProgressIndicator";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSProgressIndicator, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSProgressIndicator, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     OS.class_addMethod(cls, OS.sel_viewDidMoveToWindow, proc2, "@:");
     OS.class_addMethod(cls, OS.sel__drawThemeProgressArea_, proc3, "@:c");
@@ -2398,7 +2399,7 @@ void initClasses () {
     NSSlider.setCellClass(cls);
 
     className = "SWTStepper";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSStepper, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSStepper, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     OS.class_addMethod(cls, OS.sel_sendSelection, proc2, "@:");
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
@@ -2458,7 +2459,7 @@ void initClasses () {
     OS.objc_registerClassPair(cls);
 
     className = "SWTTextView";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSTextView, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSTextView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
@@ -2472,7 +2473,7 @@ void initClasses () {
     OS.objc_registerClassPair(cls);
 
     className = "SWTTextField";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSTextField, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSTextField, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
@@ -2510,7 +2511,7 @@ void initClasses () {
     OS.objc_registerClassPair(cls);
 
     className = "SWTWindow";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSWindow, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSWindow, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     OS.class_addMethod(cls, OS.sel_sendEvent_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_helpRequested_, proc3, "@:@");
@@ -2536,7 +2537,7 @@ void initClasses () {
     OS.objc_registerClassPair(cls);
 }
 
-NSFont getFont (objc.id cls, objc.SEL sel) {
+NSFont getFont (objc.Class cls, objc.SEL sel) {
     objc.id widget = OS.objc_msgSend (OS.objc_msgSend (cls, OS.sel_alloc), OS.sel_initWithFrame_, NSRect());
     objc.id font = null;
     if (OS.objc_msgSend_bool (widget, OS.sel_respondsToSelector_, sel)) {
@@ -3146,15 +3147,15 @@ public Rectangle map (Control from, Control to, int x, int y, int width, int hei
     return rectangle;
 }
 
-int /*long*/ observerProc (int /*long*/ observer, int /*long*/ activity, int /*long*/ info) {
-    switch (cast(int)/*64*/activity) {
+objc.id observerProc (objc.id observer, Carbon.CFRunLoopActivity activity, objc.id info) {
+    switch (activity) {
         case OS.kCFRunLoopBeforeWaiting:
             if (runAsyncMessages_) {
                 if (runAsyncMessages (false)) wakeThread ();
             }
             break;
     }
-    return 0;
+    return null;
 }
 
 /**
@@ -3186,7 +3187,7 @@ public bool readAndDispatch () {
     if (sendEventCount == 0 && loopCount == poolCount - 1/+ && Callback.getEntryCount () == 0+/) removePool ();
     addPool ();
     loopCount++;
-    boolean events = false;
+    bool events = false;
     try {
         events |= runSettings ();
         events |= runTimers ();
@@ -3345,7 +3346,7 @@ void releaseDisplay () {
     markedAttributes = null;
 
     if (oldCursorSetProc !is null) {
-        auto method = OS.class_getInstanceMethod(OS.class_NSCursor.isa, OS.sel_set);
+        objc.Method method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
         OS.method_setImplementation(method, oldCursorSetProc);
     }
 /+  if (cursorSetCallback !is null) cursorSetCallback.dispose();
@@ -3363,7 +3364,7 @@ void releaseDisplay () {
     if (!isEmbedded) {
         //remove all existing menu items except the application menu
         NSMenu menubar = application.mainMenu();
-        int /*long*/ count = menubar.numberOfItems();
+        NSInteger count = menubar.numberOfItems();
         while (count > 1) {
             menubar.removeItemAtIndex(count - 1);
             count--;
@@ -3384,7 +3385,7 @@ void releaseDisplay () {
     if (!isEmbedded) {
         //remove all existing menu items except the application menu
         NSMenu menubar = application.mainMenu();
-        int /*long*/ count = menubar.numberOfItems();
+        NSInteger count = menubar.numberOfItems();
         while (count > 1) {
             menubar.removeItemAtIndex(count - 1);
             count--;
@@ -3580,7 +3581,7 @@ bool runDeferredEvents () {
 bool runPaint () {
     if (needsDisplay is null && needsDisplayInRect is null) return false;
     if (needsDisplay !is null) {
-        int /*long*/ count = needsDisplay.count();
+        NSUInteger count = needsDisplay.count();
         for (int i = 0; i < count; i++) {
             OS.objc_msgSend(needsDisplay.objectAtIndex(i).id, OS.sel_setNeedsDisplay_, true);
         }
@@ -3588,7 +3589,7 @@ bool runPaint () {
         needsDisplay = null;
     }
     if (needsDisplayInRect !is null) {
-        int /*long*/ count = needsDisplayInRect.count();
+        NSUInteger count = needsDisplayInRect.count();
         for (int i = 0; i < count; i+=2) {
             NSValue value = new NSValue(needsDisplayInRect.objectAtIndex(i+1));
             OS.objc_msgSend(needsDisplayInRect.objectAtIndex(i).id, OS.sel_setNeedsDisplayInRect_, value.rectValue());
@@ -3673,11 +3674,11 @@ void sendEvent (EventTable table, Event event) {
 static NSString getAppName() {
     NSString name = null;
     int pid = OS.getpid ();
-    auto ptr = OS.getenv (ascii (Format("APP_NAME_{}", pid)));
+    char* ptr = OS.getenv (ascii (Format("APP_NAME_{}", pid)));
     if (ptr !is null) name = NSString.stringWithUTF8String(ptr);
     if (name is null && APP_NAME !is null) name = NSString.stringWith(APP_NAME);
     if (name is null) {
-        objc.id value = NSBundle.mainBundle().objectForInfoDictionaryKey(NSString.stringWith("CFBundleName"));
+        cocoa.id value = NSBundle.mainBundle().objectForInfoDictionaryKey(NSString.stringWith("CFBundleName"));
         if (value !is null) {
             name = new NSString(value);
         }
@@ -3842,10 +3843,11 @@ public void setCursorLocation (int x, int y) {
      */
     public void setData (String key, Object value) {
         checkDevice ();
+        // DWT extension: allow null for zero length string
         //if (key is null) error (DWT.ERROR_NULL_ARGUMENT);
 
         if (key.equals (ADD_WIDGET_KEY)) {
-            auto wrap = cast(ArrayWrapperObject) value;
+            ArrayWrapperObject wrap = cast(ArrayWrapperObject) value;
 
             if (wrap is null)
                 DWT.error(DWT.ERROR_INVALID_ARGUMENT, null, " []");
@@ -3916,7 +3918,7 @@ public void setCursorLocation (int x, int y) {
     */
 //  menubar.cancelTracking();
     OS.CancelMenuTracking (OS.AcquireRootMenu (), true, 0);
-    int /*long*/ count = menubar.numberOfItems();
+    NSInteger count = menubar.numberOfItems();
     while (count > 1) {
         menubar.removeItemAtIndex(count - 1);
         count--;
@@ -4220,7 +4222,7 @@ void updateQuitMenu () {
         NSMenu sm = appitem.submenu();
 
         // Normally this would be sel_terminate_ but we changed it so terminate: doesn't kill the app.
-        int /*long*/ quitIndex = sm.indexOfItemWithTarget(applicationDelegate, OS.sel_quitRequested_);
+        NSInteger quitIndex = sm.indexOfItemWithTarget(applicationDelegate, OS.sel_quitRequested_);
 
         if (quitIndex !is -1) {
             NSMenuItem quitItem = sm.itemAtIndex(quitIndex);
@@ -4263,7 +4265,7 @@ Control findControl (bool checkTrim, NSView[] hitView) {
     NSView view = null;
     NSPoint screenLocation = NSEvent.mouseLocation();
     NSArray windows = application.orderedWindows();
-    for (int i = 0, count = cast(int)/*64*/windows.count(); i < count && view is null; i++) {
+    for (NSUInteger i = 0, count = windows.count(); i < count && view is null; i++) {
         NSWindow window = new NSWindow(windows.objectAtIndex(i));
         NSView contentView = window.contentView();
         if (contentView !is null && OS.NSPointInRect(screenLocation, window.frame())) {
@@ -4278,7 +4280,7 @@ Control findControl (bool checkTrim, NSView[] hitView) {
     Control control = null;
     if (view !is null) {
         do {
-            auto vi = view.id;
+            objc.id vi = view.id;
             Widget widget = getWidget (view);
             if (cast(Control) widget) {
                 control = cast(Control)widget;
@@ -4333,7 +4335,7 @@ objc.id applicationNextEventMatchingMask (objc.id id, objc.SEL sel, objc.id mask
 
 void applicationSendTrackingEvent (NSEvent nsEvent, Control trackingControl) {
     NSEventType type = nsEvent.type();
-    switch (cast(int)type) {
+    switch (type) {
         case OS.NSLeftMouseDown:
         case OS.NSRightMouseDown:
     case OS.NSOtherMouseDown:
@@ -4362,9 +4364,9 @@ void applicationSendTrackingEvent (NSEvent nsEvent, Control trackingControl) {
 void applicationSendEvent (objc.id id, objc.SEL sel, objc.id event) {
     NSEvent nsEvent = new NSEvent(event);
     NSWindow window = nsEvent.window ();
-    int type = cast(int)/*64*/nsEvent.type ();
+    NSEventType type = nsEvent.type ();
     bool down = false;
-    switch (cast(int)type) {
+    switch (type) {
     case OS.NSLeftMouseDown:
     case OS.NSRightMouseDown:
     case OS.NSOtherMouseDown:
@@ -4456,7 +4458,7 @@ void applicationWillFinishLaunching (objc.id id, objc.SEL sel, objc.id notificat
         }
         sendEvent_ = true;
 
-        int /*long*/ quitIndex = sm.indexOfItemWithTarget(applicationDelegate, OS.sel_terminate_);
+        NSInteger quitIndex = sm.indexOfItemWithTarget(applicationDelegate, OS.sel_terminate_);
 
         if (quitIndex !is -1) {
             NSMenuItem quitItem = sm.itemAtIndex(quitIndex);
@@ -4706,13 +4708,13 @@ static objc.id windowProc2(objc.id id, objc.SEL sel) {
     } else if (sel is OS.sel_cellSize) {
         NSSize size = widget.cellSize (id, sel);
         /* NOTE that this is freed in C */
-        auto result = cast(objc.id)OS.malloc (NSSize.sizeof);
+        objc.id result = cast(objc.id)OS.malloc (NSSize.sizeof);
         OS.memmove (result, &size, NSSize.sizeof);
         return result;
     } else if (sel is OS.sel_cellSize) {
         NSSize size = widget.cellSize (id, sel);
         /* NOTE that this is freed in C */
-        auto result = cast(objc.id)OS.malloc (NSSize.sizeof);
+        objc.id result = cast(objc.id)OS.malloc (NSSize.sizeof);
         OS.memmove (result, &size, NSSize.sizeof);
         return result;
     } else if (sel is OS.sel_hasMarkedText) {
@@ -4829,7 +4831,7 @@ static objc.id windowProc3(objc.id id, objc.SEL sel, objc.id arg0) {
     } else if (sel is OS.sel_menuForEvent_) {
         return widget.menuForEvent(id, sel, arg0);
     } else if (sel is OS.sel_noResponderFor_) {
-        widget.noResponderFor(id, sel, arg0);
+        widget.noResponderFor(id, sel, cast(objc.SEL)arg0);
     } else if (sel is OS.sel_shouldDelayWindowOrderingForEvent_) {
         return widget.shouldDelayWindowOrderingForEvent(id, sel, arg0) ? cast(objc.id)1 : cast(objc.id)0;
     } else if (sel is OS.sel_acceptsFirstMouse_) {
@@ -4919,7 +4921,7 @@ static objc.id windowProc3(objc.id id, objc.SEL sel, objc.id arg0) {
         OS.memmove(&rect, arg0, NSRect.sizeof);
         rect = widget.imageRectForBounds(id, sel, rect);
         /* NOTE that this is freed in C */
-        auto result = cast(objc.id)OS.malloc (NSRect.sizeof);
+        objc.id result = cast(objc.id)OS.malloc (NSRect.sizeof);
         OS.memmove (result, &rect, NSRect.sizeof);
         return result;
     } else if (sel is OS.sel_titleRectForBounds_) {
@@ -4927,7 +4929,7 @@ static objc.id windowProc3(objc.id id, objc.SEL sel, objc.id arg0) {
         OS.memmove(&rect, arg0, NSRect.sizeof);
         rect = widget.titleRectForBounds(id, sel, rect);
         /* NOTE that this is freed in C */
-        auto result = cast(objc.id)OS.malloc (NSRect.sizeof);
+        objc.id result = cast(objc.id)OS.malloc (NSRect.sizeof);
         OS.memmove (result, &rect, NSRect.sizeof);
         return result;
     } else if (sel is OS.sel_setObjectValue_) {
@@ -4980,7 +4982,7 @@ static objc.id windowProc4(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1)
         OS.memmove(&rect, arg0, NSRect.sizeof);
         rect = widget.expansionFrameWithFrame_inView(id, sel, rect, arg1);
         /* NOTE that this is freed in C */
-        auto result = cast(objc.id)OS.malloc (NSRect.sizeof);
+        objc.id result = cast(objc.id)OS.malloc (NSRect.sizeof);
         OS.memmove (result, &rect, NSRect.sizeof);
         return result;
     }

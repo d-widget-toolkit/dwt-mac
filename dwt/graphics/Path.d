@@ -446,7 +446,7 @@ public bool contains(float x, float y, GC gc, bool outline) {
             int[] buffer = [0xFFFFFFFF];
             OS.memmove(pixel, buffer.ptr, 4);
             CGColorSpaceRef colorspace = OS.CGColorSpaceCreateDeviceRGB();
-            CGContextRef context = OS.CGBitmapContextCreate(pixel, 1, 1, 8, 4, colorspace, cast(CGBitmapInfo)(OS.kCGImageAlphaNoneSkipFirst));
+            CGContextRef context = OS.CGBitmapContextCreate(pixel, 1, 1, 8, 4, colorspace, OS.kCGImageAlphaNoneSkipFirst);
             OS.CGColorSpaceRelease(colorspace);
             if (context is null) {
                 OS.free(pixel);
@@ -550,10 +550,10 @@ public void getBounds(float[] bounds) {
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         NSRect rect = handle.controlPointBounds();
-        bounds[0] = cast(float)/*64*/rect.x;
-        bounds[1] = cast(float)/*64*/rect.y;
-        bounds[2] = cast(float)/*64*/rect.width;
-        bounds[3] = cast(float)/*64*/rect.height;
+        bounds[0] = cast(Cocoa.CGFloat)rect.x;
+        bounds[1] = cast(Cocoa.CGFloat)rect.y;
+        bounds[2] = cast(Cocoa.CGFloat)rect.width;
+        bounds[3] = cast(Cocoa.CGFloat)rect.height;
     } finally {
         if (pool !is null) pool.release();
     }
@@ -581,8 +581,8 @@ public void getCurrentPoint(float[] point) {
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         NSPoint pt = handle.currentPoint();
-        point[0] = cast(float)/*64*/pt.x;
-        point[1] = cast(float)/*64*/pt.y;
+        point[0] = cast(Cocoa.CGFloat)pt.x;
+        point[1] = cast(Cocoa.CGFloat)pt.y;
     } finally {
         if (pool !is null) pool.release();
     }
@@ -604,7 +604,7 @@ public PathData getPathData() {
     NSAutoreleasePool pool = null;
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
-        int count = cast(int)/*64*/handle.elementCount();
+        NSInteger count = handle.elementCount();
         int pointCount = 0, typeCount = 0;
         byte[] types = new byte[count];
         float[] pointArray = new float[count * 6];
@@ -613,7 +613,7 @@ public PathData getPathData() {
         NSPoint pt = NSPoint();
         for (NSInteger i = 0; i < count; i++) {
             NSBezierPathElement element = handle.elementAtIndex(i, points);
-            switch (cast(int)element) {
+            switch (element) {
                 case OS.NSMoveToBezierPathElement:
                     types[typeCount++] = DWT.PATH_MOVE_TO;
                     OS.memmove(&pt, points, NSPoint.sizeof);

@@ -101,7 +101,7 @@ protected String[] getTypeNames() {
 }
 
 bool checkRTF(Object object) {
-    auto o = stringcast(object);
+    String o = stringcast(object);
     return (object !is null && o && o.length > 0);
 }
 

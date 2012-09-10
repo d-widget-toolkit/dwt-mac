@@ -160,7 +160,7 @@ public class DragSource : Widget {
         objc.IMP proc5 = cast(objc.IMP) &dragSourceProc5;
         objc.IMP proc6 = cast(objc.IMP) &dragSourceProc6;
 
-        objc.Class cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSObject, className, 0);
+        objc.Class cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
         OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
 
         objc.IMP draggedImage_endedAt_operationProc = OS.CALLBACK_draggedImage_endedAt_operation_(proc5);
@@ -465,7 +465,7 @@ void dragOutlineViewStart(Event dragDetectEvent) {
 }
 
 void draggedImage_beganAt(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
-    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView.isa)) {
+    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView)) {
         callSuper(id, sel, arg0, arg1);
     }
 }
@@ -480,7 +480,7 @@ void draggedImage_endedAt_operation(objc.id id, objc.SEL sel, objc.id arg0, NSPo
     notifyListeners(DND.DragEnd, event);
     dragImageFromListener = null;
 
-    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView.isa)) {
+    if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView)) {
         callSuper(id, sel, arg0, arg1, arg2);
     }
 }

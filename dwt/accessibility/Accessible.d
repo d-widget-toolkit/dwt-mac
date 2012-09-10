@@ -930,7 +930,7 @@ public class Accessible {
             listener.getLocation(event);
         }
 
-        auto primaryMonitor = Display.getCurrent().getPrimaryMonitor();
+        dwt.widgets.Monitor.Monitor primaryMonitor = Display.getCurrent().getPrimaryMonitor();
 
         NSPoint osPositionAttribute = NSPoint ();
         if (event.width !is -1) {
@@ -1128,7 +1128,7 @@ public class Accessible {
         String appValue = event.result;
 
         if (appValue !is null) {
-            returnValue = NSString.stringWith(appValue.substring(cast(int)/*64*/range.location, cast(int)/*64*/(range.location + range.length)));
+            returnValue = NSString.stringWith(appValue.substring(range.location, (range.location + range.length)));
         }
 
         return returnValue;

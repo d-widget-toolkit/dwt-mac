@@ -180,11 +180,11 @@ public Point computeSize (int wHint, int hHint, bool changed) {
 void createHandle () {
     NSDatePicker widget = cast(NSDatePicker)(new SWTDatePicker()).alloc();
     widget.init();
-    NSDatePickerStyle pickerStyle = cast(NSDatePickerStyle)OS.NSTextFieldAndStepperDatePickerStyle;
+    NSDatePickerStyle pickerStyle = OS.NSTextFieldAndStepperDatePickerStyle;
     NSDatePickerElementFlags elementFlags;
     if ((style & DWT.CALENDAR) !is 0) {
-        pickerStyle = cast(NSDatePickerStyle)OS.NSClockAndCalendarDatePickerStyle;
-        elementFlags = cast(NSDatePickerElementFlags)OS.NSYearMonthDayDatePickerElementFlag;
+        pickerStyle = OS.NSClockAndCalendarDatePickerStyle;
+        elementFlags = OS.NSYearMonthDayDatePickerElementFlag;
     } else {
         if ((style & DWT.TIME) !is 0) {
             elementFlags = cast(NSDatePickerElementFlags)((style & DWT.SHORT) !is 0 ? OS.NSHourMinuteDatePickerElementFlag : OS.NSHourMinuteSecondDatePickerElementFlag);
@@ -325,7 +325,7 @@ public int getYear () {
     return cast(int)/*64*/getCalendarDate().yearOfCommonEra();
 }
 
-bool isEventView (int /*long*/ id) {
+bool isEventView (objc.id id) {
     return true;
 }
 

@@ -107,7 +107,7 @@ public class ScrollBar : Widget {
     int minimum, maximum = 100, thumb = 10;
     int increment = 1;
     int pageIncrement = 10;
-    objc.id target;
+    cocoa.id target;
     objc.SEL actionSelector;
 
 this () {
@@ -441,7 +441,7 @@ void sendSelection () {
     }
     Event event = new Event();
     NSScrollerPart hitPart = (cast(NSScroller)view).hitPart();
-    switch (cast(int)hitPart) {
+    switch (hitPart) {
         case OS.NSScrollerDecrementLine:
             value -= increment;
             event.detail = DWT.ARROW_UP;
@@ -490,7 +490,7 @@ public void setIncrement (int value) {
     increment = value;
 }
 
-void setClipRegion (float /*double*/ x, float /*double*/ y) {
+void setClipRegion (Cocoa.CGFloat x, Cocoa.CGFloat y) {
     NSRect frame = view.frame();
     parent.setClipRegion(frame.x + x, frame.y + y);
 }

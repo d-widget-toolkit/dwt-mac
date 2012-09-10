@@ -600,7 +600,7 @@ public Rectangle computeTrim (int x, int y, int width, int height) {
     rect.height = trim.height;
     if (window !is null) {
         if (!fixResize()) {
-            auto h = rect.height;
+            Carbon.CGFloat h = rect.height;
             rect = window.frameRectForContentRect(rect);
             rect.y = rect.y + (h-rect.height);
         }
@@ -663,9 +663,9 @@ void createHandle () {
     window.setAcceptsMouseMovedEvents(true);
     windowDelegate = cast(SWTWindowDelegate)(new SWTWindowDelegate()).alloc().init();
     window.setDelegate(windowDelegate);
-    auto id = window.fieldEditor (true, null);
+    cocoa.id id = window.fieldEditor (true, null);
     if (id !is null) {
-        OS.object_setClass (id.id, cast(objc.Class) OS.objc_getClass ("SWTEditorView"));
+        OS.object_setClass (id.id, OS.objc_getClass ("SWTEditorView"));
     }
 }
 
@@ -810,7 +810,7 @@ public Rectangle getClientArea () {
         NSSize size = NSSize();
         size.width = width;
         size.height = height;
-        size = NSScrollView.contentSizeForFrameSize(size, (style & DWT.H_SCROLL) !is 0, (style & DWT.V_SCROLL) !is 0, cast(NSBorderType)OS.NSNoBorder);
+        size = NSScrollView.contentSizeForFrameSize(size, (style & DWT.H_SCROLL) !is 0, (style & DWT.V_SCROLL) !is 0, OS.NSNoBorder);
         width = cast(int)size.width;
         height = cast(int)size.height;
     }
@@ -1078,14 +1078,14 @@ void makeKeyAndOrderFront() {
     window.makeKeyAndOrderFront (null);
 }
 
-void noResponderFor(objc.id id, objc.SEL sel, objc.id selector) {
+void noResponderFor(objc.id id, objc.SEL sel, objc.SEL selector) {
     /**
      * Feature in Cocoa.  If the selector is keyDown and nothing has handled the event
      * a system beep is generated.  There's no need to beep, as many keystrokes in the DWT
      * are listened for and acted upon but not explicitly handled in a keyDown handler.  Fix is to
      * not call the default implementation when a keyDown: is being handled.
      */
-    if (cast(objc.SEL)selector !is OS.sel_keyDown_) super.noResponderFor(id, sel, selector);
+    if (selector !is OS.sel_keyDown_) super.noResponderFor(id, sel, selector);
 }
 
 /**
@@ -1203,26 +1203,26 @@ public void removeShellListener(ShellListener listener) {
 
 void sendToolTipEvent (bool enter) {
     if (!isVisible()) return;
-    if (tooltipTag is null) {
+    if (tooltipTag is 0) {
         NSView view = window.contentView();
         tooltipTag = view.addToolTipRect(NSRect(), window, null);
-        if (tooltipTag !is null) {
-            NSTrackingArea trackingArea = new NSTrackingArea(tooltipTag);
+        if (tooltipTag !is 0) {
+            NSTrackingArea trackingArea = new NSTrackingArea(cast(objc.id)tooltipTag);
             cocoa.id owner = trackingArea.owner();
-            if (owner !is null) tooltipOwner = owner.id;
+            if (owner !is null) tooltipOwner = cast(NSInteger)owner.id;
             cocoa.id userInfo = trackingArea.userInfo();
             if (userInfo !is null) {
-                tooltipUserData = userInfo.id;
+                tooltipUserData = cast(NSInteger)userInfo.id;
             } else {
                 void* value;
-                OS.object_getInstanceVariable(tooltipTag, ['_','u', 's', 'e', 'r', 'I', 'n', 'f', 'o'], value);
-                tooltipUserData = cast(objc.id)value;
+                OS.object_getInstanceVariable(cast(objc.id)tooltipTag, ['_','u', 's', 'e', 'r', 'I', 'n', 'f', 'o'], value);
+                tooltipUserData = cast(NSInteger)value;
             }
         }
     }
-    if (tooltipTag is null || tooltipOwner is null || tooltipUserData is null) return;
+    if (tooltipTag is 0 || tooltipOwner is 0 || tooltipUserData is 0) return;
     NSPoint pt = window.convertScreenToBase(NSEvent.mouseLocation());
-    NSEvent event = NSEvent.enterExitEventWithType(cast(NSEventType)(enter ? OS.NSMouseEntered : OS.NSMouseExited), pt, 0, 0, window.windowNumber(), null, 0, cast(NSInteger)tooltipTag, tooltipUserData);
+    NSEvent event = NSEvent.enterExitEventWithType(cast(NSEventType)(enter ? OS.NSMouseEntered : OS.NSMouseExited), pt, 0, 0, window.windowNumber(), null, 0, tooltipTag, cast(void*)tooltipUserData);
     OS.objc_msgSend(tooltipOwner, enter ? OS.sel_mouseEntered_ : OS.sel_mouseExited_, event.id);
 }
 
@@ -1350,7 +1350,7 @@ void setBounds (int x, int y, int width, int height, bool move, bool resize) {
     }
 }
 
-void setClipRegion (float /*double*/ x, float /*double*/ y) {
+void setClipRegion (Cocoa.CGFloat x, Cocoa.CGFloat y) {
     if (regionPath !is null) {
         NSAffineTransform transform = NSAffineTransform.transform();
         transform.translateXBy(-x, -y);
@@ -1408,7 +1408,7 @@ public void setFullScreen (bool fullScreen) {
         fullScreenFrame = NSScreen.mainScreen().frame();
         if (getMonitor().equals(display.getPrimaryMonitor ())) {
             if (menuBar !is null) {
-                float /*double*/ menuBarHt = currentFrame.height - contentView().frame().height;
+                Cocoa.CGFloat menuBarHt = currentFrame.height - contentView().frame().height;
                 fullScreenFrame.height = fullScreenFrame.height - menuBarHt;
                 OS.SetSystemUIMode(OS.kUIModeContentHidden, 0);
             }
@@ -1590,6 +1590,7 @@ public void setRegion (Region region) {
 
 public void setText (String str) {
     checkWidget();
+    // DWT extension: allow null for zero length string
     //if (str is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (window is null) return;
     NSString nsStr = NSString.stringWith(str);
@@ -1722,7 +1723,7 @@ void updateModal () {
 void updateParent (bool visible) {
     if (visible) {
         if (parent !is null && parent.getVisible ()) {
-            (cast(Shell)parent).window.addChildWindow (window, cast(NSWindowOrderingMode)OS.NSWindowAbove);
+            (cast(Shell)parent).window.addChildWindow (window, OS.NSWindowAbove);
         }
     } else {
         NSWindow parentWindow = window.parentWindow ();
@@ -1812,16 +1813,12 @@ void windowDidResize(objc.id id, objc.SEL sel, objc.id notification) {
 void windowDidResignKey(objc.id id, objc.SEL sel, objc.id notification) {
     super.windowDidResignKey(id, sel, notification);
     sendEvent (DWT.Deactivate);
-    if (isDisposed ()) return;
-    setActiveControl (null);
-    if (isDisposed ()) return;
-    saveFocus();
 }
 
 void windowSendEvent (objc.id id, objc.SEL sel, objc.id event) {
     NSEvent nsEvent = new NSEvent (event);
-    auto type = nsEvent.type ();
-    switch (cast(int)type) {
+    NSEventType type = nsEvent.type ();
+    switch (type) {
         case OS.NSLeftMouseDown:
         case OS.NSRightMouseDown:
         case OS.NSOtherMouseDown:
@@ -1864,7 +1861,7 @@ void windowSendEvent (objc.id id, objc.SEL sel, objc.id event) {
                 NSString chars = nsEvent.characters();
 
                 if (chars !is null && chars.length() is 1) {
-                    int firstChar = cast(int)/*64*/chars.characterAtIndex(0);
+                    int firstChar = chars.characterAtIndex(0);
 
                     // Shift-tab appears as control-Y.
                     switch (firstChar) {

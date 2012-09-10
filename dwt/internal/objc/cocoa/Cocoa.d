@@ -1178,7 +1178,7 @@ enum NSURLRequestCachePolicy : NSUInteger
 
 
 // NSView.h
-alias id NSToolTipTag;
+alias NSInteger NSToolTipTag;
 
 
 // NSWindow.h

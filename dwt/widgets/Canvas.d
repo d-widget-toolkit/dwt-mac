@@ -198,7 +198,7 @@ void drawWidget (objc.id id, NSGraphicsContext context, NSRect rect) {
         if (image !is null) {
             NSImage imageHandle = image.handle;
             NSImageRep imageRep = imageHandle.bestRepresentationForDevice(null);
-            if (!imageRep.isKindOfClass(cast(objc.Class)OS.class_NSBitmapImageRep)) return;
+            if (!imageRep.isKindOfClass(OS.class_NSBitmapImageRep)) return;
             NSBitmapImageRep rep = new NSBitmapImageRep(imageRep);
             CGRect destRect = CGRect ();
             destRect.origin.x = caret.x;
@@ -206,25 +206,25 @@ void drawWidget (objc.id id, NSGraphicsContext context, NSRect rect) {
             NSSize size = imageHandle.size();
             destRect.size.width = size.width;
             destRect.size.height = size.height;
-            auto data = rep.bitmapData();
-            auto bpr = rep.bytesPerRow();
-            int alphaInfo = rep.hasAlpha() ? OS.kCGImageAlphaFirst : OS.kCGImageAlphaNoneSkipFirst;
-            auto provider = OS.CGDataProviderCreateWithData(null, data, bpr * cast(int)size.height, null);
-            auto colorspace = OS.CGColorSpaceCreateDeviceRGB();
-            auto cgImage = OS.CGImageCreate(cast(int)size.width, cast(int)size.height, rep.bitsPerSample(), rep.bitsPerPixel(), bpr, colorspace, cast(CGBitmapInfo)alphaInfo, provider, null, true, cast(CGColorRenderingIntent)0);
+            ubyte* data = rep.bitmapData();
+            NSInteger bpr = rep.bytesPerRow();
+            CGBitmapInfo alphaInfo = rep.hasAlpha() ? OS.kCGImageAlphaFirst : OS.kCGImageAlphaNoneSkipFirst;
+            CGDataProviderRef provider = OS.CGDataProviderCreateWithData(null, data, bpr * cast(int)size.height, null);
+            CGColorSpaceRef colorspace = OS.CGColorSpaceCreateDeviceRGB();
+            CGImageRef cgImage = OS.CGImageCreate(cast(int)size.width, cast(int)size.height, rep.bitsPerSample(), rep.bitsPerPixel(), bpr, colorspace, alphaInfo, provider, null, true, cast(CGColorRenderingIntent)0);
             OS.CGColorSpaceRelease(colorspace);
             OS.CGDataProviderRelease(provider);
-            auto ctx = cast(CGContext*)context.graphicsPort();
+            CGContext* ctx = cast(CGContext*)context.graphicsPort();
             OS.CGContextSaveGState(ctx);
             OS.CGContextScaleCTM (ctx, 1, -1);
             OS.CGContextTranslateCTM (ctx, 0, -(size.height + 2 * destRect.origin.y));
-            OS.CGContextSetBlendMode (ctx, cast(CGBlendMode)OS.kCGBlendModeDifference);
+            OS.CGContextSetBlendMode (ctx, OS.kCGBlendModeDifference);
             OS.CGContextDrawImage (ctx, destRect, cgImage);
             OS.CGContextRestoreGState(ctx);
             OS.CGImageRelease(cgImage);
         } else {
             context.saveGraphicsState();
-            context.setCompositingOperation(cast(NSCompositingOperation)OS.NSCompositeXOR);
+            context.setCompositingOperation(OS.NSCompositeXOR);
             NSRect drawRect = NSRect();
             drawRect.x = caret.x;
             drawRect.y = caret.y;
@@ -541,7 +541,7 @@ objc.id validAttributesForMarkedText (objc.id id, objc.SEL sel) {
     return super.validAttributesForMarkedText(id, sel);
 }
 
-void updateOpenGLContext(int /*long*/ id, int /*long*/ sel, int /*long*/ notification) {
+void updateOpenGLContext(objc.id id, objc.SEL sel, objc.id notification) {
     if (context !is null) (cast(NSOpenGLContext)context).update();
 }
 

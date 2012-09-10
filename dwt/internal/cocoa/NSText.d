@@ -57,7 +57,7 @@ public NSFont font() {
     return result !is null ? new NSFont(result) : null;
 }
 
-public void paste(objc.id sender) {
+public void paste(cocoa.id sender) {
     OS.objc_msgSend(this.id, OS.sel_paste_, sender !is null ? sender : null);
 }
 

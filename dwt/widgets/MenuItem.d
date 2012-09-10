@@ -776,7 +776,8 @@ public void setSelection (bool selected) {
  */
 public void setText (String string) {
     checkWidget ();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if ((style & DWT.SEPARATOR) !is 0) return;
     if (text.equals (string)) return;
     super.setText (string);

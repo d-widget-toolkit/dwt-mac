@@ -58,6 +58,7 @@ import dwt.graphics.Rectangle;
 public abstract class Scrollable : Control {
 
     alias Widget.setInputState setInputState;
+    alias Control.updateCursorRects updateCursorRects;
 
     NSScrollView scrollView;
     ScrollBar horizontalBar, verticalBar;
@@ -176,7 +177,7 @@ ScrollBar createScrollBar (int style) {
     bar.createJNIRef();
     bar.register();
     if ((state & CANVAS) is 0) {
-        bar.target = scroller.target().id;
+        bar.target = scroller.target();
         bar.actionSelector = scroller.action();
     }
     scroller.setTarget(scrollView);
@@ -348,14 +349,11 @@ NSView topView () {
 }
 
 void updateCursorRects (bool enabled) {
-    super.updateCursorRects (enabled);
+    updateCursorRects (enabled);
     if (scrollView is null) return;
-    super.updateCursorRects (enabled, scrollView);
+    updateCursorRects (enabled, scrollView);
     NSClipView contentView = scrollView.contentView ();
-    super.updateCursorRects (enabled, contentView);
-}
-void updateCursorRects (bool enabled, NSView widget) {
-    super.updateCursorRects(enabled, widget);
+    updateCursorRects (enabled, contentView);
 }
 
 }

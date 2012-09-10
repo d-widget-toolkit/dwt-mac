@@ -140,7 +140,7 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
             extraAttributes.addObject(OS.NSAccessibilityDescriptionAttribute);
             extraAttributes.addObject(OS.NSAccessibilityTitleAttribute);
 
-            for (int i = cast(int)/*64*/extraAttributes.count() - 1; i >= 0; i--) {
+            for (NSInteger i = extraAttributes.count() - 1; i >= 0; i--) {
                 NSString attribute = new NSString(extraAttributes.objectAtIndex(i).id);
                 if (accessible.internal_accessibilityAttributeValue(attribute, ACC.CHILDID_SELF) !is null) {
                     ourAttributes.addObject(extraAttributes.objectAtIndex(i));
@@ -186,7 +186,7 @@ objc.id accessibilityAttributeValue(objc.id id, objc.SEL sel, objc.id arg0) {
         return NSNumber.numberWithInt(value).id;
     } else if (attributeName.isEqualToString (OS.NSAccessibilityMaxValueAttribute)) {
         NSRect parentBounds = view.bounds();
-        float /*double*/ maxValue = (style & DWT.VERTICAL) !is 0 ?
+        Cocoa.CGFloat maxValue = (style & DWT.VERTICAL) !is 0 ?
         parentBounds.width :
         parentBounds.height;
         return NSNumber.numberWithInt(cast(int)maxValue).id;
@@ -496,10 +496,10 @@ public void removeSelectionListener(SelectionListener listener) {
     eventTable.unhook(DWT.DefaultSelection,listener);
 }
 
-void superKeyDown (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void superKeyDown (objc.id id, objc.SEL sel, objc.id theEvent) {
 }
 
-void superKeyUp (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void superKeyUp (objc.id id, objc.SEL sel, objc.id theEvent) {
 }
 
 int traversalCode (int key, NSEvent theEvent) {

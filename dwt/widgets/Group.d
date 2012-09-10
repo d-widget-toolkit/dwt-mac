@@ -136,7 +136,7 @@ void createHandle () {
     state |= THEME_BACKGROUND;
     NSBox widget = cast(NSBox)(new SWTBox()).alloc();
     widget.init();
-    widget.setTitlePosition(cast(NSTitlePosition)OS.NSNoTitle);
+    widget.setTitlePosition(OS.NSNoTitle);
     NSView contentWidget = cast(NSView)(new SWTView()).alloc();
     contentWidget.init();
 //  contentWidget.setDrawsBackground(false);
@@ -213,7 +213,7 @@ void setFont(NSFont font) {
     (cast(NSBox) view).setTitleFont(font);
 }
 
-void setForeground (float /*double*/ [] color) {
+void setForeground (Cocoa.CGFloat [] color) {
     NSColor nsColor;
     if (color is null) {
         nsColor = NSColor.textColor ();
@@ -250,7 +250,8 @@ void setForeground (float /*double*/ [] color) {
  */
 public void setText (String string) {
     checkWidget();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     text = string;
     char [] buffer = new char [text.length];
     text.getChars (0, buffer.length, buffer, 0);

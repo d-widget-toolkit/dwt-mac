@@ -367,7 +367,7 @@ public void setImage (Image image) {
     checkWidget ();
     if (image !is null && image.isDisposed ()) error (DWT.ERROR_INVALID_ARGUMENT);
     super.setImage (image);
-    float /*double*/ width = 0;
+    Cocoa.CGFloat width = 0;
     if (image is null) {
         view.setImage (null);
     } else {
@@ -505,7 +505,7 @@ void displayMenu () {
 
 bool shouldShowMenu (NSEvent event) {
     if (!hooks(DWT.MenuDetect)) return false;
-    switch (cast(int)/*64*/event.type()) {
+    switch (event.type()) {
         case OS.NSRightMouseDown: return true;
         case OS.NSLeftMouseDown:
             if (!(hooks(DWT.Selection) || hooks(DWT.DefaultSelection))) {

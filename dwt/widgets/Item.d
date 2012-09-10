@@ -195,6 +195,7 @@ public void setImage (Image image) {
  */
 public void setText (String string) {
     checkWidget ();
+    // DWT extension: allow null for zero length string
     //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     text = string;
 }

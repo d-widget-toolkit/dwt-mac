@@ -365,7 +365,7 @@ void onMnemonic(TraverseEvent event) {
     dchar mnemonic = _findMnemonic(text);
     if (mnemonic is '\0') return;
     dchar[1] d; uint ate;
-    auto r = tango.text.convert.Utf.toString32( [event.character][], d, &ate );
+    dchar[] r = tango.text.convert.Utf.toString32( [event.character][], d, &ate );
     if (tango.text.Unicode.toLower(r)[0] !is mnemonic) return;
     Composite control = this.getParent();
     while (control !is null) {

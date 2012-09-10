@@ -120,6 +120,7 @@ public class Text : Scrollable {
     alias Scrollable.setFont setFont;
     alias Scrollable.setForeground setForeground;
     alias Scrollable.translateTraversal translateTraversal;
+    alias Scrollable.updateCursorRects updateCursorRects;
 
     int textLimit, tabs = 8;
     wchar echoCharacter = '\0';
@@ -339,6 +340,7 @@ public void addVerifyListener (VerifyListener listener) {
 public void append (String stri) {
     wchar[] string = stri.toString16();
     checkWidget ();
+    // DWT extension: allow null for zero length string
     //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (hooks (DWT.Verify) || filters (DWT.Verify)) {
         int charCount = getCharCount ();
@@ -537,12 +539,12 @@ void createHandle () {
         widget.setSelectable (true);
         widget.setEditable((style & DWT.READ_ONLY) is 0);
         if ((style & DWT.BORDER) is 0) {
-            widget.setFocusRingType (cast(NSFocusRingType)OS.NSFocusRingTypeNone);
+            widget.setFocusRingType (OS.NSFocusRingTypeNone);
             widget.setBordered (false);
         }
-        NSTextAlignment align_ = cast(NSTextAlignment)OS.NSLeftTextAlignment;
-        if ((style & DWT.CENTER) !is 0) align_ = cast(NSTextAlignment)OS.NSCenterTextAlignment;
-        if ((style & DWT.RIGHT) !is 0) align_ = cast(NSTextAlignment)OS.NSRightTextAlignment;
+        NSTextAlignment align_ = OS.NSLeftTextAlignment;
+        if ((style & DWT.CENTER) !is 0) align_ = OS.NSCenterTextAlignment;
+        if ((style & DWT.RIGHT) !is 0) align_ = OS.NSRightTextAlignment;
         widget.setAlignment (align_);
         NSCell cell = widget.cell();
         cell.setWraps(false);
@@ -556,7 +558,7 @@ void createHandle () {
         scrollWidget.setHasVerticalScroller ((style & DWT.VERTICAL) !is 0);
         scrollWidget.setHasHorizontalScroller ((style & DWT.HORIZONTAL) !is 0);
         scrollWidget.setAutoresizesSubviews (true);
-        if ((style & DWT.BORDER) !is 0) scrollWidget.setBorderType (cast(NSBorderType)OS.NSBezelBorder);
+        if ((style & DWT.BORDER) !is 0) scrollWidget.setBorderType (OS.NSBezelBorder);
 
         NSTextView widget = cast(NSTextView) (new SWTTextView ()).alloc ();
         widget.init ();
@@ -576,9 +578,9 @@ void createHandle () {
             textContainer.setContainerSize (csize);
         }
 
-        NSTextAlignment align_ = cast(NSTextAlignment)OS.NSLeftTextAlignment;
-        if ((style & DWT.CENTER) !is 0) align_ = cast(NSTextAlignment)OS.NSCenterTextAlignment;
-        if ((style & DWT.RIGHT) !is 0) align_ = cast(NSTextAlignment)OS.NSRightTextAlignment;
+        NSTextAlignment align_ = OS.NSLeftTextAlignment;
+        if ((style & DWT.CENTER) !is 0) align_ = OS.NSCenterTextAlignment;
+        if ((style & DWT.RIGHT) !is 0) align_ = OS.NSRightTextAlignment;
         widget.setAlignment (align_);
 //      widget.setTarget(widget);
 //      widget.setAction(OS.sel_sendSelection);
@@ -671,7 +673,7 @@ void deregister() {
 bool dragDetect (int x, int y, bool filter, bool [] consume) {
     Point selection = getSelection ();
     if (selection.x !is selection.y) {
-        int /*long*/ position = getPosition (x, y);
+        NSUInteger position = getPosition (x, y);
         if (selection.x <= position && position < selection.y) {
             if (super.dragDetect (x, y, filter, consume)) {
                 if (consume !is null) consume [0] = true;
@@ -730,9 +732,9 @@ public Point getCaretLocation () {
     NSLayoutManager layoutManager = widget.layoutManager();
     NSTextContainer container = widget.textContainer();
     NSRange range = widget.selectedRange();
-    auto pRectCount = cast(uint*)OS.malloc(C.PTR_SIZEOF);
-    auto pArray = layoutManager.rectArrayForCharacterRange(range, range, container, pRectCount);
-    int /*long*/ [] rectCount = new int /*long*/ [1];
+    size_t* pRectCount = cast(size_t*)OS.malloc(C.PTR_SIZEOF);
+    NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, container, pRectCount);
+    size_t [] rectCount = new size_t [1];
     OS.memmove(rectCount.ptr, pRectCount, C.PTR_SIZEOF);
     OS.free(pRectCount);
     NSRect rect = NSRect();
@@ -867,7 +869,7 @@ wchar [] getEditText (int start, int end) {
         str = (cast(NSTextView)view).textStorage().string();
     }
 
-    int length = cast(int)/*64*/str.length ();
+    NSInteger length = str.length ();
     end = Math.min (end, length - 1);
     if (start > end) return new wchar [0];
     start = Math.max (0, start);
@@ -876,7 +878,7 @@ wchar [] getEditText (int start, int end) {
     range.length = Math.max (0, end - start + 1);
     wchar [] buffer = new wchar [range.length];
     if (hiddenText !is null) {
-        hiddenText.getChars (cast(int)/*64*/range.location, cast(int)/*64*/(range.location + range.length), buffer, 0);
+        hiddenText.getChars (range.location, range.location + range.length, buffer, 0);
     } else {
         str.getCharacters (buffer.ptr, range);
     }
@@ -897,9 +899,9 @@ public int getLineCount () {
     checkWidget ();
     if ((style & DWT.SINGLE) !is 0) return 1;
     NSTextStorage storage = (cast(NSTextView) view).textStorage ();
-    int count = cast(int)/*64*/storage.paragraphs ().count ();
+    NSUInteger count = storage.paragraphs ().count ();
     NSString string = storage.string();
-    int /*long*/ length = string.length(), c;
+    NSUInteger length = string.length(), c;
     if (length is 0 || (c = string.characterAtIndex(length - 1)) is '\n' || c is '\r') {
         count++;
     }
@@ -988,7 +990,7 @@ public String getMessage () {
     return message.fromString16();
 }
 
-int /*long*/ getPosition (int /*long*/ x, int /*long*/ y) {
+NSUInteger getPosition (NSInteger x, NSInteger y) {
 //  checkWidget ();
     if ((style & DWT.MULTI) !is 0) {
         NSTextView widget = cast(NSTextView) view;
@@ -1025,13 +1027,13 @@ public Point getSelection () {
     if ((style & DWT.SINGLE) !is 0) {
         if (selectionRange is null) {
             NSString str = (new NSTextFieldCell ((cast(NSTextField) view).cell ())).title ();
-            return new Point(cast(int)/*64*/str.length (), cast(int)/*64*/str.length ());
+            return new Point(str.length (), str.length ());
         }
-        return new Point (cast(int)/*64*/selectionRange.location, cast(int)/*64*/(selectionRange.location + selectionRange.length));
+        return new Point (selectionRange.location, (selectionRange.location + selectionRange.length));
     } else {
         NSTextView widget = cast(NSTextView) view;
         NSRange range = widget.selectedRange ();
-        return new Point (cast(int)/*64*/range.location, cast(int)/*64*/(range.location + range.length));
+        return new Point (range.location, range.location + range.length);
     }
 }
 
@@ -1163,7 +1165,7 @@ public String getText (int start, int end) {
         return new_String (getEditText (start, end).fromString16());
     }
     NSTextStorage storage = (cast(NSTextView) view).textStorage ();
-    end = Math.min (end, cast(int)/*64*/storage.length () - 1);
+    end = Math.min (end, cast(NSInteger)storage.length () - 1);
     if (start > end) return ""; //$NON-NLS-1$
     start = Math.max (0, start);
     NSRange range = NSRange ();
@@ -1260,6 +1262,7 @@ public int getTopPixel () {
 public void insert (String stri) {
     wchar[] string = stri.toString16();
     checkWidget ();
+    // DWT extension: allow null for zero length string
     //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (hooks (DWT.Verify) || filters (DWT.Verify)) {
         Point selection = getSelection ();
@@ -1696,6 +1699,7 @@ public void setOrientation (int orientation) {
  */
 public void setMessage (String message) {
     checkWidget ();
+    // DWT extension: allow null for zero length string
     //if (message is null) error (DWT.ERROR_NULL_ARGUMENT);
     this.message = message.toString16();
     if ((style & DWT.SINGLE) !is 0) {
@@ -1762,7 +1766,7 @@ public void setSelection (int start, int end) {
     checkWidget ();
     if ((style & DWT.SINGLE) !is 0) {
         NSString str = (new NSCell ((cast(NSTextField) view).cell ())).title ();
-        int length = cast(int)/*64*/str.length ();
+        NSUInteger length = str.length ();
         int selStart = Math.min (Math.max (Math.min (start, end), 0), length);
         int selEnd = Math.min (Math.max (Math.max (start, end), 0), length);
         selectionRangeStruct = NSRange ();
@@ -1774,7 +1778,7 @@ public void setSelection (int start, int end) {
             fieldEditor.setSelectedRange (selectionRangeStruct);
         }
     } else {
-        int length = cast(int)/*64*/(cast(NSTextView) view).textStorage ().length ();
+        NSUInteger length = (cast(NSTextView) view).textStorage ().length ();
         int selStart = Math.min (Math.max (Math.min (start, end), 0), length);
         int selEnd = Math.min (Math.max (Math.max (start, end), 0), length);
         NSRange range = NSRange ();
@@ -1840,13 +1844,13 @@ public void setTabs (int tabs) {
     if (this.tabs is tabs) return;
     this.tabs = tabs;
     if ((style & DWT.SINGLE) !is 0) return;
-    float /*double*/ size = textExtent("s").width * tabs;
+    Cocoa.CGFloat size = textExtent("s").width * tabs;
     NSTextView widget = cast(NSTextView)view;
     NSParagraphStyle defaultStyle = widget.defaultParagraphStyle();
     NSMutableParagraphStyle paragraphStyle = new NSMutableParagraphStyle(defaultStyle.mutableCopy());
     paragraphStyle.setTabStops(NSArray.array());
     NSTextTab tab = cast(NSTextTab)(new NSTextTab()).alloc();
-    tab = tab.initWithType(cast(NSTextTabType)OS.NSLeftTabStopType, size);
+    tab = tab.initWithType(OS.NSLeftTabStopType, size);
     paragraphStyle.addTabStop(tab);
     tab.release();
     paragraphStyle.setDefaultTabInterval(size);
@@ -1872,6 +1876,7 @@ public void setTabs (int tabs) {
 public void setText (String stri) {
     wchar[] string = stri.toString16();
     checkWidget ();
+    // DWT extension: allow null for zero length string
     //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
    if (hooks (DWT.Verify) || filters (DWT.Verify)) {
         string = verifyText (string, 0, getCharCount (), null);
@@ -1953,9 +1958,9 @@ bool shouldChangeTextInRange_replacementString(objc.id id, objc.SEL sel, objc.id
     wchar[] newText = text.toString16();
     if (hooks (DWT.Verify)) {
         NSEvent currentEvent = display.application.currentEvent();
-        int /*long*/ type = currentEvent.type();
+        NSEventType type = currentEvent.type();
         if (type !is OS.NSKeyDown && type !is OS.NSKeyUp) currentEvent = null;
-        newText = verifyText(text16, cast(int)/*64*/range.location, cast(int)/*64*/(range.location+range.length),  currentEvent);
+        newText = verifyText(text16, range.location, range.location+range.length,  currentEvent);
     }
     if (newText is null) return false;
     if ((style & DWT.SINGLE) !is 0) {
@@ -2049,7 +2054,7 @@ int traversalCode (int key, NSEvent theEvent) {
 }
 
 void updateCursorRects (bool enabled) {
-    super.updateCursorRects (enabled);
+    updateCursorRects (enabled);
     if (scrollView is null) return;
     NSClipView contentView = scrollView.contentView ();
     contentView.setDocumentCursor (enabled ? NSCursor.IBeamCursor () : null);

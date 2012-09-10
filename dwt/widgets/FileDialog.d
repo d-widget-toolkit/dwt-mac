@@ -238,7 +238,7 @@ public String open () {
         panel = savePanel;
         if (!overwrite) {
             callback = cast(objc.IMP)&_overwriteExistingFileCheck;
-            method = OS.class_getInstanceMethod(OS.class_NSSavePanel.isa, OS.sel_overwriteExistingFileCheck);
+            method = OS.class_getInstanceMethod(OS.class_NSSavePanel, OS.sel_overwriteExistingFileCheck);
             if (method !is null) methodImpl = OS.method_setImplementation(method, callback);
         }
     } else {
@@ -283,7 +283,7 @@ public String open () {
     }
     NSString dir = filterPath !is null ? NSString.stringWith(filterPath) : null;
     NSString file = fileName !is null ? NSString.stringWith(fileName) : null;
-    auto response = panel.runModalForDirectory(dir, file);
+    NSInteger response = panel.runModalForDirectory(dir, file);
     if (parent !is null && (style & DWT.SHEET) !is 0) {
         application.endSheet(panel, 0);
     }
@@ -322,7 +322,7 @@ public String open () {
         filterIndex = -1;
     }
     if (popup !is null) {
-        filterIndex = cast(int)/*64*/popup.indexOfSelectedItem();
+        filterIndex = popup.indexOfSelectedItem();
         panel.setAccessoryView(null);
         popup.release();
         popup = null;
@@ -336,7 +336,7 @@ public String open () {
     return fullPath;
 }
 
-static objc.id _overwriteExistingFileCheck (objc.id id, objc.SEL sel, objc.id str) {
+static extern(C) objc.id _overwriteExistingFileCheck (objc.id id, objc.SEL sel, objc.id str) {
     return cast(objc.id)1;
 }
 
@@ -344,7 +344,7 @@ objc.id panel_shouldShowFilename (objc.id id, objc.SEL sel, objc.id arg0, objc.i
     NSString path = new NSString(arg1);
     if (filterExtensions !is null && filterExtensions.length !is 0) {
         NSFileManager manager = NSFileManager.defaultManager();
-        auto ptr = cast(bool*)OS.malloc(1);
+        bool* ptr = cast(bool*)OS.malloc(1);
         bool found = manager.fileExistsAtPath(path, ptr);
         byte[] isDirectory = new byte[1];
         OS.memmove(isDirectory.ptr, ptr, 1);
@@ -355,7 +355,7 @@ objc.id panel_shouldShowFilename (objc.id id, objc.SEL sel, objc.id arg0, objc.i
             } else {
                 NSString ext = path.pathExtension();
                 if (ext !is null) {
-                    int filterIndex = cast(int)/*64*/popup.indexOfSelectedItem();
+                    NSInteger filterIndex = popup.indexOfSelectedItem();
                     String extension = ext.getString();
                     String extensions = filterExtensions [filterIndex];
                     int start = 0, length = extensions.length;

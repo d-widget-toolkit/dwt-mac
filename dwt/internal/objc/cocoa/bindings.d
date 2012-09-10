@@ -64,7 +64,10 @@ void CGDataProviderRelease (CGDataProviderRef provider);
 
 
 // CGDirectDisplay.h
-CGRect CGDisplayBounds (CGDirectDisplayID display, CGRect rect);
+CGRect CGDisplayBounds (CGDirectDisplayID display);
+CGRect CGDisplayBounds (CGDirectDisplayID display, CGRect rect) {
+    return CGDisplayBounds(display);
+}
 void* CGDisplayBaseAddress (CGDirectDisplayID display);
 size_t CGDisplayBitsPerPixel (CGDirectDisplayID display);
 size_t CGDisplayBitsPerSample (CGDirectDisplayID display);

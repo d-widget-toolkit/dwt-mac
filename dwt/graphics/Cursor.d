@@ -187,7 +187,7 @@ public this(Device device, int style) {
             size.height =  height;
             nsImage = nsImage.initWithSize(size);
             nsImageRep = nsImageRep.initWithBitmapDataPlanes(null, width, height, 8, 4, true, false, OS.NSDeviceRGBColorSpace,
-                    cast(NSBitmapFormat)(OS.NSAlphaFirstBitmapFormat | OS.NSAlphaNonpremultipliedBitmapFormat), width*4, 32);
+                    OS.NSAlphaFirstBitmapFormat | OS.NSAlphaNonpremultipliedBitmapFormat, width*4, 32);
             OS.memmove(nsImageRep.bitmapData(), WAIT_SOURCE.ptr, WAIT_SOURCE.length);
             nsImage.addRepresentation(nsImageRep);
             NSPoint point = NSPoint();
@@ -300,7 +300,7 @@ void createNSCursor(int hotspotX, int hotspotY, byte[] buffer, int width, int he
     nsImage = nsImage.initWithSize(size);
     nsImageRep = nsImageRep.initWithBitmapDataPlanes(null, width, height,
             8, 4, true, false, OS.NSDeviceRGBColorSpace,
-            cast(NSBitmapFormat)(OS.NSAlphaFirstBitmapFormat | OS.NSAlphaNonpremultipliedBitmapFormat), width * 4, 32);
+            OS.NSAlphaFirstBitmapFormat | OS.NSAlphaNonpremultipliedBitmapFormat, width * 4, 32);
     OS.memmove(cast(void*) nsImageRep.bitmapData(), buffer.ptr, buffer.length);
     nsImage.addRepresentation(nsImageRep);
     NSPoint point = NSPoint();
