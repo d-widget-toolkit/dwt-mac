@@ -13,6 +13,7 @@
  *******************************************************************************/
 module dwt.internal.cocoa.NSRect;
 
+import tango.text.convert.Format;
 import dwt.dwthelper.utils;
 import dwt.internal.c.Carbon;
 import dwt.internal.cocoa.NSPoint;

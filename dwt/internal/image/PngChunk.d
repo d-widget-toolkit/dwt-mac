@@ -12,7 +12,7 @@
  *******************************************************************************/
 module dwt.internal.image.PngChunk;
 
-import java.io.*;
+import dwt.DWT;
 import dwt.internal.image.LEDataInputStream;
 import dwt.internal.image.PngFileReadState;
 import dwt.internal.image.PngIhdrChunk;
@@ -21,6 +21,7 @@ import dwt.internal.image.PngIdatChunk;
 import dwt.internal.image.PngIendChunk;
 import dwt.internal.image.PngTrnsChunk;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 import tango.core.Exception;
 import tango.text.convert.Format;

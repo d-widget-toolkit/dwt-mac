@@ -106,7 +106,7 @@ public void setOutlineTableColumn(NSTableColumn outlineTableColumn) {
 }
 
 public static objc.Class cellClass() {
-    return cast(objc.Class) OS.objc_msgSend(OS.class_NSOutlineView, OS.sel_cellClass);
+    return cast(objc.Class)OS.objc_msgSend(OS.class_NSOutlineView, OS.sel_cellClass);
 }
 
 public static void setCellClass(objc.Class factoryId) {

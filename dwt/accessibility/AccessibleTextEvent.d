@@ -13,12 +13,11 @@
  *******************************************************************************/
 module dwt.accessibility.AccessibleTextEvent;
 
-import dwt.internal.DWTEventObject;
+import dwt.internal.SWTEventObject;
 
 import tango.text.convert.Format;
 
 import dwt.dwthelper.utils;
-import dwt.internal.DWTEventObject;
 
 /**
  * Instances of this class are sent as a result of
@@ -37,7 +36,7 @@ import dwt.internal.DWTEventObject;
  *
  * @since 3.0
  */
-public class AccessibleTextEvent : DWTEventObject {
+public class AccessibleTextEvent : SWTEventObject {
     public int childID;             // IN
     public int offset, length;      // OUT
 

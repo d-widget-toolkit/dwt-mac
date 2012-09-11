@@ -13,9 +13,10 @@
 module dwt.custom.BusyIndicator;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.Runnable;
 
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.graphics.Cursor;
 import dwt.widgets.Display;
 import dwt.widgets.Shell;

@@ -17,12 +17,31 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.accessibility.ACC;
+import dwt.dwthelper.System;
+import dwt.internal.cocoa.NSButton;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSNumber;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSMutableArray;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.SWTView;
+import dwt.internal.cocoa.OS;
+import dwt.internal.objc.cocoa.Cocoa;
 import cocoa = dwt.internal.cocoa.id;
 
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.ToolItem;
+import dwt.widgets.Widget;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
 
 /**
  * Instances of this class support the layout of selectable
@@ -139,7 +158,7 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
             extraAttributes.addObject(OS.NSAccessibilityDescriptionAttribute);
             extraAttributes.addObject(OS.NSAccessibilityTitleAttribute);
 
-            for (int i = (int)/*64*/extraAttributes.count() - 1; i >= 0; i--) {
+            for (NSInteger i = extraAttributes.count() - 1; i >= 0; i--) {
                 NSString attribute = new NSString(extraAttributes.objectAtIndex(i).id);
                 if (accessible.internal_accessibilityAttributeValue(attribute, ACC.CHILDID_SELF) !is null) {
                     ourAttributes.addObject(extraAttributes.objectAtIndex(i));
@@ -215,6 +234,7 @@ public Point computeSize (int wHint, int hHint, bool changed) {
 
 void createHandle () {
     state |= THEME_BACKGROUND;
+    NSView widget = cast(NSView)(new SWTView()).alloc();
     widget.initWithFrame(NSRect());
     widget.init();
     //  widget.setDrawsBackground(false);
@@ -254,7 +274,7 @@ void destroyItem (ToolItem item) {
     relayout ();
 }
 
-void drawBackground (int /*long*/ id, NSGraphicsContext context, NSRect rect) {
+void drawBackground (objc.id id, NSGraphicsContext context, NSRect rect) {
     if (id !is view.id) return;
     if (background !is null) {
         fillBackground (view, context, rect, -1);

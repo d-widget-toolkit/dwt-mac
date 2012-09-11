@@ -20,10 +20,22 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSValue;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSWindow;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSTabViewItem;
+import dwt.internal.cocoa.OS;
+import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Control;
 import dwt.widgets.Item;
 import dwt.widgets.TabFolder;
+import dwt.graphics.Image;
+import dwt.graphics.Rectangle;
 
 /**
  * Instances of this class represent a selectable user interface object
@@ -333,11 +345,12 @@ public void setImage (Image image) {
  */
 public void setText (String string) {
     checkWidget ();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     int index = parent.indexOf (this);
     if (index is -1) return;
     super.setText (string);
-    char [] chars = new char [string.length ()];
+    char [] chars = new char [string.length];
     string.getChars (0, chars.length, chars, 0);
     int length = fixMnemonic (chars);
     NSString str = NSString.stringWithCharacters (chars.toString16().ptr, length);

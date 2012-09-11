@@ -15,7 +15,14 @@ module dwt.layout.FillLayout;
 
 
 
+import dwt.DWT;
+import dwt.widgets.Scrollable;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Layout;
 import dwt.layout.FillData;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
 
 import tango.util.Convert;
 import dwt.dwthelper.utils;

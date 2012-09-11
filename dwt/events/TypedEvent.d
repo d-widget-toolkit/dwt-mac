@@ -15,7 +15,6 @@ module dwt.events.TypedEvent;
 import dwt.dwthelper.utils;
 
 
-import dwt.internal.DWTEventObject;
 import dwt.internal.SWTEventObject;
 import dwt.widgets.Display;
 import dwt.widgets.Event;
@@ -32,7 +31,7 @@ import tango.text.Util : split;
  * @see dwt.widgets.Event
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
-public class TypedEvent : DWTEventObject {
+public class TypedEvent : SWTEventObject {
 
     /**
      * the display where the event occurred
@@ -95,7 +94,7 @@ String getName () {
 	String string = this.classinfo.name;
 	int index = string.lastIndexOf ('.');
 	if (index == -1) return string;
-	return string[index + 1 .. string.length ()];
+	return string[index + 1 .. string.length];
 }
 
 /**

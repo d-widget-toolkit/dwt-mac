@@ -15,8 +15,8 @@ module dwt.custom.ViewForm;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.custom.ViewFormLayout;
 import dwt.graphics.Color;
 import dwt.graphics.GC;

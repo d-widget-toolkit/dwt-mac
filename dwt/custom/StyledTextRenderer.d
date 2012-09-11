@@ -13,6 +13,8 @@
 module dwt.custom.StyledTextRenderer;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
+import dwt.dwthelper.Runnable;
 
 
 import dwt.DWT;
@@ -385,7 +387,7 @@ int drawLine(int lineIndex, int paintX, int paintY, GC gc, Color widgetBackgroun
     TextLayout layout = getTextLayout(lineIndex);
     String line = content.getLine(lineIndex);
     int lineOffset = content.getOffsetAtLine(lineIndex);
-    int lineLength = line.length();
+    int lineLength = line.length;
     Point selection = styledText.getSelection();
     int selectionStart = selection.x - lineOffset;
     int selectionEnd = selection.y - lineOffset;
@@ -507,7 +509,7 @@ int getHeight () {
         int height = lineHeight[i];
         if (height is -1) {
             if (width > 0) {
-                int length = content.getLine(i).length();
+                int length = content.getLine(i).length;
                 height = ((length * averageCharWidth / width) + 1) * defaultLineHeight;
             } else {
                 height = defaultLineHeight;
@@ -674,7 +676,7 @@ int[] getRanges(int start, int length) {
 	}
 	return newRanges;
 }
-StyleRange[] getStyleRanges(int start, int length, boolean includeRanges) {
+StyleRange[] getStyleRanges(int start, int length, bool includeRanges) {
 	if (length is 0) return null;
 	StyleRange[] newStyles;
 	int end = start + length - 1;
@@ -880,7 +882,7 @@ TextLayout getTextLayout(int lineIndex, int orientation, int width, int lineSpac
     layout.setJustify(justify);
 
     int lastOffset = 0;
-    int length = line.length();
+    int length = line.length;
     if (styles !is null) {
         if (ranges !is null) {
             int rangeCount = styleCount << 1;
@@ -925,7 +927,7 @@ TextLayout getTextLayout(int lineIndex, int orientation, int width, int lineSpac
         int compositionOffset = ime.getCompositionOffset();
         if (compositionOffset !is -1) {
             int commitCount = ime.getCommitCount();
-            int compositionLength = ime.getText().length();
+            int compositionLength = ime.getText().length;
             if (compositionLength !is commitCount) {
                 int compositionLine = content.getLineAtOffset(compositionOffset);
                 if (compositionLine is lineIndex) {

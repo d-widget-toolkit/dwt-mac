@@ -13,9 +13,10 @@
 module dwt.custom.DefaultContent;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.custom.StyledText;
 import dwt.custom.StyledTextContent;
 import dwt.custom.StyledTextEvent;
@@ -50,8 +51,7 @@ class DefaultContent : StyledTextContent {
  * at least one empty line.
  */
 this() {
-    lines = new int[][]( 50, 2 );
-    super();
+    lines = new int[][](50, 2);
     setText("");
 }
 /**
@@ -114,7 +114,7 @@ int[][] addLineIndex(int start, int length, int[][] linesArray, int count) {
 public void addTextChangeListener(TextChangeListener listener) {
     if (listener is null) error(DWT.ERROR_NULL_ARGUMENT);
     StyledTextListener typedListener = new StyledTextListener(listener);
-    textListeners.addElement(typedListener);
+    textListeners ~= typedListener;
 }
 /**
  * Adjusts the gap to accommodate a text change that is occurring.
@@ -275,10 +275,10 @@ int[][] indexLines(int offset, int length, int numLines){
  * @param text the text to insert
  */
 void insert(int position, String text) {
-    if (text.length() is 0) return;
+    if (text.length is 0) return;
 
     int startLine = getLineAtOffset(position);
-    int change = text.length();
+    int change = text.length;
     bool endInsert = position is getCharCount();
     adjustGap(position, change, startLine);
 
@@ -293,7 +293,7 @@ void insert(int position, String text) {
     if (change > 0) {
         // shrink gap
         gapStart += (change);
-        for (int i = 0; i < text.length(); i++) {
+        for (int i = 0; i < text.length; i++) {
             textStore[position + i]= text.charAt(i);
         }
     }
@@ -743,10 +743,10 @@ public String getTextRange(int start, int length_) {
  */
 public void removeTextChangeListener(TextChangeListener listener){
     if (listener is null) error(DWT.ERROR_NULL_ARGUMENT);
-    for (int i = 0; i < textListeners.size(); i++) {
-        TypedListener typedListener = cast(TypedListener) textListeners.elementAt(i);
+    for (int i = 0; i < textListeners.length; i++) {
+        TypedListener typedListener = cast(TypedListener) textListeners[i];
         if (typedListener.getEventListener () is listener) {
-            textListeners.removeElementAt(i);
+            textListeners = textListeners[0 .. i] ~ textListeners[i + 1 .. $];
             break;
         }
     }
@@ -790,7 +790,7 @@ public void replaceTextRange(int start, int replaceLength, String newText){
     event.text = newText;
     event.newLineCount = lineCount(newText);
     event.replaceCharCount = replaceLength;
-    event.newCharCount = newText.length();
+    event.newCharCount = newText.length;
     sendTextEvent(event);
 
     // first delete the text to be replaced
@@ -806,8 +806,8 @@ public void replaceTextRange(int start, int replaceLength, String newText){
  * Sends the text listeners the TextChanged event.
  */
 void sendTextEvent(StyledTextEvent event) {
-    for (int i = 0; i < textListeners.size(); i++) {
-        (cast(StyledTextListener)textListeners.elementAt(i)).handleEvent(event);
+    for (int i = 0; i < textListeners.length; i++) {
+        (cast(StyledTextListener)textListeners[i]).handleEvent(event);
     }
 }
 /**

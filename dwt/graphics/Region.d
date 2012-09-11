@@ -16,16 +16,15 @@ module dwt.graphics.Region;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.internal.C;
 import Carbon = dwt.internal.c.Carbon;
 import dwt.graphics.Device;
 import dwt.graphics.Point;
 import dwt.graphics.Rectangle;
 import dwt.graphics.Resource;
-import dwt.internal.Callback;
 import dwt.internal.cocoa.NSAffineTransform;
 import dwt.internal.cocoa.NSAutoreleasePool;
 import dwt.internal.cocoa.NSBezierPath;
@@ -365,10 +364,10 @@ public bool contains(Point pt) {
 
 NSAffineTransform transform;
 void convertRgn(NSAffineTransform transform) {
-    auto data = RegionData!(Carbon.RgnHandle)(this);
+    RegionData!(Carbon.RgnHandle) data = RegionData!(Carbon.RgnHandle)(this);
     Carbon.RgnHandle newRgn = OS.NewRgn();
-    Carbon.RegionToRectsUPP proc = &Region.convertRgn_;
-    data.regionHandle = newRgn;
+    Carbon.RegionToRectsUPP proc = cast(Carbon.RegionToRectsUPP)&Region.convertRgn_;
+    data.data = newRgn;
     this.transform = transform;
     OS.QDRegionToRects(handle, OS.kQDParseRegionFromTopLeft, proc, &data);
     this.transform = null;
@@ -467,7 +466,7 @@ public Rectangle getBounds() {
 }
 
 NSBezierPath getPath() {
-    auto data = RegionData!(objc.id)(this);
+    RegionData!(objc.id) data = RegionData!(objc.id)(this);
     NSBezierPath path = NSBezierPath.bezierPath();
     path.retain();
     data.data = path.id;

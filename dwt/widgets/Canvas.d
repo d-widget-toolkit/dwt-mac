@@ -19,13 +19,35 @@ module dwt.widgets.Canvas;
 
 
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSRange;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSImage;
+import dwt.internal.cocoa.NSImageRep;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSBezierPath;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSOpenGLContext;
+import dwt.internal.cocoa.NSBitmapImageRep;
+import dwt.internal.cocoa.NSCursor;
+import dwt.internal.cocoa.OS;
+import dwt.internal.cocoa.CGRect;
 import dwt.internal.objc.cocoa.Cocoa;
+import dwt.internal.c.Carbon;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Caret;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.IME;
+import dwt.graphics.Image;
+import dwt.graphics.GC;
+import dwt.graphics.GCData;
+import dwt.graphics.Font;
+import dwt.graphics.Rectangle;
 /**
  * Instances of this class provide a surface for drawing
  * arbitrary graphics.
@@ -57,7 +79,7 @@ this () {
     /* Do nothing */
 }
 
-objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, objc.id range) {
+objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, NSRangePointer range) {
     if (ime !is null) return ime.attributedSubstringFromRange (id, sel, range);
     return super.attributedSubstringFromRange(id, sel, range);
 }
@@ -105,7 +127,7 @@ public this (Composite parent, int style) {
     super (parent, style);
 }
 
-NSInteger characterIndexForPoint (objc.id id, objc.SEL sel, objc.id point) {
+NSInteger characterIndexForPoint (objc.id id, objc.SEL sel, NSPointPointer point) {
     if (ime !is null) return ime.characterIndexForPoint (id, sel, point);
     return super.characterIndexForPoint (id, sel, point);
 }
@@ -158,13 +180,16 @@ public void drawBackground (GC gc, int x, int y, int width, int height) {
         gc.fillRectangle (x, y, width, height);
     }
 }
+void drawBackground (objc.id id, NSGraphicsContext context, NSRect rect) {
+    /* Do nothing */
+}
 
-void drawRect (int /*long*/ id, int /*long*/ sel, NSRect rect) {
+void drawRect (objc.id id, objc.SEL sel, NSRect rect) {
     if (context !is null && context.view() is null) context.setView(view);
     super.drawRect(id, sel, rect);
 }
 
-void drawWidget (int /*long*/ id, NSGraphicsContext context, NSRect rect) {
+void drawWidget (objc.id id, NSGraphicsContext context, NSRect rect) {
     if (id !is view.id) return;
     super.drawWidget (id, context, rect);
     if (caret is null) return;
@@ -181,15 +206,15 @@ void drawWidget (int /*long*/ id, NSGraphicsContext context, NSRect rect) {
             NSSize size = imageHandle.size();
             destRect.size.width = size.width;
             destRect.size.height = size.height;
-            int /*long*/ data = rep.bitmapData();
-            int /*long*/ bpr = rep.bytesPerRow();
-            int alphaInfo = rep.hasAlpha() ? OS.kCGImageAlphaFirst : OS.kCGImageAlphaNoneSkipFirst;
-            int /*long*/ provider = OS.CGDataProviderCreateWithData(0, data, bpr * (int)size.height, 0);
-            int /*long*/ colorspace = OS.CGColorSpaceCreateDeviceRGB();
-            int /*long*/ cgImage = OS.CGImageCreate((int)size.width, (int)size.height, rep.bitsPerSample(), rep.bitsPerPixel(), bpr, colorspace, alphaInfo, provider, 0, true, 0);
+            ubyte* data = rep.bitmapData();
+            NSInteger bpr = rep.bytesPerRow();
+            CGBitmapInfo alphaInfo = rep.hasAlpha() ? OS.kCGImageAlphaFirst : OS.kCGImageAlphaNoneSkipFirst;
+            CGDataProviderRef provider = OS.CGDataProviderCreateWithData(null, data, bpr * cast(int)size.height, null);
+            CGColorSpaceRef colorspace = OS.CGColorSpaceCreateDeviceRGB();
+            CGImageRef cgImage = OS.CGImageCreate(cast(int)size.width, cast(int)size.height, rep.bitsPerSample(), rep.bitsPerPixel(), bpr, colorspace, alphaInfo, provider, null, true, cast(CGColorRenderingIntent)0);
             OS.CGColorSpaceRelease(colorspace);
             OS.CGDataProviderRelease(provider);
-            int /*long*/ ctx = context.graphicsPort();
+            CGContext* ctx = cast(CGContext*)context.graphicsPort();
             OS.CGContextSaveGState(ctx);
             OS.CGContextScaleCTM (ctx, 1, -1);
             OS.CGContextTranslateCTM (ctx, 0, -(size.height + 2 * destRect.origin.y));
@@ -268,17 +293,19 @@ bool imeInComposition () {
     return ime !is null && ime.isInlineEnabled () && ime.startOffset !is -1;
 }
 
+bool insertText (objc.id id, objc.SEL sel, objc.id string) {
     if (ime !is null) {
         if (!ime.insertText (id, sel, string)) return false;
     }
     return super.insertText (id, sel, string);
 }
 
-bool isOpaque (int /*long*/ id, int /*long*/ sel) {
+bool isOpaque (objc.id id, objc.SEL sel) {
     if (context !is null) return true;
     return super.isOpaque(id, sel);
 }
 
+NSRange markedRange (objc.id id, objc.SEL sel) {
     if (ime !is null) return ime.markedRange (id, sel);
     return super.markedRange (id, sel);
 }
@@ -344,7 +371,7 @@ public void scroll (int destX, int destY, int x, int y, int width, int height, b
         damage.y = y;
         damage.width = width;
         damage.height = height;
-        NSPoint dest = new NSPoint();
+        NSPoint dest = NSPoint();
         dest.x = destX;
         dest.y = destY;
 
@@ -374,7 +401,7 @@ public void scroll (int destX, int destY, int x, int y, int width, int height, b
             }
         }
 
-        NSRect srcRect = new NSRect();
+        NSRect srcRect = NSRect();
         srcRect.x = sourceRect.x;
         srcRect.y = sourceRect.y;
         srcRect.width = sourceRect.width;
@@ -478,7 +505,7 @@ public void setFont (Font font) {
 }
 
 void setOpenGLContext(Object value) {
-    context = (NSOpenGLContext)value;
+    context = cast(NSOpenGLContext)value;
 }
 
 /**
@@ -514,8 +541,8 @@ objc.id validAttributesForMarkedText (objc.id id, objc.SEL sel) {
     return super.validAttributesForMarkedText(id, sel);
 }
 
-void updateOpenGLContext(int /*long*/ id, int /*long*/ sel, int /*long*/ notification) {
-    if (context !is null) ((NSOpenGLContext)context).update();
+void updateOpenGLContext(objc.id id, objc.SEL sel, objc.id notification) {
+    if (context !is null) (cast(NSOpenGLContext)context).update();
 }
 
 }

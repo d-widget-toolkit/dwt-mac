@@ -133,7 +133,7 @@ void updateEvent(DNDEvent e) {
 public String toString() {
     String string = super.toString ();
     StringBuffer sb = new StringBuffer();
-    sb.format("{}", string.substring (0, string.length() - 1)); // remove trailing '}'
+    sb.format("{}", string.substring (0, string.length - 1)); // remove trailing '}'
     sb.format("{}", " x="); sb.format("{}", x);
     sb.format("{}", " y="); sb.format("{}", y);
     sb.format("{}", " item="); sb.format("{}", item.toString);

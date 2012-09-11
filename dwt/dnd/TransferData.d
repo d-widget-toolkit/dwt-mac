@@ -15,7 +15,7 @@ module dwt.dnd.TransferData;
 
 import dwt.dwthelper.utils;
 
-import org.eclipse.swt.internal.cocoa.NSObject;
+import dwt.internal.cocoa.NSObject;
 
 /**
  * The <code>TransferData</code> class is a platform specific data structure for

@@ -14,7 +14,9 @@ module dwt.layout.RowData;
 
 
 
+import dwt.DWT;
 import dwt.widgets.Control;
+import dwt.graphics.Point;
 
 import tango.util.Convert;
 import dwt.dwthelper.utils;

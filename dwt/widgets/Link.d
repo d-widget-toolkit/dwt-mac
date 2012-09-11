@@ -19,11 +19,33 @@ import dwt.dwthelper.utils;
 
 static import tango.text.Text;
 
+import dwt.DWT;
+import dwt.dwthelper.System;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSTextView;
+import dwt.internal.cocoa.NSScrollView;
+import dwt.internal.cocoa.NSDictionary;
+import dwt.internal.cocoa.NSMutableDictionary;
+import dwt.internal.cocoa.NSTextStorage;
+import dwt.internal.cocoa.NSRange;
+import dwt.internal.cocoa.NSClipView;
+import dwt.internal.cocoa.NSCursor;
+import dwt.internal.cocoa.SWTTextView;
+import dwt.internal.cocoa.SWTScrollView;
+import dwt.internal.cocoa.OS;
+import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Event;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.TypedListener;
+import dwt.graphics.Point;
+import dwt.events.SelectionListener;
 
 
 
@@ -52,6 +74,8 @@ import dwt.widgets.TypedListener;
  * @noextend This class is not intended to be subclassed by clients.
  */
 public class Link : Control {
+    alias Control.updateCursorRects updateCursorRects;
+
     NSScrollView scrollView;
     String text;
     Point [] offsets;
@@ -137,7 +161,7 @@ public Point computeSize (int wHint, int hHint, bool changed) {
     if (hHint !is DWT.DEFAULT && hHint < 0) hHint = 0;
     int width, height;
     //TODO wrapping, wHint
-    NSBorderType borderStyle = hasBorder() ? OS.NSBezelBorder : OS.NSNoBorder;
+    NSBorderType borderStyle = cast(NSBorderType)(hasBorder() ? OS.NSBezelBorder : OS.NSNoBorder);
     NSSize borderSize = NSScrollView.frameSizeForContentSize(NSSize(), false, false, borderStyle);
     NSTextView widget = cast(NSTextView)view;
     NSSize size = widget.textStorage().size();
@@ -162,10 +186,11 @@ public Point computeSize (int wHint, int hHint, bool changed) {
 
 void createHandle () {
     state |= THEME_BACKGROUND;
+    NSScrollView scrollWidget = cast(NSScrollView)(new SWTScrollView()).alloc();
     scrollWidget.initWithFrame(NSRect ());
     scrollWidget.init();
     scrollWidget.setDrawsBackground(false);
-    scrollWidget.setBorderType(hasBorder() ? OS.NSBezelBorder : OS.NSNoBorder);
+    scrollWidget.setBorderType(cast(NSBorderType)(hasBorder() ? OS.NSBezelBorder : OS.NSNoBorder));
 
     NSTextView widget = cast(NSTextView)(new SWTTextView()).alloc();
     widget.init();
@@ -182,7 +207,7 @@ void createHandle () {
 void createWidget () {
     super.createWidget ();
     text = "";
-    NSDictionary dict = ((NSTextView)view).linkTextAttributes();
+    NSDictionary dict = (cast(NSTextView)view).linkTextAttributes();
     linkColor = new NSColor(dict.valueForKey(OS.NSForegroundColorAttributeName));
 }
 
@@ -207,10 +232,10 @@ void enableWidget (bool enabled) {
     } else {
         nsColor = NSColor.disabledControlTextColor();
     }
-    NSTextView widget = (NSTextView)view;
+    NSTextView widget = cast(NSTextView)view;
     widget.setTextColor(nsColor);
     NSDictionary linkTextAttributes = widget.linkTextAttributes();
-    int count = (int)/*64*/linkTextAttributes.count();
+    NSUInteger count = linkTextAttributes.count();
     NSMutableDictionary dict = NSMutableDictionary.dictionaryWithCapacity(count);
     dict.setDictionary(linkTextAttributes);
     dict.setValue(enabled ? linkColor : nsColor, OS.NSForegroundColorAttributeName);
@@ -278,13 +303,13 @@ public void removeSelectionListener (SelectionListener listener) {
 }
 
 String parse (String string) {
-    int length_ = string.length ();
+    int length_ = string.length;
     offsets = new Point [length_ / 4];
     ids = new String [length_ / 4];
     mnemonics = new int [length_ / 4 + 1];
     StringBuffer result = new StringBuffer ();
     char [] buffer = new char [length_];
-    string.getChars (0, string.length (), buffer, 0);
+    string.getChars (0, string.length, buffer, 0);
     int index = 0, state = 0, linkIndex = 0;
     int start = 0, tagStart = 0, linkStart = 0, endtagStart = 0, refStart = 0;
     while (index < length_) {
@@ -437,7 +462,7 @@ void updateBackground () {
 }
 
 void setBackground(NSColor nsColor) {
-    NSTextView widget = (NSTextView)view;
+    NSTextView widget = cast(NSTextView)view;
     if (nsColor is null) {
         widget.setDrawsBackground(false);
     } else {
@@ -450,7 +475,7 @@ void setFont(NSFont font) {
     (cast(NSTextView) view).setFont(font);
 }
 
-void setForeground (float /*double*/ [] color) {
+void setForeground (Cocoa.CGFloat [] color) {
     if (!getEnabled ()) return;
     NSColor nsColor;
     if (color is null) {
@@ -458,10 +483,10 @@ void setForeground (float /*double*/ [] color) {
     } else {
         nsColor = NSColor.colorWithDeviceRed (color [0], color [1], color [2], 1);
     }
-    ((NSTextView) view).setTextColor (nsColor);
+    (cast(NSTextView) view).setTextColor (nsColor);
 }
 
-void setForeground (float /*double*/ [] color) {
+void setForeground (Cocoa.CGFloat [] color) {
     if (!getEnabled ()) return;
     NSColor nsColor;
     if (color is null) {
@@ -469,7 +494,7 @@ void setForeground (float /*double*/ [] color) {
     } else {
         nsColor = NSColor.colorWithDeviceRed (color [0], color [1], color [2], 1);
     }
-    ((NSTextView) view).setTextColor (nsColor);
+    (cast(NSTextView) view).setTextColor (nsColor);
 }
 
 /**
@@ -498,8 +523,9 @@ void setForeground (float /*double*/ [] color) {
  */
 public void setText (String string) {
     checkWidget ();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
-    if (string.equals (text)) return;
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    if (string == text) return;
     text = string;
     NSTextView widget = cast(NSTextView)view;
     widget.setString(NSString.stringWith(parse(string)));
@@ -522,7 +548,7 @@ NSView topView () {
 }
 
 void updateCursorRects (bool enabled) {
-    super.updateCursorRects (enabled);
+    updateCursorRects (enabled);
     if (scrollView is null) return;
     updateCursorRects (enabled, scrollView);
     NSClipView contentView = scrollView.contentView ();

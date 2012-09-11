@@ -52,7 +52,7 @@ public static NSColorPanel sharedColorPanel() {
 }
 
 public static CGFloat minFrameWidthWithTitle(NSString aTitle, NSUInteger aStyle) {
-    return cast(CGFloat)OS.objc_msgSend_fpret(OS.class_NSColorPanel, OS.sel_minFrameWidthWithTitle_styleMask_, aTitle !is null ? aTitle.id : 0, aStyle);
+    return cast(CGFloat)OS.objc_msgSend_fpret(OS.class_NSColorPanel, OS.sel_minFrameWidthWithTitle_styleMask_, aTitle !is null ? aTitle.id : null, aStyle);
 }
 
 }

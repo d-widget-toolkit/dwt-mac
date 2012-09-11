@@ -19,11 +19,39 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.accessibility.ACC;
+import dwt.internal.cocoa.NSBox;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSCell;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSMutableArray;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSObject;
+import dwt.internal.cocoa.NSControl;
+import dwt.internal.cocoa.NSImage;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSTextField;
+import dwt.internal.cocoa.NSImageView;
+import dwt.internal.cocoa.NSImageCell;
+import dwt.internal.cocoa.SWTBox;
+import dwt.internal.cocoa.SWTView;
+import dwt.internal.cocoa.SWTImageView;
+import dwt.internal.cocoa.SWTTextField;
+import dwt.internal.cocoa.NSTextFieldCell;
+import dwt.internal.cocoa.NSAttributedString;
+import dwt.internal.cocoa.OS;
+import dwt.internal.objc.cocoa.Cocoa;
 import cocoa = dwt.internal.cocoa.id;
 import Carbon = dwt.internal.c.Carbon;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
+import dwt.graphics.Image;
+import dwt.graphics.Point;
 
 /**
  * Instances of this class represent a non-selectable
@@ -63,6 +91,7 @@ public class Label : Control {
     alias Control.setBounds setBounds;
     alias Control.setBackground setBackground;
     alias Control.setForeground setForeground;
+    alias Control.createString createString;
 
     String text;
     Image image;
@@ -121,7 +150,7 @@ objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
             extraAttributes.addObject(OS.NSAccessibilityDescriptionAttribute);
             extraAttributes.addObject(OS.NSAccessibilityTitleAttribute);
 
-            for (int i = (int)/*64*/extraAttributes.count() - 1; i >= 0; i--) {
+            for (NSInteger i = extraAttributes.count() - 1; i >= 0; i--) {
                 NSString attribute = new NSString(extraAttributes.objectAtIndex(i).id);
                 if (accessible.internal_accessibilityAttributeValue(attribute, ACC.CHILDID_SELF) is null) {
                     extraAttributes.removeObjectAtIndex(i);
@@ -160,8 +189,7 @@ void addRelation (Control control) {
     if (textView !is null) {
         NSObject accessibleElement = control.focusView();
 
-        if (accessibleElement instanceof NSControl) {
-            NSControl viewAsControl = (NSControl)accessibleElement;
+        if (auto viewAsControl = cast(NSControl)accessibleElement) {
             if (viewAsControl.cell() !is null) accessibleElement = viewAsControl.cell();
         }
 
@@ -185,11 +213,11 @@ public Point computeSize (int wHint, int hHint, bool changed) {
     int width = DEFAULT_WIDTH;
     int height = DEFAULT_HEIGHT;
     if ((style & DWT.SEPARATOR) !is 0) {
-        float /*double*/ lineWidth = ((NSBox)view).borderWidth ();
+        Cocoa.CGFloat lineWidth = (cast(NSBox)view).borderWidth ();
         if ((style & DWT.HORIZONTAL) !is 0) {
-            height = (int)Math.ceil (lineWidth * 2);
+            height = cast(int)Math.ceil (lineWidth * 2);
         } else {
-            width = (int)Math.ceil (lineWidth * 2);
+            width = cast(int)Math.ceil (lineWidth * 2);
         }
         if (wHint !is DWT.DEFAULT) width = wHint;
         if (hHint !is DWT.DEFAULT) height = hHint;
@@ -207,16 +235,17 @@ public Point computeSize (int wHint, int hHint, bool changed) {
             width = height = 0;
         }
     } else {
-        NSSize size = null;
+        NSSize size;
         if ((style & DWT.WRAP) !is 0 && wHint !is DWT.DEFAULT) {
+            NSRect rect = NSRect ();
             rect.width = wHint;
             rect.height = hHint !is DWT.DEFAULT ? hHint : Float.MAX_VALUE;
             size = textView.cell ().cellSizeForBounds (rect);
         } else {
             size = textView.cell ().cellSize ();
         }
-        width = (int)Math.ceil (size.width);
-        height = (int)Math.ceil (size.height);
+        width = cast(int)Math.ceil (size.width);
+        height = cast(int)Math.ceil (size.height);
     }
     if (wHint !is DWT.DEFAULT) width = wHint;
     if (hHint !is DWT.DEFAULT) height = hHint;
@@ -225,12 +254,13 @@ public Point computeSize (int wHint, int hHint, bool changed) {
 
 void createHandle () {
     state |= THEME_BACKGROUND;
+    NSBox widget = cast(NSBox)(new SWTBox()).alloc();
     widget.initWithFrame(NSRect());
     widget.init();
     widget.setTitle(NSString.stringWith(""));
     if ((style & DWT.SEPARATOR) !is 0) {
         widget.setBoxType(OS.NSBoxSeparator);
-        NSView child = (NSView) new SWTView().alloc().init();
+        NSView child = cast(NSView) (new SWTView()).alloc().init();
         widget.setContentView(child);
         child.release();
     } else {
@@ -291,7 +321,7 @@ void deregister () {
 }
 
 NSView eventView () {
-    return ((NSBox)view).contentView();
+    return (cast(NSBox)view).contentView();
 }
 
 /**
@@ -419,7 +449,7 @@ void updateBackground () {
     } else {
         nsColor = NSColor.clearColor();
     }
-    ((NSBox)view).setFillColor(nsColor);
+    (cast(NSBox)view).setFillColor(nsColor);
 }
 
 void _setAlignment() {
@@ -522,7 +552,8 @@ public void setImage (Image image) {
  */
 public void setText (String string) {
     checkWidget();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if ((style & DWT.SEPARATOR) !is 0) return;
     isImage = false;
     text = string;

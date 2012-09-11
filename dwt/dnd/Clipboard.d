@@ -16,9 +16,9 @@ module dwt.dnd.Clipboard;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.dnd.DND;
 import dwt.dnd.Transfer;
 import dwt.dnd.TransferData;

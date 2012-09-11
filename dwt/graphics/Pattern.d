@@ -15,9 +15,9 @@ module dwt.graphics.Pattern;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.graphics.Color;
 import dwt.graphics.Device;
 import dwt.graphics.GC;
@@ -232,7 +232,7 @@ public bool isDisposed() {
  */
 public String toString() {
     if (isDisposed()) return "Pattern {*DISPOSED*}";
-    return Format("{}{}{}", "Pattern {" , (color != null ? color.id : gradient.id) , "}");
+    return Format("{}{}{}", "Pattern {" , (color !is null ? color.id : gradient.id) , "}");
 }
 
 }

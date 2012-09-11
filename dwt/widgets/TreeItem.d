@@ -21,11 +21,32 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSTableView;
+import dwt.internal.cocoa.NSOutlineView;
+import dwt.internal.cocoa.NSObject;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSCell;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSAttributedString;
+import dwt.internal.cocoa.NSTableColumn;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.SWTTreeItem;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
+import dwt.internal.cocoa.objc_super;
 import dwt.widgets.Event;
 import dwt.widgets.Item;
 import dwt.widgets.Tree;
 import dwt.widgets.TreeColumn;
+import dwt.widgets.Table;
+import dwt.graphics.Image;
+import dwt.graphics.Rectangle;
+import dwt.graphics.Color;
+import dwt.graphics.Font;
+import dwt.graphics.GC;
+import dwt.events.ControlListener;
+import dwt.events.SelectionListener;
 
 /**
  * Instances of this class represent a selectable user interface object
@@ -261,14 +282,14 @@ int calculateWidth (int index, GC gc) {
     /* This code is inlined for performance */
     objc_super super_struct = objc_super();
     super_struct.receiver = cell.id;
-    super_struct.super_class = OS.objc_msgSend(cell.id, OS.sel_superclass);
-    NSSize size = new NSSize();
-    OS.objc_msgSendSuper_stret(size, super_struct, OS.sel_cellSize);
+    super_struct.super_class = cast(objc.Class) OS.objc_msgSend(cell.id, OS.sel_superclass);
+    NSSize size = NSSize();
+    OS.objc_msgSendSuper_stret(&size, &super_struct, OS.sel_cellSize);
     if (image !is null) size.width += parent.imageBounds.width + Table.IMAGE_GAP;
 //  cell.setImage (image !is null ? image.handle : null);
 //  NSSize size = cell.cellSize ();
 
-    int width = (int)Math.ceil (size.width);
+    int width = cast(int)Math.ceil (size.width);
     bool sendMeasure = true;
     if ((parent.style & DWT.VIRTUAL) !is 0) {
         sendMeasure = cached;
@@ -279,8 +300,8 @@ int calculateWidth (int index, GC gc) {
         event.item = this;
         event.index = index;
         event.gc = gc;
-        NSTableView widget = (NSTableView)parent.view;
-        int height = (int)widget.rowHeight ();
+        NSTableView widget = cast(NSTableView)parent.view;
+        int height = cast(int)widget.rowHeight ();
         event.width = width;
         event.height = height;
         parent.sendEvent (DWT.MeasureItem, event);
@@ -373,8 +394,8 @@ public void clearAll (bool all) {
 }
 
 void clearSelection () {
-    NSOutlineView widget = (NSOutlineView) parent.view;
-    int /*long*/ row = widget.rowForItem (handle);
+    NSOutlineView widget = cast(NSOutlineView) parent.view;
+    NSInteger row = widget.rowForItem (handle);
     if (widget.isRowSelected(row)) widget.deselectRow (row);
     if (items !is null && getExpanded ()) {
         for (int i = 0; i < items.length; i++) {
@@ -455,6 +476,7 @@ public Rectangle getBounds () {
     checkWidget ();
     if (!parent.checkData (this)) error (DWT.ERROR_WIDGET_DISPOSED);
     parent.checkItems ();
+    NSOutlineView outlineView = cast(NSOutlineView) parent.view;
     NSRect rect = outlineView.rectOfRow (outlineView.rowForItem (handle));
     return new Rectangle(cast(int) rect.x, cast(int) rect.y, cast(int) rect.width, cast(int) rect.height);
 }
@@ -485,6 +507,7 @@ public Rectangle getBounds (int index) {
         TreeColumn column = parent.getColumn (index);
         index = parent.indexOf (column.nsColumn);
     }
+    NSOutlineView outlineView = cast(NSOutlineView) parent.view;
     NSRect rect = outlineView.frameOfCellAtColumn (index, outlineView.rowForItem (handle));
     return new Rectangle (cast(int) rect.x, cast(int) rect.y, cast(int) rect.width, cast(int) rect.height);
 }
@@ -687,8 +710,9 @@ public Rectangle getImageBounds (int index) {
         TreeColumn column = parent.getColumn (index);
         index = parent.indexOf (column.nsColumn);
     }
+    NSOutlineView outlineView = cast(NSOutlineView) parent.view;
     NSRect rect = outlineView.frameOfCellAtColumn (index, outlineView.rowForItem (handle));
-    rect.x += Tree.IMAGE_GAP;
+    rect.x = rect.x + Tree.IMAGE_GAP;
     if (image !is null) {
         rect.width = parent.imageBounds.width;
     } else {
@@ -864,13 +888,14 @@ public Rectangle getTextBounds (int index) {
         TreeColumn column = parent.getColumn (index);
         index = parent.indexOf (column.nsColumn);
     }
+    NSOutlineView outlineView = cast(NSOutlineView) parent.view;
     NSRect rect = outlineView.frameOfCellAtColumn (index, outlineView.rowForItem (handle));
-    rect.x += Tree.TEXT_GAP;
-    rect.width -= Tree.TEXT_GAP;
+    rect.x = rect.x + Tree.TEXT_GAP;
+    rect.width = rect.width - Tree.TEXT_GAP;
     if (image !is null) {
         int offset = parent.imageBounds.width + Tree.IMAGE_GAP;
-        rect.x += offset;
-        rect.width -= offset;
+        rect.x = rect.x + offset;
+        rect.width = rect.width - offset;
     }
     return new Rectangle(cast(int) rect.x, cast(int) rect.y, cast(int) rect.width, cast(int) rect.height);
 }
@@ -909,7 +934,7 @@ public int indexOf (TreeItem item) {
 void redraw (int columnIndex) {
     if (parent.ignoreRedraw || !isDrawing()) return;
     /* redraw the full item if columnIndex is -1 */
-    NSOutlineView outlineView = (NSOutlineView) parent.view;
+    NSOutlineView outlineView = cast(NSOutlineView) parent.view;
     NSRect rect;
     if (columnIndex is -1 || parent.hooks (DWT.MeasureItem) || parent.hooks (DWT.EraseItem) || parent.hooks (DWT.PaintItem)) {
         rect = outlineView.rectOfRow (outlineView.rowForItem (handle));
@@ -1423,7 +1448,8 @@ public void setText (String [] strings) {
  */
 public void setText (int index, String string) {
     checkWidget ();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (index is 0) {
         if (string.equals (text)) return;
         width = -1;
@@ -1447,7 +1473,7 @@ public void setText (String string) {
 
 void updateExpanded () {
     if (itemCount is 0) return;
-    NSOutlineView outlineView = (NSOutlineView)parent.view;
+    NSOutlineView outlineView = cast(NSOutlineView)parent.view;
     if (expanded !is outlineView.isItemExpanded (handle)) {
         if (expanded) {
             outlineView.expandItem (handle);

@@ -14,10 +14,11 @@
 module dwt.dnd.DropTarget;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.graphics.Point;
 import dwt.dnd.DND;
 import dwt.dnd.DNDEvent;
@@ -28,7 +29,6 @@ import dwt.dnd.TableDropTargetEffect;
 import dwt.dnd.Transfer;
 import dwt.dnd.TransferData;
 import dwt.dnd.TreeDropTargetEffect;
-import dwt.internal.Callback;
 import dwt.internal.cocoa.NSApplication;
 import dwt.internal.cocoa.NSArray;
 import dwt.internal.cocoa.NSCursor;
@@ -43,6 +43,7 @@ import dwt.internal.cocoa.NSScreen;
 import dwt.internal.cocoa.NSString;
 import dwt.internal.cocoa.NSTableView;
 import dwt.internal.cocoa.NSURL;
+import dwt.internal.cocoa.SWTTreeItem;
 import dwt.internal.cocoa.OS;
 import dwt.internal.cocoa.id;
 import dwt.internal.cocoa.objc_super;
@@ -219,11 +220,11 @@ public void addDropListener(DropTargetListener listener) {
     addListener (DND.DropAccept, typedListener);
 }
 
-int /*long*/ callSuper (objc.id id, objc.SEL sel, int /*long*/ arg0) {
-    objc_super super_struct = new objc_super();
+objc.id callSuper_ (objc.id id, objc.SEL sel, objc.id arg0) {
+    objc_super super_struct = objc_super();
     super_struct.receiver = id;
-    super_struct.super_class = OS.objc_msgSend(id, OS.sel_superclass);
-    return OS.objc_msgSendSuper(super_struct, sel, arg0);
+    super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
+    return OS.objc_msgSendSuper(&super_struct, sel, arg0);
 }
 
 static int checkStyle (int style) {
@@ -281,7 +282,7 @@ NSDragOperation draggingEntered(objc.id id, objc.SEL sel, NSObject sender) {
     }
 
     if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView)) {
-        return callSuper(id, sel, sender.id);
+        return cast(NSDragOperation)callSuper_(id, sel, sender.id);
     }
     return opToOsOp(selectedOperation);
 }
@@ -298,7 +299,7 @@ void draggingExited(objc.id id, objc.SEL sel, NSObject sender) {
     notifyListeners(DND.DragLeave, event);
 
     if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView)) {
-        callSuper(id, sel, sender.id);
+        callSuper_(id, sel, sender.id);
     }
 }
 
@@ -353,7 +354,7 @@ NSDragOperation draggingUpdated(objc.id id, objc.SEL sel, NSObject sender) {
     }
 
     if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView)) {
-        return callSuper(id, sel, sender.id);
+        return cast(NSDragOperation)callSuper_(id, sel, sender.id);
     }
 
     return opToOsOp(selectedOperation);
@@ -468,21 +469,21 @@ static objc.id dropTargetProc3(objc.id id, objc.SEL sel, objc.id arg0) {
 }
 
 static objc.id dropTargetProc6(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2, objc.id arg3) {
-    Display display = Display.findDisplay(Thread.currentThread());
+    Display display = Display.findDisplay(Thread.getThis());
     if (display is null || display.isDisposed()) return null;
     Widget widget = display.findWidget(id);
     if (widget is null) return null;
-    DropTarget dt = (DropTarget)widget.getData(DND.DROP_TARGET_KEY);
+    DropTarget dt = cast(DropTarget)widget.getData(DND.DROP_TARGET_KEY);
     if (dt is null) return null;
 
     if (sel is OS.sel_outlineView_acceptDrop_item_childIndex_) {
         return dt.outlineView_acceptDrop_item_childIndex(id, sel, arg0, arg1, arg2, arg3) ? cast(objc.id) 1 : null;
     } else if (sel is OS.sel_outlineView_validateDrop_proposedItem_proposedChildIndex_) {
-        return dt.outlineView_validateDrop_proposedItem_proposedChildIndex(id, sel, arg0, arg1, arg2, arg3);
+        return cast(objc.id)dt.outlineView_validateDrop_proposedItem_proposedChildIndex(id, sel, arg0, arg1, arg2, arg3);
     } else if (sel is OS.sel_tableView_acceptDrop_row_dropOperation_) {
         return dt.tableView_acceptDrop_row_dropOperation(id, sel, arg0, arg1, arg2, arg3) ? cast(objc.id) 1 : null;
     } else if (sel is OS.sel_tableView_validateDrop_proposedRow_proposedDropOperation_) {
-        return dt.tableView_validateDrop_proposedRow_proposedDropOperation(id, sel, arg0, arg1, arg2, arg3);
+        return cast(objc.id)dt.tableView_validateDrop_proposedRow_proposedDropOperation(id, sel, arg0, arg1, cast(int)arg2, arg3);
     }
 
     return null;
@@ -526,7 +527,7 @@ public DropTargetListener[] getDropListeners() {
     for (int i = 0; i < length_; i++) {
         Listener listener = listeners[i];
         if (auto li = cast(DNDListener) listener) {
-            dropListeners[count] = cast(DropTargetListener) (li).getEventListener();
+            dropListeners[count] = cast(DropTargetListener) li.getEventListener();
             count++;
         }
     }
@@ -609,7 +610,7 @@ NSDragOperation opToOsOp(int operation) {
 }
 
 NSDragOperation osOpToOp(NSDragOperation osOperation){
-    NSDragOperation operation = 0;
+    NSDragOperation operation = cast(NSDragOperation)0;
     if ((osOperation & OS.NSDragOperationCopy) !is 0){
         operation |= DND.DROP_COPY;
     }
@@ -623,7 +624,7 @@ NSDragOperation osOpToOp(NSDragOperation osOperation){
         operation |= DND.DROP_MOVE;
     }
     if (osOperation is OS.NSDragOperationEvery) {
-        operation = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
+        operation = cast(NSDragOperation)(DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK);
     }
     return operation;
 }
@@ -744,7 +745,7 @@ bool drop(NSObject sender) {
 
 bool performDragOperation(objc.id id, objc.SEL sel, NSObject sender) {
     if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView)) {
-        return callSuper(id, sel, sender.id) !is 0;
+        return callSuper_(id, sel, sender.id) !is null;
     }
 
     return drop (sender);
@@ -762,7 +763,7 @@ NSDragOperation outlineView_validateDrop_proposedItem_proposedChildIndex(objc.id
     NSPoint pt = sender.draggingLocation();
     pt = widget.convertPoint_fromView_(pt, null);
     Tree tree = cast(Tree)getControl();
-    TreeItem childItem = tree.getItem(new Point((int)pt.x, (int)pt.y));
+    TreeItem childItem = tree.getItem(new Point(cast(int)pt.x, cast(int)pt.y));
     if (feedback is 0 || childItem is null) {
         widget.setDropItem(null, -1);
     } else {
@@ -771,12 +772,12 @@ NSDragOperation outlineView_validateDrop_proposedItem_proposedChildIndex(objc.id
         } else {
             TreeItem parentItem = childItem.getParentItem();
             int childIndex;
-            id parentID = null;
+            cocoa.id parentID = null;
             if (parentItem !is null) {
                 parentID = parentItem.handle;
                 childIndex = parentItem.indexOf(childItem);
             } else {
-                childIndex = ((Tree)getControl()).indexOf(childItem);
+                childIndex = (cast(Tree)getControl()).indexOf(childItem);
             }
             if ((feedback & DND.FEEDBACK_INSERT_AFTER) !is 0) {
                 widget.setDropItem(parentID, childIndex + 1);
@@ -932,16 +933,16 @@ public void setTransfer(Transfer[] transferAgents){
         String[] types = transferAgents[i].getTypeNames();
 
         for (int j = 0; j < types.length; j++) {
-            typeStrings.add(types[j]);
+            typeStrings ~= types[j];
         }
     }
 
     // Convert to an NSArray of NSStrings so we can register with the Control.
-    int typeStringCount = typeStrings.size();
+    int typeStringCount = typeStrings.length;
     NSMutableArray nsTypeStrings = NSMutableArray.arrayWithCapacity(typeStringCount);
 
     for (int i = 0; i < typeStringCount; i++) {
-        nsTypeStrings.addObject(NSString.stringWith(typeStrings.get(i)));
+        nsTypeStrings.addObject(NSString.stringWith(typeStrings[i]));
     }
 
     control.view.registerForDraggedTypes(nsTypeStrings);
@@ -951,7 +952,7 @@ public void setTransfer(Transfer[] transferAgents){
 void setDropNotAllowed() {
     if (!dropNotAllowed) {
         NSCursor.currentCursor().push();
-        if (OS.PTR_SIZEOF is 4) OS.SetThemeCursor(OS.kThemeNotAllowedCursor);
+        if (OS.PTR_SIZEOF is 4) OS.SetThemeCursor(cast(Carbon.ThemeCursor)OS.kThemeNotAllowedCursor);
         dropNotAllowed = true;
     }
 }
@@ -967,7 +968,7 @@ bool tableView_acceptDrop_row_dropOperation(objc.id id, objc.SEL sel, objc.id ta
     return drop(new NSObject(info));
 }
 
-NSDragOperation tableView_validateDrop_proposedRow_proposedDropOperation(objc.id id, objc.SEL sel, objc.id tableView, objc.id info, objc.id row, objc.id operation) {
+NSDragOperation tableView_validateDrop_proposedRow_proposedDropOperation(objc.id id, objc.SEL sel, objc.id tableView, objc.id info, int row, objc.id operation) {
     //TODO stop scrolling and expansion when app does not set FEEDBACK_SCROLL and/or FEEDBACK_EXPAND
     NSTableView widget = new NSTableView(tableView);
     if (0 <= row && row < widget.numberOfRows()) {

@@ -101,8 +101,8 @@ protected String[] getTypeNames() {
 }
 
 bool checkText(Object object) {
-    auto o = stringcast(object);
-    return (object !is null && o && o.length() > 0);
+    String o = stringcast(object);
+    return (object !is null && o && o.length > 0);
 }
 protected bool validate(Object object) {
     return checkText(object);

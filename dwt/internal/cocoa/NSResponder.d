@@ -44,7 +44,7 @@ public bool becomeFirstResponder() {
 }
 
 public void cursorUpdate(NSEvent event) {
-    OS.objc_msgSend(this.id, OS.sel_cursorUpdate_, event !is null ? event.id : 0);
+    OS.objc_msgSend(this.id, OS.sel_cursorUpdate_, event !is null ? event.id : null);
 }
 
 public void doCommandBySelector(objc.SEL aSelector) {

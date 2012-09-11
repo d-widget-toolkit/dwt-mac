@@ -15,8 +15,9 @@ module dwt.dnd.TreeDragSourceEffect;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.dnd.DragSourceEffect;
+import dwt.dnd.DragSourceEvent;
 import dwt.graphics.Image;
 import dwt.internal.cocoa.NSApplication;
 import dwt.internal.cocoa.NSEvent;
@@ -88,13 +89,13 @@ public class TreeDragSourceEffect : DragSourceEffect {
     Image getDragSourceImage(DragSourceEvent event) {
         if (dragSourceImage !is null) dragSourceImage.dispose();
         dragSourceImage = null;
-        NSPoint point = new NSPoint();
+        NSPoint point = NSPoint();
         void* ptr = OS.malloc(NSPoint.sizeof);
-        OS.memmove(ptr, point, NSPoint.sizeof);
+        OS.memmove(ptr, &point, NSPoint.sizeof);
         NSEvent nsEvent = NSApplication.sharedApplication().currentEvent();
         NSTableView widget = cast(NSTableView)control.view;
-        NSImage nsImage = widget.dragImageForRowsWithIndexes(widget.selectedRowIndexes(), widget.tableColumns(), nsEvent, ptr);
-        OS.memmove(point, ptr, NSPoint.sizeof);
+        NSImage nsImage = widget.dragImageForRowsWithIndexes(widget.selectedRowIndexes(), widget.tableColumns(), nsEvent, cast(NSPoint*)ptr);
+        OS.memmove(&point, ptr, NSPoint.sizeof);
         OS.free(ptr);
         //TODO: Image representation wrong???
         Image image = Image.cocoa_new(control.getDisplay(), DWT.BITMAP, nsImage);

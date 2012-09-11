@@ -14,6 +14,8 @@ module dwt.layout.FormAttachment;
 
 
 
+import dwt.DWT;
+import dwt.widgets.Control;
 import dwt.layout.FormLayout;
 import dwt.layout.FormData;
 

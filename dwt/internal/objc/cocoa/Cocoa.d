@@ -9,11 +9,6 @@ module dwt.internal.objc.cocoa.Cocoa;
 
 import tango.stdc.config;
 
-import dwt.internal.c.Carbon;
-import dwt.internal.objc.runtime;
-import dwt.internal.cocoa.CGRect;
-import dwt.internal.cocoa.NSRect;
-
 static if( (void*).sizeof > int.sizeof)
 {
     alias long NSInteger;
@@ -25,6 +20,12 @@ else
     alias int NSInteger;
     alias uint NSUInteger;
 }
+
+import dwt.internal.c.Carbon;
+import dwt.internal.objc.runtime;
+import dwt.internal.cocoa.CGRect;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.CGPathElement;
 
 // ATSFont.h
 enum ATSFontContext : uint
@@ -40,12 +41,6 @@ enum ATSFontFormat : uint
 }
 
 alias bindings.ATSFontActivateFromFileReference ATSFontActivateFromFileReference;
-
-
-
-// ATSTypes.h
-alias OptionBits ATSOptionFlags;
-alias UInt32 ATSFontContainerRef;
 
 
 
@@ -198,7 +193,6 @@ alias bindings.CGEventPost CGEventPost;
 
 // CGEventTypes.h
 struct __CGEvent;
-alias __CGEvent* CGEventRef;
 struct __CGEventSource;
 alias __CGEventSource* CGEventSourceRef;
 
@@ -280,11 +274,6 @@ enum CGEventSuppressionState : uint
     kCGEventSuppressionStateRemoteMouseDrag = 1,
     kCGNumberOfEventSuppressionStates = 2
 }
-
-
-
-// CGError.h
-alias int CGError;
 
 
 
@@ -656,8 +645,6 @@ enum NSButtonType : NSUInteger {
     NSMomentaryPushButton = 0,
     NSMomentaryLight = 7
 }
-
-
 
 // NSCell.h
 enum NSControlSize : NSUInteger
@@ -1221,3 +1208,20 @@ alias _NSZone NSZone;
 
 // Unknown
 alias bindings.CGContextCopyWindowContentsToRect CGContextCopyWindowContentsToRect;
+
+enum NSBorderType {
+    NSNoBorder = 0,
+    NSLineBorder = 1,
+    NSBezelBorder = 2,
+    NSGrooveBorder = 3
+}
+
+enum NSScrollerPart {
+    NSScrollerNoPart = 0,
+    NSScrollerDecrementPage = 1,
+    NSScrollerKnob = 2,
+    NSScrollerIncrementPage = 3,
+    NSScrollerDecrementLine = 4,
+    NSScrollerIncrementLine = 5,
+    NSScrollerKnobSlot = 6
+}

@@ -13,6 +13,7 @@
  *******************************************************************************/
 module dwt.internal.cocoa.NSSize;
 
+import tango.text.convert.Format;
 import dwt.dwthelper.utils;
 import dwt.internal.c.Carbon;
 

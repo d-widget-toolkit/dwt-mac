@@ -19,12 +19,19 @@ module dwt.widgets.ColorDialog;
 
 
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSColorPanel;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.SWTPanelDelegate;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Dialog;
 import dwt.widgets.Display;
 import dwt.widgets.Shell;
+import dwt.graphics.RGB;
 /**
  * Instances of this class allow the user to select a color
  * from a predefined set of available colors.
@@ -146,7 +153,7 @@ public RGB open() {
     NSApplication.sharedApplication().runModalForWindow(panel);
     panel.setDelegate(null);
     delegate_.release();
-    if (selected) {
+    OS.DeleteGlobalRef(jniRef);
     if (selected) {
         NSColor color = panel.color();
         if (color !is null) {

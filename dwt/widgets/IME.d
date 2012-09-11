@@ -18,13 +18,31 @@ import dwt.DWT;
 
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSNumber;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSMutableArray;
+import dwt.internal.cocoa.NSAttributedString;
+import dwt.internal.cocoa.OS;
 import dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
+import dwt.internal.cocoa.NSRange;
+import dwt.internal.cocoa.NSDictionary;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSPoint;
 import dwt.widgets.Canvas;
 import dwt.widgets.Caret;
 import dwt.widgets.Event;
 import dwt.widgets.Widget;
+import dwt.widgets.Shell;
+import dwt.graphics.TextStyle;
+import dwt.graphics.Font;
+import dwt.graphics.Color;
 
 /**
  * Instances of this class represent input method editors.
@@ -97,14 +115,14 @@ public this (Canvas parent, int style) {
     createWidget ();
 }
 
-objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, objc.id rangePtr) {
+objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, NSRangePointer rangePtr) {
     Event event = new Event ();
     event.detail = DWT.COMPOSITION_SELECTION;
     sendEvent (DWT.ImeComposition, event);
     NSRange range = NSRange ();
     OS.memmove (&range, rangePtr, NSRange.sizeof);
-    int start = cast(int)/*64*/range.location;
-    int end = cast(int)/*64*/(range.location + range.length);
+    NSUInteger start = range.location;
+    NSUInteger end = range.location + range.length;
     if (event.start <= start && start <= event.end && event.start <= end && end <= event.end) {
         NSString str = NSString.stringWith (event.text.substring(start - event.start, end - event.start));
         NSAttributedString attriStr = (cast(NSAttributedString)(new NSAttributedString()).alloc()).initWithString(str, null);
@@ -114,7 +132,7 @@ objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, objc.id rangePtr
     return null;
 }
 
-NSInteger characterIndexForPoint (objc.id id, objc.SEL sel, objc.id point) {
+NSInteger characterIndexForPoint (objc.id id, objc.SEL sel, NSPointPointer point) {
     if (!isInlineEnabled ()) return OS.NSNotFound;
     NSPoint pt = NSPoint ();
     OS.memmove (&pt, point, NSPoint.sizeof);
@@ -346,13 +364,13 @@ public bool getWideCaret() {
 }
 
 bool hasMarkedText (objc.id id, objc.SEL sel) {
-    return text.length () !is 0;
+    return text.length !is 0;
 }
 
 bool insertText (objc.id id, objc.SEL sel, objc.id string) {
     if (startOffset is -1) return true;
     NSString str = new NSString (string);
-    if (str.isKindOfClass (cast(objc.Class) OS.objc_getClass ("NSAttributedString"))) {
+    if (str.isKindOfClass (OS.objc_getClass ("NSAttributedString"))) {
         str = (new NSAttributedString (string)).string ();
     }
     NSUInteger length = str.length ();
@@ -378,9 +396,8 @@ bool isInlineEnabled () {
 NSRange markedRange (objc.id id, objc.SEL sel) {
     NSRange range = NSRange ();
     if (startOffset !is -1) {
-    if (startOffset !is -1) {
         range.location = startOffset;
-        range.length = text.length ();
+        range.length = text.length;
     } else {
         range.location = OS.NSNotFound;
     }
@@ -417,7 +434,7 @@ NSRange selectedRange (objc.id id, objc.SEL sel) {
     sendEvent (DWT.ImeComposition, event);
     NSRange range = NSRange ();
     range.location = event.start;
-    range.length = event.text.length ();
+    range.length = event.text.length;
     return range;
 }
 
@@ -449,7 +466,7 @@ bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, objc
     if (!isInlineEnabled ()) return true;
     resetStyles ();
     caretOffset = commitCount = 0;
-    int end = startOffset + text.length ();
+    int end = startOffset + text.length;
     if (startOffset is -1) {
         Event event = new Event ();
         event.detail = DWT.COMPOSITION_SELECTION;
@@ -458,7 +475,7 @@ bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, objc
         end = event.end;
     }
     NSString str = new NSString (string);
-    if (str.isKindOfClass (cast(objc.Class) OS.objc_getClass ("NSAttributedString"))) {
+    if (str.isKindOfClass (OS.objc_getClass ("NSAttributedString"))) {
         NSAttributedString attribStr = new NSAttributedString (string);
         str = attribStr.string ();
         NSUInteger length = str.length ();
@@ -472,8 +489,8 @@ bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, objc
             NSDictionary attribs = attribStr.attributesAtIndex(i, ptr, rangeLimit);
             OS.memmove (&effectiveRange, ptr, NSRange.sizeof);
             i = effectiveRange.location + effectiveRange.length;
-            ranges [rangeCount * 2] = cast(int)/*64*/effectiveRange.location;
-            ranges [rangeCount * 2 + 1] = cast(int)/*64*/(effectiveRange.location + effectiveRange.length - 1);
+            ranges [rangeCount * 2] = effectiveRange.location;
+            ranges [rangeCount * 2 + 1] = effectiveRange.location + effectiveRange.length - 1;
             styles [rangeCount++] = getStyle (attribs);
         }
         OS.free (ptr);
@@ -493,7 +510,7 @@ bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, objc
     }
     NSRange range = NSRange ();
     OS.memmove (&range, selRange, NSRange.sizeof);
-    caretOffset = cast(int)/*64*/range.location;
+    caretOffset = range.location;
     Event event = new Event ();
     event.detail = DWT.COMPOSITION_CHANGED;
     event.start = startOffset;
@@ -501,7 +518,7 @@ bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, objc
     event.text = text = str.getString();
     sendEvent (DWT.ImeComposition, event);
     if (isDisposed ()) return false;
-    if (text.length () is 0) {
+    if (text.length is 0) {
         Shell s = parent.getShell ();
         s.keyInputHappened = true;
         startOffset = -1;

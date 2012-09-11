@@ -15,6 +15,7 @@ module dwt.events.MouseAdapter;
 import dwt.dwthelper.utils;
 
 
+import dwt.events.MouseEvent;
 import dwt.events.MouseListener;
 
 /**

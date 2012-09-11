@@ -65,9 +65,9 @@ public ImageData[] loadFromStream(LEDataInputStream stream) {
         return loadFromByteStream();
     } catch (Exception e) {
         if (auto c = cast(IOException) e) {
-            SWT.error(SWT.ERROR_IO, c);
+            DWT.error(DWT.ERROR_IO, c);
         } else {
-            SWT.error(SWT.ERROR_INVALID_IMAGE, e);
+            DWT.error(DWT.ERROR_INVALID_IMAGE, e);
         }
         return null;
     }
@@ -85,7 +85,9 @@ public static ImageData[] load(InputStream is_, ImageLoader loader) {
         if (FORMATS[i] != null) {
             try {
                 Class clazz = Class_forName(FORMAT_PACKAGE ~ '.' ~ FORMATS[i] ~ '.' ~ FORMATS[i] ~ FORMAT_SUFFIX);
-                if (fileFormat = cast(FileFormat) clazz.create()) {
+                Object instance = clazz.create();
+                if (cast(FileFormat) instance) {
+                    fileFormat = cast(FileFormat) instance;
                     if (fileFormat.isFileFormat(stream)) {
                         isSupported = true;
                         break;
@@ -117,7 +119,7 @@ public static void save(OutputStream os, int format, ImageLoader loader) {
         Class clazz = Class_forName(FORMAT_PACKAGE ~ '.' ~ FORMATS[format] ~ '.' ~ FORMATS[format] ~ FORMAT_SUFFIX);
         fileFormat = cast(FileFormat) clazz.create();
     } catch (Exception e) {
-        SWT.error(SWT.ERROR_UNSUPPORTED_FORMAT);
+        DWT.error(DWT.ERROR_UNSUPPORTED_FORMAT);
     }
     if (format is DWT.IMAGE_BMP_RLE) {
         switch (loader.data[0].depth) {

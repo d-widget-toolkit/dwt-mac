@@ -13,7 +13,7 @@
  *******************************************************************************/
 module dwt.accessibility.AccessibleControlEvent;
 
-import dwt.internal.DWTEventObject;
+import dwt.internal.SWTEventObject;
 
 import tango.text.convert.Format;
 
@@ -37,7 +37,7 @@ import dwt.dwthelper.utils;
  *
  * @since 2.0
  */
-public class AccessibleControlEvent : DWTEventObject {
+public class AccessibleControlEvent : SWTEventObject {
     public int childID;         // IN/OUT
     public Accessible accessible;   // OUT
     public int x, y;                // IN/OUT

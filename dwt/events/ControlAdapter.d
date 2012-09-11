@@ -15,6 +15,7 @@ module dwt.events.ControlAdapter;
 import dwt.dwthelper.utils;
 
 
+import dwt.events.ControlEvent;
 import dwt.events.ControlListener;
 
 /**

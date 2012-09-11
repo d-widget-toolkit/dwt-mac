@@ -14,6 +14,7 @@ import dwt.dwthelper.utils;
 import cocoa = dwt.internal.cocoa.id;
 import dwt.internal.cocoa.NSFileWrapper;
 import dwt.internal.cocoa.NSObject;
+import dwt.internal.cocoa.OS;
 import objc = dwt.internal.objc.runtime;
 
 public class NSTextAttachment : NSObject {

@@ -16,8 +16,8 @@ module dwt.graphics.Cursor;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTError;
+import dwt.DWT;
+import dwt.DWTError;
 import dwt.graphics.Device;
 import dwt.graphics.ImageData;
 import dwt.graphics.PaletteData;

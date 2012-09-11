@@ -55,8 +55,8 @@ public NSRange rangeValue() {
 }
 
 public NSRect rectValue() {
-    NSRect result = new NSRect();
-    OS.objc_msgSend_stret(result, this.id, OS.sel_rectValue);
+    NSRect result = NSRect();
+    OS.objc_msgSend_stret(&result, this.id, OS.sel_rectValue);
     return result;
 }
 

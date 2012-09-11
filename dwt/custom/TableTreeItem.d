@@ -13,10 +13,11 @@
 module dwt.custom.TableTreeItem;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.custom.TableTree;
 import dwt.graphics.Color;
 import dwt.graphics.Font;

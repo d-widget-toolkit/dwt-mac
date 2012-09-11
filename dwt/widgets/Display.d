@@ -22,13 +22,65 @@ import dwt.internal.cocoa.NSMutableArray;
 import cocoa = dwt.internal.cocoa.id;
 
 import tango.core.Thread;
+import tango.core.Runtime;
 import tango.stdc.stringz;
+import tango.text.convert.Format;
 
+import dwt.DWT;
 import dwt.dwthelper.System;
+import dwt.dwthelper.Runnable;
 import dwt.dwthelper.utils;
+import dwt.internal.cocoa.NSDictionary;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.NSImage;
+import dwt.internal.cocoa.NSWindow;
+import dwt.internal.cocoa.NSAutoreleasePool;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSObject;
+import dwt.internal.cocoa.NSScreen;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSTimer;
+import dwt.internal.cocoa.NSMutableDictionary;
+import dwt.internal.cocoa.NSThread;
+import dwt.internal.cocoa.NSNumber;
+import dwt.internal.cocoa.NSMenu;
+import dwt.internal.cocoa.NSMenuItem;
+import dwt.internal.cocoa.NSResponder;
+import dwt.internal.cocoa.NSColorSpace;
+import dwt.internal.cocoa.NSWorkspace;
+import dwt.internal.cocoa.NSSlider;
+import dwt.internal.cocoa.NSTextField;
+import dwt.internal.cocoa.NSStepper;
+import dwt.internal.cocoa.NSSearchField;
+import dwt.internal.cocoa.NSImageView;
+import dwt.internal.cocoa.NSPopUpButton;
+import dwt.internal.cocoa.NSComboBox;
+import dwt.internal.cocoa.NSButton;
+import dwt.internal.cocoa.NSTextView;
+import dwt.internal.cocoa.NSNotificationCenter;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSValue;
+import dwt.internal.cocoa.NSBundle;
+import dwt.internal.cocoa.NSRunLoop;
+import dwt.internal.cocoa.NSDate;
+import dwt.internal.cocoa.NSRange;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.SWTWindowDelegate;
+import dwt.internal.cocoa.SWTApplicationDelegate;
+import dwt.internal.cocoa.CGPoint;
+import dwt.internal.cocoa.OS;
+import dwt.internal.cocoa.objc_super;
+//import dwt.internal.Callback;
+import dwt.internal.C;
 import Carbon = dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
+import dwt.internal.c.bindings;
 import dwt.widgets.Caret;
 import dwt.widgets.ColorDialog;
 import dwt.widgets.Control;
@@ -46,6 +98,17 @@ import dwt.widgets.Synchronizer;
 import dwt.widgets.Tray;
 import dwt.widgets.TrayItem;
 import dwt.widgets.Widget;
+import dwt.widgets.Button;
+import dwt.widgets.MessageBox;
+import dwt.widgets.FileDialog;
+import dwt.graphics.Device;
+import dwt.graphics.GCData;
+import dwt.graphics.Image;
+import dwt.graphics.Cursor;
+import dwt.graphics.DeviceData;
+import dwt.graphics.Rectangle;
+import dwt.graphics.Color;
+import dwt.graphics.Point;
 
 /**
  * Instances of this class are responsible for managing the
@@ -134,8 +197,8 @@ public class Display : Device {
     int sendEventCount;
 
     /* Key event management */
-    int [] deadKeyState = new int[1];
-    int currentKeyboardUCHRdata;
+    uint [] deadKeyState = new uint[1];
+    bindings.CFDataRef currentKeyboardUCHRdata;
     bool eventSourceDelaySet;
 
     /* Sync/Async Widget Communication */
@@ -147,7 +210,8 @@ public class Display : Device {
 
     Caret currentCaret;
 
-    bool sendEvent;
+    bool sendEvent_;
+    int clickCountButton, clickCount;
     Control currentControl, trackingControl, tooltipControl;
     Widget tooltipTarget;
 
@@ -184,14 +248,14 @@ public class Display : Device {
 
     int[] screenID = new int[32];
     NSPoint[] screenCascade = new NSPoint[32];
+    bool[] screenCascadeExists = new bool[32];
 
     Carbon.CFRunLoopObserverRef runLoopObserver;
 
     bool lockCursor = true;
     objc.IMP oldCursorSetProc;
-    int /*long*/ oldCursorSetProc;
-    Callback cursorSetCallback;
-
+/+  Callback cursorSetCallback;
++/
 
 
     /* Display Shutdown */
@@ -207,14 +271,9 @@ public class Display : Device {
     Cursor [] cursors;
 
     /* System Colors */
-    CGFloat [][] colors;
-    CGFloat [] alternateSelectedControlTextColor, selectedControlTextColor;
-    CGFloat [] alternateSelectedControlColor, secondarySelectedControlColor;
-
-    /* System Colors */
-    float /*double*/ [][] colors;
-    float /*double*/ [] alternateSelectedControlTextColor, selectedControlTextColor;
-    float /*double*/ [] alternateSelectedControlColor, secondarySelectedControlColor;
+    Carbon.CGFloat [][] colors;
+    Carbon.CGFloat [] alternateSelectedControlTextColor, selectedControlTextColor;
+    Carbon.CGFloat [] alternateSelectedControlColor, secondarySelectedControlColor;
 
     /* Key Mappings. */
     static int [] [] KeyTable = [
@@ -316,7 +375,7 @@ public class Display : Device {
     static SWTApplicationDelegate applicationDelegate;
 
     /* Settings */
-    bool runSettings;
+    bool runSettings_;
     SWTWindowDelegate settingsDelegate;
 
     static final int DEFAULT_BUTTON_INTERVAL = 30;
@@ -492,7 +551,7 @@ void addPool (NSAutoreleasePool pool) {
     }
     if (poolCount is 0) {
         NSMutableDictionary dictionary = NSThread.currentThread().threadDictionary();
-        dictionary.setObject(NSNumber.numberWithInteger(pool.id), NSString.stringWith("DWT_NSAutoreleasePool"));
+        dictionary.setObject(NSNumber.numberWithInteger(cast(int)pool.id), NSString.stringWith("DWT_NSAutoreleasePool"));
     }
     pools [poolCount++] = pool;
 }
@@ -571,13 +630,14 @@ void cascadeWindow (NSWindow window, NSScreen screen) {
     while (screenID[index] !is 0 && screenID[index] !is screenNumber) index++;
     screenID[index] = screenNumber;
     NSPoint cascade = screenCascade[index];
-    if (cascade == null) {
+    if (screenCascadeExists[index]) {
         NSRect frame = screen.frame();
         cascade = NSPoint();
         cascade.x = frame.x;
         cascade.y = frame.y + frame.height;
     }
     screenCascade[index] = window.cascadeTopLeftFromPoint(cascade);
+    screenCascadeExists[index] = true;
 }
 
 protected void checkDevice () {
@@ -663,6 +723,7 @@ public this (DeviceData data) {
     super (data);
     screenID = new int[32];
     screenCascade = new NSPoint[32];
+    screenCascadeExists = new bool[32];
     cursors = new Cursor [DWT.CURSOR_HAND + 1];
     timerDelegate = cast(SWTWindowDelegate)(new SWTWindowDelegate()).alloc().init();
 
@@ -685,7 +746,7 @@ static void checkDisplay (Thread thread, bool multiple) {
 static String convertToLf(String text) {
     char Cr = '\r';
     char Lf = '\n';
-    int length = text.length ();
+    int length = text.length;
     if (length is 0) return text;
 
     /* Check for an LF or CR/LF.  Assume the rest of the string
@@ -727,7 +788,7 @@ void clearModal (Shell shell) {
 }
 
 void clearPool () {
-    if (sendEventCount is 0 && loopCount is poolCount - 1 && Callback.getEntryCount () is 0) {
+    if (sendEventCount is 0 && loopCount is poolCount - 1/+ && Callback.getEntryCount () is 0+/) {
         removePool ();
         addPool ();
     }
@@ -785,7 +846,7 @@ void createDisplay (DeviceData data) {
     NSMutableDictionary dictionary = nsthread.threadDictionary();
     NSString key = NSString.stringWith("SWT_NSAutoreleasePool");
     NSNumber id = new NSNumber(dictionary.objectForKey(key));
-    addPool(new NSAutoreleasePool(id.integerValue()));
+    addPool(new NSAutoreleasePool(id));
 
     application = NSApplication.sharedApplication();
 
@@ -811,9 +872,9 @@ void createDisplay (DeviceData data) {
         Carbon.ProcessSerialNumber psn;
         if (OS.GetCurrentProcess (&psn) is OS.noErr) {
             int pid = OS.getpid ();
-        int /*long*/ ptr = getAppName().UTF8String();
+            char* ptr = getAppName().UTF8String();
             if (ptr !is null) OS.CPSSetProcessName (&psn, ptr);
-            OS.TransformProcessType (&psn, OS.kProcessTransformToForegroundApplication);
+            OS.TransformProcessType (&psn, cast(Carbon.ProcessApplicationTransformState)OS.kProcessTransformToForegroundApplication);
             OS.SetFrontProcess (&psn);
             ptr = OS.getenv (ascii ("APP_ICON_" ~ Integer.toString(pid)));
             if (ptr !is null) {
@@ -827,11 +888,11 @@ void createDisplay (DeviceData data) {
 
         String className = "SWTApplication";
         objc.Class cls;
-        if ((cls = cast(objc.Class) OS.objc_lookUpClass (className)) is null) {
+        if ((cls = OS.objc_lookUpClass (className)) is null) {
             objc.IMP proc2 = cast(objc.IMP) &applicationProc2;
             objc.IMP proc3 = cast(objc.IMP) &applicationProc3;
             objc.IMP proc6 = cast(objc.IMP) &applicationProc6;
-            cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSApplication, className, 0);
+            cls = OS.objc_allocateClassPair(OS.class_NSApplication, className, 0);
             OS.class_addMethod(cls, OS.sel_registerName("sendEvent:"), proc3, "@:@");
 
             static if ((void*).sizeof > int.sizeof) // 64bit target
@@ -844,12 +905,13 @@ void createDisplay (DeviceData data) {
             OS.objc_registerClassPair(cls);
         }
         applicationClass = OS.object_setClass(application.id, cls);
+    }
 
-    className = "SWTApplicationDelegate";
-    if (OS.objc_lookUpClass (className) is 0) {
-        int /*long*/ appProc3 = applicationCallback3.getAddress();
-        if (appProc3 is 0) error (DWT.ERROR_NO_MORE_CALLBACKS);
-        cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
+    String className = "SWTApplicationDelegate";
+    if (OS.objc_lookUpClass (className) is null) {
+        objc.IMP appProc3 = cast(objc.IMP) &applicationProc3;
+        if (appProc3 is null) error (DWT.ERROR_NO_MORE_CALLBACKS);
+        objc.Class cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
         OS.class_addMethod(cls, OS.sel_applicationWillFinishLaunching_, appProc3, "@:@");
         OS.class_addMethod(cls, OS.sel_terminate_, appProc3, "@:@");
         OS.class_addMethod(cls, OS.sel_quitRequested_, appProc3, "@:@");
@@ -864,7 +926,6 @@ void createDisplay (DeviceData data) {
     if (applicationDelegate is null) {
         applicationDelegate = cast(SWTApplicationDelegate)(new SWTApplicationDelegate()).alloc().init();
         application.setDelegate(applicationDelegate);
-    }
     } else {
         isEmbedded = true;
     }
@@ -880,7 +941,7 @@ void createMainMenu () {
     NSMenu appleMenu;
     NSString format = NSString.stringWith("%@ %@"), title;
 
-    NSMenuItem appItem = menuItem = mainMenu.addItemWithTitle(emptyStr, 0, emptyStr);
+    NSMenuItem appItem = menuItem = mainMenu.addItemWithTitle(emptyStr, null, emptyStr);
     appleMenu = cast(NSMenu)(new NSMenu()).alloc();
     appleMenu.initWithTitle(emptyStr);
     OS.objc_msgSend(application.id, OS.sel_registerName("setAppleMenu:"), appleMenu.id);
@@ -892,12 +953,12 @@ void createMainMenu () {
     appleMenu.addItem(NSMenuItem.separatorItem());
 
     title = NSString.stringWith(DWT.getMessage("Preferences..."));
-    menuItem = appleMenu.addItemWithTitle(title, 0, NSString.stringWith(","));
+    menuItem = appleMenu.addItemWithTitle(title, null, NSString.stringWith(","));
 
     appleMenu.addItem(NSMenuItem.separatorItem());
 
     title = NSString.stringWith(DWT.getMessage("Services"));
-    menuItem = appleMenu.addItemWithTitle(title, 0, emptyStr);
+    menuItem = appleMenu.addItemWithTitle(title, null, emptyStr);
     NSMenu servicesMenu = cast(NSMenu)(new NSMenu()).alloc();
     servicesMenu.initWithTitle(emptyStr);
     appleMenu.setSubmenu(servicesMenu, menuItem);
@@ -938,7 +999,7 @@ objc.id cursorSetProc (objc.id id, objc.SEL sel) {
             if (cursor !is null && cursor.handle.id !is id) return null;
         }
     }
-    OS.call (oldCursorSetProc, id, sel);
+    oldCursorSetProc(id, sel);
     return null;
 }
 
@@ -1125,6 +1186,7 @@ public Shell getActiveShell () {
         Widget widget = getWidget(window.contentView());
         if (cast(Shell) widget) {
             return cast(Shell)widget;
+        }
     }
     return null;
 }
@@ -1148,14 +1210,14 @@ public Rectangle getBounds () {
 
 Rectangle getBounds (NSArray screens) {
     NSRect primaryFrame = (new NSScreen(screens.objectAtIndex(0))).frame();
-    CGFloat minX = CGFloat.max, maxX = CGFloat.min;
-    CGFloat minY = CGFloat.max, maxY = CGFloat.min;
+    Carbon.CGFloat minX = Carbon.CGFloat.max, maxX = Carbon.CGFloat.min;
+    Carbon.CGFloat minY = Carbon.CGFloat.max, maxY = Carbon.CGFloat.min;
     NSUInteger count = screens.count();
     for (NSUInteger i = 0; i < count; i++) {
         NSScreen screen = new NSScreen(screens.objectAtIndex(i));
         NSRect frame = screen.frame();
-        CGFloat x1 = frame.x, x2 = frame.x + frame.width;
-        CGFloat y1 = primaryFrame.height - frame.y, y2 = primaryFrame.height - (frame.y + frame.height);
+        Carbon.CGFloat x1 = frame.x, x2 = frame.x + frame.width;
+        Carbon.CGFloat y1 = primaryFrame.height - frame.y, y2 = primaryFrame.height - (frame.y + frame.height);
         if (x1 < minX) minX = x1;
         if (x2 < minX) minX = x2;
         if (x1 > maxX) maxX = x1;
@@ -1204,7 +1266,7 @@ public Rectangle getClientArea () {
     NSScreen screen = new NSScreen(screens.objectAtIndex(0));
     NSRect frame = screen.frame();
     NSRect visibleFrame = screen.visibleFrame();
-    CGFloat y = frame.height - (visibleFrame.y + visibleFrame.height);
+    Carbon.CGFloat y = frame.height - (visibleFrame.y + visibleFrame.height);
     return new Rectangle(cast(int)visibleFrame.x, cast(int)y, cast(int)visibleFrame.width, cast(int)visibleFrame.height);
 }
 
@@ -1301,6 +1363,7 @@ public static Display getDefault () {
  */
 public Object getData (String key) {
     checkDevice ();
+    // DWT extension: allow null for zero length string
     //if (key is null) error (DWT.ERROR_NULL_ARGUMENT);
     if (keys is null) return null;
     for (int i=0; i<keys.length; i++) {
@@ -1671,11 +1734,11 @@ Color getWidgetColor (int id) {
     return null;
 }
 
-CGFloat [] getWidgetColorRGB (int id) {
+Carbon.CGFloat [] getWidgetColorRGB (int id) {
         NSColor color = null;
         switch (id) {
         case DWT.COLOR_INFO_FOREGROUND: color = NSColor.blackColor (); break;
-        case DWT.COLOR_INFO_BACKGROUND: return new CGFloat [] [0xFF / 255f, 0xFF / 255f, 0xE1 / 255f, 1];
+        	case DWT.COLOR_INFO_BACKGROUND: return cast(Carbon.CGFloat[]) [0xFF / 255f, 0xFF / 255f, 0xE1 / 255f, 1];
             case DWT.COLOR_TITLE_FOREGROUND: color = NSColor.windowFrameTextColor(); break;
         case DWT.COLOR_TITLE_BACKGROUND: color = NSColor.alternateSelectedControlColor(); break;
         case DWT.COLOR_TITLE_BACKGROUND_GRADIENT: color = NSColor.selectedControlColor(); break;
@@ -1697,14 +1760,14 @@ CGFloat [] getWidgetColorRGB (int id) {
     return getWidgetColorRGB (color);
 }
 
-CGFloat [] getWidgetColorRGB (NSColor color) {
+Carbon.CGFloat [] getWidgetColorRGB (NSColor color) {
     if (color is null) return null;
         color = color.colorUsingColorSpace(NSColorSpace.deviceRGBColorSpace());
     if (color is null) return null;
-        CGFloat[] components = new CGFloat[color.numberOfComponents()];
+        Carbon.CGFloat[] components = new Carbon.CGFloat[color.numberOfComponents()];
         color.getComponents(components.ptr);
-    return new CGFloat [][components[0], components[1], components[2], components[3]];
-    }
+    return [components[0], components[1], components[2], components[3]];
+}
 
 /**
  * Returns the matching standard platform cursor for the given
@@ -1874,7 +1937,7 @@ Widget getWidget (NSView view) {
 
 bool hasDefaultButton () {
     NSArray windows = application.windows();
-    int /*long*/ count = windows.count();
+    NSUInteger count = windows.count();
     for (int i = 0; i < count; i++) {
         NSWindow window  = new NSWindow(windows.objectAtIndex(i));
         if (window.defaultButtonCell() !is null) {
@@ -1910,30 +1973,27 @@ protected void init_ () {
             application.finishLaunching();
             Display.launched = true;
 
-            /* only add the shutdown hook once */
-            Runtime.getRuntime().addShutdownHook(new class() Thread {
+            /* TODO: only add the shutdown hook once */
+/+          Runtime.getRuntime().addShutdownHook(new class() Thread {
                 public void run() {
                     NSApplication.sharedApplication().terminate(null);
                 }
             });
-        }
++/      }
     }
 
     objc.IMP observerProc = cast(objc.IMP) &observerProc;
     int activities = OS.kCFRunLoopBeforeWaiting;
-    runLoopObserver = OS.CFRunLoopObserverCreate (0, activities, true, 0, observerProc, 0);
+    runLoopObserver = OS.CFRunLoopObserverCreate (null, cast(Carbon.CFOptionFlags)activities, true, 0, cast(Carbon.CFRunLoopObserverCallBack)observerProc, null);
     if (runLoopObserver is null) error (DWT.ERROR_NO_HANDLES);
-    OS.CFRunLoopAddObserver (OS.CFRunLoopGetCurrent (), runLoopObserver, OS.kCFRunLoopCommonModes_);
-    if (runLoopObserver is 0) error (DWT.ERROR_NO_HANDLES);
-    OS.CFRunLoopAddObserver (OS.CFRunLoopGetCurrent (), runLoopObserver, OS.kCFRunLoopCommonModes ());
+    OS.CFRunLoopAddObserver (OS.CFRunLoopGetCurrent (), runLoopObserver, cast(Carbon.CFStringRef)OS.kCFRunLoopCommonModes_);
 
-    cursorSetCallback = new Callback(this, "cursorSetProc", 2);
-    int /*long*/ cursorSetProc = cursorSetCallback.getAddress();
-    if (cursorSetProc is 0) error (DWT.ERROR_NO_MORE_CALLBACKS);
-    int /*long*/ method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
-    if (method !is 0) oldCursorSetProc = OS.method_setImplementation(method, cursorSetProc);
-
-
+/+  cursorSetCallback = new Callback(this, "cursorSetProc", 2);
+    auto cursorSetProc = cursorSetCallback.getAddress();
+    if (cursorSetProc is null) error (DWT.ERROR_NO_MORE_CALLBACKS);
+    auto method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
+    if (method !is null) oldCursorSetProc = OS.method_setImplementation(method, cursorSetProc);
++/
     objc.IMP cursorSetProc = cast(objc.IMP) &cursorSetProc;
     objc.Method method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
     if (method !is null) oldCursorSetProc = OS.method_setImplementation(method, cursorSetProc);
@@ -1944,10 +2004,11 @@ protected void init_ () {
     defaultCenter.addObserver(settingsDelegate, OS.sel_systemSettingsChanged_, OS.NSSystemColorsDidChangeNotification, null);
     defaultCenter.addObserver(settingsDelegate, OS.sel_systemSettingsChanged_, OS.NSApplicationDidChangeScreenParametersNotification, null);
 
+    NSTextView textView = cast(NSTextView)(new NSTextView()).alloc();
     textView.init ();
-     markedAttributes = textView.markedTextAttributes ();
-     markedAttributes.retain ();
-     textView.release ();
+    markedAttributes = textView.markedTextAttributes ();
+    markedAttributes.retain ();
+    textView.release ();
 
     isPainting = cast(NSMutableArray)(new NSMutableArray()).alloc();
     isPainting = isPainting.initWithCapacity(12);
@@ -2034,14 +2095,14 @@ void initClasses () {
     objc.IMP proc6 = cast(objc.IMP) &windowProc6;
     objc.IMP fieldEditorProc3 = cast(objc.IMP) &fieldEditorProc3;
     objc.IMP fieldEditorProc4 = cast(objc.IMP) &fieldEditorProc4;
-    int /*long*/ proc3 = windowCallback3.getAddress();
+/+  auto proc3 = windowCallback3.getAddress();
     fieldEditorCallback3 = new Callback(clazz, "fieldEditorProc", 3);
     int /*long*/ fieldEditorProc3 = fieldEditorCallback3.getAddress();
     if (fieldEditorProc3 is 0) error (DWT.ERROR_NO_MORE_CALLBACKS);
     fieldEditorCallback4 = new Callback(clazz, "fieldEditorProc", 4);
     int /*long*/ fieldEditorProc4 = fieldEditorCallback4.getAddress();
     if (fieldEditorProc4 is 0) error (DWT.ERROR_NO_MORE_CALLBACKS);
-
++/
     objc.IMP isFlippedProc = OS.isFlipped_CALLBACK();
     objc.IMP drawRectProc = OS.CALLBACK_drawRect_(proc3);
     objc.IMP drawInteriorWithFrameInViewProc = OS.CALLBACK_drawInteriorWithFrame_inView_ (proc4);
@@ -2107,7 +2168,7 @@ void initClasses () {
     OS.objc_registerClassPair (cls);
 
     className = "SWTCanvasView";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSView, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     //NSTextInput protocol
     OS.class_addProtocol(cls, OS.objc_getProtocol("NSTextInput"));
@@ -2186,7 +2247,6 @@ void initClasses () {
     OS.class_addIvar (cls, SWT_IMAGE, size, cast(byte)align_, types);
     OS.class_addIvar (cls, SWT_ROW, size, cast(byte)align_, types);
     OS.class_addIvar (cls, SWT_COLUMN, size, cast(byte)align_, types);
-    OS.class_addIvar (cls, DWT_COLUMN, size, (byte)align, types);
     OS.class_addMethod (cls, OS.sel_drawInteriorWithFrame_inView_, drawInteriorWithFrameInViewProc, "@:{NSRect}@");
     OS.class_addMethod (cls, OS.sel_drawWithExpansionFrame_inView_, drawWithExpansionFrameProc, "@:{NSRect}@");
     OS.class_addMethod (cls, OS.sel_imageRectForBounds_, imageRectForBoundsProc, "@:{NSRect}");
@@ -2214,7 +2274,7 @@ void initClasses () {
     OS.objc_registerClassPair(cls);
 
     className = "SWTOutlineView";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSOutlineView, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSOutlineView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     OS.class_addMethod(cls, OS.sel_highlightSelectionInClipRect_, highlightSelectionInClipRectProc, "@:{NSRect}");
     OS.class_addMethod(cls, OS.sel_sendDoubleSelection, proc2, "@:");
@@ -2238,7 +2298,7 @@ void initClasses () {
     OS.objc_registerClassPair(cls);
 
     className = "SWTPanelDelegate";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSObject, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     OS.class_addMethod(cls, OS.sel_windowWillClose_, dialogProc3, "@:@");
     OS.class_addMethod(cls, OS.sel_changeColor_, dialogProc3, "@:@");
@@ -2262,7 +2322,7 @@ void initClasses () {
     NSPopUpButton.setCellClass(cls);
 
     className = "SWTProgressIndicator";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSProgressIndicator, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSProgressIndicator, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     OS.class_addMethod(cls, OS.sel_viewDidMoveToWindow, proc2, "@:");
     OS.class_addMethod(cls, OS.sel__drawThemeProgressArea_, proc3, "@:c");
@@ -2339,7 +2399,7 @@ void initClasses () {
     NSSlider.setCellClass(cls);
 
     className = "SWTStepper";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSStepper, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSStepper, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     OS.class_addMethod(cls, OS.sel_sendSelection, proc2, "@:");
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
@@ -2399,7 +2459,7 @@ void initClasses () {
     OS.objc_registerClassPair(cls);
 
     className = "SWTTextView";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSTextView, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSTextView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
@@ -2413,7 +2473,7 @@ void initClasses () {
     OS.objc_registerClassPair(cls);
 
     className = "SWTTextField";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSTextField, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSTextField, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
@@ -2451,7 +2511,7 @@ void initClasses () {
     OS.objc_registerClassPair(cls);
 
     className = "SWTWindow";
-    cls = OS.objc_allocateClassPair(cast(objc.Class) OS.class_NSWindow, className, 0);
+    cls = OS.objc_allocateClassPair(OS.class_NSWindow, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     OS.class_addMethod(cls, OS.sel_sendEvent_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_helpRequested_, proc3, "@:@");
@@ -2477,7 +2537,7 @@ void initClasses () {
     OS.objc_registerClassPair(cls);
 }
 
-NSFont getFont (objc.id cls, objc.SEL sel) {
+NSFont getFont (objc.Class cls, objc.SEL sel) {
     objc.id widget = OS.objc_msgSend (OS.objc_msgSend (cls, OS.sel_alloc), OS.sel_initWithFrame_, NSRect());
     objc.id font = null;
     if (OS.objc_msgSend_bool (widget, OS.sel_respondsToSelector_, sel)) {
@@ -2495,7 +2555,7 @@ NSFont getFont (objc.id cls, objc.SEL sel) {
 }
 
 void initColors () {
-    colors = new CGFloat [][DWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT + 1];
+    colors = new Carbon.CGFloat [][DWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT + 1];
     colors[DWT.COLOR_INFO_FOREGROUND] = getWidgetColorRGB(DWT.COLOR_INFO_FOREGROUND);
     colors[DWT.COLOR_INFO_BACKGROUND] = getWidgetColorRGB(DWT.COLOR_INFO_BACKGROUND);
     colors[DWT.COLOR_TITLE_FOREGROUND] = getWidgetColorRGB(DWT.COLOR_TITLE_FOREGROUND);
@@ -2710,7 +2770,7 @@ public bool post(Event event) {
                 int maxStringLength = 256;
                 vKey = -1;
                 wchar [] output = new wchar [maxStringLength];
-                int [] actualStringLength = new int [1];
+                uint [] actualStringLength = new uint [1];
                 for (short i = 0 ; i <= 0x7F ; i++) {
                     OS.UCKeyTranslate (cast(Carbon.UCKeyboardLayout*) uchrPtr, cast(ushort) i, cast(ushort)(type is DWT.KeyDown ? OS.kUCKeyActionDown : OS.kUCKeyActionUp), cast(uint) 0, OS.LMGetKbdType(), cast(uint) 0, deadKeyState.ptr, maxStringLength, actualStringLength.ptr, output.ptr);
                     if (output[0] is event.character) {
@@ -2720,7 +2780,7 @@ public bool post(Event event) {
                 }
                 if (vKey is -1) {
                     for (short i = 0 ; i <= 0x7F ; i++) {
-                        OS.UCKeyTranslate (uchrPtr, i, cast(short)(type is DWT.KeyDown ? OS.kUCKeyActionDown : OS.kUCKeyActionUp), OS.shiftKey, OS.LMGetKbdType(), 0, deadKeyState, maxStringLength, actualStringLength, output);
+                        OS.UCKeyTranslate (cast(Carbon.UCKeyboardLayout*) uchrPtr, i, cast(short)(type is DWT.KeyDown ? OS.kUCKeyActionDown : OS.kUCKeyActionUp), OS.shiftKey, OS.LMGetKbdType(), 0, deadKeyState.ptr, maxStringLength, actualStringLength.ptr, output.ptr);
                         if (output[0] is event.character) {
                             vKey = i;
                             break;
@@ -2740,12 +2800,12 @@ public bool post(Event event) {
 
             if (vKey is -1) return false;
 
-            return OS.CGPostKeyboardEvent((short)0, vKey, type is DWT.KeyDown) is 0;
+            return OS.CGPostKeyboardEvent(cast(short)0, vKey, type is DWT.KeyDown) is 0;
         }
         case DWT.MouseDown:
         case DWT.MouseMove:
         case DWT.MouseUp: {
-            CGPoint mouseCursorPosition = new CGPoint ();
+            CGPoint mouseCursorPosition = CGPoint ();
             int chord = OS.GetCurrentButtonState ();
 
             if (type is DWT.MouseMove) {
@@ -2803,7 +2863,7 @@ public bool post(Event event) {
                 NSPoint nsCursorPosition = NSEvent.mouseLocation();
                 NSRect primaryFrame = getPrimaryFrame();
                 mouseCursorPosition.x = nsCursorPosition.x;
-                mouseCursorPosition.y = (int) (primaryFrame.height - nsCursorPosition.y);
+                mouseCursorPosition.y = cast(int) (primaryFrame.height - nsCursorPosition.y);
                 return OS.CGPostMouseEvent (mouseCursorPosition, true, 5, button1, button3, button2, button4, button5) is 0;
             }
         }
@@ -2956,7 +3016,6 @@ public Point map (Control from, Control to, int x, int y) {
                 pt.y = view.bounds().height - pt.y;
             }
         }
-        }
     }
     point.x = cast(int)pt.x;
     point.y = cast(int)pt.y;
@@ -3082,22 +3141,21 @@ public Rectangle map (Control from, Control to, int x, int y, int width, int hei
                 pt.y = view.bounds().height - pt.y;
             }
         }
-        }
     }
     rectangle.x = cast(int)pt.x;
     rectangle.y = cast(int)pt.y;
     return rectangle;
 }
 
-int /*long*/ observerProc (int /*long*/ observer, int /*long*/ activity, int /*long*/ info) {
-    switch ((int)/*64*/activity) {
+objc.id observerProc (objc.id observer, Carbon.CFRunLoopActivity activity, objc.id info) {
+    switch (activity) {
         case OS.kCFRunLoopBeforeWaiting:
-            if (runAsyncMessages) {
+            if (runAsyncMessages_) {
                 if (runAsyncMessages (false)) wakeThread ();
             }
             break;
     }
-    return 0;
+    return null;
 }
 
 /**
@@ -3126,12 +3184,10 @@ int /*long*/ observerProc (int /*long*/ observer, int /*long*/ activity, int /*l
  */
 public bool readAndDispatch () {
     checkDevice ();
-    if (sendEventCount == 0 && loopCount == poolCount - 1 && Callback.getEntryCount () == 0) removePool ();
+    if (sendEventCount == 0 && loopCount == poolCount - 1/+ && Callback.getEntryCount () == 0+/) removePool ();
     addPool ();
     loopCount++;
-    boolean events = false;
-    try {
-        events |= runSettings ();
+    bool events = false;
     try {
         events |= runSettings ();
         events |= runTimers ();
@@ -3150,7 +3206,7 @@ public bool readAndDispatch () {
     } finally {
         removePool ();
         loopCount--;
-        if (sendEventCount == 0 && loopCount == poolCount && Callback.getEntryCount () == 0) addPool ();
+        if (sendEventCount == 0 && loopCount == poolCount/+ && Callback.getEntryCount () == 0+/) addPool ();
     }
     return events;
 }
@@ -3219,33 +3275,33 @@ protected void release () {
 
 void releaseDisplay () {
     /* Release the System Images */
-    if (errorImage != null) errorImage.dispose ();
-    if (infoImage != null) infoImage.dispose ();
-    if (warningImage != null) warningImage.dispose ();
+    if (errorImage !is null) errorImage.dispose ();
+    if (infoImage !is null) infoImage.dispose ();
+    if (warningImage !is null) warningImage.dispose ();
     errorImage = infoImage = warningImage = null;
 
     currentCaret = null;
 
     /* Release Timers */
-    if (hoverTimer != null) timerExec(-1, hoverTimer);
+    if (hoverTimer !is null) timerExec(-1, hoverTimer);
     hoverTimer = null;
-    if (caretTimer != null) timerExec(-1, caretTimer);
+    if (caretTimer !is null) timerExec(-1, caretTimer);
     caretTimer = null;
-    if (nsTimers != null) {
+    if (nsTimers !is null) {
         for (int i=0; i<nsTimers.length; i++) {
-            if (nsTimers [i] != null) {
+            if (nsTimers [i] !is null) {
                 nsTimers [i].invalidate();
                 nsTimers [i].release();
             }
         }
     }
     nsTimers = null;
-    if (timerDelegate != null) timerDelegate.release();
+    if (timerDelegate !is null) timerDelegate.release();
     timerDelegate = null;
 
     /* Release the System Cursors */
     for (int i = 0; i < cursors.length; i++) {
-        if (cursors [i] != null) cursors [i].dispose ();
+        if (cursors [i] !is null) cursors [i].dispose ();
     }
     cursors = null;
 
@@ -3271,10 +3327,10 @@ void releaseDisplay () {
     boxFont = tabViewFont = progressIndicatorFont = null;
 
     /* Release Dock image */
-    if (dockImage != null) dockImage.release();
+    if (dockImage !is null) dockImage.release();
     dockImage = null;
 
-    if (screenWindow != null) screenWindow.release();
+    if (screenWindow !is null) screenWindow.release();
     screenWindow = null;
 
     if (needsDisplay !is null) needsDisplay.release();
@@ -3286,15 +3342,36 @@ void releaseDisplay () {
     menuBar = null;
     menus = null;
 
-    if (markedAttributes != null) markedAttributes.release();
+    if (markedAttributes !is null) markedAttributes.release();
     markedAttributes = null;
 
-    if (oldCursorSetProc !is 0) {
-        int /*long*/ method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
+    if (oldCursorSetProc !is null) {
+        objc.Method method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
         OS.method_setImplementation(method, oldCursorSetProc);
     }
-    if (cursorSetCallback !is null) cursorSetCallback.dispose();
+/+  if (cursorSetCallback !is null) cursorSetCallback.dispose();
     cursorSetCallback = null;
++/
+    deadKeyState = null;
+
+    if (settingsDelegate !is null) {
+        NSNotificationCenter.defaultCenter().removeObserver(settingsDelegate);
+        settingsDelegate.release();
+    }
+    settingsDelegate = null;
+
+    // Clear the menu bar if we created it.
+    if (!isEmbedded) {
+        //remove all existing menu items except the application menu
+        NSMenu menubar = application.mainMenu();
+        NSInteger count = menubar.numberOfItems();
+        while (count > 1) {
+            menubar.removeItemAtIndex(count - 1);
+            count--;
+        }
+    }
+
+    // The autorelease pool is cleaned up when we call NSApplication.terminate().
 
     deadKeyState = null;
 
@@ -3308,7 +3385,7 @@ void releaseDisplay () {
     if (!isEmbedded) {
         //remove all existing menu items except the application menu
         NSMenu menubar = application.mainMenu();
-        int /*long*/ count = menubar.numberOfItems();
+        NSInteger count = menubar.numberOfItems();
         while (count > 1) {
             menubar.removeItemAtIndex(count - 1);
             count--;
@@ -3317,40 +3394,20 @@ void releaseDisplay () {
 
     // The autorelease pool is cleaned up when we call NSApplication.terminate().
 
-    deadKeyState = null;
-
-    if (settingsDelegate != null) {
-        NSNotificationCenter.defaultCenter().removeObserver(settingsDelegate);
-        settingsDelegate.release();
-    }
-    settingsDelegate = null;
-
-    // Clear the menu bar if we created it.
-    if (!isEmbedded) {
-        //remove all existing menu items except the application menu
-        NSMenu menubar = application.mainMenu();
-        int /*long*/ count = menubar.numberOfItems();
-        while (count > 1) {
-            menubar.removeItemAtIndex(count - 1);
-            count--;
-        }
-    }
-
-    // The autorelease pool is cleaned up when we call NSApplication.terminate().
-
-    if (application != null && applicationClass != 0) {
+    if (application !is null && applicationClass !is null) {
         OS.object_setClass (application.id, applicationClass);
     }
     application = null;
-    applicationClass = 0;
+    applicationClass = null;
 
-    if (runLoopObserver !is 0) {
+    if (runLoopObserver !is null) {
         OS.CFRunLoopObserverInvalidate (runLoopObserver);
         OS.CFRelease (runLoopObserver);
     }
-    runLoopObserver = 0;
-    if (observerCallback !is null) observerCallback.dispose();
+    runLoopObserver = null;
+/+  if (observerCallback !is null) observerCallback.dispose();
     observerCallback = null;
++/
 }
 
 void removeContext (GCData context) {
@@ -3524,7 +3581,7 @@ bool runDeferredEvents () {
 bool runPaint () {
     if (needsDisplay is null && needsDisplayInRect is null) return false;
     if (needsDisplay !is null) {
-        int /*long*/ count = needsDisplay.count();
+        NSUInteger count = needsDisplay.count();
         for (int i = 0; i < count; i++) {
             OS.objc_msgSend(needsDisplay.objectAtIndex(i).id, OS.sel_setNeedsDisplay_, true);
         }
@@ -3532,7 +3589,7 @@ bool runPaint () {
         needsDisplay = null;
     }
     if (needsDisplayInRect !is null) {
-        int /*long*/ count = needsDisplayInRect.count();
+        NSUInteger count = needsDisplayInRect.count();
         for (int i = 0; i < count; i+=2) {
             NSValue value = new NSValue(needsDisplayInRect.objectAtIndex(i+1));
             OS.objc_msgSend(needsDisplayInRect.objectAtIndex(i).id, OS.sel_setNeedsDisplayInRect_, value.rectValue());
@@ -3540,28 +3597,29 @@ bool runPaint () {
         needsDisplayInRect.release();
         needsDisplayInRect = null;
     }
-        return true;
-    }
+    return true;
+}
 
-    bool runPopups () {
-        if (popups is null) return false;
-        bool result = false;
-        while (popups !is null) {
-            Menu menu = popups [0];
-            if (menu is null) break;
+bool runPopups () {
+    if (popups is null) return false;
+    bool result = false;
+    while (popups !is null) {
+        Menu menu = popups [0];
+        if (menu is null) break;
+        int length_ = popups.length;
+        System.arraycopy (popups, 1, popups, 0, --length_);
+        popups [length_] = null;
         runDeferredEvents ();
-            System.arraycopy (popups, 1, popups, 0, --length_);
-            popups [length_] = null;
-            if (!menu.isDisposed ()) menu._setVisible (true);
-            result = true;
-        }
-        popups = null;
-        return result;
+        if (!menu.isDisposed ()) menu._setVisible (true);
+        result = true;
     }
+    popups = null;
+    return result;
+}
 
 bool runSettings () {
-    if (!runSettings) return false;
-    runSettings = false;
+    if (!runSettings_) return false;
+    runSettings_ = false;
     initColors ();
     sendEvent (DWT.Settings, null);
     Shell [] shells = getShells ();
@@ -3592,10 +3650,10 @@ bool runTimers () {
 }
 
 void sendEvent (int eventType, Event event) {
-    if (eventTable == null && filterTable == null) {
+    if (eventTable is null && filterTable is null) {
         return;
     }
-    if (event == null) event = new Event ();
+    if (event is null) event = new Event ();
     event.display = this;
     event.type = eventType;
     if (event.time == 0) event.time = getLastEventTime ();
@@ -3616,11 +3674,11 @@ void sendEvent (EventTable table, Event event) {
 static NSString getAppName() {
     NSString name = null;
     int pid = OS.getpid ();
-    int /*long*/ ptr = OS.getenv (ascii ("APP_NAME_" + pid));
-    if (ptr !is 0) name = NSString.stringWithUTF8String(ptr);
+    char* ptr = OS.getenv (ascii (Format("APP_NAME_{}", pid)));
+    if (ptr !is null) name = NSString.stringWithUTF8String(ptr);
     if (name is null && APP_NAME !is null) name = NSString.stringWith(APP_NAME);
     if (name is null) {
-        id value = NSBundle.mainBundle().objectForInfoDictionaryKey(NSString.stringWith("CFBundleName"));
+        cocoa.id value = NSBundle.mainBundle().objectForInfoDictionaryKey(NSString.stringWith("CFBundleName"));
         if (value !is null) {
             name = new NSString(value);
         }
@@ -3674,21 +3732,7 @@ class CaretTimer : Runnable
 //TODO - use custom timer instead of timerExec
 Runnable defaultButtonTimer;
 
-class DefaultButtonTimer : Runnable
-{
-    public void run() {
-        if (isDisposed ()) return;
-        Shell shell = getActiveShell();
-        if (shell !is null && !shell.isDisposed()) {
-            Button defaultButton = shell.defaultButton;
-            if (defaultButton !is null && !defaultButton.isDisposed()) {
-                NSView view = defaultButton.view;
-                view.display();
-            }
-        }
-
-//TODO - use custom timer instead of timerExec
-Runnable defaultButtonTimer = new Runnable() {
+class DefaultButtonTimer : Runnable {
     public void run() {
         if (isDisposed ()) return;
         Shell shell = getActiveShell();
@@ -3702,7 +3746,7 @@ Runnable defaultButtonTimer = new Runnable() {
         if (isDisposed ()) return;
         if (hasDefaultButton()) timerExec(DEFAULT_BUTTON_INTERVAL, this);
     }
-};
+}
 
 void setCurrentCaret (Caret caret) {
     currentCaret = caret;
@@ -3722,34 +3766,34 @@ void setCursor (Control control) {
             }
             return;
         }
-        cursor = getSystemCursor (SWT.CURSOR_ARROW);
+        cursor = getSystemCursor (DWT.CURSOR_ARROW);
     }
     lockCursor = false;
     cursor.handle.set ();
     lockCursor = true;
 }
 
-    /**
-     * Sets the location of the on-screen pointer relative to the top left corner
-     * of the screen.  <b>Note: It is typically considered bad practice for a
-     * program to move the on-screen pointer location.</b>
-     *
-     * @param x the new x coordinate for the cursor
-     * @param y the new y coordinate for the cursor
-     *
-     * @exception DWTException <ul>
-     *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
-     *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
-     * </ul>
-     *
-     * @since 2.1
-     */
-    public void setCursorLocation (int x, int y) {
-        checkDevice ();
-        CGPoint pt = CGPoint ();
-        pt.x = x;  pt.y = y;
-        OS.CGWarpMouseCursorPosition (pt);
-    }
+/**
+ * Sets the location of the on-screen pointer relative to the top left corner
+ * of the screen.  <b>Note: It is typically considered bad practice for a
+ * program to move the on-screen pointer location.</b>
+ *
+ * @param x the new x coordinate for the cursor
+ * @param y the new y coordinate for the cursor
+ *
+ * @exception DWTException <ul>
+ *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
+ *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
+ * </ul>
+ *
+ * @since 2.1
+ */
+public void setCursorLocation (int x, int y) {
+    checkDevice ();
+    CGPoint pt = CGPoint ();
+    pt.x = x;  pt.y = y;
+    Carbon.CGWarpMouseCursorPosition (pt);
+}
 
     /**
      * Sets the location of the on-screen pointer relative to the top left corner
@@ -3799,10 +3843,11 @@ void setCursor (Control control) {
      */
     public void setData (String key, Object value) {
         checkDevice ();
+        // DWT extension: allow null for zero length string
         //if (key is null) error (DWT.ERROR_NULL_ARGUMENT);
 
         if (key.equals (ADD_WIDGET_KEY)) {
-            auto wrap = cast(ArrayWrapperObject) value;
+            ArrayWrapperObject wrap = cast(ArrayWrapperObject) value;
 
             if (wrap is null)
                 DWT.error(DWT.ERROR_INVALID_ARGUMENT, null, " []");
@@ -3873,31 +3918,32 @@ void setCursor (Control control) {
     */
 //  menubar.cancelTracking();
     OS.CancelMenuTracking (OS.AcquireRootMenu (), true, 0);
-        while (count > 1) {
-            menubar.removeItemAtIndex(count - 1);
-            count--;
-        }
-        //set parent of each item to NULL and add them to menubar
-        if (menu !is null) {
-            MenuItem[] items = menu.getItems();
-            for (int i = 0; i < items.length; i++) {
-            MenuItem item = items[i];
-            NSMenuItem nsItem = item.nsItem;
-            nsItem.setMenu(null);
-            menubar.addItem(nsItem);
+    NSInteger count = menubar.numberOfItems();
+    while (count > 1) {
+        menubar.removeItemAtIndex(count - 1);
+        count--;
+    }
+    //set parent of each item to NULL and add them to menubar
+    if (menu !is null) {
+        MenuItem[] items = menu.getItems();
+        for (int i = 0; i < items.length; i++) {
+        MenuItem item = items[i];
+        NSMenuItem nsItem = item.nsItem;
+        nsItem.setMenu(null);
+        menubar.addItem(nsItem);
 
-            /*
-            * Bug in Cocoa: Calling NSMenuItem.setEnabled() for menu item of a menu bar only
-            * works when the menu bar is the current menu bar.  The underline OS menu does get
-            * enabled/disable when that menu is set later on.  The fix is to toggle the
-            * item enabled state to force the underline menu to be updated.
-            */
-            bool enabled = menu.getEnabled () && item.getEnabled ();
-            nsItem.setEnabled(!enabled);
-            nsItem.setEnabled(enabled);
-            }
+        /*
+        * Bug in Cocoa: Calling NSMenuItem.setEnabled() for menu item of a menu bar only
+        * works when the menu bar is the current menu bar.  The underline OS menu does get
+        * enabled/disable when that menu is set later on.  The fix is to toggle the
+        * item enabled state to force the underline menu to be updated.
+        */
+        bool enabled = menu.getEnabled () && item.getEnabled ();
+        nsItem.setEnabled(!enabled);
+        nsItem.setEnabled(enabled);
         }
     }
+}
 
     void setModalShell (Shell shell) {
         if (modalShells is null) modalShells = new Shell [4];
@@ -4176,12 +4222,9 @@ void updateQuitMenu () {
         NSMenu sm = appitem.submenu();
 
         // Normally this would be sel_terminate_ but we changed it so terminate: doesn't kill the app.
-        int /*long*/ quitIndex = sm.indexOfItemWithTarget(applicationDelegate, OS.sel_quitRequested_);
+        NSInteger quitIndex = sm.indexOfItemWithTarget(applicationDelegate, OS.sel_quitRequested_);
 
         if (quitIndex !is -1) {
-            NSMenuItem quitItem = sm.itemAtIndex(quitIndex);
-            quitItem.setEnabled(enabled);
-        }
             NSMenuItem quitItem = sm.itemAtIndex(quitIndex);
             quitItem.setEnabled(enabled);
         }
@@ -4189,29 +4232,30 @@ void updateQuitMenu () {
 }
 
 
-    /**
-     * If the receiver's user-interface thread was <code>sleep</code>ing,
-     * causes it to be awakened and start running again. Note that this
-     * method may be called from any thread.
-     *
-     * @exception DWTException <ul>
-     *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
-     * </ul>
-     *
-     * @see #sleep
-     */
-    public void wake () {
-        synchronized (Device.classinfo) {
-            if (isDisposed ()) error (DWT.ERROR_DEVICE_DISPOSED);
-            if (thread is Thread.getThis ()) return;
-            wakeThread ();
-        }
+/**
+ * If the receiver's user-interface thread was <code>sleep</code>ing,
+ * causes it to be awakened and start running again. Note that this
+ * method may be called from any thread.
+ *
+ * @exception DWTException <ul>
+ *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
+ * </ul>
+ *
+ * @see #sleep
+ */
+public void wake () {
+    synchronized (Device.classinfo) {
+        if (isDisposed ()) error (DWT.ERROR_DEVICE_DISPOSED);
+        if (thread is Thread.getThis ()) return;
+        wakeThread ();
     }
+}
 
-    void wakeThread () {
-    //new pool?
-        object.performSelectorOnMainThread(OS.sel_release, null, false);
-    }
+void wakeThread () {
+//new pool?
+    NSObject object = (new NSObject()).alloc().init();
+    object.performSelectorOnMainThread(OS.sel_release, null, false);
+}
 
 Control findControl (bool checkTrim) {
     return findControl(checkTrim, null);
@@ -4221,7 +4265,7 @@ Control findControl (bool checkTrim, NSView[] hitView) {
     NSView view = null;
     NSPoint screenLocation = NSEvent.mouseLocation();
     NSArray windows = application.orderedWindows();
-    for (int i = 0, count = (int)/*64*/windows.count(); i < count && view is null; i++) {
+    for (NSUInteger i = 0, count = windows.count(); i < count && view is null; i++) {
         NSWindow window = new NSWindow(windows.objectAtIndex(i));
         NSView contentView = window.contentView();
         if (contentView !is null && OS.NSPointInRect(screenLocation, window.frame())) {
@@ -4231,148 +4275,136 @@ Control findControl (bool checkTrim, NSView[] hitView) {
                 view = contentView;
             }
             break;
-            }
         }
-        Control control = null;
-        if (view !is null) {
-            do {auto vi = view.id;
-                Widget widget = getWidget (view);
-                if (cast(Control) widget) {
-                    control = cast(Control)widget;
-                    break;
-                }
-                view = view.superview();
-            } while (view !is null);
-        }
-        if (checkTrim) {
-            if (control !is null && control.isTrim (view)) control = null;
-        }
-    if (control !is null && hitView !is null) hitView[0] = view;
-        return control;
     }
+    Control control = null;
+    if (view !is null) {
+        do {
+            objc.id vi = view.id;
+            Widget widget = getWidget (view);
+            if (cast(Control) widget) {
+                control = cast(Control)widget;
+                break;
+            }
+            view = view.superview();
+        } while (view !is null);
+    }
+    if (checkTrim) {
+        if (control !is null && control.isTrim (view)) control = null;
+    }
+    if (control !is null && hitView !is null) hitView[0] = view;
+    return control;
+}
 
-void finishLaunching (int /*long*/ id, int /*long*/ sel) {
+void finishLaunching (objc.id id, objc.SEL sel) {
     /*
     * [NSApplication finishLaunching] cannot run multiple times otherwise
     * multiple main menus are added.
     */
     if (launched) return;
     launched = true;
-    objc_super super_struct = new objc_super();
+    objc_super super_struct = objc_super();
     super_struct.receiver = id;
-    super_struct.super_class = OS.objc_msgSend(id, OS.sel_superclass);
-    OS.objc_msgSendSuper(super_struct, sel);
+    super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
+    OS.objc_msgSendSuper(&super_struct, sel);
 }
 
-void applicationDidBecomeActive (int /*long*/ id, int /*long*/ sel, int /*long*/ notification) {
+void applicationDidBecomeActive (objc.id id, objc.SEL sel, objc.id notification) {
     checkFocus();
     checkEnterExit(findControl(true), null, false);
 }
 
-void applicationDidResignActive (int /*long*/ id, int /*long*/ sel, int /*long*/ notification) {
+void applicationDidResignActive (objc.id id, objc.SEL sel, objc.id notification) {
     checkFocus();
     checkEnterExit(null, null, false);
 }
 
-    if (dequeue !is 0 && trackingControl !is null && !trackingControl.isDisposed()) runDeferredEvents();
-    objc_super super_struct = new objc_super();
+objc.id applicationNextEventMatchingMask (objc.id id, objc.SEL sel, objc.id mask, objc.id expiration, objc.id mode, objc.id dequeue) {
+    if (dequeue !is null && trackingControl !is null && !trackingControl.isDisposed()) runDeferredEvents();
+    objc_super super_struct = objc_super();
     super_struct.receiver = id;
-    super_struct.super_class = OS.objc_msgSend(id, OS.sel_superclass);
-    OS.objc_msgSendSuper(super_struct, sel);
-}
-
-void applicationDidBecomeActive (int /*long*/ id, int /*long*/ sel, int /*long*/ notification) {
-    checkFocus();
-    checkEnterExit(findControl(true), null, false);
-}
-
-void applicationDidResignActive (int /*long*/ id, int /*long*/ sel, int /*long*/ notification) {
-    checkFocus();
-    checkEnterExit(null, null, false);
-}
-
-    if (dequeue !is 0 && trackingControl !is null && !trackingControl.isDisposed()) runDeferredEvents();
-        super_struct.receiver = id;
-        super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
-        objc.id result = OS.objc_msgSendSuper(&super_struct, sel, mask, expiration, mode, dequeue !is null);
-        if (result !is null) {
-        if (dequeue !is 0 && trackingControl !is null && !trackingControl.isDisposed()) {
+    super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
+    objc.id result = OS.objc_msgSendSuper(&super_struct, sel, mask, expiration, mode, dequeue !is null);
+    if (result !is null) {
+        if (dequeue !is null && trackingControl !is null && !trackingControl.isDisposed()) {
             applicationSendTrackingEvent(new NSEvent(result), trackingControl);
-            }
         }
-        return result;
     }
+    return result;
+}
 
 void applicationSendTrackingEvent (NSEvent nsEvent, Control trackingControl) {
-        NSEventType type = nsEvent.type();
-        switch (type) {
-            case OS.NSLeftMouseDown:
-            case OS.NSRightMouseDown:
-        case OS.NSOtherMouseDown:
-            trackingControl.sendMouseEvent (nsEvent, DWT.MouseDown, true);
-                break;
-            case OS.NSLeftMouseUp:
-            case OS.NSRightMouseUp:
-        case OS.NSOtherMouseUp:
-            checkEnterExit (findControl (true), nsEvent, true);
-            if (trackingControl.isDisposed()) return;
-            trackingControl.sendMouseEvent (nsEvent, DWT.MouseUp, true);
+    NSEventType type = nsEvent.type();
+    switch (type) {
+        case OS.NSLeftMouseDown:
+        case OS.NSRightMouseDown:
+    case OS.NSOtherMouseDown:
+        trackingControl.sendMouseEvent (nsEvent, DWT.MouseDown, true);
             break;
-            case OS.NSLeftMouseDragged:
-            case OS.NSRightMouseDragged:
-            case OS.NSOtherMouseDragged:
-            checkEnterExit (trackingControl, nsEvent, true);
-            if (trackingControl.isDisposed()) return;
-            //FALL THROUGH
-        case OS.NSMouseMoved:
-            trackingControl.sendMouseEvent (nsEvent, DWT.MouseMove, true);
-                break;
-    }
-            default:
-
-    void applicationSendEvent (objc.id id, objc.SEL sel, objc.id event) {
-        NSEvent nsEvent = new NSEvent(event);
-    NSWindow window = nsEvent.window ();
-    int type = (int)/*64*/nsEvent.type ();
-    bool down = false;
-        switch (type) {
-            case OS.NSLeftMouseDown:
-            case OS.NSRightMouseDown:
-            case OS.NSOtherMouseDown:
-            down = true;
-            case OS.NSLeftMouseUp:
-            case OS.NSRightMouseUp:
-        case OS.NSOtherMouseUp:
-            case OS.NSLeftMouseDragged:
-            case OS.NSRightMouseDragged:
+        case OS.NSLeftMouseUp:
+        case OS.NSRightMouseUp:
+    case OS.NSOtherMouseUp:
+        checkEnterExit (findControl (true), nsEvent, true);
+        if (trackingControl.isDisposed()) return;
+        trackingControl.sendMouseEvent (nsEvent, DWT.MouseUp, true);
+        break;
+        case OS.NSLeftMouseDragged:
+        case OS.NSRightMouseDragged:
         case OS.NSOtherMouseDragged:
-        case OS.NSMouseMoved:
-            case OS.NSMouseEntered:
-            case OS.NSMouseExited:
-            case OS.NSKeyDown:
-            case OS.NSKeyUp:
-            case OS.NSScrollWheel:
-                if (window !is null) {
-                    Shell shell = cast(Shell) getWidget (window.id);
-                if (shell !is null) {
-                    Shell modalShell = shell.getModalShell ();
-                    if (modalShell !is null) {
-                        if (down) {
-                            if (!application.isActive()) {
-                                application.activateIgnoringOtherApps(true);
-                            }
-                            NSRect rect = window.contentRectForFrameRect(window.frame());
-                            NSPoint pt = window.convertBaseToScreen(nsEvent.locationInWindow());
-                            if (OS.NSPointInRect(pt, rect)) beep ();
+        checkEnterExit (trackingControl, nsEvent, true);
+        if (trackingControl.isDisposed()) return;
+        //FALL THROUGH
+    case OS.NSMouseMoved:
+        trackingControl.sendMouseEvent (nsEvent, DWT.MouseMove, true);
+            break;
+    default:
+    }
+}
+
+void applicationSendEvent (objc.id id, objc.SEL sel, objc.id event) {
+    NSEvent nsEvent = new NSEvent(event);
+    NSWindow window = nsEvent.window ();
+    NSEventType type = nsEvent.type ();
+    bool down = false;
+    switch (type) {
+    case OS.NSLeftMouseDown:
+    case OS.NSRightMouseDown:
+    case OS.NSOtherMouseDown:
+        down = true;
+    case OS.NSLeftMouseUp:
+    case OS.NSRightMouseUp:
+    case OS.NSOtherMouseUp:
+    case OS.NSLeftMouseDragged:
+    case OS.NSRightMouseDragged:
+    case OS.NSOtherMouseDragged:
+    case OS.NSMouseMoved:
+    case OS.NSMouseEntered:
+    case OS.NSMouseExited:
+    case OS.NSKeyDown:
+    case OS.NSKeyUp:
+    case OS.NSScrollWheel:
+        if (window !is null) {
+            Shell shell = cast(Shell) getWidget (window.id);
+            if (shell !is null) {
+                Shell modalShell = shell.getModalShell ();
+                if (modalShell !is null) {
+                    if (down) {
+                        if (!application.isActive()) {
+                            application.activateIgnoringOtherApps(true);
                         }
+                        NSRect rect = window.contentRectForFrameRect(window.frame());
+                        NSPoint pt = window.convertBaseToScreen(nsEvent.locationInWindow());
+                        if (OS.NSPointInRect(pt, rect)) beep ();
                     }
-                            NSRect rect = window.contentRectForFrameRect(window.frame());
-                            NSPoint pt = window.convertBaseToScreen(nsEvent.locationInWindow());
-                            if (OS.NSPointInRect(pt, rect)) beep ();
                 }
-                        return;
-                    }
-    sendEvent = true;
+                NSRect rect = window.contentRectForFrameRect(window.frame());
+                NSPoint pt = window.convertBaseToScreen(nsEvent.locationInWindow());
+                if (OS.NSPointInRect(pt, rect)) beep ();
+            }
+            return;
+        }
+    }
+    sendEvent_ = true;
 
     /*
      * Feature in Cocoa. The help key triggers context-sensitive help but doesn't get forwarded to the window as a key event.
@@ -4389,21 +4421,23 @@ void applicationSendTrackingEvent (NSEvent nsEvent, Control trackingControl) {
     if (window !is null && window.isKeyWindow() && nsEvent.type() is OS.NSKeyUp && (nsEvent.modifierFlags() & OS.NSCommandKeyMask) !is 0)   {
         window.sendEvent(nsEvent);
     } else {
-                }
-void applicationWillFinishLaunching (int /*long*/ id, int /*long*/ sel, int /*long*/ notification) {
+    }
+}
+
+void applicationWillFinishLaunching (objc.id id, objc.SEL sel, objc.id notification) {
     bool loaded = false;
     NSBundle bundle = NSBundle.bundleWithIdentifier(NSString.stringWith("com.apple.JavaVM"));
     NSDictionary dict = NSDictionary.dictionaryWithObject(applicationDelegate, NSString.stringWith("NSOwner"));
     NSString path = bundle.pathForResource(NSString.stringWith("DefaultApp"), NSString.stringWith("nib"));
-    if (!loaded) loaded = path !is null && NSBundle.loadNibFile(path, dict, 0);
+    if (!loaded) loaded = path !is null && NSBundle.loadNibFile(path, dict, null);
     if (!loaded) {
         NSString resourcePath = bundle.resourcePath();
         path = resourcePath !is null ? resourcePath.stringByAppendingString(NSString.stringWith("/English.lproj/DefaultApp.nib")) : null;
-        loaded = path !is null && NSBundle.loadNibFile(path, dict, 0);
-            }
+        loaded = path !is null && NSBundle.loadNibFile(path, dict, null);
+    }
     if (!loaded) {
-        path = NSString.stringWith(System.getProperty("java.home") + "/../Resources/English.lproj/DefaultApp.nib");
-        loaded = path !is null && NSBundle.loadNibFile(path, dict, 0);
+        path = NSString.stringWith(System.getProperty("java.home") ~ "/../Resources/English.lproj/DefaultApp.nib");
+        loaded = path !is null && NSBundle.loadNibFile(path, dict, null);
     }
     if (!loaded) {
         createMainMenu();
@@ -4422,184 +4456,132 @@ void applicationWillFinishLaunching (int /*long*/ id, int /*long*/ sel, int /*lo
             NSString title = ni.title().stringByReplacingOccurrencesOfString(match, name);
             ni.setTitle(title);
         }
-    sendEvent = true;
+        sendEvent_ = true;
 
-        int /*long*/ quitIndex = sm.indexOfItemWithTarget(applicationDelegate, OS.sel_terminate_);
-
-        if (quitIndex !is -1) {
-            NSMenuItem quitItem = sm.itemAtIndex(quitIndex);
-            quitItem.setAction(OS.sel_quitRequested_);
-        }
-    }
-
-    /*
-     * Feature in Cocoa. NSKeyUp events are not delivered to the window if the command key is down.
-     * If the event is destined for the key window, and it's a key up and the command key is down, send it directly to the window.
-     */
-    if (sel is OS.sel_isRunning) {
-        // #245724: [NSApplication isRunning] must return true to allow the AWT to load correctly.
-        return display.isDisposed() ? 0 : 1;
-    }
-    if (sel is OS.sel_finishLaunching) {
-        display.finishLaunching (id, sel);
-        OS.objc_msgSendSuper (&super_struct, sel, event);
-    }
-    sendEvent = false;
-    }
-
-void applicationWillFinishLaunching (int /*long*/ id, int /*long*/ sel, int /*long*/ notification) {
-    bool loaded = false;
-    NSBundle bundle = NSBundle.bundleWithIdentifier(NSString.stringWith("com.apple.JavaVM"));
-    NSDictionary dict = NSDictionary.dictionaryWithObject(applicationDelegate, NSString.stringWith("NSOwner"));
-    NSString path = bundle.pathForResource(NSString.stringWith("DefaultApp"), NSString.stringWith("nib"));
-    if (!loaded) loaded = path !is null && NSBundle.loadNibFile(path, dict, 0);
-    if (!loaded) {
-        NSString resourcePath = bundle.resourcePath();
-        path = resourcePath !is null ? resourcePath.stringByAppendingString(NSString.stringWith("/English.lproj/DefaultApp.nib")) : null;
-        loaded = path !is null && NSBundle.loadNibFile(path, dict, 0);
-        }
-    if (!loaded) {
-        path = NSString.stringWith(System.getProperty("java.home") + "/../Resources/English.lproj/DefaultApp.nib");
-        loaded = path !is null && NSBundle.loadNibFile(path, dict, 0);
-    }
-    if (!loaded) {
-        createMainMenu();
-        NSString name = getAppName();
-        NSString match = NSString.stringWith("%@");
-        appitem.setTitle(name);
-
-        int /*long*/ quitIndex = sm.indexOfItemWithTarget(applicationDelegate, OS.sel_terminate_);
+        NSInteger quitIndex = sm.indexOfItemWithTarget(applicationDelegate, OS.sel_terminate_);
 
         if (quitIndex !is -1) {
             NSMenuItem quitItem = sm.itemAtIndex(quitIndex);
             quitItem.setAction(OS.sel_quitRequested_);
         }
-        }
+    }
+}
 
-static int /*long*/ applicationProc(int /*long*/ id, int /*long*/ sel) {
-        //TODO optimize getting the display
-        Display display = getCurrent ();
-        if (display is null) return null;
+static objc.id applicationProc2(objc.id id, objc.SEL sel) {
+    //TODO optimize getting the display
+    Display display = getCurrent ();
+    if (display is null) return null;
     if (sel is OS.sel_isRunning) {
         // #245724: [NSApplication isRunning] must return true to allow the AWT to load correctly.
-        return display.isDisposed() ? 0 : 1;
+        return display.isDisposed() ? cast(objc.id)0 : cast(objc.id)1;
     }
     if (sel is OS.sel_finishLaunching) {
         display.finishLaunching (id, sel);
-        }
-        return null;
     }
+    return null;
+}
 
-static int /*long*/ applicationProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0) {
-        //TODO optimize getting the display
-        Display display = getCurrent ();
-        if (display is null) return null;
-        NSApplication application = display.application;
+static objc.id applicationProc3(objc.id id, objc.SEL sel, objc.id arg0) {
+    //TODO optimize getting the display
+    Display display = getCurrent ();
+    if (display is null) return null;
+    NSApplication application = display.application;
     if (sel is OS.sel_sendEvent_) {
         display.applicationSendEvent (id, sel, arg0);
     } else if (sel is OS.sel_applicationWillFinishLaunching_) {
         display.applicationWillFinishLaunching(id, sel, arg0);
-        } else if (sel is OS.sel_terminate_) {
-        // Do nothing here -- without a definition of sel_terminate we get a warning dumped to the console.
-        } else if (sel is OS.sel_orderFrontStandardAboutPanel_) {
+    } else if (sel is OS.sel_terminate_) {
+    // Do nothing here -- without a definition of sel_terminate we get a warning dumped to the console.
+    } else if (sel is OS.sel_orderFrontStandardAboutPanel_) {
 //      application.orderFrontStandardAboutPanel(application);
-        } else if (sel is OS.sel_hideOtherApplications_) {
-            application.hideOtherApplications(application);
-        } else if (sel is OS.sel_hide_) {
-            application.hide(application);
-        } else if (sel is OS.sel_unhideAllApplications_) {
-            application.unhideAllApplications(application);
+    } else if (sel is OS.sel_hideOtherApplications_) {
+        application.hideOtherApplications(application);
+    } else if (sel is OS.sel_hide_) {
+        application.hide(application);
+    } else if (sel is OS.sel_unhideAllApplications_) {
+        application.unhideAllApplications(application);
     } else if (sel is OS.sel_quitRequested_) {
-            if (!display.disposing) {
-                Event event = new Event ();
-                display.sendEvent (DWT.Close, event);
-                if (event.doit) {
+        if (!display.disposing) {
+            Event event = new Event ();
+            display.sendEvent (DWT.Close, event);
+            if (event.doit) {
                 display.dispose();
+            }
+        }
     } else if (sel is OS.sel_applicationDidBecomeActive_) {
         display.applicationDidBecomeActive(id, sel, arg0);
     } else if (sel is OS.sel_applicationDidResignActive_) {
         display.applicationDidResignActive(id, sel, arg0);
     }
-    return 0;
+    return null;
 }
 
-static int /*long*/ applicationProc(int /*long*/ id, int /*long*/sel, int /*long*/ arg0, int /*long*/ arg1, int /*long*/ arg2, int /*long*/ arg3) {
+static objc.id applicationProc6(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2, objc.id arg3) {
     //TODO optimize getting the display
     Display display = getCurrent ();
-    if (display is null) return 0;
+    if (display is null) return null;
     if (sel is OS.sel_nextEventMatchingMask_untilDate_inMode_dequeue_) {
         return display.applicationNextEventMatchingMask(id, sel, arg0, arg1, arg2, arg3);
-            }
     } else if (sel is OS.sel_applicationDidBecomeActive_) {
         display.applicationDidBecomeActive(id, sel, arg0);
     } else if (sel is OS.sel_applicationDidResignActive_) {
         display.applicationDidResignActive(id, sel, arg0);
     }
-    return 0;
+    return null;
 }
 
-static int /*long*/ applicationProc(int /*long*/ id, int /*long*/sel, int /*long*/ arg0, int /*long*/ arg1, int /*long*/ arg2, int /*long*/ arg3) {
-    //TODO optimize getting the display
-    Display display = getCurrent ();
-    if (display is null) return 0;
-    if (sel is OS.sel_nextEventMatchingMask_untilDate_inMode_dequeue_) {
-        return display.applicationNextEventMatchingMask(id, sel, arg0, arg1, arg2, arg3);
-        }
-        return null;
-    }
-
-    static objc.id dialogProc(objc.id id, objc.SEL sel, objc.id arg0) {
-        void* jniRef;
-        OS.object_getInstanceVariable(id, SWT_OBJECT, jniRef);
-        if (jniRef is null) return null;
-        if (sel is OS.sel_changeColor_) {
-            ColorDialog dialog = cast(ColorDialog)OS.JNIGetObject(jniRef);
-            if (jniRef is null) return null;
-            dialog.changeColor(id, sel, arg0);
-        } else if (sel is OS.sel_changeFont_) {
-            FontDialog dialog = cast(FontDialog)OS.JNIGetObject(jniRef);
-            if (dialog is null) return null;
-            dialog.changeFont(id, sel, arg0);
-    } else if (sel is OS.sel_sendSelection_) {
-        FileDialog dialog = (FileDialog)OS.JNIGetObject(jniRef[0]);
-        if (dialog is null) return 0;
-        dialog.sendSelection(id, sel, arg0);
-        } else if (sel is OS.sel_windowWillClose_) {
-            Object object = OS.JNIGetObject(jniRef);
-            if (cast(FontDialog) object) {
-                (cast(FontDialog)object).windowWillClose(id, sel, arg0);
-            } else if (cast(ColorDialog) object) {
-                (cast(ColorDialog)object).windowWillClose(id, sel, arg0);
-            }
-        }
-        return null;
-    }
-
-static int /*long*/ dialogProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1) {
-    int /*long*/ [] jniRef = new int /*long*/ [1];
+static objc.id dialogProc3(objc.id id, objc.SEL sel, objc.id arg0) {
+    void* jniRef;
     OS.object_getInstanceVariable(id, SWT_OBJECT, jniRef);
-    if (jniRef[0] is 0) return 0;
+    if (jniRef is null) return null;
+    if (sel is OS.sel_changeColor_) {
+        ColorDialog dialog = cast(ColorDialog)OS.JNIGetObject(jniRef);
+        if (jniRef is null) return null;
+        dialog.changeColor(id, sel, arg0);
+    } else if (sel is OS.sel_changeFont_) {
+        FontDialog dialog = cast(FontDialog)OS.JNIGetObject(jniRef);
+        if (dialog is null) return null;
+        dialog.changeFont(id, sel, arg0);
+    } else if (sel is OS.sel_sendSelection_) {
+        FileDialog dialog = cast(FileDialog)OS.JNIGetObject(jniRef);
+        if (dialog is null) return null;
+        dialog.sendSelection(id, sel, arg0);
+    } else if (sel is OS.sel_windowWillClose_) {
+        Object object = OS.JNIGetObject(jniRef);
+        if (cast(FontDialog) object) {
+            (cast(FontDialog)object).windowWillClose(id, sel, arg0);
+        } else if (cast(ColorDialog) object) {
+            (cast(ColorDialog)object).windowWillClose(id, sel, arg0);
+        }
+    }
+    return null;
+}
+
+static objc.id dialogProc4(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
+    void* jniRef;
+    OS.object_getInstanceVariable(id, SWT_OBJECT, jniRef);
+    if (jniRef is null) return null;
     if (sel is OS.sel_panel_shouldShowFilename_) {
-        FileDialog dialog = (FileDialog)OS.JNIGetObject(jniRef[0]);
-        if (dialog is null) return 0;
+        FileDialog dialog = cast(FileDialog)OS.JNIGetObject(jniRef);
+        if (dialog is null) return null;
         return dialog.panel_shouldShowFilename(id, sel, arg0, arg1);
     }
-    return 0;
+    return null;
 }
 
-static int /*long*/ dialogProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1, int /*long*/ arg2) {
-    int /*long*/ [] jniRef = new int /*long*/ [1];
+static objc.id dialogProc5(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2) {
+    void* jniRef;
     OS.object_getInstanceVariable(id, SWT_OBJECT, jniRef);
-    if (jniRef[0] is 0) return 0;
+    if (jniRef is null) return null;
     if (sel is OS.sel_panelDidEnd_returnCode_contextInfo_) {
-        MessageBox dialog = (MessageBox)OS.JNIGetObject(jniRef[0]);
-        if (dialog is null) return 0;
+        MessageBox dialog = cast(MessageBox)OS.JNIGetObject(jniRef);
+        if (dialog is null) return null;
         dialog.panelDidEnd_returnCode_contextInfo(id, sel, arg0, arg1, arg2);
     }
-    return 0;
+    return null;
 }
 
-static int /*long*/ fieldEditorProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0) {
+static objc.id fieldEditorProc3(objc.id id, objc.SEL sel, objc.id arg0) {
     Widget widget = null;
     NSView view = new NSView (id);
     do {
@@ -4607,19 +4589,7 @@ static int /*long*/ fieldEditorProc(int /*long*/ id, int /*long*/ sel, int /*lon
         if (widget !is null) break;
         view = view.superview ();
     } while (view !is null);
-    }
-    return 0;
-}
-
-static int /*long*/ fieldEditorProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0) {
-    Widget widget = null;
-    NSView view = new NSView (id);
-    do {
-        widget = GetWidget (view.id);
-        if (widget !is null) break;
-        view = view.superview ();
-    } while (view !is null);
-    if (widget is null) return 0;
+    if (widget is null) return null;
     if (sel is OS.sel_keyDown_) {
         widget.keyDown (id, sel, arg0);
     } else if (sel is OS.sel_keyUp_) {
@@ -4627,9 +4597,9 @@ static int /*long*/ fieldEditorProc(int /*long*/ id, int /*long*/ sel, int /*lon
     } else if (sel is OS.sel_flagsChanged_) {
         widget.flagsChanged(id, sel, arg0);
     } else if (sel is OS.sel_insertText_) {
-        return widget.insertText (id, sel, arg0) ? 1 : 0;
+        return widget.insertText (id, sel, arg0) ? cast(objc.id)1 : cast(objc.id)0;
     } else if (sel is OS.sel_doCommandBySelector_) {
-        widget.doCommandBySelector (id, sel, arg0);
+        widget.doCommandBySelector (id, sel, cast(char*)arg0);
     } else if (sel is OS.sel_menuForEvent_) {
         return widget.menuForEvent (id, sel, arg0);
     } else if (sel is OS.sel_mouseDown_) {
@@ -4659,10 +4629,10 @@ static int /*long*/ fieldEditorProc(int /*long*/ id, int /*long*/ sel, int /*lon
     } else if (sel is OS.sel_otherMouseDragged_) {
         widget.otherMouseDragged(id, sel, arg0);
     }
-    return 0;
+    return null;
 }
 
-static int /*long*/ fieldEditorProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1) {
+static objc.id fieldEditorProc4(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
     Widget widget = null;
     NSView view = new NSView (id);
     do {
@@ -4671,12 +4641,12 @@ static int /*long*/ fieldEditorProc(int /*long*/ id, int /*long*/ sel, int /*lon
         view = view.superview ();
     } while (view !is null);
     if (sel is OS.sel_shouldChangeTextInRange_replacementString_) {
-        return widget.shouldChangeTextInRange_replacementString(id, sel, arg0, arg1) ? 1 : 0;
+        return widget.shouldChangeTextInRange_replacementString(id, sel, arg0, arg1) ? cast(objc.id)1 : cast(objc.id)0;
     }
-    return 0;
+    return null;
 }
 
-static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel) {
+static objc.id windowProc2(objc.id id, objc.SEL sel) {
     /*
     * Feature in Cocoa.  In Cocoa, the default button animation is done
     * in a separate thread that calls drawRect() and isOpaque() from
@@ -4688,151 +4658,79 @@ static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel) {
     */
     if (!NSThread.isMainThread()) {
         if (sel is OS.sel_isOpaque) {
-            return 1;
+            return cast(objc.id)1;
         }
     }
-    if (widget is null) return 0;
-    if (sel is OS.sel_keyDown_) {
-        widget.keyDown (id, sel, arg0);
-    } else if (sel is OS.sel_keyUp_) {
-        widget.keyUp (id, sel, arg0);
-    } else if (sel is OS.sel_flagsChanged_) {
-        widget.flagsChanged(id, sel, arg0);
-    } else if (sel is OS.sel_insertText_) {
-        return widget.insertText (id, sel, arg0) ? 1 : 0;
-    } else if (sel is OS.sel_doCommandBySelector_) {
-        widget.doCommandBySelector (id, sel, arg0);
-    } else if (sel is OS.sel_menuForEvent_) {
-        return widget.menuForEvent (id, sel, arg0);
-    } else if (sel is OS.sel_mouseDown_) {
-        widget.mouseDown(id, sel, arg0);
-    } else if (sel is OS.sel_mouseUp_) {
-        widget.mouseUp(id, sel, arg0);
-    } else if (sel is OS.sel_mouseMoved_) {
-        widget.mouseMoved(id, sel, arg0);
-    } else if (sel is OS.sel_mouseDragged_) {
-        widget.mouseDragged(id, sel, arg0);
-    } else if (sel is OS.sel_mouseEntered_) {
-        widget.mouseEntered(id, sel, arg0);
-    } else if (sel is OS.sel_mouseExited_) {
-        widget.mouseExited(id, sel, arg0);
-    } else if (sel is OS.sel_cursorUpdate_) {
-        widget.cursorUpdate(id, sel, arg0);
-    } else if (sel is OS.sel_rightMouseDown_) {
-        widget.rightMouseDown(id, sel, arg0);
-    } else if (sel is OS.sel_rightMouseDragged_) {
-        widget.rightMouseDragged(id, sel, arg0);
-    } else if (sel is OS.sel_rightMouseUp_) {
-        widget.rightMouseUp(id, sel, arg0);
-    } else if (sel is OS.sel_otherMouseDown_) {
-        widget.otherMouseDown(id, sel, arg0);
-    } else if (sel is OS.sel_otherMouseUp_) {
-        widget.otherMouseUp(id, sel, arg0);
-    } else if (sel is OS.sel_otherMouseDragged_) {
-        widget.otherMouseDragged(id, sel, arg0);
-    }
-    return 0;
-}
-
-static int /*long*/ fieldEditorProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1) {
-    Widget widget = null;
-    NSView view = new NSView (id);
-    do {
-        widget = GetWidget (view.id);
-        if (widget !is null) break;
-        view = view.superview ();
-    } while (view !is null);
-    if (sel is OS.sel_shouldChangeTextInRange_replacementString_) {
-        return widget.shouldChangeTextInRange_replacementString(id, sel, arg0, arg1) ? 1 : 0;
-    }
-    return 0;
-}
-
-static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel) {
-    /*
-    * Feature in Cocoa.  In Cocoa, the default button animation is done
-    * in a separate thread that calls drawRect() and isOpaque() from
-    * outside the UI thread.  This means that those methods, and application
-    * code that runs as a result of those methods, must be thread safe.
-    * In DWT, paint events must happen in the UI thread.  The fix is
-    * to detect a non-UI thread and avoid the drawing. Instead, the
-    * default button is animated by a timer.
-    */
-    if (!NSThread.isMainThread()) {
-        if (sel is OS.sel_isOpaque) {
-            return 1;
-        }
-    }
-        Widget widget = GetWidget(id);
-        if (widget is null) return null;
-        if (sel is OS.sel_sendSelection) {
-            widget.sendSelection();
-        } else if (sel is OS.sel_sendDoubleSelection) {
-            widget.sendDoubleSelection();
-        } else if (sel is OS.sel_sendVerticalSelection) {
-            widget.sendVerticalSelection();
-        } else if (sel is OS.sel_sendHorizontalSelection) {
-            widget.sendHorizontalSelection();
+    Widget widget = GetWidget(id);
+    if (widget is null) return null;
+    if (sel is OS.sel_sendSelection) {
+        widget.sendSelection();
+    } else if (sel is OS.sel_sendDoubleSelection) {
+        widget.sendDoubleSelection();
+    } else if (sel is OS.sel_sendVerticalSelection) {
+        widget.sendVerticalSelection();
+    } else if (sel is OS.sel_sendHorizontalSelection) {
+        widget.sendHorizontalSelection();
     } else if (sel is OS.sel_sendSearchSelection) {
         widget.sendSearchSelection();
     } else if (sel is OS.sel_sendCancelSelection) {
         widget.sendCancelSelection();
-        } else if (sel is OS.sel_acceptsFirstResponder) {
-            return widget.acceptsFirstResponder(id, sel) ? cast(objc.id) 1 : null;
-        } else if (sel is OS.sel_becomeFirstResponder) {
-            return widget.becomeFirstResponder(id, sel) ? cast(objc.id) 1 : null;
-        } else if (sel is OS.sel_resignFirstResponder) {
-            return widget.resignFirstResponder(id, sel) ? cast(objc.id) 1 : null;
+    } else if (sel is OS.sel_acceptsFirstResponder) {
+        return widget.acceptsFirstResponder(id, sel) ? cast(objc.id) 1 : null;
+    } else if (sel is OS.sel_becomeFirstResponder) {
+        return widget.becomeFirstResponder(id, sel) ? cast(objc.id) 1 : null;
+    } else if (sel is OS.sel_resignFirstResponder) {
+        return widget.resignFirstResponder(id, sel) ? cast(objc.id) 1 : null;
     } else if (sel is OS.sel_isOpaque) {
-        return widget.isOpaque(id, sel) ? 1 : 0;
+        return widget.isOpaque(id, sel) ? cast(objc.id)1 : cast(objc.id)0;
     } else if (sel is OS.sel_isFlipped) {
-        return widget.isFlipped(id, sel) ? 1 : 0;
+        return widget.isFlipped(id, sel) ? cast(objc.id)1 : cast(objc.id)0;
     } else if (sel is OS.sel_canBecomeKeyView) {
-        return widget.canBecomeKeyView(id,sel) ? 1 : 0;
+        return widget.canBecomeKeyView(id,sel) ? cast(objc.id)1 : cast(objc.id)0;
     } else if (sel is OS.sel_becomeKeyWindow) {
         widget.becomeKeyWindow(id, sel);
-        } else if (sel is OS.sel_unmarkText) {
-            //TODO not called?
-        } else if (sel is OS.sel_validAttributesForMarkedText) {
-            return widget.validAttributesForMarkedText (id, sel);
-        } else if (sel is OS.sel_markedRange) {
-            NSRange range = widget.markedRange (id, sel);
-            /* NOTE that this is freed in C */
-            objc.id result = cast(objc.id) OS.malloc (NSRange.sizeof);
-            OS.memmove (result, &range, NSRange.sizeof);
-            return result;
-        } else if (sel is OS.sel_selectedRange) {
-            NSRange range = widget.selectedRange (id, sel);
-            /* NOTE that this is freed in C */
-            objc.id result = cast(objc.id) OS.malloc (NSRange.sizeof);
-            OS.memmove (result, &range, NSRange.sizeof);
-            return result;
-    } else if (sel is OS.sel_cellSize) {
-        NSSize size = widget.cellSize (id, sel);
+    } else if (sel is OS.sel_unmarkText) {
+        //TODO not called?
+    } else if (sel is OS.sel_validAttributesForMarkedText) {
+        return widget.validAttributesForMarkedText (id, sel);
+    } else if (sel is OS.sel_markedRange) {
+        NSRange range = widget.markedRange (id, sel);
         /* NOTE that this is freed in C */
-        int /*long*/ result = OS.malloc (NSSize.sizeof);
-        OS.memmove (result, size, NSSize.sizeof);
+        objc.id result = cast(objc.id) OS.malloc (NSRange.sizeof);
+        OS.memmove (result, &range, NSRange.sizeof);
+        return result;
+    } else if (sel is OS.sel_selectedRange) {
+        NSRange range = widget.selectedRange (id, sel);
+        /* NOTE that this is freed in C */
+        objc.id result = cast(objc.id) OS.malloc (NSRange.sizeof);
+        OS.memmove (result, &range, NSRange.sizeof);
         return result;
     } else if (sel is OS.sel_cellSize) {
         NSSize size = widget.cellSize (id, sel);
         /* NOTE that this is freed in C */
-        int /*long*/ result = OS.malloc (NSSize.sizeof);
-        OS.memmove (result, size, NSSize.sizeof);
+        objc.id result = cast(objc.id)OS.malloc (NSSize.sizeof);
+        OS.memmove (result, &size, NSSize.sizeof);
         return result;
-        } else if (sel is OS.sel_hasMarkedText) {
-            return widget.hasMarkedText (id, sel) ? cast(objc.id) 1 : null;
-        } else if (sel is OS.sel_canBecomeKeyWindow) {
-            return widget.canBecomeKeyWindow (id, sel) ? cast(objc.id) 1 : null;
-        } else if (sel is OS.sel_accessibilityActionNames) {
-            return widget.accessibilityActionNames(id, sel);
-        } else if (sel is OS.sel_accessibilityAttributeNames) {
-            return widget.accessibilityAttributeNames(id, sel);
-        } else if (sel is OS.sel_accessibilityParameterizedAttributeNames) {
-            return widget.accessibilityParameterizedAttributeNames(id, sel);
-        } else if (sel is OS.sel_accessibilityFocusedUIElement) {
-            return widget.accessibilityFocusedUIElement(id, sel);
-        } else if (sel is OS.sel_accessibilityIsIgnored) {
-            return (widget.accessibilityIsIgnored(id, sel) ? cast(objc.id) 1 : null);
+    } else if (sel is OS.sel_cellSize) {
+        NSSize size = widget.cellSize (id, sel);
+        /* NOTE that this is freed in C */
+        objc.id result = cast(objc.id)OS.malloc (NSSize.sizeof);
+        OS.memmove (result, &size, NSSize.sizeof);
+        return result;
+    } else if (sel is OS.sel_hasMarkedText) {
+        return widget.hasMarkedText (id, sel) ? cast(objc.id) 1 : null;
+    } else if (sel is OS.sel_canBecomeKeyWindow) {
+        return widget.canBecomeKeyWindow (id, sel) ? cast(objc.id) 1 : null;
+    } else if (sel is OS.sel_accessibilityActionNames) {
+        return widget.accessibilityActionNames(id, sel);
+    } else if (sel is OS.sel_accessibilityAttributeNames) {
+        return widget.accessibilityAttributeNames(id, sel);
+    } else if (sel is OS.sel_accessibilityParameterizedAttributeNames) {
+        return widget.accessibilityParameterizedAttributeNames(id, sel);
+    } else if (sel is OS.sel_accessibilityFocusedUIElement) {
+        return widget.accessibilityFocusedUIElement(id, sel);
+    } else if (sel is OS.sel_accessibilityIsIgnored) {
+        return (widget.accessibilityIsIgnored(id, sel) ? cast(objc.id) 1 : null);
     } else if (sel is OS.sel_nextState) {
         return widget.nextState(id, sel);
     } else if (sel is OS.sel_resetCursorRects) {
@@ -4843,11 +4741,11 @@ static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel) {
         widget.viewDidMoveToWindow(id, sel);
     } else if (sel is OS.sel_image) {
         return widget.image(id, sel);
-        }
-        return null;
     }
+    return null;
+}
 
-static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0) {
+static objc.id windowProc3(objc.id id, objc.SEL sel, objc.id arg0) {
     /*
     * Feature in Cocoa.  In Cocoa, the default button animation is done
     * in a separate thread that calls drawRect() and isOpaque() from
@@ -4859,292 +4757,292 @@ static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel, int /*long*/ a
     */
     if (!NSThread.isMainThread()) {
         if (sel is OS.sel_drawRect_) {
-            return 0;
+            return null;
         }
     }
-        if (sel is OS.sel_timerProc_) {
-            //TODO optimize getting the display
-            Display display = getCurrent ();
-            if (display is null) return null;
-            return display.timerProc (id, sel, arg0);
-        }
+    if (sel is OS.sel_timerProc_) {
+        //TODO optimize getting the display
+        Display display = getCurrent ();
+        if (display is null) return null;
+        return display.timerProc (id, sel, arg0);
+    }
     if (sel is OS.sel_systemSettingsChanged_) {
         //TODO optimize getting the display
         Display display = getCurrent ();
-        if (display is null) return 0;
-        display.runSettings = true;
-        return 0;
+        if (display is null) return null;
+        display.runSettings_ = true;
+        return null;
     }
     Widget widget = GetWidget(id);
-        if (sel is OS.sel_windowWillClose_) {
-            widget.windowWillClose(id, sel, arg0);
-        } else if (sel is OS.sel_drawRect_) {
-            NSRect rect = NSRect();
-            OS.memmove(&rect, arg0, NSRect.sizeof);
-            widget.drawRect(id, sel, rect);
+    if (sel is OS.sel_windowWillClose_) {
+        widget.windowWillClose(id, sel, arg0);
+    } else if (sel is OS.sel_drawRect_) {
+        NSRect rect = NSRect();
+        OS.memmove(&rect, arg0, NSRect.sizeof);
+        widget.drawRect(id, sel, rect);
     } else if (sel is OS.sel__drawThemeProgressArea_) {
         widget._drawThemeProgressArea(id, sel, arg0);
-        } else if (sel is OS.sel_setFrameOrigin_) {
-            NSPoint point = NSPoint();
-            OS.memmove(&point, arg0, NSPoint.sizeof);
-            widget.setFrameOrigin(id, sel, point);
-        } else if (sel is OS.sel_setFrameSize_) {
-            NSSize size = NSSize();
-            OS.memmove(&size, arg0, NSSize.sizeof);
-            widget.setFrameSize(id, sel, size);
-        } else if (sel is OS.sel_hitTest_) {
-            NSPoint point = NSPoint();
-            OS.memmove(&point, arg0, NSPoint.sizeof);
-            return widget.hitTest(id, sel, point);
-        } else if (sel is OS.sel_windowShouldClose_) {
-            return widget.windowShouldClose(id, sel, arg0) ? cast(objc.id) 1 : null;
-        } else if (sel is OS.sel_mouseDown_) {
-            widget.mouseDown(id, sel, arg0);
-        } else if (sel is OS.sel_keyDown_) {
-            widget.keyDown(id, sel, arg0);
-        } else if (sel is OS.sel_keyUp_) {
-            widget.keyUp(id, sel, arg0);
-        } else if (sel is OS.sel_flagsChanged_) {
-            widget.flagsChanged(id, sel, arg0);
-        } else if (sel is OS.sel_mouseUp_) {
-            widget.mouseUp(id, sel, arg0);
-        } else if (sel is OS.sel_rightMouseDown_) {
-            widget.rightMouseDown(id, sel, arg0);
+    } else if (sel is OS.sel_setFrameOrigin_) {
+        NSPoint point = NSPoint();
+        OS.memmove(&point, arg0, NSPoint.sizeof);
+        widget.setFrameOrigin(id, sel, point);
+    } else if (sel is OS.sel_setFrameSize_) {
+        NSSize size = NSSize();
+        OS.memmove(&size, arg0, NSSize.sizeof);
+        widget.setFrameSize(id, sel, size);
+    } else if (sel is OS.sel_hitTest_) {
+        NSPoint point = NSPoint();
+        OS.memmove(&point, arg0, NSPoint.sizeof);
+        return widget.hitTest(id, sel, point);
+    } else if (sel is OS.sel_windowShouldClose_) {
+        return widget.windowShouldClose(id, sel, arg0) ? cast(objc.id) 1 : null;
+    } else if (sel is OS.sel_mouseDown_) {
+        widget.mouseDown(id, sel, arg0);
+    } else if (sel is OS.sel_keyDown_) {
+        widget.keyDown(id, sel, arg0);
+    } else if (sel is OS.sel_keyUp_) {
+        widget.keyUp(id, sel, arg0);
+    } else if (sel is OS.sel_flagsChanged_) {
+        widget.flagsChanged(id, sel, arg0);
+    } else if (sel is OS.sel_mouseUp_) {
+        widget.mouseUp(id, sel, arg0);
+    } else if (sel is OS.sel_rightMouseDown_) {
+        widget.rightMouseDown(id, sel, arg0);
     } else if (sel is OS.sel_rightMouseDragged_) {
         widget.rightMouseDragged(id, sel, arg0);
-        } else if (sel is OS.sel_rightMouseUp_) {
-            widget.rightMouseUp(id, sel, arg0);
-        } else if (sel is OS.sel_otherMouseDown_) {
-            widget.otherMouseDown(id, sel, arg0);
-        } else if (sel is OS.sel_otherMouseUp_) {
-            widget.otherMouseUp(id, sel, arg0);
+    } else if (sel is OS.sel_rightMouseUp_) {
+        widget.rightMouseUp(id, sel, arg0);
+    } else if (sel is OS.sel_otherMouseDown_) {
+        widget.otherMouseDown(id, sel, arg0);
+    } else if (sel is OS.sel_otherMouseUp_) {
+        widget.otherMouseUp(id, sel, arg0);
     } else if (sel is OS.sel_otherMouseDragged_) {
         widget.otherMouseDragged(id, sel, arg0);
-        } else if (sel is OS.sel_mouseMoved_) {
-            widget.mouseMoved(id, sel, arg0);
-        } else if (sel is OS.sel_mouseDragged_) {
-            widget.mouseDragged(id, sel, arg0);
-        } else if (sel is OS.sel_mouseEntered_) {
-            widget.mouseEntered(id, sel, arg0);
-        } else if (sel is OS.sel_mouseExited_) {
-            widget.mouseExited(id, sel, arg0);
+    } else if (sel is OS.sel_mouseMoved_) {
+        widget.mouseMoved(id, sel, arg0);
+    } else if (sel is OS.sel_mouseDragged_) {
+        widget.mouseDragged(id, sel, arg0);
+    } else if (sel is OS.sel_mouseEntered_) {
+        widget.mouseEntered(id, sel, arg0);
+    } else if (sel is OS.sel_mouseExited_) {
+        widget.mouseExited(id, sel, arg0);
     } else if (sel is OS.sel_cursorUpdate_) {
         widget.cursorUpdate(id, sel, arg0);
-        } else if (sel is OS.sel_menuForEvent_) {
-            return widget.menuForEvent(id, sel, arg0);
+    } else if (sel is OS.sel_menuForEvent_) {
+        return widget.menuForEvent(id, sel, arg0);
     } else if (sel is OS.sel_noResponderFor_) {
-        widget.noResponderFor(id, sel, arg0);
+        widget.noResponderFor(id, sel, cast(objc.SEL)arg0);
     } else if (sel is OS.sel_shouldDelayWindowOrderingForEvent_) {
-        return widget.shouldDelayWindowOrderingForEvent(id, sel, arg0) ? 1 : 0;
+        return widget.shouldDelayWindowOrderingForEvent(id, sel, arg0) ? cast(objc.id)1 : cast(objc.id)0;
     } else if (sel is OS.sel_acceptsFirstMouse_) {
-        return widget.acceptsFirstMouse(id, sel, arg0) ? 1 : 0;
-        } else if (sel is OS.sel_numberOfRowsInTableView_) {
-            return cast(objc.id) widget.numberOfRowsInTableView(id, sel, arg0);
-        } else if (sel is OS.sel_tableViewSelectionDidChange_) {
-            widget.tableViewSelectionDidChange(id, sel, arg0);
-        } else if (sel is OS.sel_windowDidResignKey_) {
-            widget.windowDidResignKey(id, sel, arg0);
-        } else if (sel is OS.sel_windowDidBecomeKey_) {
-            widget.windowDidBecomeKey(id, sel, arg0);
-        } else if (sel is OS.sel_windowDidResize_) {
-            widget.windowDidResize(id, sel, arg0);
-        } else if (sel is OS.sel_windowDidMove_) {
-            widget.windowDidMove(id, sel, arg0);
-        } else if (sel is OS.sel_menuWillOpen_) {
-            widget.menuWillOpen(id, sel, arg0);
-        } else if (sel is OS.sel_menuDidClose_) {
-            widget.menuDidClose(id, sel, arg0);
-        } else if (sel is OS.sel_menuNeedsUpdate_) {
-            widget.menuNeedsUpdate(id, sel, arg0);
-        } else if (sel is OS.sel_outlineViewSelectionDidChange_) {
-            widget.outlineViewSelectionDidChange(id, sel, arg0);
-        } else if (sel is OS.sel_sendEvent_) {
-            widget.windowSendEvent(id, sel, arg0);
-        } else if (sel is OS.sel_helpRequested_) {
-            widget.helpRequested(id, sel, arg0);
-        } else if (sel is OS.sel_scrollWheel_) {
-            widget.scrollWheel(id, sel, arg0);
-        } else if (sel is OS.sel_pageDown_) {
-            widget.pageDown(id, sel, arg0);
-        } else if (sel is OS.sel_pageUp_) {
-            widget.pageUp(id, sel, arg0);
-        } else if (sel is OS.sel_textViewDidChangeSelection_) {
-            widget.textViewDidChangeSelection(id, sel, arg0);
-        } else if (sel is OS.sel_textDidChange_) {
-            widget.textDidChange(id, sel, arg0);
+        return widget.acceptsFirstMouse(id, sel, arg0) ? cast(objc.id)1 : cast(objc.id)0;
+    } else if (sel is OS.sel_numberOfRowsInTableView_) {
+        return cast(objc.id) widget.numberOfRowsInTableView(id, sel, arg0);
+    } else if (sel is OS.sel_tableViewSelectionDidChange_) {
+        widget.tableViewSelectionDidChange(id, sel, arg0);
+    } else if (sel is OS.sel_windowDidResignKey_) {
+        widget.windowDidResignKey(id, sel, arg0);
+    } else if (sel is OS.sel_windowDidBecomeKey_) {
+        widget.windowDidBecomeKey(id, sel, arg0);
+    } else if (sel is OS.sel_windowDidResize_) {
+        widget.windowDidResize(id, sel, arg0);
+    } else if (sel is OS.sel_windowDidMove_) {
+        widget.windowDidMove(id, sel, arg0);
+    } else if (sel is OS.sel_menuWillOpen_) {
+        widget.menuWillOpen(id, sel, arg0);
+    } else if (sel is OS.sel_menuDidClose_) {
+        widget.menuDidClose(id, sel, arg0);
+    } else if (sel is OS.sel_menuNeedsUpdate_) {
+        widget.menuNeedsUpdate(id, sel, arg0);
+    } else if (sel is OS.sel_outlineViewSelectionDidChange_) {
+        widget.outlineViewSelectionDidChange(id, sel, arg0);
+    } else if (sel is OS.sel_sendEvent_) {
+        widget.windowSendEvent(id, sel, arg0);
+    } else if (sel is OS.sel_helpRequested_) {
+        widget.helpRequested(id, sel, arg0);
+    } else if (sel is OS.sel_scrollWheel_) {
+        widget.scrollWheel(id, sel, arg0);
+    } else if (sel is OS.sel_pageDown_) {
+        widget.pageDown(id, sel, arg0);
+    } else if (sel is OS.sel_pageUp_) {
+        widget.pageUp(id, sel, arg0);
+    } else if (sel is OS.sel_textViewDidChangeSelection_) {
+        widget.textViewDidChangeSelection(id, sel, arg0);
+    } else if (sel is OS.sel_textDidChange_) {
+        widget.textDidChange(id, sel, arg0);
     } else if (sel is OS.sel_textDidEndEditing_) {
         widget.textDidEndEditing(id, sel, arg0);
-        } else if (sel is OS.sel_attributedSubstringFromRange_) {
-            return widget.attributedSubstringFromRange (id, sel, arg0);
-        } else if (sel is OS.sel_characterIndexForPoint_) {
-            return cast(objc.id) widget.characterIndexForPoint (id, sel, arg0);
-        } else if (sel is OS.sel_firstRectForCharacterRange_) {
-            NSRect rect = widget.firstRectForCharacterRange (id, sel, arg0);
-            /* NOTE that this is freed in C */
-            objc.id result = cast(objc.id) OS.malloc (NSRect.sizeof);
-            OS.memmove (result, &rect, NSRect.sizeof);
-            return result;
-        } else if (sel is OS.sel_insertText_) {
-        return widget.insertText (id, sel, arg0) ? 1 : 0;
-        } else if (sel is OS.sel_doCommandBySelector_) {
-            widget.doCommandBySelector (id, sel, cast(objc.SEL) arg0);
-        } else if (sel is OS.sel_highlightSelectionInClipRect_) {
-            widget.highlightSelectionInClipRect (id, sel, arg0);
-        } else if (sel is OS.sel_reflectScrolledClipView_) {
-            widget.reflectScrolledClipView (id, sel, arg0);
-        } else if (sel is OS.sel_accessibilityHitTest_) {
-            NSPoint point = NSPoint();
-            OS.memmove(&point, arg0, NSPoint.sizeof);
-            return widget.accessibilityHitTest(id, sel, point);
-        } else if (sel is OS.sel_accessibilityAttributeValue_) {
-            return widget.accessibilityAttributeValue(id, sel, arg0);
-        } else if (sel is OS.sel_accessibilityPerformAction_) {
-            widget.accessibilityPerformAction(id, sel, arg0);
-        } else if (sel is OS.sel_accessibilityActionDescription_) {
-            widget.accessibilityActionDescription(id, sel, arg0);
-        } else if (sel is OS.sel_makeFirstResponder_) {
-            return widget.makeFirstResponder(id, sel, arg0) ? cast(objc.id) 1 : null;
-        } else if (sel is OS.sel_tableViewColumnDidMove_) {
-            widget.tableViewColumnDidMove(id, sel, arg0);
-        } else if (sel is OS.sel_tableViewColumnDidResize_) {
-            widget.tableViewColumnDidResize(id, sel, arg0);
-        } else if (sel is OS.sel_outlineViewColumnDidMove_) {
-            widget.outlineViewColumnDidMove(id, sel, arg0);
-        } else if (sel is OS.sel_outlineViewColumnDidResize_) {
-            widget.outlineViewColumnDidResize(id, sel, arg0);
+    } else if (sel is OS.sel_attributedSubstringFromRange_) {
+        return widget.attributedSubstringFromRange (id, sel, cast(NSRange*)arg0);
+    } else if (sel is OS.sel_characterIndexForPoint_) {
+        return cast(objc.id) widget.characterIndexForPoint (id, sel, cast(NSPoint*)arg0);
+    } else if (sel is OS.sel_firstRectForCharacterRange_) {
+        NSRect rect = widget.firstRectForCharacterRange (id, sel, arg0);
+        /* NOTE that this is freed in C */
+        objc.id result = cast(objc.id) OS.malloc (NSRect.sizeof);
+        OS.memmove (result, &rect, NSRect.sizeof);
+        return result;
+    } else if (sel is OS.sel_insertText_) {
+        return widget.insertText (id, sel, arg0) ? cast(objc.id)1 : cast(objc.id)0;
+    } else if (sel is OS.sel_doCommandBySelector_) {
+        widget.doCommandBySelector (id, sel, cast(objc.SEL) arg0);
+    } else if (sel is OS.sel_highlightSelectionInClipRect_) {
+        widget.highlightSelectionInClipRect (id, sel, arg0);
+    } else if (sel is OS.sel_reflectScrolledClipView_) {
+        widget.reflectScrolledClipView (id, sel, arg0);
+    } else if (sel is OS.sel_accessibilityHitTest_) {
+        NSPoint point = NSPoint();
+        OS.memmove(&point, arg0, NSPoint.sizeof);
+        return widget.accessibilityHitTest(id, sel, point);
+    } else if (sel is OS.sel_accessibilityAttributeValue_) {
+        return widget.accessibilityAttributeValue(id, sel, arg0);
+    } else if (sel is OS.sel_accessibilityPerformAction_) {
+        widget.accessibilityPerformAction(id, sel, arg0);
+    } else if (sel is OS.sel_accessibilityActionDescription_) {
+        widget.accessibilityActionDescription(id, sel, arg0);
+    } else if (sel is OS.sel_makeFirstResponder_) {
+        return widget.makeFirstResponder(id, sel, arg0) ? cast(objc.id) 1 : null;
+    } else if (sel is OS.sel_tableViewColumnDidMove_) {
+        widget.tableViewColumnDidMove(id, sel, arg0);
+    } else if (sel is OS.sel_tableViewColumnDidResize_) {
+        widget.tableViewColumnDidResize(id, sel, arg0);
+    } else if (sel is OS.sel_outlineViewColumnDidMove_) {
+        widget.outlineViewColumnDidMove(id, sel, arg0);
+    } else if (sel is OS.sel_outlineViewColumnDidResize_) {
+        widget.outlineViewColumnDidResize(id, sel, arg0);
     } else if (sel is OS.sel_setNeedsDisplay_) {
-        widget.setNeedsDisplay(id, sel, arg0 !is 0);
+        widget.setNeedsDisplay(id, sel, arg0 !is null);
     } else if (sel is OS.sel_setNeedsDisplayInRect_) {
         widget.setNeedsDisplayInRect(id, sel, arg0);
     } else if (sel is OS.sel_setImage_) {
         widget.setImage(id, sel, arg0);
     } else if (sel is OS.sel_imageRectForBounds_) {
-        NSRect rect = new NSRect();
-        OS.memmove(rect, arg0, NSRect.sizeof);
+        NSRect rect = NSRect();
+        OS.memmove(&rect, arg0, NSRect.sizeof);
         rect = widget.imageRectForBounds(id, sel, rect);
         /* NOTE that this is freed in C */
-        int /*long*/ result = OS.malloc (NSRect.sizeof);
-        OS.memmove (result, rect, NSRect.sizeof);
+        objc.id result = cast(objc.id)OS.malloc (NSRect.sizeof);
+        OS.memmove (result, &rect, NSRect.sizeof);
         return result;
     } else if (sel is OS.sel_titleRectForBounds_) {
-        NSRect rect = new NSRect();
-        OS.memmove(rect, arg0, NSRect.sizeof);
+        NSRect rect = NSRect();
+        OS.memmove(&rect, arg0, NSRect.sizeof);
         rect = widget.titleRectForBounds(id, sel, rect);
         /* NOTE that this is freed in C */
-        int /*long*/ result = OS.malloc (NSRect.sizeof);
-        OS.memmove (result, rect, NSRect.sizeof);
+        objc.id result = cast(objc.id)OS.malloc (NSRect.sizeof);
+        OS.memmove (result, &rect, NSRect.sizeof);
         return result;
     } else if (sel is OS.sel_setObjectValue_) {
         widget.setObjectValue(id, sel, arg0);
     } else if (sel is OS.sel_updateOpenGLContext_) {
         widget.updateOpenGLContext(id, sel, arg0);
-        }
-        return null;
     }
+    return null;
+}
 
-static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1) {
-        Widget widget = GetWidget(id);
-        if (widget is null) return null;
-        if (sel is OS.sel_tabView_willSelectTabViewItem_) {
-            widget.tabView_willSelectTabViewItem(id, sel, arg0, arg1);
-        } else if (sel is OS.sel_tabView_didSelectTabViewItem_) {
-            widget.tabView_didSelectTabViewItem(id, sel, arg0, arg1);
-        } else if (sel is OS.sel_outlineView_isItemExpandable_) {
-            return widget.outlineView_isItemExpandable(id, sel, arg0, arg1) ? cast(objc.id) 1 : null;
-        } else if (sel is OS.sel_outlineView_numberOfChildrenOfItem_) {
-            return cast(objc.id) widget.outlineView_numberOfChildrenOfItem(id, sel, arg0, arg1);
-        } else if (sel is OS.sel_menu_willHighlightItem_) {
-            widget.menu_willHighlightItem(id, sel, arg0, arg1);
-        } else if (sel is OS.sel_setMarkedText_selectedRange_) {
-            widget.setMarkedText_selectedRange (id, sel, arg0, arg1);
-        } else if (sel is OS.sel_drawInteriorWithFrame_inView_) {
-        NSRect rect = new NSRect ();
-        OS.memmove (rect, arg0, NSRect.sizeof);
+static objc.id windowProc4(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
+    Widget widget = GetWidget(id);
+    if (widget is null) return null;
+    if (sel is OS.sel_tabView_willSelectTabViewItem_) {
+        widget.tabView_willSelectTabViewItem(id, sel, arg0, arg1);
+    } else if (sel is OS.sel_tabView_didSelectTabViewItem_) {
+        widget.tabView_didSelectTabViewItem(id, sel, arg0, arg1);
+    } else if (sel is OS.sel_outlineView_isItemExpandable_) {
+        return widget.outlineView_isItemExpandable(id, sel, arg0, arg1) ? cast(objc.id) 1 : null;
+    } else if (sel is OS.sel_outlineView_numberOfChildrenOfItem_) {
+        return cast(objc.id) widget.outlineView_numberOfChildrenOfItem(id, sel, arg0, arg1);
+    } else if (sel is OS.sel_menu_willHighlightItem_) {
+        widget.menu_willHighlightItem(id, sel, arg0, arg1);
+    } else if (sel is OS.sel_setMarkedText_selectedRange_) {
+        widget.setMarkedText_selectedRange (id, sel, arg0, arg1);
+    } else if (sel is OS.sel_drawInteriorWithFrame_inView_) {
+        NSRect rect = NSRect ();
+        OS.memmove (&rect, arg0, NSRect.sizeof);
         widget.drawInteriorWithFrame_inView (id, sel, rect, arg1);
     } else if (sel is OS.sel_drawWithExpansionFrame_inView_) {
-        NSRect rect = new NSRect();
-        OS.memmove(rect, arg0, NSRect.sizeof);
+        NSRect rect = NSRect();
+        OS.memmove(&rect, arg0, NSRect.sizeof);
         widget.drawWithExpansionFrame_inView (id, sel, rect, arg1);
-        } else if (sel is OS.sel_accessibilityAttributeValue_forParameter_) {
-            return widget.accessibilityAttributeValue_forParameter(id, sel, arg0, arg1);
-        } else if (sel is OS.sel_tableView_didClickTableColumn_) {
-            widget.tableView_didClickTableColumn (id, sel, arg0, arg1);
-        } else if (sel is OS.sel_outlineView_didClickTableColumn_) {
-            widget.outlineView_didClickTableColumn (id, sel, arg0, arg1);
+    } else if (sel is OS.sel_accessibilityAttributeValue_forParameter_) {
+        return widget.accessibilityAttributeValue_forParameter(id, sel, arg0, arg1);
+    } else if (sel is OS.sel_tableView_didClickTableColumn_) {
+        widget.tableView_didClickTableColumn (id, sel, arg0, arg1);
+    } else if (sel is OS.sel_outlineView_didClickTableColumn_) {
+        widget.outlineView_didClickTableColumn (id, sel, arg0, arg1);
     } else if (sel is OS.sel_shouldChangeTextInRange_replacementString_) {
-        return widget.shouldChangeTextInRange_replacementString(id, sel, arg0, arg1) ? 1 : 0;
+        return widget.shouldChangeTextInRange_replacementString(id, sel, arg0, arg1) ? cast(objc.id)1 : cast(objc.id)0;
     } else if (sel is OS.sel_canDragRowsWithIndexes_atPoint_) {
-        return widget.canDragRowsWithIndexes_atPoint(id, sel, arg0, arg1) ? 1 : 0;
+        return widget.canDragRowsWithIndexes_atPoint(id, sel, arg0, arg1) ? cast(objc.id)1 : cast(objc.id)0;
     } else if (sel is OS.sel_expandItem_expandChildren_) {
-        widget.expandItem_expandChildren(id, sel, arg0, arg1 !is 0);
+        widget.expandItem_expandChildren(id, sel, arg0, arg1 !is null);
     } else if (sel is OS.sel_collapseItem_collapseChildren_) {
-        widget.collapseItem_collapseChildren(id, sel, arg0, arg1 !is 0);
+        widget.collapseItem_collapseChildren(id, sel, arg0, arg1 !is null);
     } else if (sel is OS.sel_expansionFrameWithFrame_inView_) {
-        NSRect rect = new NSRect();
-        OS.memmove(rect, arg0, NSRect.sizeof);
+        NSRect rect = NSRect();
+        OS.memmove(&rect, arg0, NSRect.sizeof);
         rect = widget.expansionFrameWithFrame_inView(id, sel, rect, arg1);
         /* NOTE that this is freed in C */
-        int /*long*/ result = OS.malloc (NSRect.sizeof);
-        OS.memmove (result, rect, NSRect.sizeof);
+        objc.id result = cast(objc.id)OS.malloc (NSRect.sizeof);
+        OS.memmove (result, &rect, NSRect.sizeof);
         return result;
-        }
-        return null;
     }
+    return null;
+}
 
-static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1, int /*long*/ arg2) {
-        Widget widget = GetWidget(id);
-        if (widget is null) return null;
-        if (sel is OS.sel_tableView_objectValueForTableColumn_row_) {
-            return widget.tableView_objectValueForTableColumn_row(id, sel, arg0, arg1, arg2);
-        } else if (sel is OS.sel_tableView_shouldEditTableColumn_row_) {
-            return widget.tableView_shouldEditTableColumn_row(id, sel, arg0, arg1, arg2) ? cast(objc.id) 1 : null;
-        } else if (sel is OS.sel_textView_clickedOnLink_atIndex_) {
-            return widget.textView_clickOnLink_atIndex(id, sel, arg0, arg1, arg2) ? cast(objc.id) 1 : null;
-        } else if (sel is OS.sel_outlineView_child_ofItem_) {
-            return widget.outlineView_child_ofItem(id, sel, arg0, arg1, arg2);
-        } else if (sel is OS.sel_outlineView_objectValueForTableColumn_byItem_) {
-            return widget.outlineView_objectValueForTableColumn_byItem(id, sel, arg0, arg1, arg2);
-        } else if (sel is OS.sel_textView_willChangeSelectionFromCharacterRange_toCharacterRange_) {
-            NSRange range = widget.textView_willChangeSelectionFromCharacterRange_toCharacterRange(id, sel, arg0, arg1, arg2);
-            /* NOTE that this is freed in C */
-            objc.id result = cast(objc.id) OS.malloc (NSRange.sizeof);
-            OS.memmove (result, &range, NSRange.sizeof);
-            return result;
+static objc.id windowProc5(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2) {
+     Widget widget = GetWidget(id);
+    if (widget is null) return null;
+    if (sel is OS.sel_tableView_objectValueForTableColumn_row_) {
+        return widget.tableView_objectValueForTableColumn_row(id, sel, arg0, arg1, arg2);
+    } else if (sel is OS.sel_tableView_shouldEditTableColumn_row_) {
+        return widget.tableView_shouldEditTableColumn_row(id, sel, arg0, arg1, arg2) ? cast(objc.id) 1 : null;
+    } else if (sel is OS.sel_textView_clickedOnLink_atIndex_) {
+        return widget.textView_clickOnLink_atIndex(id, sel, arg0, arg1, arg2) ? cast(objc.id) 1 : null;
+    } else if (sel is OS.sel_outlineView_child_ofItem_) {
+        return widget.outlineView_child_ofItem(id, sel, arg0, arg1, arg2);
+    } else if (sel is OS.sel_outlineView_objectValueForTableColumn_byItem_) {
+        return widget.outlineView_objectValueForTableColumn_byItem(id, sel, arg0, arg1, arg2);
+    } else if (sel is OS.sel_textView_willChangeSelectionFromCharacterRange_toCharacterRange_) {
+        NSRange range = widget.textView_willChangeSelectionFromCharacterRange_toCharacterRange(id, sel, arg0, arg1, arg2);
+        /* NOTE that this is freed in C */
+        objc.id result = cast(objc.id) OS.malloc (NSRange.sizeof);
+        OS.memmove (result, &range, NSRange.sizeof);
+        return result;
     } else if (sel is OS.sel_dragSelectionWithEvent_offset_slideBack_) {
-        NSSize offset = new NSSize();
-        OS.memmove(offset, arg0, NSSize.sizeof);
-        return (widget.dragSelectionWithEvent(id, sel, arg0, arg1, arg2) ? 1 : 0);
+        NSSize offset = NSSize();
+        OS.memmove(&offset, arg0, NSSize.sizeof);
+        return (widget.dragSelectionWithEvent(id, sel, arg0, arg1, arg2) ? cast(objc.id)1 : cast(objc.id)0);
     } else if (sel is OS.sel_drawImage_withFrame_inView_) {
-        NSRect rect = new NSRect ();
-        OS.memmove (rect, arg1, NSRect.sizeof);
+        NSRect rect = NSRect ();
+        OS.memmove (&rect, arg1, NSRect.sizeof);
         widget.drawImageWithFrameInView (id, sel, arg0, rect, arg2);
     } else if (sel is OS.sel_hitTestForEvent_inRect_ofView_) {
-        NSRect rect = new NSRect ();
-        OS.memmove (rect, arg1, NSRect.sizeof);
+        NSRect rect = NSRect ();
+        OS.memmove (&rect, arg1, NSRect.sizeof);
         return widget.hitTestForEvent (id, sel, arg0, rect, arg2);
     } else if (sel is OS.sel_tableView_writeRowsWithIndexes_toPasteboard_) {
-        return (widget.tableView_writeRowsWithIndexes_toPasteboard(id, sel, arg0, arg1, arg2) ? 1 : 0);
+        return (widget.tableView_writeRowsWithIndexes_toPasteboard(id, sel, arg0, arg1, arg2) ? cast(objc.id)1 : cast(objc.id)0);
     } else if (sel is OS.sel_outlineView_writeItems_toPasteboard_) {
-        return (widget.outlineView_writeItems_toPasteboard(id, sel, arg0, arg1, arg2) ? 1 : 0);
-        }
-        return null;
+        return (widget.outlineView_writeItems_toPasteboard(id, sel, arg0, arg1, arg2) ? cast(objc.id)1 : cast(objc.id)0);
     }
+    return null;
+}
 
-static int /*long*/ windowProc(int /*long*/ id, int /*long*/ sel, int /*long*/ arg0, int /*long*/ arg1, int /*long*/ arg2, int /*long*/ arg3) {
-        Widget widget = GetWidget(id);
-        if (widget is null) return null;
-        if (sel is OS.sel_tableView_willDisplayCell_forTableColumn_row_) {
-            widget.tableView_willDisplayCell_forTableColumn_row(id, sel, arg0, arg1, arg2, arg3);
-        } else if (sel is OS.sel_outlineView_willDisplayCell_forTableColumn_item_) {
-            widget.outlineView_willDisplayCell_forTableColumn_item(id, sel, arg0, arg1, arg2, arg3);
-        } else  if (sel is OS.sel_outlineView_setObjectValue_forTableColumn_byItem_) {
-            widget.outlineView_setObjectValue_forTableColumn_byItem(id, sel, arg0, arg1, arg2, arg3);
-        } else if (sel is OS.sel_tableView_setObjectValue_forTableColumn_row_) {
-            widget.tableView_setObjectValue_forTableColumn_row(id, sel, arg0, arg1, arg2, arg3);
+static objc.id windowProc6(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2, objc.id arg3) {
+    Widget widget = GetWidget(id);
+    if (widget is null) return null;
+    if (sel is OS.sel_tableView_willDisplayCell_forTableColumn_row_) {
+        widget.tableView_willDisplayCell_forTableColumn_row(id, sel, arg0, arg1, arg2, arg3);
+    } else if (sel is OS.sel_outlineView_willDisplayCell_forTableColumn_item_) {
+        widget.outlineView_willDisplayCell_forTableColumn_item(id, sel, arg0, arg1, arg2, arg3);
+    } else  if (sel is OS.sel_outlineView_setObjectValue_forTableColumn_byItem_) {
+        widget.outlineView_setObjectValue_forTableColumn_byItem(id, sel, arg0, arg1, arg2, arg3);
+    } else if (sel is OS.sel_tableView_setObjectValue_forTableColumn_row_) {
+        widget.tableView_setObjectValue_forTableColumn_row(id, sel, arg0, arg1, arg2, arg3);
     } else if (sel is OS.sel_view_stringForToolTip_point_userData_) {
         return widget.view_stringForToolTip_point_userData(id, sel, arg0, arg1, arg2, arg3);
-        }
-        return null;
     }
+    return null;
+}
 
-    }
+}

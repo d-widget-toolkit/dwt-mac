@@ -35,7 +35,7 @@ public class LONG {
     }
 
     public override hash_t toHash () {
-        return /*64*/value;
+        return value;
     }
 
     alias toHash hashCode;

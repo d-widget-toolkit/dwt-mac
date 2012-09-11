@@ -71,7 +71,7 @@ public CGFloat deltaY() {
 }
 
 public static NSEvent enterExitEventWithType(NSEventType type, NSPoint location, NSUInteger flags, double time, NSInteger wNum, NSGraphicsContext context, NSInteger eNum, NSInteger tNum, void* data) {
-    objc.id result = OS.objc_msgSend(OS.class_NSEvent, OS.sel_enterExitEventWithType_location_modifierFlags_timestamp_windowNumber_context_eventNumber_trackingNumber_userData_, type, location, flags, time, wNum, context !is null ? context.id : 0, eNum, tNum, data);
+    objc.id result = OS.objc_msgSend(OS.class_NSEvent, OS.sel_enterExitEventWithType_location_modifierFlags_timestamp_windowNumber_context_eventNumber_trackingNumber_userData_, type, location, flags, time, wNum, context !is null ? context.id : null, eNum, tNum, data);
     return result !is null ? new NSEvent(result) : null;
 }
 

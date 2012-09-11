@@ -15,6 +15,7 @@ module dwt.events.TreeAdapter;
 import dwt.dwthelper.utils;
 
 
+import dwt.events.TreeEvent;
 import dwt.events.TreeListener;
 
 /**

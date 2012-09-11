@@ -16,6 +16,7 @@ module dwt.internal.image.PngDecodingDataStream;
 import dwt.dwthelper.InputStream;
 
 
+import dwt.DWT;
 import dwt.internal.image.PngLzBlockReader;
 
 public class PngDecodingDataStream : InputStream {

@@ -14,8 +14,8 @@ module dwt.custom.PopupList;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.events.ControlEvent;
 import dwt.events.ControlListener;
 import dwt.events.KeyEvent;

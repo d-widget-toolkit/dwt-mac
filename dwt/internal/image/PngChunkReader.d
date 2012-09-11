@@ -14,6 +14,7 @@ module dwt.internal.image.PngChunkReader;
 
 
 
+import dwt.DWT;
 import dwt.internal.image.LEDataInputStream;
 import dwt.internal.image.PngFileReadState;
 import dwt.internal.image.PngIhdrChunk;

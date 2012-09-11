@@ -110,7 +110,7 @@ public Object nativeToJava(TransferData transferData) {
     if (!isSupportedType(transferData) || transferData.data is null) return null;
     NSArray array = cast(NSArray) transferData.data;
     if (array.count() is 0) return null;
-    int count = cast(int)/*64*/array.count();
+    NSUInteger count = array.count();
     String[] fileNames = new String[count];
     for (int i=0; i<count; i++) {
         NSString string = new NSString(array.objectAtIndex(i));
@@ -128,11 +128,11 @@ protected String[] getTypeNames(){
 }
 
 bool checkFile(Object object) {
-    auto o = cast(ArrayWrapperString2) object;
+    ArrayWrapperString2 o = cast(ArrayWrapperString2) object;
     if (object is null || !o || o.array.length is 0) return false;
     String[] strings = o.array;
     for (int i = 0; i < strings.length; i++) {
-        if (strings[i] is null || strings[i].length() is 0) return false;
+        if (strings[i] is null || strings[i].length is 0) return false;
     }
     return true;
 }

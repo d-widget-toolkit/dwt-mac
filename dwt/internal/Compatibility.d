@@ -16,11 +16,14 @@ import dwt.dwthelper.utils;
 
 
 import dwt.DWT;
+import dwt.dwthelper.File;
 import dwt.dwthelper.FileInputStream;
 import dwt.dwthelper.FileOutputStream;
 import dwt.dwthelper.InflaterInputStream;
 import dwt.dwthelper.BufferedInputStream;
 import dwt.dwthelper.ResourceBundle;
+import dwt.dwthelper.InputStream;
+import dwt.dwthelper.OutputStream;
 
 import Math = tango.math.Math;
 import Unicode = tango.text.Unicode;
@@ -242,7 +245,7 @@ public static bool isLetterOrDigit(dchar c) {
  * @return true when the character is a Unicode space character
  */
 public static bool isSpaceChar(dchar c) {
-    return Character.isSpace(c);
+    return Character.isSpaceChar(c);
 }
 
 /**
@@ -270,7 +273,7 @@ public static bool isWhitespace(dchar c) {
  *  if the current SecurityManager disallows program execution
  */
 public static void exec(String prog) {
-    auto proc = new Process( prog );
+    Process proc = new Process( prog );
     proc.execute;
 }
 
@@ -289,7 +292,7 @@ public static void exec(String prog) {
  *  if the current SecurityManager disallows program execution
  */
 public static void exec(String[] progArray) {
-    auto proc = new Process( progArray );
+    Process proc = new Process( progArray );
     proc.execute;
 }
 
@@ -335,9 +338,10 @@ private static ResourceBundle msgs = null;
 public static String getMessage(String key) {
     String answer = key;
 
-    if (key is null) {
-        DWT.error (DWT.ERROR_NULL_ARGUMENT);
-    }
+    // DWT extension: allow null for zero length string
+    //if (key is null) {
+    //    DWT.error (DWT.ERROR_NULL_ARGUMENT);
+    //}
     if (msgs is null) {
         try {
             msgs = ResourceBundle.getBundle(SWTMessagesBundleData); //$NON-NLS-1$
@@ -356,7 +360,8 @@ public static String getMessage(String key) {
 public static String getMessage(String key, Object[] args) {
     String answer = key;
 
-    if (key is null || args is null) {
+    // DWT extension: allow null for zero length string
+    if (/+key is null || +/args is null) {
         DWT.error (DWT.ERROR_NULL_ARGUMENT);
     }
     if (msgs is null) {
