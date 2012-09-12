@@ -13,10 +13,11 @@
 module dwt.custom.CLabel;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.accessibility.ACC;
 import dwt.accessibility.Accessible;
 import dwt.accessibility.AccessibleAdapter;
@@ -219,7 +220,7 @@ private void drawBevelRect(GC gc, int x, int y, int w, int h, Color topleft, Col
 dchar _findMnemonic (String string) {
     if (string is null) return '\0';
     int index = 0;
-    int length = string.length ();
+    int length = string.length;
     do {
         while (index < length && string[index] !is '&') index++;
         if (++index >= length) return '\0';
@@ -265,7 +266,7 @@ private Point getTotalSize(Image image, String text) {
     }
 
     GC gc = new GC(this);
-    if (text !is null && text.length() > 0) {
+    if (text !is null && text.length > 0) {
         Point e = gc.textExtent(text, DRAW_FLAGS);
         size.x += e.x;
         size.y = Math.max(size.y, e.y);
@@ -364,7 +365,7 @@ void onMnemonic(TraverseEvent event) {
     dchar mnemonic = _findMnemonic(text);
     if (mnemonic is '\0') return;
     dchar[1] d; uint ate;
-    auto r = tango.text.convert.Utf.toString32( [event.character][], d, &ate );
+    dchar[] r = tango.text.convert.Utf.toString32( [event.character][], d, &ate );
     if (tango.text.Unicode.toLower(r)[0] !is mnemonic) return;
     Composite control = this.getParent();
     while (control !is null) {
@@ -813,7 +814,7 @@ protected String shortenText(GC gc, String t, int width) {
     if (t is null) return null;
     int w = gc.textExtent(ELLIPSIS, DRAW_FLAGS).x;
     if (width<=w) return t;
-    int l = t.length();
+    int l = t.length;
     int max = l/2;
     int min = 0;
     int mid = (max+min)/2 - 1;

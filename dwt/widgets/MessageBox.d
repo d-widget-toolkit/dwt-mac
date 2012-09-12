@@ -19,8 +19,16 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSApplication;
+import dwt.internal.cocoa.NSAlert;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSWindow;
+import dwt.internal.cocoa.SWTPanelDelegate;
 import dwt.internal.objc.cocoa.Cocoa;
+import dwt.internal.cocoa.OS;
 import dwt.widgets.Dialog;
+import dwt.widgets.Display;
 import dwt.widgets.Shell;
 
 /**
@@ -48,6 +56,7 @@ import dwt.widgets.Shell;
  * @noextend This class is not intended to be subclassed by clients.
  */
 public  class MessageBox : Dialog {
+    bool allowNullParent = false;
     String message = "";
     int returnCode;
 
@@ -109,6 +118,8 @@ public this (Shell parent, int style) {
     if (Display.getSheetEnabled ()) {
         if (parent !is null && (style & DWT.SHEET) !is 0) this.style |= DWT.SHEET;
     }
+    checkSubclass ();
+}
 /++
  + DWT extension, a MessageBox with no parent
  +/
@@ -159,7 +170,7 @@ public String getMessage () {
  * </ul>
  */
 public int open () {
-    NSAlert alert = (NSAlert) new NSAlert().alloc().init();
+    NSAlert alert = cast(NSAlert) (new NSAlert()).alloc().init();
     NSAlertStyle alertType = OS.NSInformationalAlertStyle;
     if ((style & DWT.ICON_ERROR) !is 0) alertType = OS.NSCriticalAlertStyle;
     if ((style & DWT.ICON_INFORMATION) !is 0) alertType = OS.NSInformationalAlertStyle;
@@ -229,17 +240,17 @@ public int open () {
     alert.window().setTitle(title);
     NSString message = NSString.stringWith(this.message !is null ? this.message : "");
     alert.setMessageText(message);
-    int response = 0;
-    int /*long*/ jniRef = 0;
-    SWTPanelDelegate delegate = null;
+    NSInteger response = 0;
+    void* jniRef = null;
+    SWTPanelDelegate delegate_ = null;
     if ((style & DWT.SHEET) !is 0) {
-        delegate = (SWTPanelDelegate)new SWTPanelDelegate().alloc().init();
+        delegate_ = cast(SWTPanelDelegate)(new SWTPanelDelegate()).alloc().init();
         jniRef = OS.NewGlobalRef(this);
-        if (jniRef is 0) DWT.error(DWT.ERROR_NO_HANDLES);
-        OS.object_setInstanceVariable(delegate.id, Display.DWT_OBJECT, jniRef);
-        alert.beginSheetModalForWindow(parent.window, delegate, OS.sel_panelDidEnd_returnCode_contextInfo_, 0);
+        if (jniRef is null) DWT.error(DWT.ERROR_NO_HANDLES);
+        OS.object_setInstanceVariable(delegate_.id, Display.SWT_OBJECT, jniRef);
+        alert.beginSheetModalForWindow(parent.window, delegate_, OS.sel_panelDidEnd_returnCode_contextInfo_, null);
         if ((style & DWT.APPLICATION_MODAL) !is 0) {
-            response = (int)/*64*/alert.runModal();
+            response = alert.runModal();
         } else {
             this.returnCode = 0;
             NSWindow window = alert.window();
@@ -248,10 +259,10 @@ public int open () {
             response = this.returnCode;
         }
     } else {
-        response = (int)/*64*/alert.runModal();
+        response = alert.runModal();
     }
-    if (delegate !is null) delegate.release();
-    if (jniRef !is 0) OS.DeleteGlobalRef(jniRef);
+    if (delegate_ !is null) delegate_.release();
+    if (jniRef !is null) OS.DeleteGlobalRef(jniRef);
     alert.release();
     switch (bits) {
         case DWT.OK:
@@ -336,19 +347,10 @@ public int open () {
     return DWT.CANCEL;
 }
 
-void panelDidEnd_returnCode_contextInfo(int /*long*/ id, int /*long*/ sel, int /*long*/ alert, int /*long*/ returnCode, int /*long*/ contextInfo) {
-    this.returnCode = (int)/*64*/returnCode;
+void panelDidEnd_returnCode_contextInfo(objc.id id, objc.SEL sel, objc.id alert, objc.id returnCode, objc.id contextInfo) {
+    this.returnCode = cast(NSInteger)returnCode;
     NSApplication application = NSApplication.sharedApplication();
-    application.endSheet(new NSAlert(alert).window(), returnCode);
-    if ((style & DWT.PRIMARY_MODAL) !is 0) {
-        application.stop(null);
-    }
-}
-
-void panelDidEnd_returnCode_contextInfo(int /*long*/ id, int /*long*/ sel, int /*long*/ alert, int /*long*/ returnCode, int /*long*/ contextInfo) {
-    this.returnCode = (int)/*64*/returnCode;
-    NSApplication application = NSApplication.sharedApplication();
-    application.endSheet(new NSAlert(alert).window(), returnCode);
+    application.endSheet((new NSAlert(alert)).window(), cast(NSInteger)returnCode);
     if ((style & DWT.PRIMARY_MODAL) !is 0) {
         application.stop(null);
     }
@@ -366,6 +368,7 @@ void panelDidEnd_returnCode_contextInfo(int /*long*/ id, int /*long*/ sel, int /
  * </ul>
  */
 public void setMessage (String string) {
+    // DWT extension: allow null for zero length string
     //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     message = string;
 }

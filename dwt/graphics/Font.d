@@ -16,14 +16,15 @@ module dwt.graphics.Font;
 import dwt.dwthelper.utils;
 
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.graphics.Device;
 import dwt.graphics.FontData;
 import dwt.graphics.Point;
 import dwt.graphics.Resource;
 import Carbon = dwt.internal.c.Carbon;
+import dwt.internal.objc.cocoa.Cocoa;
 import dwt.internal.cocoa.NSAutoreleasePool;
 import dwt.internal.cocoa.NSFont;
 import dwt.internal.cocoa.NSFontManager;
@@ -266,14 +267,14 @@ public FontData[] getFontData() {
         NSString str = handle.fontName();
         String nsName = str.getString();
         NSFontManager manager = NSFontManager.sharedFontManager();
-        int /*long*/ traits = manager.traitsOfFont(handle);
+        NSFontTraitMask traits = manager.traitsOfFont(handle);
         int style = DWT.NORMAL;
         if ((traits & OS.NSItalicFontMask) !is 0) style |= DWT.ITALIC;
         if ((traits & OS.NSBoldFontMask) !is 0) style |= DWT.BOLD;
         if ((extraTraits & OS.NSItalicFontMask) !is 0) style |= DWT.ITALIC;
         if ((extraTraits & OS.NSBoldFontMask) !is 0) style |= DWT.BOLD;
         Point dpi = device.dpi, screenDPI = device.getScreenDPI();
-        FontData data = new FontData(name, cast(float)/*64*/handle.pointSize() * screenDPI.y / dpi.y, style);
+        FontData data = new FontData(name, cast(Cocoa.CGFloat)handle.pointSize() * screenDPI.y / dpi.y, style);
         data.nsName = nsName;
         return [data];
     } finally {
@@ -321,6 +322,7 @@ public hash_t toHash() {
 alias toHash hashCode;
 
 void init_(String name, float height, int style, String nsName) {
+    // DWT extension: allow null for zero length string
     //if (name is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     if (height < 0) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     Point dpi = device.dpi, screenDPI = device.getScreenDPI();
@@ -339,19 +341,19 @@ void init_(String name, float height, int style, String nsName) {
                 int traits = 0;
                 if ((style & DWT.ITALIC) !is 0) traits |= OS.NSItalicFontMask;
                 if ((style & DWT.BOLD) !is 0) traits |= OS.NSBoldFontMask;
-                handle = manager.convertFont(nsFont, traits);
+                handle = manager.convertFont(nsFont, cast(NSFontTraitMask)traits);
                 if ((style & DWT.ITALIC) !is 0 && (handle is null || (manager.traitsOfFont(handle) & OS.NSItalicFontMask) is 0)) {
                     traits &= ~OS.NSItalicFontMask;
                     handle = null;
                     if ((style & DWT.BOLD) !is 0) {
-                        handle = manager.convertFont(nsFont, traits);
+                        handle = manager.convertFont(nsFont, cast(NSFontTraitMask)traits);
                     }
                 }
                 if ((style & DWT.BOLD) !is 0 && handle is null) {
                     traits &= ~OS.NSBoldFontMask;
                     if ((style & DWT.ITALIC) !is 0) {
                         traits |= OS.NSItalicFontMask;
-                        handle = manager.convertFont(nsFont, traits);
+                        handle = manager.convertFont(nsFont, cast(NSFontTraitMask)traits);
                     }
                 }
                 if (handle is null) handle = nsFont;
@@ -394,8 +396,8 @@ public bool isDisposed() {
  * @return a string representation of the receiver
  */
 public String toString () {
-	if (isDisposed()) return "Font {*DISPOSED*}";
-	return Format("{}{}{}", "Font {" + handle + "}");
+    if (isDisposed()) return "Font {*DISPOSED*}";
+    return Format("{}{}{}", "Font {", handle, "}");
 }
 
 }

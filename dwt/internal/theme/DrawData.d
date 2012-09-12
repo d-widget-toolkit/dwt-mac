@@ -14,6 +14,10 @@
 module dwt.internal.theme.DrawData;
 
 import dwt.dwthelper.utils;
+import dwt.graphics.GC;
+import dwt.graphics.Image;
+import dwt.graphics.Rectangle;
+import dwt.graphics.Point;
 
 
 

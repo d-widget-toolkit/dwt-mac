@@ -19,6 +19,7 @@ module dwt.widgets.Layout;
 import dwt.dwthelper.utils;
 import dwt.widgets.Control;
 import dwt.widgets.Composite;
+import dwt.graphics.Point;
 
 /**
  * A layout controls the position and size

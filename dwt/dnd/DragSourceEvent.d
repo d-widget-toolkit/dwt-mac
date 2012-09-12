@@ -13,6 +13,7 @@
  *******************************************************************************/
 module dwt.dnd.DragSourceEvent;
 
+import tango.text.convert.Format;
 import dwt.dwthelper.utils;
 
 import dwt.dnd.DNDEvent;
@@ -140,7 +141,7 @@ void updateEvent(DNDEvent e) {
  */
 public String toString() {
     String string = super.toString ();
-    return Format("{}{}{}{}{}{}{}", string.substring (0, string.length() - 1) // remove trailing '}'
+    return Format("{}{}{}{}{}{}{}", string.substring (0, string.length - 1) // remove trailing '}'
         , " operation=" , detail
         , " type=" , (dataType !is null ? dataType.type : 0)
         , " doit=" , doit

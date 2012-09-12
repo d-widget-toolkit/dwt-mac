@@ -13,10 +13,15 @@
 module dwt.internal.image.LZWCodec;
 
 
+import dwt.DWT;
 import dwt.internal.image.LZWNode;
 import dwt.internal.image.LEDataInputStream;
 import dwt.internal.image.LEDataOutputStream;
+import dwt.graphics.ImageLoader;
+import dwt.graphics.ImageLoaderEvent;
+import dwt.graphics.ImageData;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 import tango.core.Exception;
 

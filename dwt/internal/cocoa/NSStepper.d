@@ -62,7 +62,7 @@ public void setValueWraps(bool valueWraps) {
 }
 
 public static objc.Class cellClass() {
-    return cast(objc.Class) OS.objc_msgSend(OS.class_NSStepper, OS.sel_cellClass);
+    return cast(objc.Class)OS.objc_msgSend(OS.class_NSStepper, OS.sel_cellClass);
 }
 
 public static void setCellClass(objc.Class factoryId) {

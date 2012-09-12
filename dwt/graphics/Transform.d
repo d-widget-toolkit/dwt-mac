@@ -15,9 +15,9 @@ module dwt.graphics.Transform;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
-import dwt.SWTError;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTError;
+import dwt.DWTException;
 import dwt.graphics.Device;
 import dwt.graphics.Resource;
 import dwt.internal.cocoa.NSAffineTransform;
@@ -25,6 +25,7 @@ import dwt.internal.cocoa.NSAffineTransformStruct;
 import dwt.internal.cocoa.NSAutoreleasePool;
 import dwt.internal.cocoa.NSPoint;
 import dwt.internal.cocoa.NSThread;
+import Cocoa = dwt.internal.objc.cocoa.Cocoa;
 
 import tango.text.convert.Format;
 
@@ -194,12 +195,12 @@ public void getElements(float[] elements) {
     if (!NSThread.isMainThread()) pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         NSAffineTransformStruct struct_ = handle.transformStruct();
-        elements[0] = cast(float)/*64*/struct_.m11;
-        elements[1] = cast(float)/*64*/struct_.m12;
-        elements[2] = cast(float)/*64*/struct_.m21;
-        elements[3] = cast(float)/*64*/struct_.m22;
-        elements[4] = cast(float)/*64*/struct_.tX;
-        elements[5] = cast(float)/*64*/struct_.tY;
+        elements[0] = cast(Cocoa.CGFloat)struct_.m11;
+        elements[1] = cast(Cocoa.CGFloat)struct_.m12;
+        elements[2] = cast(Cocoa.CGFloat)struct_.m21;
+        elements[3] = cast(Cocoa.CGFloat)struct_.m22;
+        elements[4] = cast(Cocoa.CGFloat)struct_.tX;
+        elements[5] = cast(Cocoa.CGFloat)struct_.tY;
     } finally {
         if (pool !is null) pool.release();
     }
@@ -448,8 +449,8 @@ public void transform(float[] pointArray) {
             point.x = pointArray[j];
             point.y = pointArray[j + 1];
             point = handle.transformPoint(point);
-            pointArray[j] = cast(float)/*64*/point.x;
-            pointArray[j + 1] = cast(float)/*64*/point.y;
+            pointArray[j] = cast(Cocoa.CGFloat)point.x;
+            pointArray[j + 1] = cast(Cocoa.CGFloat)point.y;
         }
     } finally {
         if (pool !is null) pool.release();

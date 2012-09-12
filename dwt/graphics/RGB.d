@@ -15,7 +15,7 @@ module dwt.graphics.RGB;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.internal.SerializableCompatibility;
 
 import tango.text.convert.Format;

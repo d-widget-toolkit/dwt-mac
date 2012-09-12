@@ -19,14 +19,32 @@ module dwt.widgets.TrayItem;
 
 
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
 import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSStatusItem;
+import dwt.internal.cocoa.NSImageView;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSControl;
+import dwt.internal.cocoa.NSImage;
+import dwt.internal.cocoa.NSStatusBar;
+import dwt.internal.cocoa.SWTImageView;
+import dwt.internal.cocoa.OS;
 import Carbon = dwt.internal.c.Carbon;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Item;
 import dwt.widgets.ToolTip;
 import dwt.widgets.Tray;
 import dwt.widgets.TypedListener;
+import dwt.widgets.Menu;
+import dwt.widgets.Display;
+import dwt.graphics.Point;
+import dwt.graphics.Image;
+import dwt.events.MenuDetectListener;
+import dwt.events.SelectionListener;
 
 /**
  * Instances of this class represent icons that can be placed on the
@@ -349,7 +367,7 @@ public void setImage (Image image) {
     checkWidget ();
     if (image !is null && image.isDisposed ()) error (DWT.ERROR_INVALID_ARGUMENT);
     super.setImage (image);
-    float /*double*/ width = 0;
+    Cocoa.CGFloat width = 0;
     if (image is null) {
         view.setImage (null);
     } else {
@@ -422,10 +440,10 @@ public void setToolTipText (String string) {
 
 void _setToolTipText (String string) {
     if (string !is null) {
-        char[] chars = new char [string.length ()];
+        char[] chars = new char [string.length];
         string.getChars (0, chars.length, chars, 0);
         int length = fixMnemonic (chars);
-        NSString str = NSString.stringWithCharacters (chars, length);
+        NSString str = NSString.stringWith (chars[0 .. length]);
         view.setToolTip (str);
     } else {
         view.setToolTip (null);
@@ -487,7 +505,7 @@ void displayMenu () {
 
 bool shouldShowMenu (NSEvent event) {
     if (!hooks(DWT.MenuDetect)) return false;
-    switch ((int)/*64*/event.type()) {
+    switch (event.type()) {
         case OS.NSRightMouseDown: return true;
         case OS.NSLeftMouseDown:
             if (!(hooks(DWT.Selection) || hooks(DWT.DefaultSelection))) {
@@ -504,14 +522,14 @@ bool shouldShowMenu (NSEvent event) {
     return false;
 }
 
-void mouseDown(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void mouseDown(objc.id id, objc.SEL sel, objc.id theEvent) {
     NSEvent nsEvent = new NSEvent(theEvent);
     highlight = true;
     view.setNeedsDisplay(true);
     if (shouldShowMenu(nsEvent)) displayMenu();
 }
 
-void mouseDragged(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void mouseDragged(objc.id id, objc.SEL sel, objc.id theEvent) {
     NSEvent nsEvent = new NSEvent(theEvent);
     NSRect frame = view.frame();
     highlight = OS.NSPointInRect(nsEvent.locationInWindow(), frame);
@@ -519,41 +537,7 @@ void mouseDragged(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
     if (shouldShowMenu(nsEvent)) displayMenu();
 }
 
-bool shouldShowMenu (NSEvent event) {
-    if (!hooks(DWT.MenuDetect)) return false;
-    switch ((int)/*64*/event.type()) {
-        case OS.NSRightMouseDown: return true;
-        case OS.NSLeftMouseDown:
-            if (!(hooks(DWT.Selection) || hooks(DWT.DefaultSelection))) {
-                return true;
-            }
-            if ((event.modifierFlags() & OS.NSDeviceIndependentModifierFlagsMask) is OS.NSControlKeyMask) {
-                return true;
-            }
-            return false;
-        case OS.NSLeftMouseDragged:
-        case OS.NSRightMouseDragged:
-            return true;
-    }
-    return false;
-}
-
-void mouseDown(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
-    NSEvent nsEvent = new NSEvent(theEvent);
-    highlight = true;
-    (cast(NSView)view).setNeedsDisplay(true);
-    if (shouldShowMenu(nsEvent)) displayMenu();
-}
-
-void mouseDragged(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
-    NSEvent nsEvent = new NSEvent(theEvent);
-    NSRect frame = view.frame();
-    highlight = OS.NSPointInRect(nsEvent.locationInWindow(), frame);
-    view.setNeedsDisplay(true);
-    if (shouldShowMenu(nsEvent)) displayMenu();
-}
-
-void mouseUp(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void mouseUp(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (highlight) {
         NSEvent nsEvent = new NSEvent(theEvent);
         if (nsEvent.type() is OS.NSLeftMouseUp) {
@@ -564,23 +548,15 @@ void mouseUp(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
     view.setNeedsDisplay(true);
 }
 
-void rightMouseDown(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void rightMouseDown(objc.id id, objc.SEL sel, objc.id theEvent) {
     mouseDown(id, sel, theEvent);
 }
 
-void rightMouseUp(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void rightMouseUp(objc.id id, objc.SEL sel, objc.id theEvent) {
     mouseUp(id, sel, theEvent);
 }
 
-void rightMouseDragged(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
-    mouseDragged(id, sel, theEvent);
-}
-
-void rightMouseUp(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
-    mouseUp(id, sel, theEvent);
-}
-
-void rightMouseDragged(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void rightMouseDragged(objc.id id, objc.SEL sel, objc.id theEvent) {
     mouseDragged(id, sel, theEvent);
 }
 

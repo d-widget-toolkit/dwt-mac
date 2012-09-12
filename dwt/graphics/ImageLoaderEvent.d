@@ -18,7 +18,7 @@ import dwt.dwthelper.utils;
 
 import dwt.graphics.ImageData;
 import dwt.graphics.ImageLoader;
-import dwt.internal.DWTEventObject;
+import dwt.internal.SWTEventObject;
 
 import tango.text.convert.Format;
 
@@ -41,7 +41,7 @@ import tango.text.convert.Format;
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
  */
 
-public class ImageLoaderEvent : DWTEventObject {
+public class ImageLoaderEvent : SWTEventObject {
 
     /**
      * if the <code>endOfImage</code> flag is false, then this is a

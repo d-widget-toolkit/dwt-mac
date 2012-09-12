@@ -15,6 +15,7 @@ import cocoa = dwt.internal.cocoa.id;
 import dwt.internal.cocoa.NSButtonCell;
 import dwt.internal.cocoa.NSRect;
 import dwt.internal.cocoa.NSTextFieldCell;
+import dwt.internal.cocoa.OS;
 import objc = dwt.internal.objc.runtime;
 
 public class NSSearchFieldCell : NSTextFieldCell {
@@ -42,8 +43,8 @@ public NSButtonCell searchButtonCell() {
 }
 
 public NSRect searchTextRectForBounds(NSRect rect) {
-    NSRect result = new NSRect();
-    OS.objc_msgSend_stret(result, this.id, OS.sel_searchTextRectForBounds_, rect);
+    NSRect result = NSRect();
+    OS.objc_msgSend_stret(&result, this.id, OS.sel_searchTextRectForBounds_, rect);
     return result;
 }
 

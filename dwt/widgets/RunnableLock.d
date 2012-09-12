@@ -20,6 +20,7 @@ import tango.core.sync.Mutex;
 import tango.core.Thread;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.Runnable;
 
 /**
  * Instances of this class are used to ensure that an

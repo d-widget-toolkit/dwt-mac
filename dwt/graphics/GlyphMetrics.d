@@ -15,7 +15,7 @@ module dwt.graphics.GlyphMetrics;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
+import dwt.DWT;
 
 import tango.text.convert.Format;
 

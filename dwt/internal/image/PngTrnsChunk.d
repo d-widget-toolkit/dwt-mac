@@ -13,7 +13,9 @@
 module dwt.internal.image.PngTrnsChunk;
 
 
+import dwt.DWT;
 import dwt.graphics.PaletteData;
+import dwt.graphics.RGB;
 import dwt.internal.image.PngChunk;
 import dwt.internal.image.PNGFileFormat;
 import dwt.internal.image.PngFileReadState;

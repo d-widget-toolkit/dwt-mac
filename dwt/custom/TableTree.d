@@ -13,10 +13,11 @@
 module dwt.custom.TableTree;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.custom.TableTreeItem;
 import dwt.events.SelectionEvent;
 import dwt.events.SelectionListener;
@@ -68,6 +69,7 @@ public class TableTree : Composite {
     Table table;
     TableTreeItem[] items;
     Image plusImage, minusImage, sizeImage;
+    Listener listener;
 
     /*
     * TableTreeItems are not treated as children but rather as items.

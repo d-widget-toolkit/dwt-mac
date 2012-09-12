@@ -46,7 +46,7 @@ public class Library {
     static const String SEPARATOR = "\n";
 
     /* 64-bit support */
-    static /*final*/ bool IS_64 = 0x1FFFFFFFFL is (int /*long*/)0x1FFFFFFFFL;
+    static /*final*/ bool IS_64 = 0x1FFFFFFFFL is cast(int /*long*/)0x1FFFFFFFFL;
     static final String SUFFIX_64 = "-64";  //$NON-NLS-1$
     static final String DWTDIR_32 = "swtlib-32";    //$NON-NLS-1$
     static final String DWTDIR_64 = "swtlib-64";    //$NON-NLS-1$
@@ -60,7 +60,7 @@ public class Library {
 static int parseVersion(String version_) {
     if (version_ is null) return 0;
     int major = 0, minor = 0, micro = 0;
-    int length = version_.length(), index = 0, start = 0;
+    int length = version_.length, index = 0, start = 0;
     while (index < length && Character.isDigit(version_.charAt(index))) index++;
     try {
         if (start < length) major = Integer.parseInt(version_.substring(start, index));
@@ -270,5 +270,5 @@ static String mapLibraryName (String libName) {
     }
     return libName;
 }
-
-}+/
++/
+}

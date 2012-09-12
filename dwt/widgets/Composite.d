@@ -20,7 +20,20 @@ module dwt.widgets.Composite;
 
 import cocoa = dwt.internal.cocoa.id;
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
+import dwt.accessibility.ACC;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSArray;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.SWTCanvasView;
+import dwt.internal.cocoa.NSClipView;
+import dwt.internal.cocoa.NSScrollView;
+import dwt.internal.cocoa.SWTScrollView;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.OS;
 import Carbon = dwt.internal.c.Carbon;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
@@ -34,6 +47,8 @@ import dwt.widgets.Scrollable;
 import dwt.widgets.ScrollBar;
 import dwt.widgets.Shell;
 import dwt.widgets.Widget;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
 
 import tango.io.Stdout;
 
@@ -75,6 +90,7 @@ public class Composite : Scrollable {
     alias Scrollable.moveBelow moveBelow;
     alias Scrollable.setBounds setBounds;
     alias Scrollable.translateTraversal translateTraversal;
+    alias Scrollable.updateCursorRects updateCursorRects;
 
     Layout layout_;
     Control[] tabList;
@@ -121,13 +137,14 @@ public this (Composite parent, int style) {
 }
 
 Control [] _getChildren () {
-    auto vi = view.id;
+    objc.id vi = view.id;
     NSArray views = contentView().subviews();
     NSUInteger count = views.count();
     Control [] children = new Control [count];
     if (count is 0) return children;
     NSUInteger j = 0;
-    for (NSUInteger i=0; i<count; i++){auto o = views.objectAtIndex (count - i - 1).id;
+    for (NSUInteger i=0; i<count; i++){
+        objc.id o = views.objectAtIndex (count - i - 1).id;
         Widget widget = display.getWidget (views.objectAtIndex (count - i - 1).id);
         if (widget !is null && widget !is this && cast(Control) widget) {
             children [j++] = cast(Control) widget;
@@ -294,10 +311,10 @@ void createHandle () {
         scrollWidget.setDrawsBackground(false);
         if ((style & DWT.H_SCROLL) !is 0) scrollWidget.setHasHorizontalScroller(true);
         if ((style & DWT.V_SCROLL) !is 0) scrollWidget.setHasVerticalScroller(true);
-        scrollWidget.setBorderType(hasBorder() ? OS.NSBezelBorder : OS.NSNoBorder);
+        scrollWidget.setBorderType(cast(NSBorderType)(hasBorder() ? OS.NSBezelBorder : OS.NSNoBorder));
         scrollView = scrollWidget;
     }
-    NSView widget = (NSView)new SWTCanvasView().alloc();
+    NSView widget = cast(NSView)(new SWTCanvasView()).alloc();
     widget.initWithFrame (rect);
 //  widget.setFocusRingType(OS.NSFocusRingTypeExterior);
     view = widget;
@@ -756,11 +773,12 @@ Point minimumSize (int wHint, int Hint, bool changed) {
     return new Point (width, height);
 }
 
-bool mouseEvent (int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent, int type) {
+bool mouseEvent (objc.id id, objc.SEL sel, objc.id theEvent, int type) {
     bool result = super.mouseEvent (id, sel, theEvent, type);
-    return (state & CANVAS) is 0 ? result : new NSEvent (theEvent).type () !is OS.NSLeftMouseDown;
+    return (state & CANVAS) is 0 ? result : (new NSEvent (theEvent)).type () !is OS.NSLeftMouseDown;
 }
 
+void pageDown(objc.id id, objc.SEL sel, objc.id sender) {
     if ((state & CANVAS) !is 0) return;
     super.pageDown(id, sel, sender);
 }
@@ -822,7 +840,7 @@ void scrollWheel (objc.id id, objc.SEL sel, objc.id theEvent) {
             if (delta !is 0 && bar !is null && bar.getEnabled ()) {
                 if (-1 < delta && delta < 0) delta = -1;
                 if (0 < delta && delta < 1) delta = 1;
-                int selection = Math.max (0, (int)(0.5f + bar.getSelection () - bar.getIncrement () * delta));
+                int selection = Math.max (0, cast(int)(0.5f + bar.getSelection () - bar.getIncrement () * delta));
                 bar.setSelection (selection);
                 Event event = new Event ();
                 event.detail = delta > 0 ? DWT.PAGE_UP : DWT.PAGE_DOWN;
@@ -1003,16 +1021,7 @@ void updateBackgroundMode () {
 }
 
 void updateCursorRects (bool enabled) {
-    super.updateCursorRects (enabled);
-    Control [] children = _getChildren ();
-    for (int i = 0; i < children.length; i++) {
-        Control control = children [i];
-        control.updateCursorRects (enabled && control.isEnabled ());
-    }
-}
-
-void updateCursorRects (bool enabled) {
-    super.updateCursorRects (enabled);
+    updateCursorRects (enabled);
     Control [] children = _getChildren ();
     for (int i = 0; i < children.length; i++) {
         Control control = children [i];

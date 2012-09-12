@@ -14,6 +14,7 @@
 module dwt.internal.cocoa.NSScrollView;
 
 import dwt.dwthelper.utils;
+import dwt.internal.objc.cocoa.Cocoa;
 import cocoa = dwt.internal.cocoa.id;
 import dwt.internal.cocoa.NSClipView;
 import dwt.internal.cocoa.NSRect;

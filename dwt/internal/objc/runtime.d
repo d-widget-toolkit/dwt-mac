@@ -165,12 +165,7 @@ Class objc_allocateClassPair (Class superclass, String name, size_t extraBytes)
     return bindings.objc_allocateClassPair(superclass, name.toStringz(), extraBytes);
 }
 
-Class objc_allocateClassPair (id superclass, String name, size_t extraBytes)
-{
-    return bindings.objc_allocateClassPair(cast(Class) superclass, name.toStringz(), extraBytes);
-}
-
-id objc_getClass (String name)
+Class objc_getClass (String name)
 {
     return bindings.objc_getClass(name.toStringz());
 }
@@ -180,7 +175,7 @@ Protocol* objc_getProtocol (String name)
     return bindings.objc_getProtocol(name.toStringz());
 }
 
-id objc_lookUpClass (String name)
+Class objc_lookUpClass (String name)
 {
     return bindings.objc_lookUpClass(name.toStringz());
 }
@@ -205,9 +200,9 @@ SEL sel_registerName (String str)
     return bindings.sel_registerName(str.toStringz());
 }
 
-id objc_msgSend (ARGS...) (id theReceiver, SEL theSelector, ARGS args)
+id objc_msgSend (T, ARGS...) (T theReceiver, SEL theSelector, ARGS args)
 {
-    alias extern (C) id function (id, SEL, ARGS) fp;
+    alias extern (C) id function (T, SEL, ARGS) fp;
     return (cast(fp)&bindings.objc_msgSend)(theReceiver, theSelector, args);
 }
 
@@ -218,17 +213,17 @@ void objc_msgSend_struct (T, ARGS...) (T* result, id theReceiver, SEL theSelecto
     //result = cast(T*) bindings.objc_msgSend(theReceiver, theSelector, args);
 }
 
-void objc_msgSend_stret (T, ARGS...) (T* stretAddr, id theReceiver, SEL theSelector, ARGS args)
+void objc_msgSend_stret (T1, T2, ARGS...) (T1* stretAddr, T2 theReceiver, SEL theSelector, ARGS args)
 {
-    if (T.sizeof > STRUCT_SIZE_LIMIT)
+    if (T1.sizeof > STRUCT_SIZE_LIMIT)
     {
-        alias extern (C) void function (T *, id, SEL, ARGS) fp;
+        alias extern (C) void function (T1 *, T2, SEL, ARGS) fp;
         (cast(fp)&bindings.objc_msgSend_stret)(stretAddr, theReceiver, theSelector, args);
     }
 
     else
     {
-        alias extern (C) T* function (id, SEL, ARGS) fp;
+        alias extern (C) T1* function (T2, SEL, ARGS) fp;
         stretAddr = (cast(fp)&bindings.objc_msgSend)(theReceiver, theSelector, args);
     }
 }
@@ -239,7 +234,7 @@ id objc_msgSendSuper (ARGS...) (objc_super* superr, SEL op, ARGS args)
     return (cast(fp)&bindings.objc_msgSendSuper)(superr, op, args);
 }
 
-id objc_msgSendSuper_stret (T, ARGS...) (T* stretAddr, objc_super* super_, SEL op, ARGS args)
+void objc_msgSendSuper_stret (T, ARGS...) (T* stretAddr, objc_super* super_, SEL theSelector, ARGS args)
 {
     if (T.sizeof > STRUCT_SIZE_LIMIT)
     {
@@ -254,9 +249,9 @@ id objc_msgSendSuper_stret (T, ARGS...) (T* stretAddr, objc_super* super_, SEL o
     }
 }
 
-bool objc_msgSend_bool (ARGS...) (id theReceiver, SEL theSelector, ARGS args)
+bool objc_msgSend_bool (T, ARGS...) (T theReceiver, SEL theSelector, ARGS args)
 {
-    alias extern (C) bool function (id, SEL, ARGS) fp;
+    alias extern (C) bool function (T, SEL, ARGS) fp;
     return (cast(fp)&bindings.objc_msgSend)(theReceiver, theSelector, args);
 }
 
@@ -268,18 +263,18 @@ bool objc_msgSendSuper_bool (ARGS...) (objc_super* super_, SEL theSelector, ARGS
 
 version (X86)
 {
-    double objc_msgSend_fpret(ARGS...) (id self, SEL op, ARGS args)
+    double objc_msgSend_fpret(T, ARGS...) (T self, SEL op, ARGS args)
     {
-        alias extern (C) double function (id, SEL, ARGS) fp;
+        alias extern (C) double function (T, SEL, ARGS) fp;
         return (cast(fp)&bindings.objc_msgSend_fpret)(self, op, args);
     }
 }
 
 else
 {
-    double objc_msgSend_fpret(ARGS...) (id self, SEL op, ARGS args)
+    double objc_msgSend_fpret(T, ARGS...) (T self, SEL op, ARGS args)
     {
-        alias extern (C) double function (id, SEL, ARGS) fp;
+        alias extern (C) double function (T, SEL, ARGS) fp;
         return (cast(fp)&bindings.objc_msgSend)(self, op, args);
     }
 }

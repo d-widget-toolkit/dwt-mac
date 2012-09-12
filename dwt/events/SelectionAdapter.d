@@ -15,6 +15,7 @@ module dwt.events.SelectionAdapter;
 import dwt.dwthelper.utils;
 
 
+import dwt.events.SelectionEvent;
 import dwt.events.SelectionListener;
 
 /**

@@ -13,10 +13,12 @@
 module dwt.internal.image.JPEGScanHeader;
 
 
+import dwt.DWT;
 import dwt.internal.image.JPEGVariableSizeSegment;
 import dwt.internal.image.LEDataInputStream;
 import dwt.internal.image.JPEGFileFormat;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
 final class JPEGScanHeader : JPEGVariableSizeSegment {
     public int[][] componentParameters;

@@ -19,7 +19,17 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSOpenGLContext;
+import dwt.internal.cocoa.NSOpenGLPixelFormat;
+import dwt.internal.cocoa.NSNotificationCenter;
+import dwt.internal.cocoa.NSOpenGLView;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
+import dwt.widgets.Composite;
+import dwt.widgets.Canvas;
+import dwt.widgets.Listener;
+import dwt.widgets.Event;
 import dwt.opengl.GLData;
 
 /**
@@ -118,7 +128,7 @@ public this (Composite parent, int style, GLData data) {
     pixelFormat.initWithAttributes((cast(NSOpenGLPixelFormatAttribute[])attrib).ptr);
 
     NSOpenGLContext ctx = data.shareContext !is null ? data.shareContext.context : null;
-    context = (NSOpenGLContext) new NSOpenGLContext().alloc();
+    context = cast(NSOpenGLContext) (new NSOpenGLContext()).alloc();
     if (context is null) {
         dispose ();
         DWT.error (DWT.ERROR_UNSUPPORTED_DEPTH);
@@ -127,7 +137,7 @@ public this (Composite parent, int style, GLData data) {
     setData(GLCONTEXT_KEY, context);
     NSNotificationCenter.defaultCenter().addObserver(view,  OS.sel_updateOpenGLContext_, OS.NSViewGlobalFrameDidChangeNotification, view);
 
-    Listener listener = new class (glView, pixelFormat) Listener {
+    Listener listener = new class (cast(NSOpenGLView)view, pixelFormat) Listener {
         NSOpenGLView glView;
         NSOpenGLPixelFormat pixelFormat;
 
@@ -171,50 +181,50 @@ public this (Composite parent, int style, GLData data) {
 public GLData getGLData () {
     checkWidget ();
     GLData data = new GLData ();
-    int /*long*/ [] value = new int /*long*/ [1];
-    pixelFormat.getValues(value, OS.NSOpenGLPFADoubleBuffer, 0);
+    GLint [] value = new GLint [1];
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFADoubleBuffer, 0);
     data.doubleBuffer = value [0] !is 0;
-    pixelFormat.getValues(value, OS.NSOpenGLPFAStereo, 0);
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFAStereo, 0);
     data.stereo = value [0] !is 0;
 
-    pixelFormat.getValues(value, OS.NSOpenGLPFAAlphaSize, 0);
-    data.alphaSize = (int/*64*/)value [0];
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFAAlphaSize, 0);
+    data.alphaSize = value [0];
 
     /*
      * Feature in Cocoa: NSOpenGL/CoreOpenGL only supports specifying the total number of bits
      * in the size of the color component. For compatibility we split the color size less any alpha
      * into thirds and allocate a third to each color.
      */
-    pixelFormat.getValues(value, OS.NSOpenGLPFAColorSize, 0);
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFAColorSize, 0);
 
-    int colorSize = ((int/*64*/)(value[0] - data.alphaSize)) / 3;
+    int colorSize = (cast(int/*64*/)(value[0] - data.alphaSize)) / 3;
 
     data.redSize = colorSize;
     data.greenSize = colorSize;
     data.blueSize = colorSize;
 
-    pixelFormat.getValues(value, OS.NSOpenGLPFADepthSize, 0);
-    data.depthSize = (int/*64*/)value [0];
-    pixelFormat.getValues(value, OS.NSOpenGLPFAStencilSize, 0);
-    data.stencilSize = (int/*64*/)value [0];
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFADepthSize, 0);
+    data.depthSize = value [0];
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFAStencilSize, 0);
+    data.stencilSize = value [0];
 
     /*
      * Feature(?) in Cocoa: NSOpenGL/CoreOpenGL doesn't support setting an accumulation buffer alpha, but
      * has an alpha if the color values for the accumulation buffer were set. Allocate the values evenly
      * in that case.
      */
-    pixelFormat.getValues(value, OS.NSOpenGLPFAAccumSize, 0);
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFAAccumSize, 0);
 
-    int accumColorSize = (int/*64*/)(value[0]) / 4;
+    int accumColorSize = cast(int/*64*/)(value[0]) / 4;
     data.accumRedSize = accumColorSize;
     data.accumGreenSize = accumColorSize;
     data.accumBlueSize = accumColorSize;
     data.accumAlphaSize = accumColorSize;
 
-    pixelFormat.getValues(value, OS.NSOpenGLPFASampleBuffers, 0);
-    data.sampleBuffers = (int/*64*/)value [0];
-    pixelFormat.getValues(value, OS.NSOpenGLPFASamples, 0);
-    data.samples = (int/*64*/)value [0];
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFASampleBuffers, 0);
+    data.sampleBuffers = value [0];
+    pixelFormat.getValues(value.ptr, OS.NSOpenGLPFASamples, 0);
+    data.samples = value [0];
     return data;
 }
 

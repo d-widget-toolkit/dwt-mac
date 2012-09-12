@@ -18,10 +18,15 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
 import dwt.widgets.Control;
 import dwt.widgets.Display;
 import dwt.widgets.ExpandBar;
 import dwt.widgets.Item;
+import dwt.graphics.GC;
+import dwt.graphics.Image;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
 
 /**
  * Instances of this class represent a selectable user interface object
@@ -184,7 +189,7 @@ void drawItem (GC gc, bool drawFocus) {
         }
         drawX += imageWidth;
     }
-    if (text.length() > 0) {
+    if (text.length > 0) {
         drawX += ExpandItem.TEXT_INSET;
         Point size = gc.stringExtent (text);
         gc.setForeground (parent.getForeground ());
@@ -279,7 +284,7 @@ int getPreferredWidth (GC gc) {
     if (image !is null) {
         width += ExpandItem.TEXT_INSET + imageWidth;
     }
-    if (text.length() > 0) {
+    if (text.length > 0) {
         width += gc.stringExtent (text).x;
     }
     return width;

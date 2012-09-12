@@ -13,7 +13,13 @@
  *******************************************************************************/
 module dwt.internal.theme.Theme;
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.graphics.Image;
+import dwt.graphics.Rectangle;
+import dwt.graphics.Point;
+import dwt.graphics.GC;
+import dwt.graphics.Device;
 
 
 
@@ -112,7 +118,8 @@ public Rectangle measureText(GC gc, Rectangle bounds, DrawData data, String text
     checkTheme();
     if (gc is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     if (data is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
-    if (text is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (text is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     if (gc.isDisposed()) DWT.error(DWT.ERROR_INVALID_ARGUMENT);
     return data.measureText(this, text, flags, gc, bounds);
 }

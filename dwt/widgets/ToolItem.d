@@ -21,13 +21,39 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.NSButton;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSBox;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSNumber;
+import dwt.internal.cocoa.NSAttributedString;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSBezierPath;
+import dwt.internal.cocoa.NSAffineTransform;
+import dwt.internal.cocoa.NSColor;
+import dwt.internal.cocoa.NSButtonCell;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.SWTView;
+import dwt.internal.cocoa.SWTButton;
+import dwt.internal.cocoa.SWTBox;
+import dwt.internal.cocoa.SWTButtonCell;
+import dwt.internal.cocoa.OS;
 import objc = dwt.internal.objc.runtime;
+import dwt.internal.objc.cocoa.Cocoa;
 import dwt.widgets.Control;
 import dwt.widgets.Display;
 import dwt.widgets.Event;
 import dwt.widgets.Item;
 import dwt.widgets.ToolBar;
 import dwt.widgets.TypedListener;
+import dwt.graphics.Image;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
+import dwt.graphics.Font;
+import dwt.events.SelectionListener;
 
 /**
  * Instances of this class represent a selectable user interface object
@@ -239,11 +265,11 @@ Point computeSize () {
             height = Math.max (height, control.getMininumHeight ());
         }
     } else {
-        if (text.length () !is 0 || image !is null) {
+        if (text.length !is 0 || image !is null) {
             NSButton widget = cast(NSButton)button;
             NSSize size = widget.cell().cellSize();
-            width = (int)Math.ceil(size.width);
-            height = (int)Math.ceil(size.height);
+            width = cast(int)Math.ceil(size.width);
+            height = cast(int)Math.ceil(size.height);
         } else {
             width = DEFAULT_WIDTH;
             height = DEFAULT_HEIGHT;
@@ -274,7 +300,7 @@ void createHandle () {
         * between their edge and their image.  The workaround is to provide a
         * custom cell that displays the image in a better position.
         */
-        NSButtonCell cell = (NSButtonCell)new SWTButtonCell ().alloc ().init ();
+        NSButtonCell cell = cast(NSButtonCell)(new SWTButtonCell ()).alloc ().init ();
         button.setCell (cell);
         cell.release();
         cell.release();
@@ -313,18 +339,18 @@ void destroyWidget() {
     super.destroyWidget();
 }
 
-void drawImageWithFrameInView (int /*long*/ id, int /*long*/ sel, int /*long*/ image, NSRect rect, int /*long*/ view) {
-    if (text.length () > 0) {
+void drawImageWithFrameInView (objc.id id, objc.SEL sel, objc.id image, NSRect rect, objc.id view) {
+    if (text.length > 0) {
         if ((parent.style & DWT.RIGHT) !is 0) {
-            rect.x += 3;
+            rect.x = rect.x + 3;
         } else {
-            rect.y += 3;
+            rect.y = rect.y + 3;
         }
     }
     callSuper (id, sel, image, rect, view);
 }
 
-void drawWidget (int /*long*/ id, NSGraphicsContext context, NSRect rect) {
+void drawWidget (objc.id id, NSGraphicsContext context, NSRect rect) {
     if (id is view.id) {
         if (getSelection ()) {
             NSRect bounds = view.bounds();
@@ -385,7 +411,7 @@ public Rectangle getBounds () {
     return new Rectangle(cast(int)rect.x, cast(int)rect.y, cast(int)rect.width, cast(int)rect.height);
 }
 
-void setClipRegion (float /*double*/ x, float /*double*/ y) {
+void setClipRegion (Cocoa.CGFloat x, Cocoa.CGFloat y) {
     NSRect frame = view.frame();
     parent.setClipRegion(frame.x + x, frame.y + y);
 }
@@ -560,6 +586,7 @@ bool isDrawing () {
     return getDrawing() && parent.isDrawing ();
 }
 
+objc.id menuForEvent (objc.id id, objc.SEL sel, objc.id theEvent) {
     return parent.menuForEvent (id, sel, theEvent);
 }
 
@@ -579,42 +606,42 @@ void mouseDown(objc.id id, objc.SEL sel, objc.id theEvent) {
     }
 }
 
-void mouseUp(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void mouseUp(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!parent.mouseEvent(parent.view.id, sel, theEvent, DWT.MouseUp)) return;
     super.mouseUp(id, sel, theEvent);
 }
 
-void mouseDragged(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void mouseDragged(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!parent.mouseEvent(parent.view.id, sel, theEvent, DWT.MouseMove)) return;
     super.mouseDragged(id, sel, theEvent);
 }
 
-void rightMouseDown(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void rightMouseDown(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!parent.mouseEvent(parent.view.id, sel, theEvent, DWT.MouseDown)) return;
     super.rightMouseDown(id, sel, theEvent);
 }
 
-void rightMouseUp(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void rightMouseUp(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!parent.mouseEvent(parent.view.id, sel, theEvent, DWT.MouseUp)) return;
     super.rightMouseUp(id, sel, theEvent);
 }
 
-void rightMouseDragged(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void rightMouseDragged(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!parent.mouseEvent(parent.view.id, sel, theEvent, DWT.MouseMove)) return;
     super.rightMouseDragged(id, sel, theEvent);
 }
 
-void otherMouseDown(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void otherMouseDown(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!parent.mouseEvent(parent.view.id, sel, theEvent, DWT.MouseDown)) return;
     super.otherMouseDown(id, sel, theEvent);
 }
 
-void otherMouseUp(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void otherMouseUp(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!parent.mouseEvent(parent.view.id, sel, theEvent, DWT.MouseUp)) return;
     super.otherMouseUp(id, sel, theEvent);
 }
 
-void otherMouseDragged(int /*long*/ id, int /*long*/ sel, int /*long*/ theEvent) {
+void otherMouseDragged(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!parent.mouseEvent(parent.view.id, sel, theEvent, DWT.MouseMove)) return;
     super.otherMouseDragged(id, sel, theEvent);
 }
@@ -735,7 +762,7 @@ public void setControl (Control control) {
     }
     if ((style & DWT.SEPARATOR) is 0) return;
     if (this.control is control) return;
-    NSBox widget = (NSBox)view;
+    NSBox widget = cast(NSBox)view;
     if (control is null) {
         widget.setBoxType(OS.NSBoxSeparator);
     } else {
@@ -892,19 +919,20 @@ public void setSelection (bool selected) {
  */
 public void setText (String string) {
     checkWidget();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if ((style & DWT.SEPARATOR) !is 0) return;
     super.setText (string);
     NSButton widget = cast(NSButton)button;
     widget.setAttributedTitle(createString());
-    if (text.length() !is 0 && image !is null) {
+    if (text.length !is 0 && image !is null) {
         if ((parent.style & DWT.RIGHT) !is 0) {
             widget.setImagePosition(OS.NSImageLeft);
         } else {
             widget.setImagePosition(OS.NSImageAbove);
         }
     } else {
-        widget.setImagePosition(text.length() !is 0 ? OS.NSNoImage : OS.NSImageOnly);
+        widget.setImagePosition(cast(NSCellImagePosition)(text.length !is 0 ? OS.NSNoImage : OS.NSImageOnly));
     }
     parent.relayout ();
 }
@@ -990,14 +1018,14 @@ void updateImage (bool layout) {
      */
     widget.setImage(image !is null ? image.handle : null);
     widget.setNeedsDisplay(true);
-    if (text.length() !is 0 && image !is null) {
+    if (text.length !is 0 && image !is null) {
         if ((parent.style & DWT.RIGHT) !is 0) {
             widget.setImagePosition(OS.NSImageLeft);
         } else {
             (cast(NSButton)button).setImagePosition(OS.NSImageAbove);
         }
     } else {
-        widget.setImagePosition(text.length() !is 0 ? OS.NSNoImage : OS.NSImageOnly);
+        widget.setImagePosition(cast(NSCellImagePosition)(text.length !is 0 ? OS.NSNoImage : OS.NSImageOnly));
     }
     parent.relayout();
 }

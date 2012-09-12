@@ -21,8 +21,18 @@ import dwt.dwthelper.utils;
 
 
 
+import dwt.DWT;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSBezierPath;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSProgressIndicator;
+import dwt.internal.cocoa.SWTProgressIndicator;
+import dwt.internal.cocoa.OS;
+import Carbon = dwt.internal.c.Carbon;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
+import dwt.graphics.Point;
 
 /**
  * Instances of the receiver represent an unselectable
@@ -47,8 +57,6 @@ import dwt.widgets.Control;
  * @noextend This class is not intended to be subclassed by clients.
  */
 public class ProgressBar : Control {
-
-    NSBezierPath visiblePath;
 
     NSBezierPath visiblePath;
 
@@ -120,7 +128,7 @@ NSFont defaultNSFont () {
     return display.progressIndicatorFont;
 }
 
-void _drawThemeProgressArea (int /*long*/ id, int /*long*/ sel, int /*long*/ arg0) {
+void _drawThemeProgressArea (objc.id id, objc.SEL sel, objc.id arg0) {
     /*
     * Bug in Cocoa.  When the threaded animation is turned off by calling
     * setUsesThreadedAnimation(), _drawThemeProgressArea() attempts to
@@ -138,7 +146,7 @@ void _drawThemeProgressArea (int /*long*/ id, int /*long*/ sel, int /*long*/ arg
     * region of the progress bar before calling super.
     */
     if (visiblePath is null) {
-        int /*long*/ visibleRegion = getVisibleRegion();
+        Carbon.RgnHandle visibleRegion = getVisibleRegion();
         visiblePath = getPath(visibleRegion);
         OS.DisposeRgn(visibleRegion);
     }
@@ -323,7 +331,7 @@ void resetVisibleRegion () {
     visiblePath = null;
 }
 
-void viewDidMoveToWindow(int /*long*/ id, int /*long*/ sel) {
+void viewDidMoveToWindow(objc.id id, objc.SEL sel) {
     /*
      * Bug in Cocoa. An indeterminate progress indicator doesn't start animating until it is in
      * a visible window.  Workaround is to catch when the bar has been added to a window and start
@@ -331,7 +339,7 @@ void viewDidMoveToWindow(int /*long*/ id, int /*long*/ sel) {
      */
     if (view.window() !is null) {
         if ((style & DWT.INDETERMINATE) !is 0) {
-            ((NSProgressIndicator)view).startAnimation(null);
+            (cast(NSProgressIndicator)view).startAnimation(null);
         }
     }
 }

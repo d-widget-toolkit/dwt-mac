@@ -22,16 +22,37 @@ module dwt.widgets.Button;
 import dwt.internal.cocoa.NSSize;
 import cocoa = dwt.internal.cocoa.id;
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.accessibility.ACC;
 import Carbon = dwt.internal.c.Carbon;
+import dwt.internal.cocoa.OS;
 import dwt.internal.cocoa.NSCell;
 import dwt.internal.cocoa.NSText;
+import dwt.internal.cocoa.NSEvent;
+import dwt.internal.cocoa.NSRect;
+import dwt.internal.cocoa.NSFont;
+import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.NSGraphicsContext;
+import dwt.internal.cocoa.NSAttributedString;
+import dwt.internal.cocoa.NSButton;
+import dwt.internal.cocoa.SWTButton;
+import dwt.internal.cocoa.NSButtonCell;
+import dwt.internal.cocoa.SWTButtonCell;
+import dwt.internal.cocoa.NSControl;
+import dwt.internal.cocoa.NSAffineTransform;
+import dwt.internal.cocoa.NSPoint;
+import dwt.internal.cocoa.NSBezierPath;
+import dwt.internal.cocoa.NSColor;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 import dwt.widgets.Composite;
 import dwt.widgets.Control;
 import dwt.widgets.Decorations;
 import dwt.widgets.TypedListener;
+import dwt.events.SelectionListener;
+import dwt.graphics.Image;
+import dwt.graphics.Point;
 
 /**
  * Instances of this class represent a selectable user interface object that
@@ -66,6 +87,7 @@ public class Button : Control {
     alias Control.setBackground setBackground;
     alias Control.setForeground setForeground;
     alias Control.computeSize computeSize;
+    alias Control.createString createString;
 
     Image image;
     bool grayed;
@@ -178,7 +200,7 @@ public void addSelectionListener(SelectionListener listener) {
     addListener(DWT.DefaultSelection,typedListener);
 }
 
-NSSize cellSize (int /*long*/ id, int /*long*/ sel) {
+NSSize cellSize (objc.id id, objc.SEL sel) {
     NSSize size = super.cellSize(id, sel);
     if (image !is null && ((style & (DWT.CHECK|DWT.RADIO)) !is 0)) {
         NSSize imageSize = image.handle.size();
@@ -215,9 +237,9 @@ public Point computeSize (int wHint, int hHint, bool changed) {
         int height = hHint !is DWT.DEFAULT ? hHint : 14;
         return new Point (width, height);
     }
-    NSSize size = ((NSButton)view).cell ().cellSize ();
-    int width = (int)Math.ceil (size.width);
-    int height = (int)Math.ceil (size.height);
+    NSSize size = (cast(NSButton)view).cell ().cellSize ();
+    int width = cast(int)Math.ceil (size.width);
+    int height = cast(int)Math.ceil (size.height);
     if (wHint !is DWT.DEFAULT) width = wHint;
     if (hHint !is DWT.DEFAULT) height = hHint;
     if ((style & (DWT.PUSH | DWT.TOGGLE)) !is 0 && (style & DWT.FLAT) is 0) {
@@ -243,10 +265,11 @@ void createHandle () {
     * and offset the image drawing.
     */
 //  if (display.smallFonts && (style & (DWT.PUSH | DWT.TOGGLE)) !is 0 && (style & DWT.FLAT) is 0) {
-        NSButtonCell cell = (NSButtonCell)new SWTButtonCell ().alloc ().init ();
+        NSButtonCell cell = cast(NSButtonCell)(new SWTButtonCell ()).alloc ().init ();
         widget.setCell (cell);
         cell.release ();
 //  }
+    int type = OS.NSMomentaryLightButton;
     if ((style & DWT.PUSH) !is 0) {
         if ((style & DWT.FLAT) !is 0) {
             widget.setBezelStyle(OS.NSShadowlessSquareBezelStyle);
@@ -269,7 +292,7 @@ void createHandle () {
     } else if ((style & DWT.ARROW) !is 0) {
         widget.setBezelStyle(OS.NSShadowlessSquareBezelStyle);
     }
-    widget.setButtonType(type);
+    widget.setButtonType(cast(NSButtonType)type);
     widget.setTitle(NSString.stringWith(""));
     widget.setImagePosition(OS.NSImageLeft);
     widget.setTarget(widget);
@@ -298,28 +321,28 @@ bool dragDetect(int x, int y, bool filter, bool[] consume) {
     return dragging;
 }
 
-void drawImageWithFrameInView (int /*long*/ id, int /*long*/ sel, int /*long*/ image, NSRect rect, int /*long*/ view) {
+void drawImageWithFrameInView (objc.id id, objc.SEL sel, objc.id image, NSRect rect, objc.id view) {
     /*
     * Feature in Cocoa.  Images touch the edge of rounded buttons
     * when set to small size. The fix to subclass the button cell
     * and offset the image drawing.
     */
     if (display.smallFonts && (style & (DWT.PUSH | DWT.TOGGLE)) !is 0 && (style & DWT.FLAT) is 0) {
-        rect.y += EXTRA_HEIGHT / 2;
-        rect.height += EXTRA_HEIGHT;
+        rect.y = rect.y + EXTRA_HEIGHT / 2;
+        rect.height = rect.height + EXTRA_HEIGHT;
     }
     callSuper (id, sel, image, rect, view);
 }
 
-void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect cellRect, int /*long*/ viewid) {
+void drawInteriorWithFrame_inView (objc.id id, objc.SEL sel, NSRect cellRect, objc.id viewid) {
     super.drawInteriorWithFrame_inView(id, sel, cellRect, viewid);
     if (image !is null && ((style & (DWT.CHECK|DWT.RADIO)) !is 0)) {
         NSSize imageSize = image.handle.size();
         NSCell nsCell = new NSCell(id);
-        float /*double*/ x = 0;
-        float /*double*/ y = (imageSize.height - cellRect.height)/2f;
+        Cocoa.CGFloat x = 0;
+        Cocoa.CGFloat y = (imageSize.height - cellRect.height)/2f;
         NSRect imageRect = nsCell.imageRectForBounds(cellRect);
-        NSSize stringSize = ((NSButton)view).attributedTitle().size();
+        NSSize stringSize = (cast(NSButton)view).attributedTitle().size();
         switch (style & (DWT.LEFT|DWT.RIGHT|DWT.CENTER)) {
             case DWT.LEFT:
                 x = imageRect.x + imageRect.width + IMAGE_GAP;
@@ -331,7 +354,7 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect cel
                 x = cellRect.x + cellRect.width - stringSize.width - imageSize.width - IMAGE_GAP;
                 break;
         }
-        NSRect destRect = new NSRect();
+        NSRect destRect = NSRect();
         destRect.x = x;
         destRect.y = y;
         destRect.width = imageSize.width;
@@ -341,13 +364,13 @@ void drawInteriorWithFrame_inView (int /*long*/ id, int /*long*/ sel, NSRect cel
         transform.scaleXBy(1, -1);
         transform.translateXBy(0, -imageSize.height);
         transform.concat();
-        image.handle.drawInRect(destRect, new NSRect(), OS.NSCompositeSourceOver, 1);
+        image.handle.drawInRect(destRect, NSRect(), OS.NSCompositeSourceOver, 1);
         NSGraphicsContext.static_restoreGraphicsState();
     }
 
 }
 
-void drawWidget (int /*long*/ id, NSGraphicsContext context, NSRect rect) {
+void drawWidget (objc.id id, NSGraphicsContext context, NSRect rect) {
     if ((style & DWT.ARROW) !is 0) {
         NSRect frame = view.frame();
         int arrowSize = Math.min(cast(int)frame.height, cast(int)frame.width) / 2;
@@ -508,9 +531,9 @@ bool isDescribedByLabel () {
  * This will cause the on state to momentarily appear while clicking on the checkbox. To avoid this, we override [NSCell nextState]
  * to go directly to the desired state if we have a grayed checkbox.
  */
-int /*long*/ nextState(int /*long*/ id, int /*long*/ sel) {
+objc.id nextState(objc.id id, objc.SEL sel) {
     if ((style & DWT.CHECK) !is 0 && grayed) {
-        return ((NSButton)view).state() is OS.NSMixedState ? OS.NSOffState : OS.NSMixedState;
+        return cast(objc.id)((cast(NSButton)view).state() is OS.NSMixedState ? OS.NSOffState : OS.NSMixedState);
     }
 
     return super.nextState(id, sel);
@@ -682,7 +705,7 @@ void setFont (NSFont font) {
     }
 }
 
-void setForeground (float /*double*/ [] color) {
+void setForeground (Cocoa.CGFloat [] color) {
     (cast(NSButton)view).setAttributedTitle(createString());
 }
 
@@ -705,7 +728,7 @@ public void setGrayed(bool grayed) {
     if ((style & DWT.CHECK) is 0) return;
     bool checked = getSelection ();
     this.grayed = grayed;
-    ((NSButton) view).setAllowsMixedState(grayed);
+    (cast(NSButton) view).setAllowsMixedState(grayed);
 
     if (checked) {
         if (grayed) {
@@ -750,10 +773,10 @@ public void setImage (Image image) {
          * if the NSImage object's content has changed since it was last set
          * into the button.  The workaround is to explicitly redraw the button.
          */
-        ((NSButton)view).setImage(image !is null ? image.handle : null);
+        (cast(NSButton)view).setImage(image !is null ? image.handle : null);
         view.setNeedsDisplay(true);
     } else {
-        ((NSButton)view).setAttributedTitle(createString());
+        (cast(NSButton)view).setAttributedTitle(createString());
     }
     updateAlignment ();
 }
@@ -826,19 +849,20 @@ public void setSelection (bool selected) {
  */
 public void setText (String string) {
     checkWidget();
-    if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (string is null) error (DWT.ERROR_NULL_ARGUMENT);
     if ((style & DWT.ARROW) !is 0) return;
     text = string;
     (cast(NSButton)view).setAttributedTitle(createString());
     updateAlignment ();
 }
 
-NSRect titleRectForBounds (int /*long*/ id, int /*long*/ sel, NSRect cellFrame) {
+NSRect titleRectForBounds (objc.id id, objc.SEL sel, NSRect cellFrame) {
     NSRect rect = super.titleRectForBounds(id, sel, cellFrame);
     if (image !is null && ((style & (DWT.CHECK|DWT.RADIO)) !is 0)) {
         NSSize imageSize = image.handle.size();
-        rect.x += imageSize.width + IMAGE_GAP;
-        rect.width -= (imageSize.width + IMAGE_GAP);
+        rect.x = rect.x + imageSize.width + IMAGE_GAP;
+        rect.width = rect.width - (imageSize.width + IMAGE_GAP);
         rect.width = Math.max(0f, rect.width);
     }
     return rect;
@@ -852,12 +876,12 @@ int traversalCode (int key, NSEvent theEvent) {
 }
 
 void updateAlignment () {
-    NSButton widget = (NSButton)view;
+    NSButton widget = cast(NSButton)view;
     if ((style & (DWT.PUSH | DWT.TOGGLE)) !is 0) {
-        if (text.length() !is 0 && image !is null) {
+        if (text.length !is 0 && image !is null) {
             widget.setImagePosition(OS.NSImageLeft);
         } else {
-            widget.setImagePosition(text.length() !is 0 ? OS.NSNoImage : OS.NSImageOnly);
+            widget.setImagePosition(cast(NSCellImagePosition)(text.length !is 0 ? OS.NSNoImage : OS.NSImageOnly));
         }
     }
 }

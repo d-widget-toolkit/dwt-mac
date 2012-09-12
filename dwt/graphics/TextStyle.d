@@ -15,7 +15,7 @@ module dwt.graphics.TextStyle;
 
 import dwt.dwthelper.utils;
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.graphics.Color;
 import dwt.graphics.Font;
 import dwt.graphics.GlyphMetrics;
@@ -249,7 +249,7 @@ public int opEquals(Object object) {
         if (!borderColor.equals(style.borderColor)) return false;
     } else if (style.borderColor !is null) return false;
     if (data !is null) {
-        if (!data.equals(style.data)) return false;
+        if (!data.opEquals(style.data)) return false;
     } else if (style.data !is null) return false;
     return true;
 }
@@ -366,7 +366,7 @@ public String toString () {
         }
         if (underlineColor !is null) {
             buffer.append(", underlineColor="); //$NON-NLS-1$
-            buffer.append(underlineColor);
+            buffer.append(underlineColor.toString());
         }
     }
     if (strikeout) {
@@ -374,7 +374,7 @@ public String toString () {
         buffer.format("{}", "striked out"); //$NON-NLS-1$
         if (strikeoutColor !is null) {
             buffer.append(", strikeoutColor="); //$NON-NLS-1$
-            buffer.append(strikeoutColor);
+            buffer.append(strikeoutColor.toString());
         }
     }
     if (borderStyle !is DWT.NONE) {
@@ -387,7 +387,7 @@ public String toString () {
         }
         if (borderColor !is null) {
             buffer.append(", borderColor="); //$NON-NLS-1$
-            buffer.append(borderColor);
+            buffer.append(borderColor.toString());
         }
     }
     if (rise !is 0) {

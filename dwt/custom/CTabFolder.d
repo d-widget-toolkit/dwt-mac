@@ -13,9 +13,10 @@
 module dwt.custom.CTabFolder;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.System;
 
-import dwt.SWT;
-import dwt.SWTException;
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.accessibility.ACC;
 import dwt.accessibility.Accessible;
 import dwt.accessibility.AccessibleAdapter;
@@ -427,7 +428,7 @@ static int checkStyle (Composite parent, int style) {
      * that use double buffering which is true in both of these cases.
      */
     String platform = DWT.getPlatform();
-    if ("cocoa".equals(platform) || "carbon".equals(platform) || "gtk".equals(platform)) return style; //$NON-NLS-1$ //$NON-NLS-2$
+    if ("cocoa" == platform || "carbon" == platform || "gtk" == platform) return style; //$NON-NLS-1$ //$NON-NLS-2$
 
     //TEMPORARY CODE
     /*
@@ -555,9 +556,9 @@ void antialias (int[] shape, RGB lineRGB, RGB innerRGB, RGB outerRGB, GC gc){
     // already does it.  The simple style also does not require anti-aliasing.
     if (simple) return;
     String platform = DWT.getPlatform();
-    if ("cocoa".equals(platform)) return; //$NON-NLS-1$
-    if ("carbon".equals(platform)) return; //$NON-NLS-1$
-    if ("wpf".equals(platform)) return; //$NON-NLS-1$
+    if ("cocoa" == platform) return; //$NON-NLS-1$
+    if ("carbon" == platform) return; //$NON-NLS-1$
+    if ("wpf" == platform) return; //$NON-NLS-1$
     // Don't perform anti-aliasing on low resolution displays
     if (getDisplay().getDepth() < 15) return;
     if (outerRGB !is null) {
@@ -1342,7 +1343,7 @@ public CTabItem [] getItems() {
 dchar _findMnemonic (String string) {
     if (string is null) return '\0';
     int index = 0;
-    int length_ = string.length ();
+    int length_ = string.length;
     do {
         while (index < length_ && string.charAt(index) !is '&') index++;
         if (++index >= length_) return '\0';
@@ -1353,7 +1354,7 @@ dchar _findMnemonic (String string) {
 }
 String stripMnemonic (String string) {
     int index = 0;
-    int length_ = string.length ();
+    int length_ = string.length;
     do {
         while ((index < length_) && (string.charAt(index) !is '&')) index++;
         if (++index >= length_) return string;
@@ -2011,10 +2012,10 @@ void onFocus(Event event) {
     }
 }
 bool onMnemonic (Event event, bool doit) {
-    auto key = event.character;
+    char key = event.character;
     for (int i = 0; i < items.length; i++) {
         if (items[i] !is null) {
-            auto mnemonic = _findMnemonic (items[i].getText ());
+            char mnemonic = _findMnemonic (items[i].getText ());
             if (mnemonic !is '\0') {
                 if ( CharacterToLower(key) is mnemonic) {
                     if (doit) setSelection(i, true);

@@ -20,9 +20,16 @@ module dwt.widgets.Caret;
 
 
 
+import dwt.DWT;
 import dwt.dwthelper.utils;
+import dwt.internal.cocoa.NSSize;
+import dwt.internal.cocoa.NSRect;
 import dwt.widgets.Canvas;
 import dwt.widgets.Widget;
+import dwt.graphics.Font;
+import dwt.graphics.Image;
+import dwt.graphics.Rectangle;
+import dwt.graphics.Point;
 
 /**
  * Instances of this class provide an i-beam that is typically used

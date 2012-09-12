@@ -14,6 +14,7 @@
 module dwt.printing.PrinterData;
 
 import dwt.dwthelper.utils;
+import dwt.graphics.DeviceData;
 
 
 

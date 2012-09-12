@@ -17,6 +17,7 @@ import dwt.internal.cocoa.NSActionCell;
 import dwt.internal.cocoa.NSImage;
 import dwt.internal.cocoa.NSMenu;
 import dwt.internal.cocoa.NSString;
+import dwt.internal.cocoa.OS;
 import dwt.internal.objc.cocoa.Cocoa;
 import objc = dwt.internal.objc.runtime;
 

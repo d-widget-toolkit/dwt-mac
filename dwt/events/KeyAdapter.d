@@ -15,6 +15,7 @@ module dwt.events.KeyAdapter;
 import dwt.dwthelper.utils;
 
 
+import dwt.events.KeyEvent;
 import dwt.events.KeyListener;
 
 /**

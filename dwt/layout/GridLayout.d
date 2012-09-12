@@ -12,7 +12,14 @@
  *******************************************************************************/
 module dwt.layout.GridLayout;
 
+import dwt.DWT;
 import dwt.layout.GridData;
+import dwt.widgets.Scrollable;
+import dwt.widgets.Composite;
+import dwt.widgets.Control;
+import dwt.widgets.Layout;
+import dwt.graphics.Point;
+import dwt.graphics.Rectangle;
 
 
 

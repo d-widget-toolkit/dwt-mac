@@ -53,7 +53,7 @@ public NSCell cell() {
 }
 
 public static objc.Class cellClass() {
-    return cast(objc.Class) OS.objc_msgSend(OS.class_NSControl, OS.sel_cellClass);
+    return cast(objc.Class)OS.objc_msgSend(OS.class_NSControl, OS.sel_cellClass);
 }
 
 public NSText currentEditor() {

@@ -13,9 +13,10 @@
 module dwt.custom.TreeEditor;
 
 import dwt.dwthelper.utils;
+import dwt.dwthelper.Runnable;
 
 
-import dwt.SWT;
+import dwt.DWT;
 import dwt.custom.ControlEditor;
 import dwt.events.ControlEvent;
 import dwt.events.ControlListener;

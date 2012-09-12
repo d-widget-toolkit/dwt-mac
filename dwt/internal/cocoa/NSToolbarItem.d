@@ -17,6 +17,7 @@ import dwt.internal.cocoa.NSObject;
 import dwt.internal.cocoa.NSSize;
 import dwt.internal.cocoa.NSString;
 import dwt.internal.cocoa.NSView;
+import dwt.internal.cocoa.OS;
 import objc = dwt.internal.objc.runtime;
 
 public class NSToolbarItem : NSObject {

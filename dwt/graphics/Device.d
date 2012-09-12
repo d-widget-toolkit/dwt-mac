@@ -13,10 +13,13 @@
  *******************************************************************************/
 module dwt.graphics.Device;
 
-import dwt.SWT;
-import dwt.SWTException;
+import tango.text.convert.Format;
+
+import dwt.DWT;
+import dwt.DWTException;
 import dwt.dwthelper.System;
 import dwt.dwthelper.utils;
+import dwt.dwthelper.Runnable;
 import dwt.graphics.Drawable;
 import dwt.graphics.Color;
 import dwt.graphics.DeviceData;
@@ -25,6 +28,14 @@ import dwt.graphics.FontData;
 import dwt.graphics.GCData;
 import dwt.graphics.Point;
 import dwt.graphics.Rectangle;
+import dwt.graphics.Cursor;
+import dwt.graphics.GC;
+import dwt.graphics.Image;
+import dwt.graphics.Path;
+import dwt.graphics.Pattern;
+import dwt.graphics.Region;
+import dwt.graphics.TextLayout;
+import dwt.graphics.Transform;
 import dwt.internal.Compatibility;
 import Carbon = dwt.internal.c.Carbon;
 import dwt.internal.cocoa.NSArray;
@@ -403,9 +414,9 @@ public FontData[] getFontList (String faceName, bool scalable) {
         NSUInteger fontCount = fonts.count();
         for (NSUInteger j = 0; j < fontCount; j++) {
             NSArray fontDetails = new NSArray(fonts.objectAtIndex(j));
-            String nsName = new NSString(fontDetails.objectAtIndex(0)).getString();
-            NSInteger weight = new NSNumber(fontDetails.objectAtIndex(2)).integerValue();
-            NSInteger traits = new NSNumber(fontDetails.objectAtIndex(3)).integerValue();
+            String nsName = (new NSString(fontDetails.objectAtIndex(0))).getString();
+            NSInteger weight = (new NSNumber(fontDetails.objectAtIndex(2))).integerValue();
+            NSInteger traits = (new NSNumber(fontDetails.objectAtIndex(3))).integerValue();
             int style = DWT.NORMAL;
             if ((traits & OS.NSItalicFontMask) !is 0) style |= DWT.ITALIC;
             if (weight is 9) style |= DWT.BOLD;
@@ -548,10 +559,10 @@ protected void init_ () {
     COLOR_CYAN = new Color (this, 0,0xFF,0xFF);
     COLOR_WHITE = new Color (this, 0xFF,0xFF,0xFF);
 
-    paragraphStyle = (NSMutableParagraphStyle)new NSMutableParagraphStyle().alloc().init();
+    paragraphStyle = cast(NSMutableParagraphStyle)(new NSMutableParagraphStyle()).alloc().init();
     paragraphStyle.setAlignment(OS.NSLeftTextAlignment);
     paragraphStyle.setLineBreakMode(OS.NSLineBreakByClipping);
-    NSArray tabs = new NSArray(new NSArray().alloc().init());
+    NSArray tabs = new NSArray((new NSArray()).alloc().init());
     paragraphStyle.setTabStops(tabs);
     tabs.release();
 
@@ -628,7 +639,8 @@ public bool isDisposed () {
  */
 public bool loadFont (String path) {
     checkDevice();
-    if (path is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
+    // DWT extension: allow null for zero length string
+    //if (path is null) DWT.error(DWT.ERROR_NULL_ARGUMENT);
     bool result = false;
     NSString nsPath = NSString.stringWith(path);
     char* fsRepresentation = nsPath.fileSystemRepresentation();
@@ -636,8 +648,8 @@ public bool loadFont (String path) {
     if (fsRepresentation !is null) {
         byte [] fsRef = new byte [80];
         bool [] isDirectory = new bool[1];
-        if (OS.FSPathMakeRef (fsRepresentation, fsRef, isDirectory) is OS.noErr) {
-            result = OS.ATSFontActivateFromFileReference (fsRef, OS.kATSFontContextLocal, OS.kATSFontFormatUnspecified, 0, OS.kATSOptionFlagsDefault, null) is OS.noErr;
+        if (OS.FSPathMakeRef (cast(ubyte*)fsRepresentation, cast(Carbon.FSRef*)fsRef.ptr, isDirectory.ptr) is OS.noErr) {
+            result = OS.ATSFontActivateFromFileReference (cast(Carbon.FSRef*)fsRef.ptr, OS.kATSFontContextLocal, OS.kATSFontFormatUnspecified, null, OS.kATSOptionFlagsDefault, null) is OS.noErr;
         }
     }
 
@@ -676,16 +688,16 @@ void printErrors () {
                 Object object = objects [i];
                 if (object !is null) {
                     objectCount++;
-                    if (object instanceof Color) colors++;
-                    if (object instanceof Cursor) cursors++;
-                    if (object instanceof Font) fonts++;
-                    if (object instanceof GC) gcs++;
-                    if (object instanceof Image) images++;
-                    if (object instanceof Path) paths++;
-                    if (object instanceof Pattern) patterns++;
-                    if (object instanceof Region) regions++;
-                    if (object instanceof TextLayout) textLayouts++;
-                    if (object instanceof Transform) transforms++;
+                    if (cast(Color)object) colors++;
+                    if (cast(Cursor)object) cursors++;
+                    if (cast(Font)object) fonts++;
+                    if (cast(GC)object) gcs++;
+                    if (cast(Image)object) images++;
+                    if (cast(Path)object) paths++;
+                    if (cast(Pattern)object) patterns++;
+                    if (cast(Region)object) regions++;
+                    if (cast(TextLayout)object) textLayouts++;
+                    if (cast(Transform)object) transforms++;
                 }
             }
             if (objectCount !is 0) {
@@ -700,13 +712,14 @@ void printErrors () {
                 if (regions !is 0) string ~= Format("{}{}", regions , " Region(s), ");
                 if (textLayouts !is 0) string ~= Format("{}{}", textLayouts , " TextLayout(s), ");
                 if (transforms !is 0) string ~= Format("{}{}", transforms , " Transforms(s), ");
-                if (string.length () !is 0) {
-                    string = string.substring (0, string.length () - 2);
+                if (string.length !is 0) {
+                    string = string.substring (0, string.length - 2);
                     System.out_.println (string);
                 }
-                for (int i=0; i<errors.length; i++) {
-                    if (errors [i] !is null) errors [i].printStackTrace (System.Out);
-                }
+              for (int i=0; i<errors.length; i++) {
+                    if (errors [i] !is null) System.out_.println (errors [i].toString());
+/+                  if (errors [i] !is null) errors [i].printStackTrace (System.Out);
++/              }
             }
         }
     }
