@@ -279,7 +279,7 @@ public void save(String filename, int format) {
  */
 public void addImageLoaderListener(ImageLoaderListener listener) {
     if (listener is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
-    imageLoaderListeners ~= listener;
+    imageLoaderListeners.addElement(listener);
 }
 
 /**
@@ -297,12 +297,7 @@ public void addImageLoaderListener(ImageLoaderListener listener) {
 public void removeImageLoaderListener(ImageLoaderListener listener) {
     if (listener is null) DWT.error (DWT.ERROR_NULL_ARGUMENT);
     if (imageLoaderListeners.length is 0 ) return;
-    foreach (i, l; imageLoaderListeners) {
-        if (l is listener) {
-            imageLoaderListeners = imageLoaderListeners[0 .. i] ~ imageLoaderListeners[i + 1 .. $];
-            break;
-        }
-    }
+    imageLoaderListeners.removeElement(listener);
 }
 
 /**
@@ -315,7 +310,7 @@ public void removeImageLoaderListener(ImageLoaderListener listener) {
  * @see #removeImageLoaderListener(ImageLoaderListener)
  */
 public bool hasListeners() {
-    return imageLoaderListeners !is null && imageLoaderListeners.length > 0;
+    return imageLoaderListeners !is null && imageLoaderListeners.size() > 0;
 }
 
 /**
@@ -326,9 +321,9 @@ public bool hasListeners() {
  */
 public void notifyListeners(ImageLoaderEvent event) {
     if (!hasListeners()) return;
-    size_t size = imageLoaderListeners.length;
+    size_t size = imageLoaderListeners.size();
     for (size_t i = 0; i < size; i++) {
-        ImageLoaderListener listener = imageLoaderListeners[i];
+        ImageLoaderListener listener = imageLoaderListeners.elementAt(i);
         listener.imageDataLoaded(event);
     }
 }
