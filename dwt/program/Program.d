@@ -252,7 +252,7 @@ public static Program [] getPrograms () {
                     NSString fullPath = path.stringByAppendingPathComponent(new NSString(id.id));
                     if (workspace.isFilePackageAtPath(fullPath)) {
                         NSBundle bundle = NSBundle.bundleWithPath(fullPath);
-                        if (bundle !is null) vector ~= getProgram(bundle);
+                        if (bundle !is null) vector.addElement(getProgram(bundle));
                     }
                 }
             }

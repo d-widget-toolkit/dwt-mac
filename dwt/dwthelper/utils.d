@@ -36,8 +36,8 @@ alias Exception Throwable;
 
 alias ClassInfo Class;
 
-import dwt.dwthelper.array;
-import dwt.dwthelper.associativearray;
+public import dwt.dwthelper.array;
+public import dwt.dwthelper.associativearray;
 
 void implMissing( String file, uint line ){
     Stderr.formatln( "implementation missing in file {} line {}", file, line );
@@ -1084,27 +1084,4 @@ Class Class_forName (String name)
        throw new ClassNotFoundException("Class not found " ~ name, __FILE__, __LINE__);
 
    return null;
-}
-
-void addElement(T)(ref T[] array, T element) {
-    array ~= element;
-}
-alias addElement add;
-
-void elementAt(T)(T[] array, size_t index) {
-    return array[index];
-}
-
-void size(T)(T[] array) {
-    return array.length;
-}
-alias size length;
-
-void removeElement(T)(ref T[] array, T element) {
-    foreach (i, e; array) {
-        if (e == element) {
-            array = array[0 .. i] ~ array[i + 1 .. $];
-            break;
-        }
-    }
 }

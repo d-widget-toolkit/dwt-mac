@@ -368,7 +368,7 @@ public class StyledText : Canvas {
                     }
                     else {
                         printerColor = new Color (printer, color.getRGB());
-                        resources[color] = printerColor;
+                        resources.put(color, printerColor);
                     }
                     printerRenderer.setLineBackground(i, 1, printerColor);
                 } else {
@@ -391,7 +391,7 @@ public class StyledText : Canvas {
                 }
                 else {
                     printerFont = new Font (printer, font.getFontData());
-                    resources[font] = printerFont;
+                    resources.put(font, printerFont);
                 }
                 style.font = printerFont;
             }
@@ -404,7 +404,7 @@ public class StyledText : Canvas {
                     }
                     else {
                         printerColor = new Color (printer, color.getRGB());
-                        resources[color] = printerColor;
+                        resources.put(color, printerColor);
                     }
                     style.foreground = printerColor;
                 } else {
@@ -420,7 +420,7 @@ public class StyledText : Canvas {
                     }
                     else {
                         printerColor = new Color (printer, color.getRGB());
-                        resources[color] = printerColor;
+                        resources.put(color, printerColor);
                     }
                     style.background = printerColor;
                 } else {
@@ -670,7 +670,7 @@ public class StyledText : Canvas {
             buffer.format ("{}", segment.substring(pageIndex + pageTagLength));
             segment = buffer.toString().dup;
         }
-        if (segment.length > 0) {
+        if (segment.length() > 0) {
             layout.setText(segment);
             int segmentWidth = layout.getBounds().width;
             int segmentHeight = printerRenderer.getLineHeight();
@@ -779,9 +779,9 @@ public class StyledText : Canvas {
      */
     public this(int start, int length) {
         super(start, length);
-        colorTable ~= getForeground();
-        colorTable ~= getBackground();
-        fontTable ~= getFont();
+        colorTable.addElement(getForeground());
+        colorTable.addElement(getBackground());
+        fontTable.addElement(getFont());
         setUnicode();
     }
     /**
@@ -808,8 +808,8 @@ public class StyledText : Canvas {
         if (color is null) return defaultIndex;
         int index = colorTable.indexOf(color);
         if (index is -1) {
-            index = colorTable.length;
-            colorTable ~= color;
+            index = colorTable.size();
+            colorTable.addElement(color);
         }
         return index;
     }
@@ -824,8 +824,8 @@ public class StyledText : Canvas {
     int getFontIndex(Font font) {
         int index = fontTable.indexOf(font);
         if (index is -1) {
-            index = fontTable.length;
-            fontTable ~= font;
+            index = fontTable.size();
+            fontTable.addElement(font);
         }
         return index;
     }
@@ -915,7 +915,7 @@ public class StyledText : Canvas {
         String cpg = "UTF16";
         /+
         if (cpg.startsWith("cp") || cpg.startsWith("ms")) {
-            cpg = cpg.substring(2, cpg.length);
+            cpg = cpg.substring(2, cpg.length());
             header.format("{}", "\\ansicpg");
             header.format("{}", cpg);
         }
@@ -1223,7 +1223,7 @@ public class StyledText : Canvas {
      * @param offset offset in the existing data to insert "string" at.
      */
     void write(String string, int offset) {
-        if (offset < 0 || offset > buffer.length) {
+        if (offset < 0 || offset > buffer.length()) {
             return;
         }
         buffer.select( offset );
@@ -1879,7 +1879,7 @@ bool copySelection(int type) {
     try {
         if (blockSelection && blockXLocation !is -1) {
             String text = getBlockSelectionText(PlatformLineDelimiter);
-            if (text.length > 0) {
+            if (text.length() > 0) {
                 //TODO RTF support
                 TextTransfer plainTextTransfer = TextTransfer.getInstance();
                 Object[] data = [cast(Object)text];
@@ -1982,7 +1982,7 @@ public Color getMarginColor() {
  *  has the DWT.SINGLE style.
  */
 String getModelDelimitedText(String text) {
-    int length = text.length;
+    int length = text.length();
     if (length is 0) {
         return text;
     }
@@ -2018,7 +2018,7 @@ String getModelDelimitedText(String text) {
     }
     // copy remaining text if any and if not in single line mode or no
     // text copied thus far (because there only is one line)
-    if (i < length && (!isSingleLine() || convertedText.length is 0)) {
+    if (i < length && (!isSingleLine() || convertedText.length() is 0)) {
         convertedText.format("{}", text.substring(i));
     }
     return convertedText.toString();
@@ -2393,7 +2393,7 @@ void doBlockWord(bool next) {
         int lineIndex = content.getLineAtOffset(offset);
         int lineOffset = content.getOffsetAtLine(lineIndex);
         String lineText = content.getLine(lineIndex);
-        int lineLength = lineText.length;
+        int lineLength = lineText.length();
         int newOffset = offset;
         if (next) {
             if (offset < lineOffset + lineLength) {
@@ -2449,7 +2449,7 @@ void doBlockLineHorizontal(bool end) {
     int lineIndex = getLineIndex(y);
     int lineOffset = content.getOffsetAtLine(lineIndex);
     String lineText = content.getLine(lineIndex);
-    int lineLength = lineText.length;
+    int lineLength = lineText.length();
     int[] trailing = new int[1];
     int offset = getOffsetAtPoint(x, y, trailing, true);
     if (offset !is -1) {
@@ -2610,7 +2610,7 @@ void doDelete() {
     } else if (caretOffset < content.getCharCount()) {
         int line = content.getLineAtOffset(caretOffset);
         int lineOffset = content.getOffsetAtLine(line);
-        int lineLength = content.getLine(line).length;
+        int lineLength = content.getLine(line).length();
         if (caretOffset is lineOffset + lineLength) {
             event.start = caretOffset;
             event.end = content.getOffsetAtLine(line + 1);
@@ -2716,7 +2716,7 @@ void doLineEnd() {
         lineEndOffset = lineOffset + offsets[lineIndex + 1];
         renderer.disposeTextLayout(layout);
     } else {
-        int lineLength = content.getLine(caretLine).length;
+        int lineLength = content.getLine(caretLine).length();
         lineEndOffset = lineOffset + lineLength;
     }
     if (caretOffset < lineEndOffset) {
@@ -3095,14 +3095,14 @@ void doPageEnd() {
                 index--;
             }
             if (index is -1 && lineIndex > 0) {
-                bottomOffset = content.getOffsetAtLine(lineIndex - 1) + content.getLine(lineIndex - 1).length;
+                bottomOffset = content.getOffsetAtLine(lineIndex - 1) + content.getLine(lineIndex - 1).length();
             } else {
                 bottomOffset = content.getOffsetAtLine(lineIndex) + Math.max(0, layout.getLineOffsets()[index + 1] - 1);
             }
             renderer.disposeTextLayout(layout);
         } else {
             int lineIndex = getBottomIndex();
-            bottomOffset = content.getOffsetAtLine(lineIndex) + content.getLine(lineIndex).length;
+            bottomOffset = content.getOffsetAtLine(lineIndex) + content.getLine(lineIndex).length();
         }
         if (caretOffset < bottomOffset) {
             setCaretOffset(bottomOffset, OFFSET_LEADING);
@@ -3311,7 +3311,7 @@ void doSelectionCursorNext() {
     int lineOffset = content.getOffsetAtLine(caretLine);
     int offsetInLine = caretOffset - lineOffset;
     int offset, alignment;
-    if (offsetInLine < content.getLine(caretLine).length) {
+    if (offsetInLine < content.getLine(caretLine).length()) {
         TextLayout layout = renderer.getTextLayout(caretLine);
         offsetInLine = layout.getNextOffset(offsetInLine, DWT.MOVEMENT_CLUSTER);
         int lineStart = layout.getLineOffsets()[layout.getLineIndex(offsetInLine)];
@@ -3343,7 +3343,7 @@ void doSelectionCursorPrevious() {
     } else if (caretLine > 0) {
         caretLine--;
         lineOffset = content.getOffsetAtLine(caretLine);
-        int offset = lineOffset + content.getLine(caretLine).length;
+        int offset = lineOffset + content.getLine(caretLine).length();
         setCaretOffset(offset, OFFSET_LEADING);
         showCaret();
     }
@@ -3546,7 +3546,7 @@ public int getBaseline(int offset) {
     int lineIndex = content.getLineAtOffset(offset);
     int lineOffset = content.getOffsetAtLine(lineIndex);
     TextLayout layout = renderer.getTextLayout(lineIndex);
-    int lineInParagraph = layout.getLineIndex(Math.min(offset - lineOffset, layout.getText().length));
+    int lineInParagraph = layout.getLineIndex(Math.min(offset - lineOffset, layout.getText().length()));
     FontMetrics metrics = layout.getLineMetrics(lineInParagraph);
     renderer.disposeTextLayout(layout);
     return metrics.getAscent() + metrics.getLeading();
@@ -3709,7 +3709,7 @@ Rectangle getBoundsAtOffset(int offset) {
     int lineOffset = content.getOffsetAtLine(lineIndex);
     String line = content.getLine(lineIndex);
     Rectangle bounds;
-    if (line.length !is 0) {
+    if (line.length() !is 0) {
         int offsetInLine = offset - lineOffset;
         TextLayout layout = renderer.getTextLayout(lineIndex);
         bounds = layout.getBounds(offsetInLine, offsetInLine);
@@ -3718,7 +3718,7 @@ Rectangle getBoundsAtOffset(int offset) {
         bounds = new Rectangle (0, 0, 0, renderer.getLineHeight());
     }
     if (offset is caretOffset) {
-        int lineEnd = lineOffset + line.length;
+        int lineEnd = lineOffset + line.length();
         if (offset is lineEnd) {
             bounds.width += getCaretWidth();
         }
@@ -4157,7 +4157,7 @@ public int getLineHeight(int offset) {
     int lineIndex = content.getLineAtOffset(offset);
     int lineOffset = content.getOffsetAtLine(lineIndex);
     TextLayout layout = renderer.getTextLayout(lineIndex);
-    int lineInParagraph = layout.getLineIndex(Math.min(offset - lineOffset, layout.getText().length));
+    int lineInParagraph = layout.getLineIndex(Math.min(offset - lineOffset, layout.getText().length()));
     int height = layout.getLineBounds(lineInParagraph).height;
     renderer.disposeTextLayout(layout);
     return height;
@@ -4546,7 +4546,7 @@ String getPlatformDelimitedText(TextWriter writer) {
             writer.writeLineDelimiter(PlatformLineDelimiter);
         }
     }
-    if (end > endLineOffset + endLineText.length) {
+    if (end > endLineOffset + endLineText.length()) {
         writer.writeLineDelimiter(PlatformLineDelimiter);
     }
     writer.close();
@@ -4754,7 +4754,7 @@ public Color getSelectionBackground() {
 public int getSelectionCount() {
     checkWidget();
     if (blockSelection && blockXLocation !is -1) {
-        return getBlockSelectionText(content.getLineDelimiter()).length;
+        return getBlockSelectionText(content.getLineDelimiter()).length();
     }
     return getSelectionRange().y;
 }
@@ -4881,7 +4881,7 @@ int [] getBidiSegmentsCompatibility(String line, int lineOffset) {
         StyleRange style = styles[i];
         int styleLineStart = Math.max(style.start - lineOffset, 0);
         int styleLineEnd = Math.max(style.start + style.length - lineOffset, styleLineStart);
-        styleLineEnd = Math.min (styleLineEnd, line.length);
+        styleLineEnd = Math.min (styleLineEnd, line.length() );
         if (i > 0 && count > 1 &&
             ((styleLineStart >= offsets[count-2] && styleLineStart <= offsets[count-1]) ||
              (styleLineEnd >= offsets[count-2] && styleLineEnd <= offsets[count-1])) &&
@@ -5168,7 +5168,7 @@ public Rectangle getTextBounds(int start, int end) {
     for (int i = lineStart; i <= lineEnd; i++) {
         int lineOffset = content.getOffsetAtLine(i);
         TextLayout layout = renderer.getTextLayout(i);
-        int length = layout.getText().length;
+        int length = layout.getText().length();
         if (length > 0) {
             if (i is lineStart) {
                 if (i is lineEnd) {
@@ -5361,7 +5361,7 @@ int getWordNext (int offset, int movement) {
         int lineIndex = content.getLineAtOffset(offset);
         lineOffset = content.getOffsetAtLine(lineIndex);
         lineText = content.getLine(lineIndex);
-        int lineLength = lineText.length;
+        int lineLength = lineText.length();
         if (offset is lineOffset + lineLength) {
             newOffset = content.getOffsetAtLine(lineIndex + 1);
         } else {
@@ -5387,7 +5387,7 @@ int getWordPrevious(int offset, int movement) {
         if (offset is lineOffset) {
             String nextLineText = content.getLine(lineIndex - 1);
             int nextLineOffset = content.getOffsetAtLine(lineIndex - 1);
-            newOffset = nextLineOffset + nextLineText.length;
+            newOffset = nextLineOffset + nextLineText.length();
         } else {
             TextLayout layout = renderer.getTextLayout(lineIndex);
             newOffset = lineOffset + layout.getPreviousOffset(offset - lineOffset, movement);
@@ -5419,7 +5419,7 @@ Point getPointAtOffset(int offset) {
     String line = content.getLine(lineIndex);
     int lineOffset = content.getOffsetAtLine(lineIndex);
     int offsetInLine = offset - lineOffset;
-    int lineLength = line.length;
+    int lineLength = line.length();
     if (lineIndex < content.getLineCount() - 1) {
         int endLineOffset = content.getOffsetAtLine(lineIndex + 1) - 1;
         if (lineLength < offsetInLine && offsetInLine <= endLineOffset) {
@@ -5483,11 +5483,11 @@ public void insert(String string) {
 }
 int insertBlockSelectionText(String text, bool fillWithSpaces) {
     int lineCount = 1;
-    for (int i = 0; i < text.length; i++) {
+    for (int i = 0; i < text.length(); i++) {
         char ch = text.charAt(i);
         if (ch is '\n' || ch is '\r') {
             lineCount++;
-            if (ch is '\r' && i + 1 < text.length && text.charAt(i + 1) is '\n') {
+            if (ch is '\r' && i + 1 < text.length() && text.charAt(i + 1) is '\n') {
                 i++;
             }
         }
@@ -5495,11 +5495,11 @@ int insertBlockSelectionText(String text, bool fillWithSpaces) {
     String[] lines = new String[lineCount];
     int start = 0;
     lineCount = 0;
-    for (int i = 0; i < text.length; i++) {
+    for (int i = 0; i < text.length(); i++) {
         char ch = text.charAt(i);
         if (ch is '\n' || ch is '\r') {
             lines[lineCount++] = text.substring(start, i);
-            if (ch is '\r' && i + 1 < text.length && text.charAt(i + 1) is '\n') {
+            if (ch is '\r' && i + 1 < text.length() && text.charAt(i + 1) is '\n') {
                 i++;
             }
             start = i + 1;
@@ -5509,12 +5509,12 @@ int insertBlockSelectionText(String text, bool fillWithSpaces) {
     if (fillWithSpaces) {
         int maxLength = 0;
         for (int i = 0; i < lines.length; i++) {
-            int length = lines[i].length;
+            int length = lines[i].length();
             maxLength = Math.max(maxLength, length);
         }
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
-            int length = line.length;
+            int length = line.length();
             if (length < maxLength) {
                 int numSpaces = maxLength - length;;
                 StringBuffer buffer = new StringBuffer(length + numSpaces);
@@ -5561,7 +5561,7 @@ void insertBlockSelectionText(char key, int action) {
     int[] trailing = new int[1];
     int offset = 0, delta = 0;
     String text = key !is 0 ? [key] : "";
-    int length = text.length;
+    int length = text.length();
     for (int lineIndex = firstLine; lineIndex <= lastLine; lineIndex++) {
         String line = content.getLine(lineIndex);
         int lineOffset = content.getOffsetAtLine(lineIndex);
@@ -5791,7 +5791,7 @@ void handleCompositionChanged(Event event) {
     String text = event.text;
     int start = event.start;
     int end = event.end;
-    int length = text.length;
+    int length = text.length();
     if (length is ime.getCommitCount()) {
         content.replaceTextRange(start, end - start, "");
         setCaretOffset(ime.getCompositionOffset(), DWT.DEFAULT);
@@ -6002,7 +6002,7 @@ void handleMouseDown(Event event) {
             int lineOffset = content.getOffsetAtLine(lineIndex);
             if (wordSelect) {
                 int min = blockSelection ? lineOffset : 0;
-                int max = blockSelection ? lineOffset + content.getLine(lineIndex).length : content.getCharCount();
+                int max = blockSelection ? lineOffset + content.getLine(lineIndex).length() : content.getCharCount();
                 int start = Math.max(min, getWordPrevious(offset, DWT.MOVEMENT_WORD_START));
                 int end = Math.min(max, getWordNext(start, DWT.MOVEMENT_WORD_END));
                 setSelection(start, end - start, false, true);
@@ -6388,7 +6388,7 @@ Label getAssociatedLabel () {
 }
 String stripMnemonic (String string) {
     int index = 0;
-    int length_ = string.length;
+    int length_ = string.length ();
     do {
         while ((index < length_) && (string.charAt(index) !is '&')) index++;
         if (++index >= length_) return string;
@@ -6407,7 +6407,7 @@ String stripMnemonic (String string) {
 dchar _findMnemonic (String string) {
     if (string is null) return '\0';
     int index = 0;
-    int length_ = string.length;
+    int length_ = string.length();
     do {
         while (index < length_ && string.charAt(index) !is '&') index++;
         if (++index >= length_) return '\0';
@@ -6675,7 +6675,7 @@ bool isLineDelimiter(int offset) {
     // offsetInLine will be greater than line length if the line
     // delimiter is longer than one character and the offset is set
     // in between parts of the line delimiter.
-    return offsetInLine > content.getLine(line).length;
+    return offsetInLine > content.getLine(line).length();
 }
 /**
  * Returns whether the widget is mirrored (right oriented/right to left
@@ -6718,12 +6718,12 @@ void modifyContent(Event event, bool updateCaret) {
         if (isListening(ExtendedModify)) {
             styledTextEvent = new StyledTextEvent(content);
             styledTextEvent.start = event.start;
-            styledTextEvent.end = event.start + event.text.length;
+            styledTextEvent.end = event.start + event.text.length();
             styledTextEvent.text = content.getTextRange(event.start, replacedLength);
         }
         if (updateCaret) {
             //Fix advancing flag for delete/backspace key on direction boundary
-            if (event.text.length is 0) {
+            if (event.text.length() is 0) {
                 int lineIndex = content.getLineAtOffset(event.start);
                 int lineOffset = content.getOffsetAtLine(lineIndex);
                 TextLayout layout = renderer.getTextLayout(lineIndex);
@@ -6748,7 +6748,7 @@ void modifyContent(Event event, bool updateCaret) {
         // fixes 1GBB8NJ
         if (updateCaret && !(blockSelection && blockXLocation !is -1)) {
             // always update the caret location. fixes 1G8FODP
-            setSelection(event.start + event.text.length, 0, true, false);
+            setSelection(event.start + event.text.length(), 0, true, false);
             showCaret();
         }
         notifyListeners(DWT.Modify, event);
@@ -6786,7 +6786,7 @@ void paintObject(GC gc, int x, int y, int ascent, int descent, StyleRange style,
 public void paste(){
     checkWidget();
 	String text = stringcast(getClipboardContent(DND.CLIPBOARD));
-	if (text !is null && text.length > 0) {
+	if (text !is null && text.length() > 0) {
 		if (blockSelection) {
 			bool fillWithSpaces = isFixedLineHeight() && renderer.fixedPitch;
 			int offset = insertBlockSelectionText(text, fillWithSpaces);
@@ -7601,7 +7601,7 @@ int sendTextEvent(int left, int right, int lineIndex, String text, bool fillWith
         start = getOffsetAtPoint(left, getLinePixel(lineIndex), trailing, true);
         if (start is -1) {
             int lineOffset = content.getOffsetAtLine(lineIndex);
-            int lineLegth = content.getLine(lineIndex).length;
+            int lineLegth = content.getLine(lineIndex).length();
             start = end = lineOffset + lineLegth;
             if (fillWithSpaces) {
                 TextLayout layout = renderer.getTextLayout(lineIndex);
@@ -7635,7 +7635,7 @@ int sendTextEvent(int left, int right, int lineIndex, String text, bool fillWith
     event.end = end;
     event.text = buffer.toString();
     sendKeyEvent(event);
-    return event.start + event.text.length;
+    return event.start + event.text.length();
 }
 int sendWordBoundaryEvent(int eventType, int movement, int offset, int newOffset, String lineText, int lineOffset) {
     if (isListening(eventType)) {
@@ -8324,20 +8324,20 @@ public void setKeyBinding(int key, int action) {
         if (action is DWT.NULL) {
             keyActionMap.remove(newKey);
         } else {
-            keyActionMap[newKey] = action;
+            keyActionMap.put(newKey, action);
         }
         ch = CharacterToLower(keyChar);
         newKey = ch | modifierValue;
         if (action is DWT.NULL) {
             keyActionMap.remove(newKey);
         } else {
-            keyActionMap[newKey] = action;
+            keyActionMap.put(newKey, action);
         }
     } else {
         if (action is DWT.NULL) {
             keyActionMap.remove(key);
         } else {
-            keyActionMap[key] = action;
+            keyActionMap.put(key, action);
         }
     }
 }
@@ -8716,8 +8716,7 @@ public void setOrientation(int orientation) {
     caretDirection = DWT.NULL;
     resetCache(0, content.getLineCount());
     setCaretLocation();
-    typeof(keyActionMap) keyActionMap_init;
-    keyActionMap = keyActionMap_init;
+    keyActionMap.clear();
     createKeyBindings();
     super.redraw();
 }
@@ -9290,7 +9289,7 @@ public void setText(String text) {
         if (isListening(ExtendedModify)) {
             styledTextEvent = new StyledTextEvent(content);
             styledTextEvent.start = event.start;
-            styledTextEvent.end = event.start + event.text.length;
+            styledTextEvent.end = event.start + event.text.length();
             styledTextEvent.text = content.getTextRange(event.start, event.end - event.start);
         }
         content.setText(event.text);
