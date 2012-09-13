@@ -1,0 +1,8 @@
+- Replace "int /*long*/" with the real type
+- Replace "float /*double*/" with the real type
+- Check the "CGDisplayBounds" function and the os_custom.c file
+- Check the "NSIntersectionRect" function
+- Check the "accessibilityActionNames" and "internal_accessibilityActioregionToRectsnNames" method methods
+- Add back Java methods for string, array and collection methods that were replaced with D equivalents @done(2012-09-13)
+- Replace "auto" with the real type @done(2012-09-13)
+- Check every usage of C memory related functions, i.e. "memcpy", "memmove", "memset", "memcmp", "memchr", "malloc", "free", "realloc", "calloc"
