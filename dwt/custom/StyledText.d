@@ -1882,7 +1882,7 @@ bool copySelection(int type) {
             if (text.length() > 0) {
                 //TODO RTF support
                 TextTransfer plainTextTransfer = TextTransfer.getInstance();
-                Object[] data = [cast(Object)text];
+                Object[] data = [stringcast(text)];
                 Transfer[] types = [cast(Transfer)plainTextTransfer];
                 clipboard.setContents(data, types, type);
                 return true;

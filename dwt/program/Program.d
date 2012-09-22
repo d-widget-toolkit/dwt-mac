@@ -287,7 +287,7 @@ public static bool launch (String fileName) {
             unescapedStr = NSString.stringWith("%#"); //$NON-NLS-1$
         } else {
             if (!lowercaseName.startsWith (PREFIX_FILE)) {
-                fileName = PREFIX_FILE + fileName;
+                fileName = PREFIX_FILE ~ fileName;
             }
         }
         NSString fullPath = NSString.stringWith(fileName);

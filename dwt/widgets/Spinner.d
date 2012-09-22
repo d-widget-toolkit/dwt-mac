@@ -97,7 +97,7 @@ public class Spinner : Composite {
      *
      * @since 3.4
      */
-    public static final int LIMIT = 0x7FFFFFFF;
+    public static const int LIMIT = 0x7FFFFFFF;
 
     /*
     * These values can be different on different platforms.

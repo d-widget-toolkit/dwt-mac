@@ -55,7 +55,7 @@ import dwt.widgets.Shell;
  * @noextend This class is not intended to be subclassed by clients.
  */
 public class PrintDialog : Dialog {
-    PrinterData printerData = new PrinterData();
+    PrinterData printerData;
     int returnCode;
 
     // the following Callbacks are never freed
@@ -112,6 +112,7 @@ public this (Shell parent) {
  * @see Widget#getStyle
  */
 public this (Shell parent, int style) {
+	printerData = new PrinterData();
     super (parent, checkStyle(parent, style));
     checkSubclass ();
 }

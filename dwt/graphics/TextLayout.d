@@ -99,7 +99,7 @@ public final class TextLayout : Resource {
     NSRect[] lineBounds;
 
     static const int UNDERLINE_THICK = 1 << 16;
-    static final RGB LINK_FOREGROUND = new RGB (0, 51, 153);
+    static const RGB LINK_FOREGROUND;
     int[] invalidOffsets;
     static const wchar LTR_MARK = '\u200E', RTL_MARK = '\u200F', ZWS = '\u200B';
 
@@ -111,6 +111,11 @@ public final class TextLayout : Resource {
             return Format("{}{}{}{}{}", "StyleItem {" , start , ", " , style , "}");
         }
     }
+
+	static this ()
+	{
+		LINK_FOREGROUND = new RGB (0, 51, 153);
+	}
 
 /**
  * Constructs a new instance of this class on the given device.

@@ -182,8 +182,11 @@ static this() {
     new Code(27, 12, 12289, 16384),
     new Code(28, 13, 16385, 24576),
     new Code(29, 13, 24577, 32768)];
+}
 
-    bytes = new ByteArrayOutputStream(1024);
+this ()
+{
+	 bytes = new ByteArrayOutputStream(1024);
 }
 
 void writeShortLSB(ByteArrayOutputStream baos, int theShort) {

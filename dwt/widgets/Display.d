@@ -197,7 +197,7 @@ public class Display : Device {
     int sendEventCount;
 
     /* Key event management */
-    uint [] deadKeyState = new uint[1];
+    uint [] deadKeyState;
     bindings.CFDataRef currentKeyboardUCHRdata;
     bool eventSourceDelaySet;
 
@@ -246,9 +246,9 @@ public class Display : Device {
     NSAutoreleasePool[] pools;
     int poolCount, loopCount;
 
-    int[] screenID = new int[32];
-    NSPoint[] screenCascade = new NSPoint[32];
-    bool[] screenCascadeExists = new bool[32];
+    int[] screenID;
+    NSPoint[] screenCascade;
+    bool[] screenCascadeExists;
 
     Carbon.CFRunLoopObserverRef runLoopObserver;
 
@@ -720,6 +720,11 @@ public this () {
  * @param data the device data
  */
 public this (DeviceData data) {
+	deadKeyState = new uint[1];
+	screenID = new int[32];
+    screenCascade = new NSPoint[32];
+    screenCascadeExists = new bool[32];
+
     super (data);
     screenID = new int[32];
     screenCascade = new NSPoint[32];
@@ -2075,7 +2080,7 @@ void addAccessibilityMethods(objc.Class cls, objc.IMP proc2, objc.IMP proc3, obj
 
 objc.Class registerCellSubclass(objc.Class cellClass, int size, int align_, char[] types) {
     String cellClassName = OS.class_getName(cellClass);
-    objc.Class cls = OS.objc_allocateClassPair(cellClass, "SWTAccessible" + cellClassName, 0);
+    objc.Class cls = OS.objc_allocateClassPair(cellClass, "SWTAccessible" ~ cellClassName, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
     OS.objc_registerClassPair(cls);
     return cls;

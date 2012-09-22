@@ -143,7 +143,7 @@ public final class PrinterData : DeviceData {
      *
      * @since 3.5
      */
-    public static final int PORTRAIT = 1;
+    public static const int PORTRAIT = 1;
 
     /**
      * <code>orientation</code> field value indicating
@@ -151,7 +151,7 @@ public final class PrinterData : DeviceData {
      *
      * @since 3.5
      */
-    public static final int LANDSCAPE = 2;
+    public static const int LANDSCAPE = 2;
 
     /**
      * private, platform-specific data
