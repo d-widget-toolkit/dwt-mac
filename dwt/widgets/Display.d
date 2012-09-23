@@ -1985,9 +1985,12 @@ protected void init_ () {
 +/      }
     }
 
+    Carbon.CFRunLoopObserverContext context;
+    context.info = cast(void*) this;
+
     objc.IMP observerProc = cast(objc.IMP) &observerProc;
     int activities = OS.kCFRunLoopBeforeWaiting;
-    runLoopObserver = OS.CFRunLoopObserverCreate (null, cast(Carbon.CFOptionFlags)activities, true, 0, cast(Carbon.CFRunLoopObserverCallBack)observerProc, null);
+    runLoopObserver = OS.CFRunLoopObserverCreate (null, cast(Carbon.CFOptionFlags)activities, true, 0, cast(Carbon.CFRunLoopObserverCallBack)observerProc, &context);
     if (runLoopObserver is null) error (DWT.ERROR_NO_HANDLES);
     OS.CFRunLoopAddObserver (OS.CFRunLoopGetCurrent (), runLoopObserver, cast(Carbon.CFStringRef)OS.kCFRunLoopCommonModes_);
 
@@ -3150,13 +3153,15 @@ public Rectangle map (Control from, Control to, int x, int y, int width, int hei
     return rectangle;
 }
 
-objc.id observerProc (objc.id observer, Carbon.CFRunLoopActivity activity, objc.id info) {
+private static extern (C) objc.id observerProc (Carbon.CFRunLoopObserverRef observer, Carbon.CFRunLoopActivity activity, void* info) {
+    auto display = cast(Display) info;
     switch (activity) {
         case OS.kCFRunLoopBeforeWaiting:
-            if (runAsyncMessages_) {
-                if (runAsyncMessages (false)) wakeThread ();
+            if (display.runAsyncMessages_) {
+                if (display.runAsyncMessages (false)) display.wakeThread ();
             }
             break;
+        default:
     }
     return null;
 }
@@ -4406,6 +4411,7 @@ void applicationSendEvent (objc.id id, objc.SEL sel, objc.id event) {
             }
             return;
         }
+    default:
     }
     sendEvent_ = true;
 
