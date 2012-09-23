@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2008, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,8 +21,8 @@ alias NSPoint* NSPointArray;
 alias NSPoint* NSPointPointer;
 
 public struct NSPoint {
-    public CGFloat x;
-    public CGFloat y;
+    public CGFloat x = 0.0;
+    public CGFloat y = 0.0;
 
     public String toString() {
         return Format("{}{}{}{}{}", "NSPoint{" , x , "," , y , "}");
