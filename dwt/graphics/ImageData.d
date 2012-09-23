@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -225,19 +225,29 @@ public final class ImageData : CloneableCompatibility {
     /**
      * Arbitrary channel width data to 8-bit conversion table.
      */
-    static const byte[][] ANY_TO_EIGHT;
-    static this () {
-        ANY_TO_EIGHT = new byte[][](9);
-        for (int b = 0; b < 9; ++b) {
+    private static byte[][] _ANY_TO_EIGHT;
+
+	static byte[][] ANY_TO_EIGHT ()
+	{
+		return _ANY_TO_EIGHT = _ANY_TO_EIGHT.length > 0 ? _ANY_TO_EIGHT : new byte[][](9);
+	}
+
+	static byte[] ONE_TO_ONE_MAPPING ()
+	{
+		if (_ONE_TO_ONE_MAPPING.length > 0)
+			return _ONE_TO_ONE_MAPPING;
+
+		for (int b = 0; b < 9; ++b) {
             byte[] data = ANY_TO_EIGHT[b] = new byte[1 << b];
             if (b == 0) continue;
             int inc = 0;
             for (int bit = 0x10000; (bit >>= b) != 0;) inc |= bit;
             for (int v = 0, p = 0; v < 0x10000; v+= inc) data[p++] = cast(byte)(v >> 8);
         }
-        ONE_TO_ONE_MAPPING = ANY_TO_EIGHT[8];
-    }
-    static const byte[] ONE_TO_ONE_MAPPING;
+        _ONE_TO_ONE_MAPPING = ANY_TO_EIGHT[8];
+	}
+
+    private static byte[] _ONE_TO_ONE_MAPPING;
 
     /**
      * Scaled 8x8 Bayer dither matrix.
