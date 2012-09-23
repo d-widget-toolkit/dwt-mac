@@ -4429,19 +4429,20 @@ void applicationSendEvent (objc.id id, objc.SEL sel, objc.id event) {
 
 void applicationWillFinishLaunching (objc.id id, objc.SEL sel, objc.id notification) {
     bool loaded = false;
-    NSBundle bundle = NSBundle.bundleWithIdentifier(NSString.stringWith("com.apple.JavaVM"));
-    NSDictionary dict = NSDictionary.dictionaryWithObject(applicationDelegate, NSString.stringWith("NSOwner"));
-    NSString path = bundle.pathForResource(NSString.stringWith("DefaultApp"), NSString.stringWith("nib"));
-    if (!loaded) loaded = path !is null && NSBundle.loadNibFile(path, dict, null);
-    if (!loaded) {
-        NSString resourcePath = bundle.resourcePath();
-        path = resourcePath !is null ? resourcePath.stringByAppendingString(NSString.stringWith("/English.lproj/DefaultApp.nib")) : null;
-        loaded = path !is null && NSBundle.loadNibFile(path, dict, null);
-    }
-    if (!loaded) {
-        path = NSString.stringWith(System.getProperty("java.home") ~ "/../Resources/English.lproj/DefaultApp.nib");
-        loaded = path !is null && NSBundle.loadNibFile(path, dict, null);
-    }
+    // FIXME is this code really necessary - Jacob Carlborg
+    // NSBundle bundle = NSBundle.bundleWithIdentifier(NSString.stringWith("com.apple.JavaVM"));
+    // NSDictionary dict = NSDictionary.dictionaryWithObject(applicationDelegate, NSString.stringWith("NSOwner"));
+    // NSString path = bundle.pathForResource(NSString.stringWith("DefaultApp"), NSString.stringWith("nib"));
+    // if (!loaded) loaded = path !is null && NSBundle.loadNibFile(path, dict, null);
+    // if (!loaded) {
+    //     NSString resourcePath = bundle.resourcePath();
+    //     path = resourcePath !is null ? resourcePath.stringByAppendingString(NSString.stringWith("/English.lproj/DefaultApp.nib")) : null;
+    //     loaded = path !is null && NSBundle.loadNibFile(path, dict, null);
+    // }
+    // if (!loaded) {
+    //     path = NSString.stringWith(System.getProperty("java.home") ~ "/../Resources/English.lproj/DefaultApp.nib");
+    //     loaded = path !is null && NSBundle.loadNibFile(path, dict, null);
+    // }
     if (!loaded) {
         createMainMenu();
     }
