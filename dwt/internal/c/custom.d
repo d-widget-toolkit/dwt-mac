@@ -16,7 +16,7 @@ static IMP CALLBACK_1drawRect_1;
 
 static void proc_CALLBACK_1drawRect_1(id obj, SEL sel, NSRect rect)
 {
-	alias void function (id, SEL, NSRect*) Fp;
+	alias extern (C) void function (id, SEL, NSRect*) Fp;
 	(cast(Fp) CALLBACK_1drawRect_1)(obj, sel, &rect);
 }
 
@@ -32,7 +32,7 @@ static IMP CALLBACK_1drawInteriorWithFrame_1inView_1;
 
 static void proc_CALLBACK_1drawInteriorWithFrame_1inView_1(id obj, SEL sel, NSRect rect, id view)
 {
-	alias void function (id, SEL, NSRect*, id) Fp;
+	alias extern (C) void function (id, SEL, NSRect*, id) Fp;
 	(cast(Fp) CALLBACK_1drawInteriorWithFrame_1inView_1)(obj, sel, &rect, view);
 }
 
@@ -48,7 +48,7 @@ static IMP CALLBACK_1setFrame_1;
 
 static void proc_CALLBACK_1setFrame_1(id obj, SEL sel, NSRect rect)
 {
-	alias void function (id, SEL, NSRect*) Fp;
+	alias extern (C) void function (id, SEL, NSRect*) Fp;
 	(cast(Fp) CALLBACK_1setFrame_1)(obj, sel, &rect);
 }
 
@@ -64,7 +64,7 @@ static IMP CALLBACK_1setFrameOrigin_1;
 
 static void proc_CALLBACK_1setFrameOrigin_1(id obj, SEL sel, NSPoint point)
 {
-	alias void function (id, SEL, NSPoint*) Fp;
+	alias extern (C) void function (id, SEL, NSPoint*) Fp;
 	(cast(Fp) CALLBACK_1setFrameOrigin_1)(obj, sel, &point);
 }
 
@@ -80,7 +80,7 @@ static IMP CALLBACK_1setFrameSize_1;
 
 static void proc_CALLBACK_1setFrameSize_1(id obj, SEL sel, NSSize size)
 {
-	alias void function (id, SEL, NSSize*) Fp;
+	alias extern (C) void function (id, SEL, NSSize*) Fp;
 	(cast(Fp) CALLBACK_1setFrameSize_1)(obj, sel, &size);
 }
 
@@ -96,7 +96,7 @@ static IMP CALLBACK_1hitTest_1;
 
 static void proc_CALLBACK_1hitTest_1(id obj, SEL sel, NSPoint point)
 {
-	alias id function (id, SEL, NSPoint*) Fp;
+	alias extern (C) id function (id, SEL, NSPoint*) Fp;
 	(cast(Fp) CALLBACK_1hitTest_1)(obj, sel, &point);
 }
 
@@ -112,7 +112,7 @@ static IMP CALLBACK_1webView_1setFrame_1;
 
 static void proc_CALLBACK_1webView_1setFrame_1(id obj, SEL sel, id sender, NSRect rect)
 {
-	alias void function (id, SEL, id, NSRect*) Fp;
+	alias extern (C) void function (id, SEL, id, NSRect*) Fp;
 	(cast(Fp) CALLBACK_1webView_1setFrame_1)(obj, sel, sender, &rect);
 }
 
@@ -129,7 +129,7 @@ static IMP CALLBACK_1markedRange;
 
 static NSRange proc_CALLBACK_1markedRange(id obj, SEL sel)
 {
-	alias NSRange* function (id, SEL) Fp;
+	alias extern (C) NSRange* function (id, SEL) Fp;
 
 	NSRange* lprc = (cast(Fp) CALLBACK_1markedRange)(obj, sel);
 	NSRange rc = void;
@@ -154,7 +154,7 @@ static IMP CALLBACK_1selectedRange;
 
 static NSRange proc_CALLBACK_1selectedRange(id obj, SEL sel)
 {
-	alias NSRange* function (id, SEL) Fp;
+	alias extern (C) NSRange* function (id, SEL) Fp;
 
 	NSRange* lprc = (cast(Fp) CALLBACK_1selectedRange)(obj, sel);
 	NSRange rc = void;
@@ -179,7 +179,7 @@ static IMP CALLBACK_1highlightSelectionInClipRect_1;
 
 static void proc_CALLBACK_1highlightSelectionInClipRect_1(id obj, SEL sel, NSRect rect)
 {
-	alias void function (id, SEL, NSRect*) Fp;
+	alias extern (C) void function (id, SEL, NSRect*) Fp;
 	(cast(Fp) CALLBACK_1highlightSelectionInClipRect_1)(obj, sel, &rect);
 }
 
@@ -195,7 +195,7 @@ static IMP CALLBACK_1attributedSubstringFromRange_1;
 
 static id proc_CALLBACK_1attributedSubstringFromRange_1(id obj, SEL sel, NSRange arg0)
 {
-	alias id function (id, SEL, NSRange*) Fp;
+	alias extern (C) id function (id, SEL, NSRange*) Fp;
 	return (cast(Fp) CALLBACK_1attributedSubstringFromRange_1)(obj, sel, &arg0);
 }
 
@@ -211,7 +211,7 @@ static IMP CALLBACK_1setMarkedText_1selectedRange_1;
 
 static void proc_CALLBACK_1setMarkedText_1selectedRange_1(id obj, SEL sel, id arg0, NSRange arg1)
 {
-	alias void function (id, SEL, id, NSRange*) Fp;
+	alias extern (C) void function (id, SEL, id, NSRange*) Fp;
 	(cast(Fp) CALLBACK_1setMarkedText_1selectedRange_1)(obj, sel, arg0, &arg1);
 }
 
@@ -227,7 +227,7 @@ static IMP CALLBACK_1characterIndexForPoint_1;
 
 static NSUInteger proc_CALLBACK_1characterIndexForPoint_1(id obj, SEL sel, NSPoint point)
 {
-	alias NSUInteger function (id, SEL, NSPoint*) Fp;
+	alias extern (C) NSUInteger function (id, SEL, NSPoint*) Fp;
 	return (cast(Fp) CALLBACK_1characterIndexForPoint_1)(obj, sel, &point);
 }
 
@@ -243,7 +243,7 @@ static IMP CALLBACK_1firstRectForCharacterRange_1;
 
 static NSRect proc_CALLBACK_1firstRectForCharacterRange_1(id obj, SEL sel, NSRange arg0)
 {
-	alias NSRect* function (id, SEL, NSRange*) Fp;
+	alias extern (C) NSRect* function (id, SEL, NSRange*) Fp;
 
 	NSRect* lprc = (cast(Fp) CALLBACK_1firstRectForCharacterRange_1)(obj, sel, &arg0);
 	NSRect rc = void;
@@ -268,7 +268,7 @@ static IMP CALLBACK_1textView_1willChangeSelectionFromCharacterRange_1toCharacte
 
 static NSRange proc_CALLBACK_1textView_1willChangeSelectionFromCharacterRange_1toCharacterRange_1(id obj, SEL sel, id aTextView, NSRange oldSelectedCharRange, NSRange newSelectedCharRange)
 {
-	alias NSRange* function (id, SEL, id, NSRange*, NSRange*) Fp;
+	alias extern (C) NSRange* function (id, SEL, id, NSRange*, NSRange*) Fp;
 	NSRange* lprc = (cast(Fp) CALLBACK_1textView_1willChangeSelectionFromCharacterRange_1toCharacterRange_1)(obj, sel, aTextView, &oldSelectedCharRange, &newSelectedCharRange);
 	NSRange rc;
 	if (lprc) {
@@ -292,7 +292,7 @@ static IMP CALLBACK_1draggedImage_1beganAt_1;
 
 static void proc_CALLBACK_1draggedImage_1beganAt_1 (id obj, SEL sel, id anImage, NSPoint aPoint)
 {
-	alias void function (id, SEL, id, NSPoint*) Fp;
+	alias extern (C) void function (id, SEL, id, NSPoint*) Fp;
 	(cast(Fp) CALLBACK_1draggedImage_1beganAt_1)(obj, sel, anImage, &aPoint);
 }
 
@@ -308,7 +308,7 @@ static IMP CALLBACK_1draggedImage_1endedAt_1operation_1;
 
 static void proc_CALLBACK_1draggedImage_1endedAt_1operation_1(id obj, SEL sel, id image, NSPoint point, NSDragOperation op)
 {
-	alias void function (id, SEL, id, NSPoint*, NSDragOperation) Fp;
+	alias extern (C) void function (id, SEL, id, NSPoint*, NSDragOperation) Fp;
 	return (cast(Fp) CALLBACK_1draggedImage_1endedAt_1operation_1)(obj, sel, image, &point, op);
 }
 
@@ -324,7 +324,7 @@ static IMP CALLBACK_1accessibilityHitTest_1;
 
 static void proc_CALLBACK_1accessibilityHitTest_1(id obj, SEL sel, NSPoint point)
 {
-	alias void function (id, SEL, NSPoint*) Fp;
+	alias extern (C) void function (id, SEL, NSPoint*) Fp;
 	(cast(Fp) CALLBACK_1accessibilityHitTest_1)(obj, sel, &point);
 }
 
@@ -340,7 +340,7 @@ static IMP CALLBACK_1dragSelectionWithEvent_1offset_1slideBack_1;
 
 bool proc_CALLBACK_1dragSelectionWithEvent_1offset_1slideBack_1 (id obj, SEL sel, id event, NSSize mouseOffset, bool slideBack)
 {
-	alias bool function (id, SEL, id, NSSize*, bool) Fp;
+	alias extern (C) bool function (id, SEL, id, NSSize*, bool) Fp;
 	return (cast(Fp) CALLBACK_1dragSelectionWithEvent_1offset_1slideBack_1)(obj, sel, event, &mouseOffset, slideBack);
 }
 
@@ -367,7 +367,7 @@ IMP isFlipped_CALLBACK ()
 static IMP CALLBACK_1canDragRowsWithIndexes_1atPoint_1;
 
 static bool proc_CALLBACK_1canDragRowsWithIndexes_1atPoint_1 (id arg0, SEL arg1, id arg2, NSPoint arg3) {
-	alias bool function (id, SEL, id, NSPoint*) Fp;
+	alias extern (C) bool function (id, SEL, id, NSPoint*) Fp;
 	return (cast(Fp) CALLBACK_1canDragRowsWithIndexes_1atPoint_1)(arg0, arg1, arg2, &arg3);
 }
 
@@ -381,7 +381,7 @@ static IMP CALLBACK_canDragRowsWithIndexes_atPoint_(IMP func) {
 static IMP CALLBACK_1cellSize;
 
 static NSSize proc_CALLBACK_1cellSize(id arg0, SEL arg1) {
-	alias NSSize* function (id, SEL) Fp;
+	alias extern (C) NSSize* function (id, SEL) Fp;
 
 	NSSize* lprc = (cast(Fp) CALLBACK_1cellSize)(arg0, arg1);
 	NSSize rc = void;
@@ -404,7 +404,7 @@ static IMP CALLBACK_cellSize(IMP func) {
 static IMP CALLBACK_1drawImage_1withFrame_1inView_1;
 
 static void proc_CALLBACK_1drawImage_1withFrame_1inView_1(id arg0, SEL arg1, id arg2, NSRect arg3, id arg4) {
-	alias void function (id, SEL, id, NSRect*, id) Fp;
+	alias extern (C) void function (id, SEL, id, NSRect*, id) Fp;
 	(cast(Fp) CALLBACK_1drawImage_1withFrame_1inView_1)(arg0, arg1, arg2, &arg3, arg4);
 }
 
@@ -418,7 +418,7 @@ static IMP CALLBACK_drawImage_withFrame_inView_(IMP func) {
 static IMP CALLBACK_1drawWithExpansionFrame_1inView_1;
 
 static void proc_CALLBACK_1drawWithExpansionFrame_1inView_1(id arg0, SEL arg1, NSRect arg2, id arg3) {
-	alias void function (id, SEL, NSRect*, id) Fp;
+	alias extern (C) void function (id, SEL, NSRect*, id) Fp;
 	(cast(Fp) CALLBACK_1drawWithExpansionFrame_1inView_1)(arg0, arg1, &arg2, arg3);
 }
 
@@ -432,7 +432,7 @@ static IMP CALLBACK_drawWithExpansionFrame_inView_(IMP func) {
 static IMP CALLBACK_1expansionFrameWithFrame_1inView_1;
 
 static NSRect proc_CALLBACK_1expansionFrameWithFrame_1inView_1(id arg0, SEL arg1, NSRect arg2, id arg3) {
-	alias NSRect* function (id, SEL, NSRect*, id) Fp;
+	alias extern (C) NSRect* function (id, SEL, NSRect*, id) Fp;
 
 	NSRect* lprc = (cast(Fp) CALLBACK_1expansionFrameWithFrame_1inView_1)(arg0, arg1, &arg2, arg3);
 	NSRect rc = void;
@@ -455,7 +455,7 @@ static IMP CALLBACK_expansionFrameWithFrame_inView_(IMP func) {
 static IMP CALLBACK_1hitTestForEvent_1inRect_1ofView_1;
 
 static NSUInteger proc_CALLBACK_1hitTestForEvent_1inRect_1ofView_1(id arg0, SEL arg1, id arg2, NSRect arg3, id arg4) {
-	alias NSUInteger function (id, SEL, id, NSRect*, id) Fp;
+	alias extern (C) NSUInteger function (id, SEL, id, NSRect*, id) Fp;
 	return (cast(Fp) CALLBACK_1hitTestForEvent_1inRect_1ofView_1)(arg0, arg1, arg2, &arg3, arg4);
 }
 
@@ -469,7 +469,7 @@ static IMP CALLBACK_hitTestForEvent_inRect_ofView_(IMP func) {
 static IMP CALLBACK_1imageRectForBounds_1;
 
 static NSRect proc_CALLBACK_1imageRectForBounds_1(id arg0, SEL arg1, NSRect arg2) {
-	alias NSRect* function (id, SEL, NSRect*) Fp;
+	alias extern (C) NSRect* function (id, SEL, NSRect*) Fp;
 
 	NSRect* lprc = (cast(Fp) CALLBACK_1imageRectForBounds_1)(arg0, arg1, &arg2);
 	NSRect rc = void;
@@ -492,7 +492,7 @@ static IMP CALLBACK_imageRectForBounds_(IMP func) {
 static IMP CALLBACK_1setNeedsDisplayInRect_1;
 
 static void proc_CALLBACK_1setNeedsDisplayInRect_1(id arg0, SEL arg1, NSRect arg2) {
-	alias void function (id, SEL, NSRect*) Fp;
+	alias extern (C) void function (id, SEL, NSRect*) Fp;
 	(cast(Fp)CALLBACK_1setNeedsDisplayInRect_1)(arg0, arg1, &arg2);
 }
 
@@ -506,7 +506,7 @@ static IMP CALLBACK_setNeedsDisplayInRect_(IMP func) {
 static IMP CALLBACK_1shouldChangeTextInRange_1replacementString_1;
 
 static bool proc_CALLBACK_1shouldChangeTextInRange_1replacementString_1(id arg0, SEL arg1, NSRange arg2, id arg3) {
-	alias bool function (id, SEL, NSRange*, id) Fp;
+	alias extern (C) bool function (id, SEL, NSRange*, id) Fp;
 	return (cast(Fp)CALLBACK_1shouldChangeTextInRange_1replacementString_1)(arg0, arg1, &arg2, arg3);
 }
 
@@ -520,7 +520,7 @@ static IMP CALLBACK_shouldChangeTextInRange_replacementString_(IMP func) {
 static IMP CALLBACK_1titleRectForBounds_1;
 
 static NSRect proc_CALLBACK_1titleRectForBounds_1(id arg0, SEL arg1, NSRect arg2) {
-	alias NSRect* function (id, SEL, NSRect*) Fp;
+	alias extern (C) NSRect* function (id, SEL, NSRect*) Fp;
 
 	NSRect* lprc = (cast(Fp)CALLBACK_1titleRectForBounds_1)(arg0, arg1, &arg2);
 	NSRect rc = void;
@@ -543,7 +543,7 @@ static IMP CALLBACK_titleRectForBounds_(IMP func) {
 static IMP CALLBACK_1view_1stringForToolTip_1point_1userData_1;
 
 static id proc_CALLBACK_1view_1stringForToolTip_1point_1userData_1(id arg0, SEL arg1, id arg2, NSToolTipTag arg3, NSPoint arg4, void* arg5) {
-	alias id function (id, SEL, id, NSToolTipTag, NSPoint*, void*) Fp;
+	alias extern (C) id function (id, SEL, id, NSToolTipTag, NSPoint*, void*) Fp;
 	return (cast(Fp)CALLBACK_1view_1stringForToolTip_1point_1userData_1)(arg0, arg1, arg2, arg3, &arg4, arg5);
 }
 
