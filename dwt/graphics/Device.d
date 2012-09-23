@@ -104,11 +104,11 @@ public abstract class Device : Drawable {
     */
     protected static Device CurrentDevice;
     protected static Runnable DeviceFinder;
-    static this (){
-        try {
-            ClassInfo.find ("dwt.widgets.Display.Display");
-        } catch (ClassNotFoundException e) {}
-    }
+    // static this (){
+    //     try {
+    //         ClassInfo.find ("dwt.widgets.Display.Display");
+    //     } catch (ClassNotFoundException e) {}
+    // }
 
 /*
 * TEMPORARY CODE.
