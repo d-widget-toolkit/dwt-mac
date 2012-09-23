@@ -263,7 +263,7 @@ static bool getSheetEnabled () {
     return !"false".equals(System.getProperty("dwt.sheet"));
 }
 
-static objc.id dialogProc(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2) {
+private extern(C) static objc.id dialogProc(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2) {
     void* jniRef;
     OS.object_getInstanceVariable(id, DWT_OBJECT, jniRef);
     if (jniRef is null) return null;

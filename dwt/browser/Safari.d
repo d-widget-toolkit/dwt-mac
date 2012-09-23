@@ -282,6 +282,9 @@ public bool back() {
     return webView.goBack();
 }
 
+private {
+extern (C) {
+
 static objc.id browserProc3(objc.id id, objc.SEL sel, objc.id arg0) {
     if (id is delegateClass) {
         if (sel is OS.sel_isSelectorExcludedFromWebScript_) {
@@ -399,6 +402,8 @@ static objc.id browserProc7(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1
         safari.webView_decidePolicyForNewWindowAction_request_newFrameName_decisionListener(arg0, arg1, arg2, arg3, arg4);
     }
     return null;
+}
+}
 }
 
 static bool isSelectorExcludedFromWebScript (int /*long*/ aSelector) {

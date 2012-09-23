@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,8 +12,6 @@
  *     Jacob Carlborg <doob@me.com>
  *******************************************************************************/
 module dwt.widgets.Display;
-
-
 
 
 
@@ -4471,6 +4469,9 @@ void applicationWillFinishLaunching (objc.id id, objc.SEL sel, objc.id notificat
         }
     }
 }
+
+private:
+extern (C):
 
 static objc.id applicationProc2(objc.id id, objc.SEL sel) {
     //TODO optimize getting the display
