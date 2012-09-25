@@ -1005,7 +1005,7 @@ objc.id cursorSetProc (objc.id id, objc.SEL sel) {
 
 private static extern (C) objc.id cursorSetProcFunc (objc.id id, objc.SEL sel)
 {
-    auto widget = getWidget(id);
+    auto widget = GetWidget(id);
     assert(widget !is null);
 
     auto display = cast(Display) widget;
@@ -3151,7 +3151,7 @@ void observerProc (Carbon.CFRunLoopObserverRef observer, Carbon.CFRunLoopActivit
     switch (activity) {
         case OS.kCFRunLoopBeforeWaiting:
             if (runAsyncMessages_) {
-                if (runAsyncMessages (false)) display.wakeThread ();
+                if (runAsyncMessages (false)) wakeThread ();
             }
             break;
         default:
