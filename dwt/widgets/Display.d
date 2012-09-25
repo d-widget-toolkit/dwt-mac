@@ -3544,39 +3544,39 @@ bool runContexts () {
 
 bool runDeferredEvents () {
     bool run = false;
-        /*
-         * Run deferred events.  This code is always
-         * called  in the Display's thread so it must
-         * be re-enterant need not be synchronized.
-         */
-        while (eventQueue !is null) {
+    /*
+     * Run deferred events.  This code is always
+     * called  in the Display's thread so it must
+     * be re-enterant need not be synchronized.
+     */
+    while (eventQueue !is null) {
 
-            /* Take an event off the queue */
-            Event event = eventQueue [0];
-            if (event is null) break;
-            int length_ = eventQueue.length;
-            System.arraycopy (eventQueue, 1, eventQueue, 0, --length_);
-            eventQueue [length_] = null;
+        /* Take an event off the queue */
+        Event event = eventQueue [0];
+        if (event is null) break;
+        int length_ = eventQueue.length;
+        System.arraycopy (eventQueue, 1, eventQueue, 0, --length_);
+        eventQueue [length_] = null;
 
-            /* Run the event */
-            Widget widget = event.widget;
-            if (widget !is null && !widget.isDisposed ()) {
-                Widget item = event.item;
-                if (item is null || !item.isDisposed ()) {
-                run = true;
-                    widget.notifyListeners (event.type, event);
-                }
+        /* Run the event */
+        Widget widget = event.widget;
+        if (widget !is null && !widget.isDisposed ()) {
+            Widget item = event.item;
+            if (item is null || !item.isDisposed ()) {
+            run = true;
+                widget.notifyListeners (event.type, event);
             }
-
-            /*
-             * At this point, the event queue could
-             * be null due to a recursive invokation
-             * when running the event.
-             */
         }
 
-        /* Clear the queue */
-        eventQueue = null;
+        /*
+         * At this point, the event queue could
+         * be null due to a recursive invokation
+         * when running the event.
+         */
+    }
+
+    /* Clear the queue */
+    eventQueue = null;
     return run;
 }
 
@@ -3797,122 +3797,122 @@ public void setCursorLocation (int x, int y) {
     Carbon.CGWarpMouseCursorPosition (pt);
 }
 
-    /**
-     * Sets the location of the on-screen pointer relative to the top left corner
-     * of the screen.  <b>Note: It is typically considered bad practice for a
-     * program to move the on-screen pointer location.</b>
-     *
-     * @param point new position
-     *
-     * @exception DWTException <ul>
-     *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
-     *    <li>ERROR_NULL_ARGUMENT - if the point is null
-     *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
-     * </ul>
-     *
-     * @since 2.0
-     */
-    public void setCursorLocation (Point point) {
-        checkDevice ();
-        if (point is null) error (DWT.ERROR_NULL_ARGUMENT);
-        setCursorLocation (point.x, point.y);
+/**
+ * Sets the location of the on-screen pointer relative to the top left corner
+ * of the screen.  <b>Note: It is typically considered bad practice for a
+ * program to move the on-screen pointer location.</b>
+ *
+ * @param point new position
+ *
+ * @exception DWTException <ul>
+ *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
+ *    <li>ERROR_NULL_ARGUMENT - if the point is null
+ *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
+ * </ul>
+ *
+ * @since 2.0
+ */
+public void setCursorLocation (Point point) {
+    checkDevice ();
+    if (point is null) error (DWT.ERROR_NULL_ARGUMENT);
+    setCursorLocation (point.x, point.y);
+}
+
+/**
+ * Sets the application defined property of the receiver
+ * with the specified name to the given argument.
+ * <p>
+ * Applications may have associated arbitrary objects with the
+ * receiver in this fashion. If the objects stored in the
+ * properties need to be notified when the display is disposed
+ * of, it is the application's responsibility provide a
+ * <code>disposeExec()</code> handler which does so.
+ * </p>
+ *
+ * @param key the name of the property
+ * @param value the new value for the property
+ *
+ * @exception IllegalArgumentException <ul>
+ *    <li>ERROR_NULL_ARGUMENT - if the key is null</li>
+ * </ul>
+ * @exception DWTException <ul>
+ *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
+ *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
+ * </ul>
+ *
+ * @see #getData(String)
+ * @see #disposeExec(Runnable)
+ */
+public void setData (String key, Object value) {
+    checkDevice ();
+    // DWT extension: allow null for zero length string
+    //if (key is null) error (DWT.ERROR_NULL_ARGUMENT);
+
+    if (key.equals (ADD_WIDGET_KEY)) {
+        ArrayWrapperObject wrap = cast(ArrayWrapperObject) value;
+
+        if (wrap is null)
+            DWT.error(DWT.ERROR_INVALID_ARGUMENT, null, " []");
+
+        Object [] data = wrap.array;
+        NSObject object = cast(NSObject)data [0];
+        Widget widget = cast(Widget)data [1];
+        if (widget is null) {
+            removeWidget (object);
+        } else {
+            addWidget (object, widget);
+        }
     }
 
-    /**
-     * Sets the application defined property of the receiver
-     * with the specified name to the given argument.
-     * <p>
-     * Applications may have associated arbitrary objects with the
-     * receiver in this fashion. If the objects stored in the
-     * properties need to be notified when the display is disposed
-     * of, it is the application's responsibility provide a
-     * <code>disposeExec()</code> handler which does so.
-     * </p>
-     *
-     * @param key the name of the property
-     * @param value the new value for the property
-     *
-     * @exception IllegalArgumentException <ul>
-     *    <li>ERROR_NULL_ARGUMENT - if the key is null</li>
-     * </ul>
-     * @exception DWTException <ul>
-     *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
-     *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
-     * </ul>
-     *
-     * @see #getData(String)
-     * @see #disposeExec(Runnable)
-     */
-    public void setData (String key, Object value) {
-        checkDevice ();
-        // DWT extension: allow null for zero length string
-        //if (key is null) error (DWT.ERROR_NULL_ARGUMENT);
-
-        if (key.equals (ADD_WIDGET_KEY)) {
-            ArrayWrapperObject wrap = cast(ArrayWrapperObject) value;
-
-            if (wrap is null)
-                DWT.error(DWT.ERROR_INVALID_ARGUMENT, null, " []");
-
-            Object [] data = wrap.array;
-            NSObject object = cast(NSObject)data [0];
-            Widget widget = cast(Widget)data [1];
-            if (widget is null) {
-                removeWidget (object);
-            } else {
-                addWidget (object, widget);
-            }
+    /* Remove the key/value pair */
+    if (value is null) {
+        if (keys is null) return;
+        int index = 0;
+        while (index < keys.length && !keys [index].equals (key)) index++;
+        if (index is keys.length) return;
+        if (keys.length is 1) {
+            keys = null;
+            values = null;
+        } else {
+            String [] newKeys = new String [keys.length - 1];
+            Object [] newValues = new Object [values.length - 1];
+            System.arraycopy (keys, 0, newKeys, 0, index);
+            System.arraycopy (keys, index + 1, newKeys, index, newKeys.length - index);
+            System.arraycopy (values, 0, newValues, 0, index);
+            System.arraycopy (values, index + 1, newValues, index, newValues.length - index);
+            keys = newKeys;
+            values = newValues;
         }
-
-        /* Remove the key/value pair */
-        if (value is null) {
-            if (keys is null) return;
-            int index = 0;
-            while (index < keys.length && !keys [index].equals (key)) index++;
-            if (index is keys.length) return;
-            if (keys.length is 1) {
-                keys = null;
-                values = null;
-            } else {
-                String [] newKeys = new String [keys.length - 1];
-                Object [] newValues = new Object [values.length - 1];
-                System.arraycopy (keys, 0, newKeys, 0, index);
-                System.arraycopy (keys, index + 1, newKeys, index, newKeys.length - index);
-                System.arraycopy (values, 0, newValues, 0, index);
-                System.arraycopy (values, index + 1, newValues, index, newValues.length - index);
-                keys = newKeys;
-                values = newValues;
-            }
-            return;
-        }
-
-        /* Add the key/value pair */
-        if (keys is null) {
-            keys = [key];
-            values = [value];
-            return;
-        }
-        for (int i=0; i<keys.length; i++) {
-            if (keys [i].equals (key)) {
-                values [i] = value;
-                return;
-            }
-        }
-        String [] newKeys = new String [keys.length + 1];
-        Object [] newValues = new Object [values.length + 1];
-        System.arraycopy (keys, 0, newKeys, 0, keys.length);
-        System.arraycopy (values, 0, newValues, 0, values.length);
-        newKeys [keys.length] = key;
-        newValues [values.length] = value;
-        keys = newKeys;
-        values = newValues;
+        return;
     }
 
-    void setMenuBar (Menu menu) {
-        if (menu is menuBar) return;
-        menuBar = menu;
-        //remove all existing menu items except the application menu
-        NSMenu menubar = application.mainMenu();
+    /* Add the key/value pair */
+    if (keys is null) {
+        keys = [key];
+        values = [value];
+        return;
+    }
+    for (int i=0; i<keys.length; i++) {
+        if (keys [i].equals (key)) {
+            values [i] = value;
+            return;
+        }
+    }
+    String [] newKeys = new String [keys.length + 1];
+    Object [] newValues = new Object [values.length + 1];
+    System.arraycopy (keys, 0, newKeys, 0, keys.length);
+    System.arraycopy (values, 0, newValues, 0, values.length);
+    newKeys [keys.length] = key;
+    newValues [values.length] = value;
+    keys = newKeys;
+    values = newValues;
+}
+
+void setMenuBar (Menu menu) {
+    if (menu is menuBar) return;
+    menuBar = menu;
+    //remove all existing menu items except the application menu
+    NSMenu menubar = application.mainMenu();
     /*
     * For some reason, NSMenu.cancelTracking() does not dismisses
     * the menu right away when the menu bar is set in a stacked
@@ -3947,98 +3947,98 @@ public void setCursorLocation (int x, int y) {
     }
 }
 
-    void setModalShell (Shell shell) {
-        if (modalShells is null) modalShells = new Shell [4];
-        int index = 0, length = modalShells.length;
-        while (index < length) {
-            if (modalShells [index] is shell) return;
-            if (modalShells [index] is null) break;
-            index++;
-        }
-        if (index is length) {
-            Shell [] newModalShells = new Shell [length + 4];
-            System.arraycopy (modalShells, 0, newModalShells, 0, length);
-            modalShells = newModalShells;
-        }
-        modalShells [index] = shell;
-        Shell [] shells = getShells ();
-        for (int i=0; i<shells.length; i++) shells [i].updateModal ();
+void setModalShell (Shell shell) {
+    if (modalShells is null) modalShells = new Shell [4];
+    int index = 0, length = modalShells.length;
+    while (index < length) {
+        if (modalShells [index] is shell) return;
+        if (modalShells [index] is null) break;
+        index++;
     }
-
-    /**
-     * Sets the application defined, display specific data
-     * associated with the receiver, to the argument.
-     * The <em>display specific data</em> is a single,
-     * unnamed field that is stored with every display.
-     * <p>
-     * Applications may put arbitrary objects in this field. If
-     * the object stored in the display specific data needs to
-     * be notified when the display is disposed of, it is the
-     * application's responsibility provide a
-     * <code>disposeExec()</code> handler which does so.
-     * </p>
-     *
-     * @param data the new display specific data
-     *
-     * @exception DWTException <ul>
-     *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
-     *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
-     * </ul>
-     *
-     * @see #getData()
-     * @see #disposeExec(Runnable)
-     */
-    public void setData (Object data) {
-        checkDevice ();
-        this.data = data;
+    if (index is length) {
+        Shell [] newModalShells = new Shell [length + 4];
+        System.arraycopy (modalShells, 0, newModalShells, 0, length);
+        modalShells = newModalShells;
     }
+    modalShells [index] = shell;
+    Shell [] shells = getShells ();
+    for (int i=0; i<shells.length; i++) shells [i].updateModal ();
+}
 
-    /**
-     * Sets the synchronizer used by the display to be
-     * the argument, which can not be null.
-     *
-     * @param synchronizer the new synchronizer for the display (must not be null)
-     *
-     * @exception IllegalArgumentException <ul>
-     *    <li>ERROR_NULL_ARGUMENT - if the synchronizer is null</li>
-     * </ul>
-     * @exception DWTException <ul>
-     *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
-     *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
-     *    <li>ERROR_FAILED_EXEC - if an exception occurred while running an inter-thread message</li>
-     * </ul>
-     */
-    public void setSynchronizer (Synchronizer synchronizer) {
-        checkDevice ();
-        if (synchronizer is null) error (DWT.ERROR_NULL_ARGUMENT);
-        if (synchronizer is this.synchronizer) return;
-        Synchronizer oldSynchronizer;
-        synchronized (Device.classinfo) {
-            oldSynchronizer = this.synchronizer;
-            this.synchronizer = synchronizer;
-        }
-        if (oldSynchronizer !is null) {
-            oldSynchronizer.runAsyncMessages(true);
-        }
+/**
+ * Sets the application defined, display specific data
+ * associated with the receiver, to the argument.
+ * The <em>display specific data</em> is a single,
+ * unnamed field that is stored with every display.
+ * <p>
+ * Applications may put arbitrary objects in this field. If
+ * the object stored in the display specific data needs to
+ * be notified when the display is disposed of, it is the
+ * application's responsibility provide a
+ * <code>disposeExec()</code> handler which does so.
+ * </p>
+ *
+ * @param data the new display specific data
+ *
+ * @exception DWTException <ul>
+ *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
+ *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
+ * </ul>
+ *
+ * @see #getData()
+ * @see #disposeExec(Runnable)
+ */
+public void setData (Object data) {
+    checkDevice ();
+    this.data = data;
+}
+
+/**
+ * Sets the synchronizer used by the display to be
+ * the argument, which can not be null.
+ *
+ * @param synchronizer the new synchronizer for the display (must not be null)
+ *
+ * @exception IllegalArgumentException <ul>
+ *    <li>ERROR_NULL_ARGUMENT - if the synchronizer is null</li>
+ * </ul>
+ * @exception DWTException <ul>
+ *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
+ *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
+ *    <li>ERROR_FAILED_EXEC - if an exception occurred while running an inter-thread message</li>
+ * </ul>
+ */
+public void setSynchronizer (Synchronizer synchronizer) {
+    checkDevice ();
+    if (synchronizer is null) error (DWT.ERROR_NULL_ARGUMENT);
+    if (synchronizer is this.synchronizer) return;
+    Synchronizer oldSynchronizer;
+    synchronized (Device.classinfo) {
+        oldSynchronizer = this.synchronizer;
+        this.synchronizer = synchronizer;
     }
+    if (oldSynchronizer !is null) {
+        oldSynchronizer.runAsyncMessages(true);
+    }
+}
 
-    /**
-     * Causes the user-interface thread to <em>sleep</em> (that is,
-     * to be put in a state where it does not consume CPU cycles)
-     * until an event is received or it is otherwise awakened.
-     *
-     * @return <code>true</code> if an event requiring dispatching was placed on the queue.
-     *
-     * @exception DWTException <ul>
-     *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
-     *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
-     * </ul>
-     *
-     * @see #wake
-     */
-    public bool sleep () {
-        checkDevice ();
-        if (getMessageCount () !is 0) return true;
+/**
+ * Causes the user-interface thread to <em>sleep</em> (that is,
+ * to be put in a state where it does not consume CPU cycles)
+ * until an event is received or it is otherwise awakened.
+ *
+ * @return <code>true</code> if an event requiring dispatching was placed on the queue.
+ *
+ * @exception DWTException <ul>
+ *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
+ *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
+ * </ul>
+ *
+ * @see #wake
+ */
+public bool sleep () {
+    checkDevice ();
+    if (getMessageCount () !is 0) return true;
     try {
         addPool();
         allowTimers = runAsyncMessages = false;
@@ -4047,154 +4047,154 @@ public void setCursorLocation (int x, int y) {
     } finally {
         removePool();
     }
-        return true;
-    }
+    return true;
+}
 
-    int sourceProc (int info) {
-        return 0;
-    }
+int sourceProc (int info) {
+    return 0;
+}
 
-    /**
-     * Causes the <code>run()</code> method of the runnable to
-     * be invoked by the user-interface thread at the next
-     * reasonable opportunity. The thread which calls this method
-     * is suspended until the runnable completes.  Specifying <code>null</code>
-     * as the runnable simply wakes the user-interface thread.
-     * <p>
-     * Note that at the time the runnable is invoked, widgets
-     * that have the receiver as their display may have been
-     * disposed. Therefore, it is necessary to check for this
-     * case inside the runnable before accessing the widget.
-     * </p>
-     *
-     * @param runnable code to run on the user-interface thread or <code>null</code>
-     *
-     * @exception DWTException <ul>
-     *    <li>ERROR_FAILED_EXEC - if an exception occurred when executing the runnable</li>
-     *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
-     * </ul>
-     *
-     * @see #asyncExec
-     */
-    public void syncExec (Runnable runnable) {
-        Synchronizer synchronizer;
-        synchronized (Device.classinfo) {
-            if (isDisposed ()) error (DWT.ERROR_DEVICE_DISPOSED);
-            synchronizer = this.synchronizer;
-        }
-        synchronizer.syncExec (runnable);
+/**
+ * Causes the <code>run()</code> method of the runnable to
+ * be invoked by the user-interface thread at the next
+ * reasonable opportunity. The thread which calls this method
+ * is suspended until the runnable completes.  Specifying <code>null</code>
+ * as the runnable simply wakes the user-interface thread.
+ * <p>
+ * Note that at the time the runnable is invoked, widgets
+ * that have the receiver as their display may have been
+ * disposed. Therefore, it is necessary to check for this
+ * case inside the runnable before accessing the widget.
+ * </p>
+ *
+ * @param runnable code to run on the user-interface thread or <code>null</code>
+ *
+ * @exception DWTException <ul>
+ *    <li>ERROR_FAILED_EXEC - if an exception occurred when executing the runnable</li>
+ *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
+ * </ul>
+ *
+ * @see #asyncExec
+ */
+public void syncExec (Runnable runnable) {
+    Synchronizer synchronizer;
+    synchronized (Device.classinfo) {
+        if (isDisposed ()) error (DWT.ERROR_DEVICE_DISPOSED);
+        synchronizer = this.synchronizer;
     }
+    synchronizer.syncExec (runnable);
+}
 
-    /**
-     * Causes the <code>run()</code> method of the runnable to
-     * be invoked by the user-interface thread after the specified
-     * number of milliseconds have elapsed. If milliseconds is less
-     * than zero, the runnable is not executed.
-     * <p>
-     * Note that at the time the runnable is invoked, widgets
-     * that have the receiver as their display may have been
-     * disposed. Therefore, it is necessary to check for this
-     * case inside the runnable before accessing the widget.
-     * </p>
-     *
-     * @param milliseconds the delay before running the runnable
-     * @param runnable code to run on the user-interface thread
-     *
-     * @exception IllegalArgumentException <ul>
-     *    <li>ERROR_NULL_ARGUMENT - if the runnable is null</li>
-     * </ul>
-     * @exception DWTException <ul>
-     *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
-     *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
-     * </ul>
-     *
-     * @see #asyncExec
-     */
-    public void timerExec (int milliseconds, Runnable runnable) {
-        checkDevice ();
-        //TODO - remove a timer, reschedule a timer not tested
-        if (runnable is null) error (DWT.ERROR_NULL_ARGUMENT);
-        if (timerList is null) timerList = new Runnable [4];
-        if (nsTimers is null) nsTimers = new NSTimer [4];
-        int index = 0;
-        while (index < timerList.length) {
-            if (timerList [index] is runnable) break;
-            index++;
-        }
-        if (index !is timerList.length) {
-            NSTimer timer = nsTimers [index];
-            if (timer is null) {
+/**
+ * Causes the <code>run()</code> method of the runnable to
+ * be invoked by the user-interface thread after the specified
+ * number of milliseconds have elapsed. If milliseconds is less
+ * than zero, the runnable is not executed.
+ * <p>
+ * Note that at the time the runnable is invoked, widgets
+ * that have the receiver as their display may have been
+ * disposed. Therefore, it is necessary to check for this
+ * case inside the runnable before accessing the widget.
+ * </p>
+ *
+ * @param milliseconds the delay before running the runnable
+ * @param runnable code to run on the user-interface thread
+ *
+ * @exception IllegalArgumentException <ul>
+ *    <li>ERROR_NULL_ARGUMENT - if the runnable is null</li>
+ * </ul>
+ * @exception DWTException <ul>
+ *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
+ *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
+ * </ul>
+ *
+ * @see #asyncExec
+ */
+public void timerExec (int milliseconds, Runnable runnable) {
+    checkDevice ();
+    //TODO - remove a timer, reschedule a timer not tested
+    if (runnable is null) error (DWT.ERROR_NULL_ARGUMENT);
+    if (timerList is null) timerList = new Runnable [4];
+    if (nsTimers is null) nsTimers = new NSTimer [4];
+    int index = 0;
+    while (index < timerList.length) {
+        if (timerList [index] is runnable) break;
+        index++;
+    }
+    if (index !is timerList.length) {
+        NSTimer timer = nsTimers [index];
+        if (timer is null) {
+            timerList [index] = null;
+        } else {
+            if (milliseconds < 0) {
+                timer.invalidate();
+            timer.release();
                 timerList [index] = null;
+                nsTimers [index] = null;
             } else {
-                if (milliseconds < 0) {
-                    timer.invalidate();
-                timer.release();
-                    timerList [index] = null;
-                    nsTimers [index] = null;
-                } else {
-                    timer.setFireDate(NSDate.dateWithTimeIntervalSinceNow (milliseconds / 1000.0));
-                }
-                return;
+                timer.setFireDate(NSDate.dateWithTimeIntervalSinceNow (milliseconds / 1000.0));
             }
+            return;
         }
-        if (milliseconds < 0) return;
-        index = 0;
-        while (index < timerList.length) {
-            if (timerList [index] is null) break;
-            index++;
-        }
-        if (index is timerList.length) {
-            Runnable [] newTimerList = new Runnable [timerList.length + 4];
-            SimpleType!(Runnable).arraycopy (timerList, 0, newTimerList, 0, timerList.length);
-            timerList = newTimerList;
-            NSTimer [] newTimerIds = new NSTimer [nsTimers.length + 4];
-            System.arraycopy (nsTimers, 0, newTimerIds, 0, nsTimers.length);
-            nsTimers = newTimerIds;
-        }
-        NSNumber userInfo = NSNumber.numberWithInt(index);
-        NSTimer timer = NSTimer.scheduledTimerWithTimeInterval(milliseconds / 1000.0, timerDelegate, OS.sel_timerProc_, userInfo, false);
+    }
+    if (milliseconds < 0) return;
+    index = 0;
+    while (index < timerList.length) {
+        if (timerList [index] is null) break;
+        index++;
+    }
+    if (index is timerList.length) {
+        Runnable [] newTimerList = new Runnable [timerList.length + 4];
+        SimpleType!(Runnable).arraycopy (timerList, 0, newTimerList, 0, timerList.length);
+        timerList = newTimerList;
+        NSTimer [] newTimerIds = new NSTimer [nsTimers.length + 4];
+        System.arraycopy (nsTimers, 0, newTimerIds, 0, nsTimers.length);
+        nsTimers = newTimerIds;
+    }
+    NSNumber userInfo = NSNumber.numberWithInt(index);
+    NSTimer timer = NSTimer.scheduledTimerWithTimeInterval(milliseconds / 1000.0, timerDelegate, OS.sel_timerProc_, userInfo, false);
     NSRunLoop.currentRunLoop().addTimer(timer, OS.NSEventTrackingRunLoopMode);
-        timer.retain();
-        if (timer !is null) {
-            nsTimers [index] = timer;
-            timerList [index] = runnable;
+    timer.retain();
+    if (timer !is null) {
+        nsTimers [index] = timer;
+        timerList [index] = runnable;
+    }
+}
+
+objc.id timerProc (objc.id id, objc.SEL sel, objc.id timerID) {
+    NSTimer timer = new NSTimer (timerID);
+    NSNumber number = new NSNumber(timer.userInfo());
+    int index = number.intValue();
+    if (timerList is null) return null;
+    if (0 <= index && index < timerList.length) {
+        if (allowTimers) {
+            Runnable runnable = timerList [index];
+            timerList [index] = null;
+            nsTimers [index] = null;
+            if (runnable !is null) runnable.run ();
+        } else {
+            nsTimers [index] = null;
+            wakeThread ();
         }
     }
-
-    objc.id timerProc (objc.id id, objc.SEL sel, objc.id timerID) {
-        NSTimer timer = new NSTimer (timerID);
-        NSNumber number = new NSNumber(timer.userInfo());
-        int index = number.intValue();
-        if (timerList is null) return null;
-        if (0 <= index && index < timerList.length) {
-            if (allowTimers) {
-                Runnable runnable = timerList [index];
-                timerList [index] = null;
-                nsTimers [index] = null;
-                if (runnable !is null) runnable.run ();
-            } else {
-                nsTimers [index] = null;
-                wakeThread ();
-            }
-        }
     timer.invalidate();
-        timer.release();
-        return null;
-    }
+    timer.release();
+    return null;
+}
 
-    /**
-     * Forces all outstanding paint requests for the display
-     * to be processed before this method returns.
-     *
-     * @exception DWTException <ul>
-     *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
-     *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
-     * </ul>
-     *
-     * @see Control#update()
-     */
-    public void update () {
-        checkDevice ();
+/**
+ * Forces all outstanding paint requests for the display
+ * to be processed before this method returns.
+ *
+ * @exception DWTException <ul>
+ *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
+ *    <li>ERROR_DEVICE_DISPOSED - if the receiver has been disposed</li>
+ * </ul>
+ *
+ * @see Control#update()
+ */
+public void update () {
+    checkDevice ();
     Shell [] shells = getShells ();
     for (int i=0; i<shells.length; i++) {
         Shell shell = shells [i];
