@@ -264,7 +264,14 @@ public static GC cocoa_new(Drawable drawable, GCData data) {
     return gc;
 }
 
-objc.id applierFunc(objc.id info, objc.id elementPtr) {
+private static extern (C) void applierFuncFunc(void* info, /*const*/ CGPathElement* elementPtr)
+{
+    auto gc = cast(GC) info;
+    assert(gc !is null);
+    gc.applierFunc(info, elementPtr);
+}
+
+void applierFunc(void* info, /*const*/ CGPathElement* elementPtr) {
     OS.memmove(&element, elementPtr, CGPathElement.sizeof);
     int type = 0, length = 1;
     switch (element.type) {
@@ -283,7 +290,6 @@ objc.id applierFunc(objc.id info, objc.id elementPtr) {
     }
     typeCount++;
     count += length * 2;
-    return null;
 }
 
 NSAutoreleasePool checkGC (int mask) {
@@ -792,15 +798,15 @@ static CGMutablePathRef createCGPathRef(NSBezierPath nsPath) {
 
 
 NSBezierPath createNSBezierPath (CGMutablePathRef  cgPath) {
-    CGPathApplierFunction proc = cast(CGPathApplierFunction)&applierFunc;
+    CGPathApplierFunction proc = &applierFuncFunc;
     count = typeCount = 0;
     element = CGPathElement();
-    OS.CGPathApply(cgPath, null, proc);
+    OS.CGPathApply(cgPath, cast(void*) this, proc);
     types = new byte[typeCount];
     points = new Carbon.CGFloat [count];
     point = new Carbon.CGFloat [6];
     count = typeCount = 0;
-    OS.CGPathApply(cgPath, null, proc);
+    OS.CGPathApply(cgPath, cast(void*) this, proc);
 
     NSBezierPath bezierPath = NSBezierPath.bezierPath();
     NSPoint nsPoint = NSPoint(), nsPoint2 = NSPoint(), nsPoint3 = NSPoint();
