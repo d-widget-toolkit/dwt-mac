@@ -1006,10 +1006,10 @@ objc.id cursorSetProc (objc.id id, objc.SEL sel) {
 private static extern (C) objc.id cursorSetProcFunc (objc.id id, objc.SEL sel)
 {
     auto widget = GetWidget(id);
-    assert(widget !is null);
+    assert(widget !is null, "No DWT widget was found in the received Objective-C instance");
 
     auto display = cast(Display) widget;
-    assert(display !is null);
+    assert(display !is null, "The received DWT widget was either not a Display or null");
 
     return display.cursorSetProc(id, sel);
 }
