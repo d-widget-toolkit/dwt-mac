@@ -7,3 +7,4 @@
 - Add back Java methods for string, array and collection methods that were replaced with D equivalents @done(2012-09-13)
 - Replace "auto" with the real type @done(2012-09-13)
 - Check every usage of C memory related functions, i.e. "memcpy", "memmove", "memset", "memcmp", "memchr", "malloc", "free", "realloc", "calloc"
+- Check all methods ending with "Proc"

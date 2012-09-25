@@ -252,9 +252,6 @@ public class Display : Device {
 
     bool lockCursor = true;
     objc.IMP oldCursorSetProc;
-/+  Callback cursorSetCallback;
-+/
-
 
     /* Display Shutdown */
     Runnable [] disposeList;
@@ -791,7 +788,7 @@ void clearModal (Shell shell) {
 }
 
 void clearPool () {
-    if (sendEventCount is 0 && loopCount is poolCount - 1/+ && Callback.getEntryCount () is 0+/) {
+    if (sendEventCount is 0 && loopCount is poolCount - 1) {
         removePool ();
         addPool ();
     }
@@ -1004,6 +1001,17 @@ objc.id cursorSetProc (objc.id id, objc.SEL sel) {
     }
     oldCursorSetProc(id, sel);
     return null;
+}
+
+private static extern (C) objc.id cursorSetProcFunc (objc.id id, objc.SEL sel)
+{
+    auto widget = getWidget(id);
+    assert(widget !is null);
+
+    auto display = cast(Display) widget;
+    assert(display !is null);
+
+    return display.cursorSetProc(id, sel);
 }
 
 static void deregister (Display display) {
@@ -1988,22 +1996,15 @@ protected void init_ () {
     Carbon.CFRunLoopObserverContext context;
     context.info = cast(void*) this;
 
-    objc.IMP observerProc = cast(objc.IMP) &observerProc;
-    int activities = OS.kCFRunLoopBeforeWaiting;
-    runLoopObserver = OS.CFRunLoopObserverCreate (null, cast(Carbon.CFOptionFlags)activities, true, 0, cast(Carbon.CFRunLoopObserverCallBack)observerProc, &context);
+    Carbon.CFRunLoopObserverCallBack observerProc = &observerProcFunc;
+    Carbon.CFOptionFlags activities = OS.kCFRunLoopBeforeWaiting;
+    runLoopObserver = OS.CFRunLoopObserverCreate (null, activities, true, 0, observerProc, &context);
     if (runLoopObserver is null) error (DWT.ERROR_NO_HANDLES);
     OS.CFRunLoopAddObserver (OS.CFRunLoopGetCurrent (), runLoopObserver, cast(Carbon.CFStringRef)OS.kCFRunLoopCommonModes_);
 
-/+  cursorSetCallback = new Callback(this, "cursorSetProc", 2);
-    auto cursorSetProc = cursorSetCallback.getAddress();
-    if (cursorSetProc is null) error (DWT.ERROR_NO_MORE_CALLBACKS);
-    auto method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
-    if (method !is null) oldCursorSetProc = OS.method_setImplementation(method, cursorSetProc);
-+/
-    objc.IMP cursorSetProc = cast(objc.IMP) &cursorSetProc;
+    objc.IMP cursorSetProc = cast(objc.IMP) &cursorSetProcFunc;
     objc.Method method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
     if (method !is null) oldCursorSetProc = OS.method_setImplementation(method, cursorSetProc);
-
 
     settingsDelegate = cast(SWTWindowDelegate)(new SWTWindowDelegate()).alloc().init();
     NSNotificationCenter defaultCenter = NSNotificationCenter.defaultCenter();
@@ -2101,14 +2102,7 @@ void initClasses () {
     objc.IMP proc6 = cast(objc.IMP) &windowProc6;
     objc.IMP fieldEditorProc3 = cast(objc.IMP) &fieldEditorProc3;
     objc.IMP fieldEditorProc4 = cast(objc.IMP) &fieldEditorProc4;
-/+  auto proc3 = windowCallback3.getAddress();
-    fieldEditorCallback3 = new Callback(clazz, "fieldEditorProc", 3);
-    int /*long*/ fieldEditorProc3 = fieldEditorCallback3.getAddress();
-    if (fieldEditorProc3 is 0) error (DWT.ERROR_NO_MORE_CALLBACKS);
-    fieldEditorCallback4 = new Callback(clazz, "fieldEditorProc", 4);
-    int /*long*/ fieldEditorProc4 = fieldEditorCallback4.getAddress();
-    if (fieldEditorProc4 is 0) error (DWT.ERROR_NO_MORE_CALLBACKS);
-+/
+
     objc.IMP isFlippedProc = OS.isFlipped_CALLBACK();
     objc.IMP drawRectProc = OS.CALLBACK_drawRect_(proc3);
     objc.IMP drawInteriorWithFrameInViewProc = OS.CALLBACK_drawInteriorWithFrame_inView_ (proc4);
@@ -3153,17 +3147,22 @@ public Rectangle map (Control from, Control to, int x, int y, int width, int hei
     return rectangle;
 }
 
-private static extern (C) objc.id observerProc (Carbon.CFRunLoopObserverRef observer, Carbon.CFRunLoopActivity activity, void* info) {
-    auto display = cast(Display) info;
+void observerProc (Carbon.CFRunLoopObserverRef observer, Carbon.CFRunLoopActivity activity, void* info) {
     switch (activity) {
         case OS.kCFRunLoopBeforeWaiting:
-            if (display.runAsyncMessages_) {
-                if (display.runAsyncMessages (false)) display.wakeThread ();
+            if (runAsyncMessages_) {
+                if (runAsyncMessages (false)) display.wakeThread ();
             }
             break;
         default:
     }
-    return null;
+}
+
+private static extern (C) void observerProcFunc (Carbon.CFRunLoopObserverRef observer, Carbon.CFRunLoopActivity activity, void* info)
+{
+    auto display = cast(Display) info;
+    assert(display !is null, "The callback data is null or not a Display");
+    display.observerProc(observer, activity, info);
 }
 
 /**
@@ -3192,7 +3191,7 @@ private static extern (C) objc.id observerProc (Carbon.CFRunLoopObserverRef obse
  */
 public bool readAndDispatch () {
     checkDevice ();
-    if (sendEventCount == 0 && loopCount == poolCount - 1/+ && Callback.getEntryCount () == 0+/) removePool ();
+    if (sendEventCount == 0 && loopCount == poolCount - 1) removePool ();
     addPool ();
     loopCount++;
     bool events = false;
@@ -3214,7 +3213,7 @@ public bool readAndDispatch () {
     } finally {
         removePool ();
         loopCount--;
-        if (sendEventCount == 0 && loopCount == poolCount/+ && Callback.getEntryCount () == 0+/) addPool ();
+        if (sendEventCount == 0 && loopCount == poolCount) addPool ();
     }
     return events;
 }
@@ -3357,9 +3356,7 @@ void releaseDisplay () {
         objc.Method method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
         OS.method_setImplementation(method, oldCursorSetProc);
     }
-/+  if (cursorSetCallback !is null) cursorSetCallback.dispose();
-    cursorSetCallback = null;
-+/
+
     deadKeyState = null;
 
     if (settingsDelegate !is null) {
@@ -3413,9 +3410,6 @@ void releaseDisplay () {
         OS.CFRelease (runLoopObserver);
     }
     runLoopObserver = null;
-/+  if (observerCallback !is null) observerCallback.dispose();
-    observerCallback = null;
-+/
 }
 
 void removeContext (GCData context) {
