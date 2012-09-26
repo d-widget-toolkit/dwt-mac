@@ -1085,3 +1085,12 @@ Class Class_forName (String name)
 
    return null;
 }
+
+void println (Args ...) (Args args)
+{
+	static const format = "{}{}{}{}{}{}{}{}{}{}{}{}{}{}"
+						  "{}{}{}{}{}{}{}{}{}{}{}{}{}{}"
+						  "{}{}{}{}{}{}{}{}{}{}{}{}{}{}";
+
+	Stdout.formatln(format[0 .. Args.length * 2], args);
+}

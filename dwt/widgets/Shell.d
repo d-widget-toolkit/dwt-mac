@@ -1875,6 +1875,7 @@ void windowSendEvent (objc.id id, objc.SEL sel, objc.id event) {
                 }
             }
             break;
+        default:
     }
     super.windowSendEvent (id, sel, event);
 }

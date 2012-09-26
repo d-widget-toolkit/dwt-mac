@@ -4399,12 +4399,10 @@ void applicationSendEvent (objc.id id, objc.SEL sel, objc.id event) {
                         NSPoint pt = window.convertBaseToScreen(nsEvent.locationInWindow());
                         if (OS.NSPointInRect(pt, rect)) beep ();
                     }
+                    return;
                 }
-                NSRect rect = window.contentRectForFrameRect(window.frame());
-                NSPoint pt = window.convertBaseToScreen(nsEvent.locationInWindow());
-                if (OS.NSPointInRect(pt, rect)) beep ();
             }
-            return;
+            break;
         }
     default:
     }
@@ -4425,7 +4423,12 @@ void applicationSendEvent (objc.id id, objc.SEL sel, objc.id event) {
     if (window !is null && window.isKeyWindow() && nsEvent.type() is OS.NSKeyUp && (nsEvent.modifierFlags() & OS.NSCommandKeyMask) !is 0)   {
         window.sendEvent(nsEvent);
     } else {
+        objc.objc_super super_struct = objc.objc_super ();
+        super_struct.receiver = id;
+        super_struct.super_class = cast(objc.Class) OS.objc_msgSend (id, OS.sel_superclass);
+        OS.objc_msgSendSuper (&super_struct, sel, event);
     }
+    sendEvent_ = false;
 }
 
 void applicationWillFinishLaunching (objc.id id, objc.SEL sel, objc.id notification) {
