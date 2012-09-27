@@ -1819,12 +1819,6 @@ void windowSendEvent (objc.id id, objc.SEL sel, objc.id event) {
     NSEvent nsEvent = new NSEvent (event);
     NSEventType type = nsEvent.type ();
     switch (type) {
-        case OS.NSLeftMouseDown:
-        case OS.NSRightMouseDown:
-        case OS.NSOtherMouseDown:
-            display.clickCount = cast(int)(display.clickCountButton == nsEvent.buttonNumber() ? nsEvent.clickCount() : 1);
-            display.clickCountButton = cast(int)nsEvent.buttonNumber();
-            break;
         case OS.NSLeftMouseUp:
         case OS.NSRightMouseUp:
         case OS.NSOtherMouseUp:

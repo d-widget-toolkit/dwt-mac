@@ -5,7 +5,7 @@ if [[ -s "$HOME/.dvm/scripts/dvm" ]] ; then
 	dvm use 1.072
 fi
 
-rdmd --build-only -ofmain -L-framework -LCocoa -L-framework -LCarbon -Jres main.d
+rdmd --build-only -g -debug -ofmain -L-framework -LCocoa -L-framework -LCarbon -Jres main.d
 
 # dmd -c -Jres dwt/accessibility/ACC.d \
 # dwt/accessibility/Accessible.d \
