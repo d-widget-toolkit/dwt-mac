@@ -4370,41 +4370,41 @@ void applicationSendEvent (objc.id id, objc.SEL sel, objc.id event) {
     NSEventType type = nsEvent.type ();
     bool down = false;
     switch (type) {
-    case OS.NSLeftMouseDown:
-    case OS.NSRightMouseDown:
-    case OS.NSOtherMouseDown:
-        down = true;
-    case OS.NSLeftMouseUp:
-    case OS.NSRightMouseUp:
-    case OS.NSOtherMouseUp:
-    case OS.NSLeftMouseDragged:
-    case OS.NSRightMouseDragged:
-    case OS.NSOtherMouseDragged:
-    case OS.NSMouseMoved:
-    case OS.NSMouseEntered:
-    case OS.NSMouseExited:
-    case OS.NSKeyDown:
-    case OS.NSKeyUp:
-    case OS.NSScrollWheel:
-        if (window !is null) {
-            Shell shell = cast(Shell) getWidget (window.id);
-            if (shell !is null) {
-                Shell modalShell = shell.getModalShell ();
-                if (modalShell !is null) {
-                    if (down) {
-                        if (!application.isActive()) {
-                            application.activateIgnoringOtherApps(true);
+        case OS.NSLeftMouseDown:
+        case OS.NSRightMouseDown:
+        case OS.NSOtherMouseDown:
+            down = true;
+        case OS.NSLeftMouseUp:
+        case OS.NSRightMouseUp:
+        case OS.NSOtherMouseUp:
+        case OS.NSLeftMouseDragged:
+        case OS.NSRightMouseDragged:
+        case OS.NSOtherMouseDragged:
+        case OS.NSMouseMoved:
+        case OS.NSMouseEntered:
+        case OS.NSMouseExited:
+        case OS.NSKeyDown:
+        case OS.NSKeyUp:
+        case OS.NSScrollWheel:
+            if (window !is null) {
+                Shell shell = cast(Shell) getWidget (window.id);
+                if (shell !is null) {
+                    Shell modalShell = shell.getModalShell ();
+                    if (modalShell !is null) {
+                        if (down) {
+                            if (!application.isActive()) {
+                                application.activateIgnoringOtherApps(true);
+                            }
+                            NSRect rect = window.contentRectForFrameRect(window.frame());
+                            NSPoint pt = window.convertBaseToScreen(nsEvent.locationInWindow());
+                            if (OS.NSPointInRect(pt, rect)) beep ();
                         }
-                        NSRect rect = window.contentRectForFrameRect(window.frame());
-                        NSPoint pt = window.convertBaseToScreen(nsEvent.locationInWindow());
-                        if (OS.NSPointInRect(pt, rect)) beep ();
+                        return;
                     }
-                    return;
                 }
+                break;
             }
-            break;
-        }
-    default:
+        default:
     }
     sendEvent_ = true;
 
