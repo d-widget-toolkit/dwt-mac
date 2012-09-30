@@ -548,7 +548,7 @@ void addPool (NSAutoreleasePool pool) {
     }
     if (poolCount is 0) {
         NSMutableDictionary dictionary = NSThread.currentThread().threadDictionary();
-        dictionary.setObject(NSNumber.numberWithInteger(cast(int)pool.id), NSString.stringWith("DWT_NSAutoreleasePool"));
+        dictionary.setObject(NSNumber.numberWithInteger(cast(int)pool.id), NSString.stringWith("SWT_NSAutoreleasePool"));
     }
     pools [poolCount++] = pool;
 }
@@ -3525,7 +3525,7 @@ void removePool () {
     pools [--poolCount] = null;
     if (poolCount is 0) {
         NSMutableDictionary dictionary = NSThread.currentThread().threadDictionary();
-        dictionary.removeObjectForKey(NSString.stringWith("DWT_NSAutoreleasePool"));
+        dictionary.removeObjectForKey(NSString.stringWith("SWT_NSAutoreleasePool"));
     }
     pool.release ();
 }
@@ -4353,24 +4353,24 @@ void applicationSendTrackingEvent (NSEvent nsEvent, Control trackingControl) {
     switch (type) {
         case OS.NSLeftMouseDown:
         case OS.NSRightMouseDown:
-    case OS.NSOtherMouseDown:
-        trackingControl.sendMouseEvent (nsEvent, DWT.MouseDown, true);
+        case OS.NSOtherMouseDown:
+            trackingControl.sendMouseEvent (nsEvent, DWT.MouseDown, true);
             break;
         case OS.NSLeftMouseUp:
         case OS.NSRightMouseUp:
-    case OS.NSOtherMouseUp:
-        checkEnterExit (findControl (true), nsEvent, true);
-        if (trackingControl.isDisposed()) return;
-        trackingControl.sendMouseEvent (nsEvent, DWT.MouseUp, true);
-        break;
+        case OS.NSOtherMouseUp:
+            checkEnterExit (findControl (true), nsEvent, true);
+            if (trackingControl.isDisposed()) return;
+            trackingControl.sendMouseEvent (nsEvent, DWT.MouseUp, true);
+            break;
         case OS.NSLeftMouseDragged:
         case OS.NSRightMouseDragged:
         case OS.NSOtherMouseDragged:
-        checkEnterExit (trackingControl, nsEvent, true);
-        if (trackingControl.isDisposed()) return;
-        //FALL THROUGH
-    case OS.NSMouseMoved:
-        trackingControl.sendMouseEvent (nsEvent, DWT.MouseMove, true);
+            checkEnterExit (trackingControl, nsEvent, true);
+            if (trackingControl.isDisposed()) return;
+            //FALL THROUGH
+        case OS.NSMouseMoved:
+            trackingControl.sendMouseEvent (nsEvent, DWT.MouseMove, true);
             break;
     default:
     }
@@ -4539,16 +4539,12 @@ static objc.id applicationProc3(objc.id id, objc.SEL sel, objc.id arg0) {
     return null;
 }
 
-static objc.id applicationProc6(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2, bool arg3) {
+static objc.id applicationProc6(objc.id id, objc.SEL sel, NSUInteger arg0, objc.id arg1, objc.id arg2, bool arg3) {
     //TODO optimize getting the display
     Display display = getCurrent ();
     if (display is null) return null;
     if (sel is OS.sel_nextEventMatchingMask_untilDate_inMode_dequeue_) {
-        return display.applicationNextEventMatchingMask(id, sel, cast(NSUInteger) arg0, arg1, arg2, arg3);
-    } else if (sel is OS.sel_applicationDidBecomeActive_) {
-        display.applicationDidBecomeActive(id, sel, arg0);
-    } else if (sel is OS.sel_applicationDidResignActive_) {
-        display.applicationDidResignActive(id, sel, arg0);
+        return display.applicationNextEventMatchingMask(id, sel, arg0, arg1, arg2, arg3);
     }
     return null;
 }
