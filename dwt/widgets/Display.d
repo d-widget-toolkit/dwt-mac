@@ -893,15 +893,15 @@ void createDisplay (DeviceData data) {
             objc.IMP proc3 = cast(objc.IMP) &applicationProc3;
             objc.IMP proc6 = cast(objc.IMP) &applicationProc6;
             cls = OS.objc_allocateClassPair(OS.class_NSApplication, className, 0);
-            OS.class_addMethod(cls, OS.sel_registerName("sendEvent:"), proc3, "@:@");
+            OS.class_addMethod(cls, OS.sel_registerName("sendEvent:"), proc3, "@:@@");
 
             static if ((void*).sizeof > int.sizeof) // 64bit target
-                OS.class_addMethod(cls, OS.sel_nextEventMatchingMask_untilDate_inMode_dequeue_, proc6, "@:Q@@B");
+                OS.class_addMethod(cls, OS.sel_nextEventMatchingMask_untilDate_inMode_dequeue_, proc6, "@@:Q@@c");
             else
-                OS.class_addMethod(cls, OS.sel_nextEventMatchingMask_untilDate_inMode_dequeue_, proc6, "@:I@@B");
+                OS.class_addMethod(cls, OS.sel_nextEventMatchingMask_untilDate_inMode_dequeue_, proc6, "@@:I@@c");
 
-            OS.class_addMethod(cls, OS.sel_isRunning, proc2, "@:");
-            OS.class_addMethod(cls, OS.sel_finishLaunching, proc2, "@:");
+            OS.class_addMethod(cls, OS.sel_isRunning, proc2, "c@:");
+            OS.class_addMethod(cls, OS.sel_finishLaunching, proc2, "v@:");
             OS.objc_registerClassPair(cls);
         }
         applicationClass = OS.object_setClass(application.id, cls);
@@ -4322,14 +4322,14 @@ void applicationDidResignActive (objc.id id, objc.SEL sel, objc.id notification)
     checkEnterExit(null, null, false);
 }
 
-objc.id applicationNextEventMatchingMask (objc.id id, objc.SEL sel, objc.id mask, objc.id expiration, objc.id mode, objc.id dequeue) {
-    if (dequeue !is null && trackingControl !is null && !trackingControl.isDisposed()) runDeferredEvents();
+objc.id applicationNextEventMatchingMask (objc.id id, objc.SEL sel, NSUInteger mask, objc.id expiration, objc.id mode, bool dequeue) {
+    if (dequeue !is 0 && trackingControl !is null && !trackingControl.isDisposed()) runDeferredEvents();
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
-    objc.id result = OS.objc_msgSendSuper(&super_struct, sel, mask, expiration, mode, dequeue !is null);
+    objc.id result = OS.objc_msgSendSuper(&super_struct, sel, mask, expiration, mode, dequeue !is 0);
     if (result !is null) {
-        if (dequeue !is null && trackingControl !is null && !trackingControl.isDisposed()) {
+        if (dequeue !is 0 && trackingControl !is null && !trackingControl.isDisposed()) {
             applicationSendTrackingEvent(new NSEvent(result), trackingControl);
         }
     }
@@ -4402,8 +4402,8 @@ void applicationSendEvent (objc.id id, objc.SEL sel, objc.id event) {
                         return;
                     }
                 }
-                break;
             }
+            break;
         default:
     }
     sendEvent_ = true;
@@ -4527,12 +4527,12 @@ static objc.id applicationProc3(objc.id id, objc.SEL sel, objc.id arg0) {
     return null;
 }
 
-static objc.id applicationProc6(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2, objc.id arg3) {
+static objc.id applicationProc6(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2, bool arg3) {
     //TODO optimize getting the display
     Display display = getCurrent ();
     if (display is null) return null;
     if (sel is OS.sel_nextEventMatchingMask_untilDate_inMode_dequeue_) {
-        return display.applicationNextEventMatchingMask(id, sel, arg0, arg1, arg2, arg3);
+        return display.applicationNextEventMatchingMask(id, sel, cast(NSUInteger) arg0, arg1, arg2, arg3);
     } else if (sel is OS.sel_applicationDidBecomeActive_) {
         display.applicationDidBecomeActive(id, sel, arg0);
     } else if (sel is OS.sel_applicationDidResignActive_) {
@@ -4785,6 +4785,7 @@ static objc.id windowProc3(objc.id id, objc.SEL sel, objc.id arg0) {
         return null;
     }
     Widget widget = GetWidget(id);
+    if (widget is null) return null;
     if (sel is OS.sel_windowWillClose_) {
         widget.windowWillClose(id, sel, arg0);
     } else if (sel is OS.sel_drawRect_) {
