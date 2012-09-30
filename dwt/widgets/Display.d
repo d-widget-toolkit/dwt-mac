@@ -912,15 +912,15 @@ void createDisplay (DeviceData data) {
         objc.IMP appProc3 = cast(objc.IMP) &applicationProc3;
         if (appProc3 is null) error (DWT.ERROR_NO_MORE_CALLBACKS);
         objc.Class cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
-        OS.class_addMethod(cls, OS.sel_applicationWillFinishLaunching_, appProc3, "@:@");
-        OS.class_addMethod(cls, OS.sel_terminate_, appProc3, "@:@");
+        OS.class_addMethod(cls, OS.sel_applicationWillFinishLaunching_, appProc3, "v:@");
+        OS.class_addMethod(cls, OS.sel_terminate_, appProc3, "v:@");
         OS.class_addMethod(cls, OS.sel_quitRequested_, appProc3, "@:@");
-        OS.class_addMethod(cls, OS.sel_orderFrontStandardAboutPanel_, appProc3, "@:@");
-        OS.class_addMethod(cls, OS.sel_hideOtherApplications_, appProc3, "@:@");
-        OS.class_addMethod(cls, OS.sel_hide_, appProc3, "@:@");
-        OS.class_addMethod(cls, OS.sel_unhideAllApplications_, appProc3, "@:@");
-        OS.class_addMethod(cls, OS.sel_applicationDidBecomeActive_, appProc3, "@:@");
-        OS.class_addMethod(cls, OS.sel_applicationDidResignActive_, appProc3, "@:@");
+        OS.class_addMethod(cls, OS.sel_orderFrontStandardAboutPanel_, appProc3, "v:@");
+        OS.class_addMethod(cls, OS.sel_hideOtherApplications_, appProc3, "v:@");
+        OS.class_addMethod(cls, OS.sel_hide_, appProc3, "v:@");
+        OS.class_addMethod(cls, OS.sel_unhideAllApplications_, appProc3, "v:@");
+        OS.class_addMethod(cls, OS.sel_applicationDidBecomeActive_, appProc3, "v:@");
+        OS.class_addMethod(cls, OS.sel_applicationDidResignActive_, appProc3, "v:@");
         OS.objc_registerClassPair(cls);
     }
     if (applicationDelegate is null) {
