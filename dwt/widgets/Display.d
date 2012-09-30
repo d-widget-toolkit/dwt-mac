@@ -380,6 +380,8 @@ public class Display : Device {
     String [] keys;
     Object [] values;
 
+    private static bool runShutdownHook;
+
     /*
      * TEMPORARY CODE.  Install the runnable that
      * gets the current display. This code will
@@ -905,27 +907,27 @@ void createDisplay (DeviceData data) {
             OS.objc_registerClassPair(cls);
         }
         applicationClass = OS.object_setClass(application.id, cls);
-    }
 
-    String className = "SWTApplicationDelegate";
-    if (OS.objc_lookUpClass (className) is null) {
-        objc.IMP appProc3 = cast(objc.IMP) &applicationProc3;
-        if (appProc3 is null) error (DWT.ERROR_NO_MORE_CALLBACKS);
-        objc.Class cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
-        OS.class_addMethod(cls, OS.sel_applicationWillFinishLaunching_, appProc3, "v:@");
-        OS.class_addMethod(cls, OS.sel_terminate_, appProc3, "v:@");
-        OS.class_addMethod(cls, OS.sel_quitRequested_, appProc3, "@:@");
-        OS.class_addMethod(cls, OS.sel_orderFrontStandardAboutPanel_, appProc3, "v:@");
-        OS.class_addMethod(cls, OS.sel_hideOtherApplications_, appProc3, "v:@");
-        OS.class_addMethod(cls, OS.sel_hide_, appProc3, "v:@");
-        OS.class_addMethod(cls, OS.sel_unhideAllApplications_, appProc3, "v:@");
-        OS.class_addMethod(cls, OS.sel_applicationDidBecomeActive_, appProc3, "v:@");
-        OS.class_addMethod(cls, OS.sel_applicationDidResignActive_, appProc3, "v:@");
-        OS.objc_registerClassPair(cls);
-    }
-    if (applicationDelegate is null) {
-        applicationDelegate = cast(SWTApplicationDelegate)(new SWTApplicationDelegate()).alloc().init();
-        application.setDelegate(applicationDelegate);
+        className = "SWTApplicationDelegate";
+        if (OS.objc_lookUpClass (className) is null) {
+            objc.IMP appProc3 = cast(objc.IMP) &applicationProc3;
+            if (appProc3 is null) error (DWT.ERROR_NO_MORE_CALLBACKS);
+            cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
+            OS.class_addMethod(cls, OS.sel_applicationWillFinishLaunching_, appProc3, "v:@");
+            OS.class_addMethod(cls, OS.sel_terminate_, appProc3, "v:@");
+            OS.class_addMethod(cls, OS.sel_quitRequested_, appProc3, "@:@");
+            OS.class_addMethod(cls, OS.sel_orderFrontStandardAboutPanel_, appProc3, "v:@");
+            OS.class_addMethod(cls, OS.sel_hideOtherApplications_, appProc3, "v:@");
+            OS.class_addMethod(cls, OS.sel_hide_, appProc3, "v:@");
+            OS.class_addMethod(cls, OS.sel_unhideAllApplications_, appProc3, "v:@");
+            OS.class_addMethod(cls, OS.sel_applicationDidBecomeActive_, appProc3, "v:@");
+            OS.class_addMethod(cls, OS.sel_applicationDidResignActive_, appProc3, "v:@");
+            OS.objc_registerClassPair(cls);
+        }
+        if (applicationDelegate is null) {
+            applicationDelegate = cast(SWTApplicationDelegate)(new SWTApplicationDelegate()).alloc().init();
+            application.setDelegate(applicationDelegate);
+        }
     } else {
         isEmbedded = true;
     }
@@ -1554,8 +1556,8 @@ public Point [] getIconSizes () {
 }
 
 int getLastEventTime () {
-NSEvent event = application.currentEvent();
-return event !is null ? cast(int)(event.timestamp() * 1000) : 0;
+    NSEvent event = application.currentEvent();
+    return event !is null ? cast(int)(event.timestamp() * 1000) : 0;
 }
 
 Menu [] getMenus (Decorations shell) {
@@ -1671,7 +1673,7 @@ public Shell [] getShells () {
 }
 
 static bool getSheetEnabled () {
-    return !"false".equals(System.getProperty("dwt.sheet"));
+    return !"false".equals(System.getProperty("org.eclipse.swt.sheet"));
 }
 
 /**
@@ -1733,7 +1735,7 @@ public Thread getSyncThread () {
  * @see DWT
  */
 public Color getSystemColor (int id) {
-       checkDevice ();
+    checkDevice ();
     Color color = getWidgetColor (id);
     if (color !is null) return color;
     return super.getSystemColor (id);
@@ -1747,37 +1749,37 @@ Color getWidgetColor (int id) {
 }
 
 Carbon.CGFloat [] getWidgetColorRGB (int id) {
-        NSColor color = null;
-        switch (id) {
+    NSColor color = null;
+    switch (id) {
         case DWT.COLOR_INFO_FOREGROUND: color = NSColor.blackColor (); break;
-        	case DWT.COLOR_INFO_BACKGROUND: return cast(Carbon.CGFloat[]) [0xFF / 255f, 0xFF / 255f, 0xE1 / 255f, 1];
-            case DWT.COLOR_TITLE_FOREGROUND: color = NSColor.windowFrameTextColor(); break;
+        case DWT.COLOR_INFO_BACKGROUND: return cast(Carbon.CGFloat[]) [0xFF / 255f, 0xFF / 255f, 0xE1 / 255f, 1];
+        case DWT.COLOR_TITLE_FOREGROUND: color = NSColor.windowFrameTextColor(); break;
         case DWT.COLOR_TITLE_BACKGROUND: color = NSColor.alternateSelectedControlColor(); break;
         case DWT.COLOR_TITLE_BACKGROUND_GRADIENT: color = NSColor.selectedControlColor(); break;
-            case DWT.COLOR_TITLE_INACTIVE_FOREGROUND: color = NSColor.disabledControlTextColor();  break;
-            case DWT.COLOR_TITLE_INACTIVE_BACKGROUND: color = NSColor.secondarySelectedControlColor(); break;
-            case DWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT: color = NSColor.secondarySelectedControlColor(); break;
-            case DWT.COLOR_WIDGET_DARK_SHADOW: color = NSColor.controlDarkShadowColor(); break;
-            case DWT.COLOR_WIDGET_NORMAL_SHADOW: color = NSColor.controlShadowColor(); break;
-            case DWT.COLOR_WIDGET_LIGHT_SHADOW: color = NSColor.controlHighlightColor(); break;
-            case DWT.COLOR_WIDGET_HIGHLIGHT_SHADOW: color = NSColor.controlLightHighlightColor(); break;
-            case DWT.COLOR_WIDGET_BACKGROUND: color = NSColor.controlHighlightColor(); break;
-            case DWT.COLOR_WIDGET_FOREGROUND: color = NSColor.controlTextColor(); break;
+        case DWT.COLOR_TITLE_INACTIVE_FOREGROUND: color = NSColor.disabledControlTextColor();  break;
+        case DWT.COLOR_TITLE_INACTIVE_BACKGROUND: color = NSColor.secondarySelectedControlColor(); break;
+        case DWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT: color = NSColor.secondarySelectedControlColor(); break;
+        case DWT.COLOR_WIDGET_DARK_SHADOW: color = NSColor.controlDarkShadowColor(); break;
+        case DWT.COLOR_WIDGET_NORMAL_SHADOW: color = NSColor.controlShadowColor(); break;
+        case DWT.COLOR_WIDGET_LIGHT_SHADOW: color = NSColor.controlHighlightColor(); break;
+        case DWT.COLOR_WIDGET_HIGHLIGHT_SHADOW: color = NSColor.controlLightHighlightColor(); break;
+        case DWT.COLOR_WIDGET_BACKGROUND: color = NSColor.controlHighlightColor(); break;
+        case DWT.COLOR_WIDGET_FOREGROUND: color = NSColor.controlTextColor(); break;
         case DWT.COLOR_WIDGET_BORDER: color = NSColor.blackColor (); break;
-            case DWT.COLOR_LIST_FOREGROUND: color = NSColor.textColor(); break;
-            case DWT.COLOR_LIST_BACKGROUND: color = NSColor.textBackgroundColor(); break;
-            case DWT.COLOR_LIST_SELECTION_TEXT: color = NSColor.selectedTextColor(); break;
-            case DWT.COLOR_LIST_SELECTION: color = NSColor.selectedTextBackgroundColor(); break;
-        }
+        case DWT.COLOR_LIST_FOREGROUND: color = NSColor.textColor(); break;
+        case DWT.COLOR_LIST_BACKGROUND: color = NSColor.textBackgroundColor(); break;
+        case DWT.COLOR_LIST_SELECTION_TEXT: color = NSColor.selectedTextColor(); break;
+        case DWT.COLOR_LIST_SELECTION: color = NSColor.selectedTextBackgroundColor(); break;
+    }
     return getWidgetColorRGB (color);
 }
 
 Carbon.CGFloat [] getWidgetColorRGB (NSColor color) {
     if (color is null) return null;
-        color = color.colorUsingColorSpace(NSColorSpace.deviceRGBColorSpace());
+    color = color.colorUsingColorSpace(NSColorSpace.deviceRGBColorSpace());
     if (color is null) return null;
-        Carbon.CGFloat[] components = new Carbon.CGFloat[color.numberOfComponents()];
-        color.getComponents(components.ptr);
+    Carbon.CGFloat[] components = new Carbon.CGFloat[color.numberOfComponents()];
+    color.getComponents(components.ptr);
     return [components[0], components[1], components[2], components[3]];
 }
 
@@ -1986,12 +1988,8 @@ protected void init_ () {
             Display.launched = true;
 
             /* TODO: only add the shutdown hook once */
-/+          Runtime.getRuntime().addShutdownHook(new class() Thread {
-                public void run() {
-                    NSApplication.sharedApplication().terminate(null);
-                }
-            });
-+/      }
+            runShutdownHook = true;
+        }
     }
 
     Carbon.CFRunLoopObserverContext context;
@@ -2020,6 +2018,12 @@ protected void init_ () {
 
     isPainting = cast(NSMutableArray)(new NSMutableArray()).alloc();
     isPainting = isPainting.initWithCapacity(12);
+}
+
+static ~this ()
+{
+    if (runShutdownHook)
+        NSApplication.sharedApplication().terminate(null);
 }
 
 void addEventMethods (objc.Class cls, objc.IMP proc2, objc.IMP proc3, objc.IMP drawRectProc, objc.IMP hitTestProc, objc.IMP needsDisplayInRectProc) {

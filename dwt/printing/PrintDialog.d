@@ -260,7 +260,7 @@ public int getScope() {
 }
 
 static bool getSheetEnabled () {
-    return !"false".equals(System.getProperty("dwt.sheet"));
+    return !"false".equals(System.getProperty("org.eclipse.swt.sheet"));
 }
 
 private extern(C) static objc.id dialogProc(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2) {
