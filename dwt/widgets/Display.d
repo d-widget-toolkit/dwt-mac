@@ -3676,7 +3676,7 @@ static NSString getAppName() {
             name = new NSString(value);
         }
     }
-    if (name is null) name = NSString.stringWith("DWT");
+    if (name is null) name = NSString.stringWith("SWT");
     return name;
 }
 
