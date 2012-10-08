@@ -3390,27 +3390,6 @@ void releaseDisplay () {
 
     // The autorelease pool is cleaned up when we call NSApplication.terminate().
 
-    deadKeyState = null;
-
-    if (settingsDelegate !is null) {
-        NSNotificationCenter.defaultCenter().removeObserver(settingsDelegate);
-        settingsDelegate.release();
-    }
-    settingsDelegate = null;
-
-    // Clear the menu bar if we created it.
-    if (!isEmbedded) {
-        //remove all existing menu items except the application menu
-        NSMenu menubar = application.mainMenu();
-        NSInteger count = menubar.numberOfItems();
-        while (count > 1) {
-            menubar.removeItemAtIndex(count - 1);
-            count--;
-        }
-    }
-
-    // The autorelease pool is cleaned up when we call NSApplication.terminate().
-
     if (application !is null && applicationClass !is null) {
         OS.object_setClass (application.id, applicationClass);
     }
