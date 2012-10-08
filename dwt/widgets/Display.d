@@ -350,7 +350,7 @@ public class Display : Device {
                                  ];
 
     static String APP_NAME;
-    static const String ADD_WIDGET_KEY = "dwt.internal.addWidget";
+    static const String ADD_WIDGET_KEY = "org.eclipse.swt.internal.addWidget";
     static const char[] SWT_OBJECT = ['S', 'W', 'T', '_', 'O', 'B', 'J', 'E', 'C', 'T', '\0'];
     static const char[] SWT_IMAGE = ['S', 'W', 'T', '_', 'I', 'M', 'A', 'G', 'E', '\0'];
     static const char[] SWT_ROW = ['S', 'W', 'T', '_', 'R', 'O', 'W', '\0'];
