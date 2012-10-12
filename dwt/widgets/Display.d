@@ -896,7 +896,7 @@ void createDisplay (DeviceData data) {
             objc.IMP proc3 = cast(objc.IMP) &applicationProc3;
             objc.IMP proc6 = cast(objc.IMP) &applicationProc6;
             cls = OS.objc_allocateClassPair(OS.class_NSApplication, className, 0);
-            OS.class_addMethod(cls, OS.sel_registerName("sendEvent:"), proc3, "@:@@");
+            OS.class_addMethod(cls, OS.sel_sendEvent_, proc3, "@:@@");
 
             static if ((void*).sizeof > int.sizeof) // 64bit target
                 OS.class_addMethod(cls, OS.sel_nextEventMatchingMask_untilDate_inMode_dequeue_, proc6, "@@:Q@@c");
