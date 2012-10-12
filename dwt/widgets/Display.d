@@ -1002,7 +1002,7 @@ objc.id cursorSetProc (objc.id id, objc.SEL sel) {
             if (cursor !is null && cursor.handle.id !is id) return null;
         }
     }
-    oldCursorSetProc(id, sel);
+    OS.call (oldCursorSetProc, id, sel);
     return null;
 }
 

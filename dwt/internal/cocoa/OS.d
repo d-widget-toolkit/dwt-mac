@@ -230,10 +230,11 @@ alias Carbon.CancelMenuTracking CancelMenuTracking;
 
 alias unistd.getpid getpid;
 
-void call (objc.IMP func, objc.id id, objc.SEL sel)
+static void call (objc.IMP func, objc.id id, objc.SEL sel)
 {
     // ((void (*)())arg0)(arg1, arg2);
-    func(id, sel);
+    alias extern (C) void function (objc.id, objc.SEL) Fp;
+    (cast(Fp) func)(id, sel);
 }
 
 /** @method flags=no_gen */
