@@ -180,9 +180,9 @@ Class objc_lookUpClass (String name)
     return bindings.objc_lookUpClass(name.toStringz());
 }
 
-SEL object_getClassName (id obj)
+String object_getClassName (id obj)
 {
-    return bindings.object_getClassName(obj);
+    return fromStringz(bindings.object_getClassName(obj));
 }
 
 Ivar object_getInstanceVariable (id obj, String name, out void* outValue)
