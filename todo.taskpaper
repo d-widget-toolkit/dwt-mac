@@ -1,5 +1,5 @@
-- Replace "int /*long*/" with the real type
-- Replace "float /*double*/" with the real type
+- Replace "int /*long*/" with the real type @done(2012-11-27)
+- Replace "float /*double*/" with the real type @done(2012-11-27)
 - Check the "CGDisplayBounds" function
 - Check the os_custom.c file @done(2012-09-23)
 - Check the "NSIntersectionRect" function
