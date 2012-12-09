@@ -25,3 +25,8 @@ Snippets:
 		- Snippet 133 @runs
 		- Snippet 132 @runs
 		- Snippet 136 @runs
+		- Snippet 14 @runs on right click tango.core.Exception.SwitchException@dwt.widgets.Control(2206) No appropriate switch clause found
+		- Snippet 140 @bus_error
+		- Snippet 142 @segmentation_fault
+		- Snippet 143 @runs
+		- Snippet 144 @segmentation_fault
