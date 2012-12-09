@@ -12,8 +12,16 @@ Todo:
 Snippets:
 	Not Working:
 		- Snippet 10 - IllegalArgumentException
-		- Snippet 107 - [NSCursor length]: unrecognized selector
-		- Snippet 108 - [__NSArrayI accessibilityAttributeNames]: unrecognized selector
-		- Snippet 109 - Bus error
+		- Snippet 107 - [NSCursor length]: @unrecognized_selector
+		- Snippet 108 - [__NSArrayI accessibilityAttributeNames]: @unrecognized_selector
+		- Snippet 109 - @bus_error
 		- Snippet 111 @runs
-		- Snippet 115 - [__NSDictionaryM length]: unrecognized selector
+		- Snippet 115 - [__NSDictionaryM length]: @unrecognized_selector
+		- Snippet 118 @runs on right click tango.core.Exception.SwitchException@dwt.widgets.Control(2206) No appropriate switch clause found
+		- Snippet 119 @segmentation_fault
+		- Snippet 122 @runs on quit dwt.DWTException.DWTException: Device is disposed
+		- Snippet 127 @segmentation_fault
+		- Snippet 132 - Floating point exception: 8
+		- Snippet 133 @runs
+		- Snippet 132 @runs
+		- Snippet 136 @runs
