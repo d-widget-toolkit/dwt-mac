@@ -1,10 +1,19 @@
-- Replace "int /*long*/" with the real type @done(2012-11-27)
-- Replace "float /*double*/" with the real type @done(2012-11-27)
-- Check the "CGDisplayBounds" function
-- Check the os_custom.c file @done(2012-09-23)
-- Check the "NSIntersectionRect" function
-- Check the "accessibilityActionNames" and "internal_accessibilityActioregionToRectsnNames" method methods
-- Add back Java methods for string, array and collection methods that were replaced with D equivalents @done(2012-09-13)
-- Replace "auto" with the real type @done(2012-09-13)
-- Check every usage of C memory related functions, i.e. "memcpy", "memmove", "memset", "memcmp", "memchr", "malloc", "free", "realloc", "calloc"
-- Check all methods ending with "Proc" @done(2012-09-25)
+Todo:
+	- Replace "int /*long*/" with the real type @done(2012-11-27)
+	- Replace "float /*double*/" with the real type @done(2012-11-27)
+	- Check the "CGDisplayBounds" function
+	- Check the os_custom.c file @done(2012-09-23)
+	- Check the "NSIntersectionRect" function
+	- Check the "accessibilityActionNames" and "internal_accessibilityActioregionToRectsnNames" method methods
+	- Add back Java methods for string, array and collection methods that were replaced with D equivalents @done(2012-09-13)
+	- Replace "auto" with the real type @done(2012-09-13)
+	- Check every usage of C memory related functions, i.e. "memcpy", "memmove", "memset", "memcmp", "memchr", "malloc", "free", "realloc", "calloc"
+	- Check all methods ending with "Proc" @done(2012-09-25)
+Snippets:
+	Not Working:
+		- Snippet 10 - IllegalArgumentException
+		- Snippet 107 - [NSCursor length]: unrecognized selector
+		- Snippet 108 - [__NSArrayI accessibilityAttributeNames]: unrecognized selector
+		- Snippet 109 - Bus error
+		- Snippet 111 @runs
+		- Snippet 115 - [__NSDictionaryM length]: unrecognized selector

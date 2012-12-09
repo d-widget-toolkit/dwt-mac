@@ -2,3 +2,5 @@
 *.orig
 *.o
 *.a
+main.d
+main
