@@ -74,6 +74,15 @@ public NSString initWithCharacters(/*const*/wchar* characters, NSUInteger length
     return result is this.id ? this : (result !is null ? new NSString(result) : null);
 }
 
+public NSString initWithBytes (/*const*/ void* bytes, NSUInteger length, NSStringEncoding encoding) {
+    objc.id result = OS.objc_msgSend(this.id, OS.sel_initWithBytes_length_encoding_, bytes, length, encoding);
+    return result is this.id ? this : (result !is null ? new NSString(result) : null);
+}
+
+public NSString initWithString (String str) {
+    return initWithBytes(str.ptr, str.length, OS.NSUTF8StringEncoding);
+}
+
 public bool isEqualToString(NSString aString) {
     return OS.objc_msgSend_bool(this.id, OS.sel_isEqualToString_, aString !is null ? aString.id : null);
 }

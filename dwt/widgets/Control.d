@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -901,11 +901,11 @@ NSAttributedString createString (String string, Font font, Cocoa.CGFloat [] fore
         dict.setObject (paragraphStyle, OS.NSParagraphStyleAttributeName);
         paragraphStyle.release ();
     }
-    int length = string.length;
-    char [] chars = new char [length];
+    size_t len = string.length;
+    char [] chars = new char [len];
     string.getChars (0, chars.length, chars, 0);
-    if (mnemonics) length = fixMnemonic (chars);
-    NSString str = NSString.stringWith(chars[0 .. length]);
+    if (mnemonics) len = fixMnemonic (chars);
+    NSString str = (cast(NSString) (new NSString()).alloc()).initWithString(chars[0 .. len]);
     NSAttributedString attribStr = (cast(NSAttributedString) (new NSAttributedString ()).alloc ()).initWithString (str, dict);
     str.release();
     dict.release();

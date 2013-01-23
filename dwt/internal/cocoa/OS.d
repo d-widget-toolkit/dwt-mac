@@ -1092,6 +1092,7 @@ public static /+const+/ objc.SEL sel_initListDescriptor;
 public static /+const+/ objc.SEL sel_initWithAttributes_;
 public static /+const+/ objc.SEL sel_initWithBitmapDataPlanes_pixelsWide_pixelsHigh_bitsPerSample_samplesPerPixel_hasAlpha_isPlanar_colorSpaceName_bitmapFormat_bytesPerRow_bitsPerPixel_;
 public static /+const+/ objc.SEL sel_initWithBitmapDataPlanes_pixelsWide_pixelsHigh_bitsPerSample_samplesPerPixel_hasAlpha_isPlanar_colorSpaceName_bytesPerRow_bitsPerPixel_;
+public static /+const+/ objc.SEL sel_initWithBytes_length_encoding_;
 public static /+const+/ objc.SEL sel_initWithCapacity_;
 public static /+const+/ objc.SEL sel_initWithCharacters_length_;
 public static /+const+/ objc.SEL sel_initWithContainerSize_;
@@ -3773,6 +3774,7 @@ static this () {
     sel_initWithAttributes_ = sel_registerName("initWithAttributes:");
     sel_initWithBitmapDataPlanes_pixelsWide_pixelsHigh_bitsPerSample_samplesPerPixel_hasAlpha_isPlanar_colorSpaceName_bitmapFormat_bytesPerRow_bitsPerPixel_ = sel_registerName("initWithBitmapDataPlanes:pixelsWide:pixelsHigh:bitsPerSample:samplesPerPixel:hasAlpha:isPlanar:colorSpaceName:bitmapFormat:bytesPerRow:bitsPerPixel:");
     sel_initWithBitmapDataPlanes_pixelsWide_pixelsHigh_bitsPerSample_samplesPerPixel_hasAlpha_isPlanar_colorSpaceName_bytesPerRow_bitsPerPixel_ = sel_registerName("initWithBitmapDataPlanes:pixelsWide:pixelsHigh:bitsPerSample:samplesPerPixel:hasAlpha:isPlanar:colorSpaceName:bytesPerRow:bitsPerPixel:");
+    sel_initWithBytes_length_encoding_ = sel_registerName("initWithBytes:length:encoding:");
     sel_initWithCapacity_ = sel_registerName("initWithCapacity:");
     sel_initWithCharacters_length_ = sel_registerName("initWithCharacters:length:");
     sel_initWithContainerSize_ = sel_registerName("initWithContainerSize:");
