@@ -2224,6 +2224,8 @@ bool mouseEvent (objc.id id, objc.SEL sel, objc.id theEvent, int type) {
         case OS.NSOtherMouseUp:
             display.checkEnterExit (display.findControl(true), nsEvent, false);
             break;
+        default:
+            break;
     }
     sendMouseEvent (nsEvent, type, false);
     if (type is DWT.MouseDown && nsEvent.clickCount() is 2) {
