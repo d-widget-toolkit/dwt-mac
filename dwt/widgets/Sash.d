@@ -372,6 +372,7 @@ bool sendKeyEvent(NSEvent nsEvent, int type) {
                     display.setCursorLocation (parent.toDisplay (cursorX, cursorY));
                 }
                 break;
+                default:
             }
         }
     }
