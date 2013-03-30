@@ -1865,6 +1865,7 @@ void windowSendEvent (objc.id id, objc.SEL sel, objc.id event) {
                         case OS.NSPageUpFunctionKey:
                             window.firstResponder().keyDown(nsEvent);
                             return;
+                        default:
                     }
                 }
             }

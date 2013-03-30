@@ -1092,5 +1092,5 @@ void println (Args ...) (Args args)
 						  "{}{}{}{}{}{}{}{}{}{}{}{}{}{}"
 						  "{}{}{}{}{}{}{}{}{}{}{}{}{}{}";
 
-	Stdout.formatln(format[0 .. Args.length * 2], args);
+	Stdout.formatln(format[0 .. Args.length * 2], args).flush();
 }

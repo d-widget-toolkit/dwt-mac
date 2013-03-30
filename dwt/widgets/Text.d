@@ -1281,7 +1281,7 @@ public void insert (String stri) {
 }
 
 void insertEditText (wchar[] string) {
-    int length_ = string.length;
+    auto length_ = string.length;
     Point selection = getSelection ();
     if (hasFocus () && hiddenText is null) {
         if (textLimit !is LIMIT) {
