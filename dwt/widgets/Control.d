@@ -2106,22 +2106,6 @@ void keyDown (objc.id id, objc.SEL sel, objc.id theEvent) {
                 if (isDisposed ()) return;
                 if (!sendKeyEvent (nsEvent, DWT.KeyDown)) return;
                 if (consume [0]) return;
-        } else {
-            // Control is some kind of text field, so the key event will be sent from insertText: or doCommandBySelector:
-            super.keyDown (id, sel, theEvent);
-
-            if (imeInComposition ()) return;
-            // If none of those methods triggered a key event send one now.
-            if (!s.keyInputHappened) {
-                NSEvent nsEvent = new NSEvent (theEvent);
-                bool [] consume = new bool [1];
-                if (translateTraversal (nsEvent.keyCode (), nsEvent, consume)) return;
-                if (isDisposed ()) return;
-                if (!sendKeyEvent (nsEvent, DWT.KeyDown)) return;
-                if (consume [0]) return;
-            }
-
-            return;
             }
 
             return;
