@@ -12,7 +12,7 @@ Todo:
 Snippets:
 	Not Working:
 		- Snippet 10 - IllegalArgumentException
-		- Snippet 107 - [NSCursor length]: @unrecognized_selector
+		- Snippet 107 - @runs
 		- Snippet 108 - [__NSArrayI accessibilityAttributeNames]: @unrecognized_selector
 		- Snippet 109 - @bus_error
 		- Snippet 111 @runs
