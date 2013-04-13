@@ -41,9 +41,7 @@ public NSInteger columnAtPoint(NSPoint point) {
 }
 
 public NSRect headerRectOfColumn(NSInteger column) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_headerRectOfColumn_, column);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_headerRectOfColumn_, column);
 }
 
 }

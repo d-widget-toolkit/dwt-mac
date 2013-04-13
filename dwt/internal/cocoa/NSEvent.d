@@ -80,9 +80,7 @@ public ushort keyCode() {
 }
 
 public NSPoint locationInWindow() {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_locationInWindow);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_locationInWindow);
 }
 
 public NSUInteger modifierFlags() {
@@ -90,9 +88,7 @@ public NSUInteger modifierFlags() {
 }
 
 public static NSPoint mouseLocation() {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, OS.class_NSEvent, OS.sel_mouseLocation);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(OS.class_NSEvent, OS.sel_mouseLocation);
 }
 
 public static NSEvent otherEventWithType(NSEventType type, NSPoint location, NSUInteger flags, double time, NSTimeInterval wNum, NSGraphicsContext context, short subtype, NSInteger d1, NSInteger d2) {

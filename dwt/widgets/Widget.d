@@ -267,21 +267,17 @@ bool canBecomeKeyWindow (objc.id id, objc.SEL sel) {
 }
 
 NSSize cellSize (objc.id id, objc.SEL sel) {
-    NSSize result = NSSize();
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
-    OS.objc_msgSendSuper_stret(&result, &super_struct, sel);
-    return result;
+    return OS.objc_msgSendSuper_stret!(NSSize)(&super_struct, sel);
 }
 
 NSSize cellSizeForBounds (objc.id id, objc.SEL sel, NSRect cellFrame) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
-    NSSize result = NSSize();
-    OS.objc_msgSendSuper_stret(&result, &super_struct, sel);
-    return result;
+    return OS.objc_msgSendSuper_stret!(NSSize)(&super_struct, sel);
 }
 
 bool callSuperBoolean(objc.id id, objc.SEL sel, objc.id arg0) {
@@ -682,9 +678,7 @@ NSRect expansionFrameWithFrame_inView(objc.id id, objc.SEL sel, NSRect cellRect,
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
-    NSRect result = NSRect();
-    OS.objc_msgSendSuper_stret(&result, &super_struct, sel, cellRect, view);
-    return result;
+    return OS.objc_msgSendSuper_stret!(NSRect, NSRect, objc.id)(&super_struct, sel, cellRect, view);
 }
 
 bool filters (int eventType) {
@@ -1752,9 +1746,7 @@ NSRect titleRectForBounds (objc.id id, objc.SEL sel, NSRect cellFrame) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
-    NSRect result = NSRect();
-    OS.objc_msgSendSuper_stret(&result, &super_struct, sel, cellFrame);
-    return result;
+    return OS.objc_msgSendSuper_stret!(NSRect, NSRect)(&super_struct, sel, cellFrame);
 }
 
 String tooltipText () {

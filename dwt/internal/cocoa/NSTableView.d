@@ -93,9 +93,7 @@ public NSImage dragImageForRowsWithIndexes(NSIndexSet dragRows, NSArray tableCol
 }
 
 public NSRect frameOfCellAtColumn(NSInteger column, NSInteger row) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_frameOfCellAtColumn_row_, column, row);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_frameOfCellAtColumn_row_, column, row);
 }
 
 public NSTableHeaderView headerView() {
@@ -108,9 +106,7 @@ public void highlightSelectionInClipRect(NSRect clipRect) {
 }
 
 public NSSize intercellSpacing() {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_intercellSpacing);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_intercellSpacing);
 }
 
 public bool isRowSelected(NSInteger row) {
@@ -138,15 +134,11 @@ public NSInteger numberOfSelectedRows() {
 }
 
 public NSRect rectOfColumn(NSInteger column) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_rectOfColumn_, column);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_rectOfColumn_, column);
 }
 
 public NSRect rectOfRow(NSInteger row) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_rectOfRow_, row);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_rectOfRow_, row);
 }
 
 public void reloadData() {
@@ -166,9 +158,7 @@ public CGFloat rowHeight() {
 }
 
 public NSRange rowsInRect(NSRect rect) {
-    NSRange result = NSRange();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_rowsInRect_, rect);
-    return result;
+    return OS.objc_msgSend_stret!(NSRange)(this.id, OS.sel_rowsInRect_, rect);
 }
 
 public void scrollColumnToVisible(NSInteger column) {

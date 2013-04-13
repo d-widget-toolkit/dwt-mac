@@ -71,9 +71,7 @@ public void beginPageInRect(NSRect aRect, NSPoint location) {
 }
 
 public NSRect bounds() {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_bounds);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_bounds);
 }
 
 public bool canBecomeKeyView() {
@@ -81,75 +79,51 @@ public bool canBecomeKeyView() {
 }
 
 public NSPoint convertPoint_fromView_(NSPoint aPoint, NSView aView) {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertPoint_fromView_, aPoint, aView !is null ? aView.id : null);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_convertPoint_fromView_, aPoint, aView !is null ? aView.id : null);
 }
 
 public NSPoint convertPoint_toView_(NSPoint aPoint, NSView aView) {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertPoint_toView_, aPoint, aView !is null ? aView.id : null);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_convertPoint_toView_, aPoint, aView !is null ? aView.id : null);
 }
 
 public NSPoint convertPointFromBase(NSPoint aPoint) {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertPointFromBase_, aPoint);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_convertPointFromBase_, aPoint);
 }
 
 public NSPoint convertPointToBase(NSPoint aPoint) {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertPointToBase_, aPoint);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_convertPointToBase_, aPoint);
 }
 
 public NSRect convertRect_fromView_(NSRect aRect, NSView aView) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertRect_fromView_, aRect, aView !is null ? aView.id : null);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_convertRect_fromView_, aRect, aView !is null ? aView.id : null);
 }
 
 public NSRect convertRect_toView_(NSRect aRect, NSView aView) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertRect_toView_, aRect, aView !is null ? aView.id : null);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_convertRect_toView_, aRect, aView !is null ? aView.id : null);
 }
 
 public NSRect convertRectFromBase(NSRect aRect) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertRectFromBase_, aRect);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_convertRectFromBase_, aRect);
 }
 
 public NSRect convertRectToBase(NSRect aRect) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertRectToBase_, aRect);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_convertRectToBase_, aRect);
 }
 
 public NSSize convertSize_fromView_(NSSize aSize, NSView aView) {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertSize_fromView_, aSize, aView !is null ? aView.id : null);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_convertSize_fromView_, aSize, aView !is null ? aView.id : null);
 }
 
 public NSSize convertSize_toView_(NSSize aSize, NSView aView) {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertSize_toView_, aSize, aView !is null ? aView.id : null);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_convertSize_toView_, aSize, aView !is null ? aView.id : null);
 }
 
 public NSSize convertSizeFromBase(NSSize aSize) {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertSizeFromBase_, aSize);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_convertSizeFromBase_, aSize);
 }
 
 public NSSize convertSizeToBase(NSSize aSize) {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertSizeToBase_, aSize);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_convertSizeToBase_, aSize);
 }
 
 public void discardCursorRects() {
@@ -185,9 +159,7 @@ public void endPage() {
 }
 
 public NSRect frame() {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_frame);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_frame);
 }
 
 public NSView hitTest(NSPoint aPoint) {
@@ -325,9 +297,7 @@ public void viewDidMoveToWindow() {
 }
 
 public NSRect visibleRect() {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_visibleRect);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_visibleRect);
 }
 
 public NSWindow window() {

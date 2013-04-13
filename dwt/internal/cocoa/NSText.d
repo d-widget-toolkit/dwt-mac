@@ -74,9 +74,7 @@ public void selectAll(cocoa.id sender) {
 }
 
 public NSRange selectedRange() {
-    NSRange result = NSRange();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_selectedRange);
-    return result;
+    return OS.objc_msgSend_stret!(NSRange)(this.id, OS.sel_selectedRange);
 }
 
 public void setAlignment(NSTextAlignment mode) {

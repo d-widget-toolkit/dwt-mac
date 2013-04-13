@@ -51,9 +51,7 @@ public NSMutableDictionary dictionary() {
 }
 
 public NSRect imageablePageBounds() {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_imageablePageBounds);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_imageablePageBounds);
 }
 
 public NSPrintInfo initWithDictionary(NSDictionary attributes) {
@@ -71,9 +69,7 @@ public NSPrintingOrientation orientation() {
 }
 
 public NSSize paperSize() {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_paperSize);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_paperSize);
 }
 
 public NSPrinter printer() {

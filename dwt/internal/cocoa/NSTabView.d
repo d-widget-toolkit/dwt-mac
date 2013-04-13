@@ -44,9 +44,7 @@ public void addTabViewItem(NSTabViewItem tabViewItem) {
 }
 
 public NSRect contentRect() {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_contentRect);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_contentRect);
 }
 
 public void insertTabViewItem(NSTabViewItem tabViewItem, NSInteger index) {
@@ -54,9 +52,7 @@ public void insertTabViewItem(NSTabViewItem tabViewItem, NSInteger index) {
 }
 
 public NSSize minimumSize() {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_minimumSize);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_minimumSize);
 }
 
 public void removeTabViewItem(NSTabViewItem tabViewItem) {

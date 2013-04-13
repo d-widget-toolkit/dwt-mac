@@ -283,8 +283,7 @@ int calculateWidth (int index, GC gc) {
     objc_super super_struct = objc_super();
     super_struct.receiver = cell.id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(cell.id, OS.sel_superclass);
-    NSSize size = NSSize();
-    OS.objc_msgSendSuper_stret(&size, &super_struct, OS.sel_cellSize);
+    NSSize size = OS.objc_msgSendSuper_stret!(NSSize)(&super_struct, OS.sel_cellSize);
     if (image !is null) size.width += parent.imageBounds.width + Table.IMAGE_GAP;
 //  cell.setImage (image !is null ? image.handle : null);
 //  NSSize size = cell.cellSize ();

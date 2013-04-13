@@ -75,21 +75,15 @@ public static NSAffineTransform transform() {
 }
 
 public NSPoint transformPoint(NSPoint aPoint) {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_transformPoint_, aPoint);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_transformPoint_, aPoint);
 }
 
 public NSSize transformSize(NSSize aSize) {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_transformSize_, aSize);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_transformSize_, aSize);
 }
 
 public NSAffineTransformStruct transformStruct() {
-    NSAffineTransformStruct result = NSAffineTransformStruct();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_transformStruct);
-    return result;
+    return OS.objc_msgSend_stret!(NSAffineTransformStruct)(this.id, OS.sel_transformStruct);
 }
 
 public void translateXBy (CGFloat deltaX, CGFloat deltaY) {

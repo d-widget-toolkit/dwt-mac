@@ -41,9 +41,7 @@ public void drawSortIndicatorWithFrame(NSRect cellFrame, NSView controlView, boo
 }
 
 public NSRect sortIndicatorRectForBounds(NSRect theRect) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_sortIndicatorRectForBounds_, theRect);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_sortIndicatorRectForBounds_, theRect);
 }
 
 }

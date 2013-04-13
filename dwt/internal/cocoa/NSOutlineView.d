@@ -54,9 +54,7 @@ public void expandItem(cocoa.id item, bool expandChildren) {
 }
 
 public NSRect frameOfOutlineCellAtRow(NSInteger row) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_frameOfOutlineCellAtRow_, row);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_frameOfOutlineCellAtRow_, row);
 }
 
 public CGFloat indentationPerLevel() {

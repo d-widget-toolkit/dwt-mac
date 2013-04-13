@@ -50,15 +50,11 @@ public NSAttributedString attributedStringValue() {
 }
 
 public NSSize cellSize() {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_cellSize);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_cellSize);
 }
 
 public NSSize cellSizeForBounds(NSRect aRect) {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_cellSizeForBounds_, aRect);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_cellSizeForBounds_, aRect);
 }
 
 public void drawInteriorWithFrame(NSRect cellFrame, NSView controlView) {
@@ -70,15 +66,11 @@ public void drawWithExpansionFrame(NSRect cellFrame, NSView view) {
 }
 
 public NSRect drawingRectForBounds(NSRect theRect) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_drawingRectForBounds_, theRect);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_drawingRectForBounds_, theRect);
 }
 
 public NSRect expansionFrameWithFrame(NSRect cellFrame, NSView view) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_expansionFrameWithFrame_inView_, cellFrame, view !is null ? view.id : null);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_expansionFrameWithFrame_inView_, cellFrame, view !is null ? view.id : null);
 }
 
 public NSFont font() {
@@ -101,9 +93,7 @@ public NSImage image() {
 }
 
 public NSRect imageRectForBounds(NSRect theRect) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_imageRectForBounds_, theRect);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_imageRectForBounds_, theRect);
 }
 
 public bool isEnabled() {
@@ -180,9 +170,7 @@ public NSString title() {
 }
 
 public NSRect titleRectForBounds(NSRect theRect) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_titleRectForBounds_, theRect);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_titleRectForBounds_, theRect);
 }
 
 public bool wraps() {

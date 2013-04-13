@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,15 +39,11 @@ public this(cocoa.id id) {
 }
 
 public NSSize contentSize() {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_contentSize);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_contentSize);
 }
 
 public static NSSize contentSizeForFrameSize(NSSize fSize, bool hFlag, bool vFlag, NSBorderType aType) {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, OS.class_NSScrollView, OS.sel_contentSizeForFrameSize_hasHorizontalScroller_hasVerticalScroller_borderType_, fSize, hFlag, vFlag, aType);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(OS.class_NSScrollView, OS.sel_contentSizeForFrameSize_hasHorizontalScroller_hasVerticalScroller_borderType_, fSize, hFlag, vFlag, aType);
 }
 
 public NSClipView contentView() {
@@ -61,15 +57,11 @@ public NSView documentView() {
 }
 
 public NSRect documentVisibleRect() {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_documentVisibleRect);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_documentVisibleRect);
 }
 
 public static NSSize frameSizeForContentSize(NSSize cSize, bool hFlag, bool vFlag, NSBorderType aType) {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, OS.class_NSScrollView, OS.sel_frameSizeForContentSize_hasHorizontalScroller_hasVerticalScroller_borderType_, cSize, hFlag, vFlag, aType);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(OS.class_NSScrollView, OS.sel_frameSizeForContentSize_hasHorizontalScroller_hasVerticalScroller_borderType_, cSize, hFlag, vFlag, aType);
 }
 
 public void reflectScrolledClipView(NSClipView cView) {

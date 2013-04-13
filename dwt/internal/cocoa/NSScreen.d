@@ -47,9 +47,7 @@ public NSDictionary deviceDescription() {
 }
 
 public NSRect frame() {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_frame);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_frame);
 }
 
 public static NSScreen mainScreen() {
@@ -63,9 +61,7 @@ public static NSArray screens() {
 }
 
 public NSRect visibleFrame() {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_visibleFrame);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_visibleFrame);
 }
 
 }

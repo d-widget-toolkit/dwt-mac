@@ -43,27 +43,19 @@ public char* objCType() {
 }
 
 public NSPoint pointValue() {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_pointValue);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_pointValue);
 }
 
 public NSRange rangeValue() {
-    NSRange result = NSRange();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_rangeValue);
-    return result;
+    return OS.objc_msgSend_stret!(NSRange)(this.id, OS.sel_rangeValue);
 }
 
 public NSRect rectValue() {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_rectValue);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_rectValue);
 }
 
 public NSSize sizeValue() {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_sizeValue);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_sizeValue);
 }
 
 public static NSValue valueWithPoint(NSPoint point) {

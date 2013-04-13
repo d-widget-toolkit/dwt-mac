@@ -87,9 +87,7 @@ public static NSBezierPath bezierPathWithRect(NSRect rect) {
 }
 
 public NSRect bounds() {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_bounds);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_bounds);
 }
 
 public void closePath() {
@@ -101,15 +99,11 @@ public bool containsPoint(NSPoint point) {
 }
 
 public NSRect controlPointBounds() {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_controlPointBounds);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_controlPointBounds);
 }
 
 public NSPoint currentPoint() {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_currentPoint);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_currentPoint);
 }
 
 public void curveToPoint(NSPoint endPoint, NSPoint controlPoint1, NSPoint controlPoint2) {

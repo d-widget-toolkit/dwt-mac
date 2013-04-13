@@ -72,9 +72,7 @@ public NSWindow draggingDestinationWindow() {
 }
 
 public NSPoint draggingLocation() {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_draggingLocation);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_draggingLocation);
 }
 
 public NSPasteboard draggingPasteboard() {

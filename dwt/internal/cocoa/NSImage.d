@@ -112,9 +112,7 @@ public void setSize(NSSize aSize) {
 }
 
 public NSSize size() {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_size);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_size);
 }
 
 public void unlockFocus() {

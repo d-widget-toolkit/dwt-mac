@@ -52,9 +52,7 @@ public NSDictionary attributesAtIndex(NSUInteger location, NSRangePointer range,
 }
 
 public NSRange doubleClickAtIndex(NSUInteger location) {
-    NSRange result = NSRange();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_doubleClickAtIndex_, location);
-    return result;
+    return OS.objc_msgSend_stret!(NSRange)(this.id, OS.sel_doubleClickAtIndex_, location);
 }
 
 public void drawAtPoint(NSPoint point) {
@@ -75,9 +73,7 @@ public NSUInteger nextWordFromIndex(NSUInteger location, bool isForward) {
 }
 
 public NSSize size() {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_size);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_size);
 }
 
 public NSAttributedString attributedSubstringFromRange(NSRange range) {

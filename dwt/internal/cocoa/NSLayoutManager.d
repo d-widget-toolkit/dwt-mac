@@ -52,9 +52,7 @@ public void addTextContainer(NSTextContainer container) {
 }
 
 public NSRect boundingRectForGlyphRange(NSRange glyphRange, NSTextContainer container) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_boundingRectForGlyphRange_inTextContainer_, glyphRange, container !is null ? container.id : null);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_boundingRectForGlyphRange_inTextContainer_, glyphRange, container !is null ? container.id : null);
 }
 
 public NSUInteger characterIndexForGlyphAtIndex(NSUInteger glyphIndex) {
@@ -94,33 +92,23 @@ public NSUInteger glyphIndexForPoint(NSPoint point, NSTextContainer container, C
 }
 
 public NSRange glyphRangeForCharacterRange(NSRange charRange, NSRangePointer actualCharRange) {
-    NSRange result = NSRange();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_glyphIndexForPoint_inTextContainer_fractionOfDistanceThroughGlyph__actualCharacterRange_, charRange, actualCharRange);
-    return result;
+    return OS.objc_msgSend_stret!(NSRange)(this.id, OS.sel_glyphIndexForPoint_inTextContainer_fractionOfDistanceThroughGlyph__actualCharacterRange_, charRange, actualCharRange);
 }
 
 public NSRange glyphRangeForTextContainer(NSTextContainer container) {
-    NSRange result = NSRange();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_glyphRangeForTextContainer_, container !is null ? container.id : null);
-    return result;
+    return OS.objc_msgSend_stret!(NSRange)(this.id, OS.sel_glyphRangeForTextContainer_, container !is null ? container.id : null);
 }
 
 public NSRect lineFragmentUsedRectForGlyphAtIndex(NSUInteger glyphIndex, NSRangePointer effectiveGlyphRange) {
-	NSRect result = NSRect();
-	OS.objc_msgSend_stret(&result, this.id, OS.sel_lineFragmentUsedRectForGlyphAtIndex_effectiveRange_, glyphIndex, effectiveGlyphRange);
-	return result;
+	return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_lineFragmentUsedRectForGlyphAtIndex_effectiveRange_, glyphIndex, effectiveGlyphRange);
 }
 
 public NSRect lineFragmentUsedRectForGlyphAtIndex(NSUInteger glyphIndex, NSRangePointer effectiveGlyphRange, bool flag) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_lineFragmentUsedRectForGlyphAtIndex_effectiveRange_withoutAdditionalLayout_, glyphIndex, effectiveGlyphRange, flag);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_lineFragmentUsedRectForGlyphAtIndex_effectiveRange_withoutAdditionalLayout_, glyphIndex, effectiveGlyphRange, flag);
 }
 
 public NSPoint locationForGlyphAtIndex(NSUInteger glyphIndex) {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_locationForGlyphAtIndex_, glyphIndex);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_locationForGlyphAtIndex_, glyphIndex);
 }
 
 public NSUInteger numberOfGlyphs() {
@@ -153,9 +141,7 @@ public NSTypesetter typesetter() {
 }
 
 public NSRect usedRectForTextContainer(NSTextContainer container) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_usedRectForTextContainer_, container !is null ? container.id : null);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_usedRectForTextContainer_, container !is null ? container.id : null);
 }
 
 }

@@ -50,9 +50,7 @@ public NSView contentView() {
 }
 
 public NSSize contentViewMargins () {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_contentViewMargins);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_contentViewMargins);
 }
 
 public void setBorderType (NSBorderType aType) {

@@ -213,19 +213,18 @@ void objc_msgSend_struct (T, ARGS...) (T* result, id theReceiver, SEL theSelecto
     //result = cast(T*) bindings.objc_msgSend(theReceiver, theSelector, args);
 }
 
-void objc_msgSend_stret (T1, T2, ARGS...) (T1* stretAddr, T2 theReceiver, SEL theSelector, ARGS args)
+R objc_msgSend_stret (R, T, ARGS...) (T theReceiver, SEL theSelector, ARGS args)
 {
-    if (T1.sizeof > STRUCT_SIZE_LIMIT)
-    {
-        alias extern (C) void function (T1 *, T2, SEL, ARGS) fp;
-        (cast(fp)&bindings.objc_msgSend_stret)(stretAddr, theReceiver, theSelector, args);
-    }
+    static if (R.sizeof > STRUCT_SIZE_LIMIT)
+        alias bindings.objc_msgSend_stret objc_msgSend;
 
     else
-    {
-        alias extern (C) T1* function (T2, SEL, ARGS) fp;
-        stretAddr = (cast(fp)&bindings.objc_msgSend)(theReceiver, theSelector, args);
-    }
+        alias bindings.objc_msgSend objc_msgSend;
+
+    alias extern (C) R function (T, SEL, ARGS) fp;
+    // bus error if no temporary is used. http://d.puremagic.com/issues/show_bug.cgi?id=9931
+    auto r = (cast(fp)&objc_msgSend)(theReceiver, theSelector, args);
+    return r;
 }
 
 id objc_msgSendSuper (ARGS...) (objc_super* superr, SEL op, ARGS args)
@@ -234,19 +233,18 @@ id objc_msgSendSuper (ARGS...) (objc_super* superr, SEL op, ARGS args)
     return (cast(fp)&bindings.objc_msgSendSuper)(superr, op, args);
 }
 
-void objc_msgSendSuper_stret (T, ARGS...) (T* stretAddr, objc_super* super_, SEL theSelector, ARGS args)
+R objc_msgSendSuper_stret (R, ARGS...) (objc_super* super_, SEL theSelector, ARGS args)
 {
-    if (T.sizeof > STRUCT_SIZE_LIMIT)
-    {
-        alias extern (C) void function (T*, objc_super*, SEL, ARGS) fp;
-        (cast(fp)&bindings.objc_msgSendSuper_stret)(stretAddr, super_, theSelector, args);
-    }
+    static if (R.sizeof > STRUCT_SIZE_LIMIT)
+        alias bindings.objc_msgSendSuper_stret objc_msgSendSuper;
 
     else
-    {
-        alias extern (C) T* function (objc_super*, SEL, ARGS) fp;
-        stretAddr = (cast(fp)&bindings.objc_msgSendSuper)(super_, theSelector, args);
-    }
+        alias bindings.objc_msgSendSuper objc_msgSendSuper;
+
+    alias extern (C) R function (objc_super*, SEL, ARGS) fp;
+    // bus error if no temporary is used. http://d.puremagic.com/issues/show_bug.cgi?id=9931
+    auto r = (cast(fp)&objc_msgSendSuper)(super_, theSelector, args);
+    return r;
 }
 
 bool objc_msgSend_bool (T, ARGS...) (T theReceiver, SEL theSelector, ARGS args)

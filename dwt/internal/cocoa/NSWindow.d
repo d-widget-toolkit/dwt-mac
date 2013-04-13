@@ -69,9 +69,7 @@ public bool canBecomeKeyWindow() {
 }
 
 public NSPoint cascadeTopLeftFromPoint(NSPoint topLeftPoint) {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_cascadeTopLeftFromPoint_, topLeftPoint);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_cascadeTopLeftFromPoint_, topLeftPoint);
 }
 
 public void close() {
@@ -79,9 +77,7 @@ public void close() {
 }
 
 public NSRect contentRectForFrameRect(NSRect frameRect) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_contentRectForFrameRect_, frameRect);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_contentRectForFrameRect_, frameRect);
 }
 
 public NSView contentView() {
@@ -90,15 +86,11 @@ public NSView contentView() {
 }
 
 public NSPoint convertBaseToScreen(NSPoint aPoint) {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertBaseToScreen_, aPoint);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_convertBaseToScreen_, aPoint);
 }
 
 public NSPoint convertScreenToBase(NSPoint aPoint) {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_convertScreenToBase_, aPoint);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_convertScreenToBase_, aPoint);
 }
 
 public NSButtonCell defaultButtonCell() {
@@ -133,15 +125,11 @@ public NSResponder firstResponder() {
 }
 
 public NSRect frame() {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_frame);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_frame);
 }
 
 public NSRect frameRectForContentRect(NSRect contentRect) {
-    NSRect result = NSRect();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_frameRectForContentRect_, contentRect);
-    return result;
+    return OS.objc_msgSend_stret!(NSRect)(this.id, OS.sel_frameRectForContentRect_, contentRect);
 }
 
 public NSGraphicsContext graphicsContext() {
@@ -204,9 +192,7 @@ public static CGFloat minFrameWidthWithTitle(NSString aTitle, NSUInteger aStyle)
 }
 
 public NSSize minSize() {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_minSize);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_minSize);
 }
 
 public void miniaturize(cocoa.id sender) {
@@ -214,9 +200,7 @@ public void miniaturize(cocoa.id sender) {
 }
 
 public NSPoint mouseLocationOutsideOfEventStream() {
-    NSPoint result = NSPoint();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_mouseLocationOutsideOfEventStream);
-    return result;
+    return OS.objc_msgSend_stret!(NSPoint)(this.id, OS.sel_mouseLocationOutsideOfEventStream);
 }
 
 public void orderBack(cocoa.id sender) {

@@ -36,9 +36,7 @@ public this(cocoa.id id) {
 }
 
 public NSSize containerSize() {
-    NSSize result = NSSize();
-    OS.objc_msgSend_stret(&result, this.id, OS.sel_containerSize);
-    return result;
+    return OS.objc_msgSend_stret!(NSSize)(this.id, OS.sel_containerSize);
 }
 
 public NSTextContainer initWithContainerSize(NSSize size) {
