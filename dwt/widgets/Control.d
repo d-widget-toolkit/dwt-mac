@@ -2222,7 +2222,6 @@ bool mouseEvent (objc.id id, objc.SEL sel, objc.id theEvent, int type) {
 
 void mouseDown(objc.id id, objc.SEL sel, objc.id theEvent) {
     if (!mouseEvent(id, sel, theEvent, DWT.MouseDown)) return;
-    if (!mouseEvent(id, sel, theEvent, DWT.MouseDown)) return;
     bool tracking = isEventView (id);
     Display display = this.display;
     if (tracking) display.trackingControl = this;

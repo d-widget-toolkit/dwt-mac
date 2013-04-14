@@ -965,10 +965,11 @@ void keyUp (objc.id id, objc.SEL sel, objc.id theEvent) {
 }
 
 void mouseDown(objc.id id, objc.SEL sel, objc.id theEvent) {
+    callSuper(id, sel, theEvent);
 }
 
 void mouseUp(objc.id id, objc.SEL sel, objc.id theEvent) {
-    superKeyUp(id, sel, theEvent);
+    callSuper(id, sel, theEvent);
 }
 
 void mouseMoved(objc.id id, objc.SEL sel, objc.id theEvent) {
