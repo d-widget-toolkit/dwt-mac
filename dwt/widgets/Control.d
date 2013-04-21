@@ -4001,7 +4001,7 @@ bool translateTraversal (short key, NSEvent theEvent, bool [] consume) {
     return false;
 }
 
-int traversalCode (short key, NSEvent theEvent) {
+int traversalCode (int key, NSEvent theEvent) {
     int code = DWT.TRAVERSE_RETURN | DWT.TRAVERSE_TAB_NEXT | DWT.TRAVERSE_TAB_PREVIOUS | DWT.TRAVERSE_PAGE_NEXT | DWT.TRAVERSE_PAGE_PREVIOUS;
     Shell shell = getShell ();
     if (shell.parent !is null) code |= DWT.TRAVERSE_ESCAPE;
