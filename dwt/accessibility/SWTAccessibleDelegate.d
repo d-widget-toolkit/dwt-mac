@@ -78,7 +78,7 @@ class SWTAccessibleDelegate : NSObject {
         OS.class_addMethod(cls, OS.sel_accessibilityFocusedUIElement, proc2Args, "@:");
 
         OS.class_addMethod(cls, OS.sel_accessibilityAttributeValue_, proc3Args, "@:@");
-        OS.class_addMethod(cls, OS.sel_accessibilityHitTest_, proc3Args, "@:{NSPoint}");
+        OS.class_addMethod!("@:{NSPoint}")(cls, OS.sel_accessibilityHitTest_, proc3Args);
         OS.class_addMethod(cls, OS.sel_accessibilityIsAttributeSettable_, proc3Args, "@:@");
         OS.class_addMethod(cls, OS.sel_accessibilityActionDescription_, proc3Args, "@:@");
         OS.class_addMethod(cls, OS.sel_accessibilityPerformAction_, proc3Args, "@:@");

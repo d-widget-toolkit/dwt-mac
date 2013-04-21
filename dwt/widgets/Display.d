@@ -2058,19 +2058,19 @@ void addEventMethods (objc.Class cls, objc.IMP proc2, objc.IMP proc3, objc.IMP d
         OS.class_addMethod(cls, OS.sel_updateTrackingAreas, proc2, "v@:");
     }
     if (needsDisplayInRectProc !is null) {
-        OS.class_addMethod(cls, OS.sel_setNeedsDisplayInRect_, needsDisplayInRectProc, "v@:{NSRect}");
+        OS.class_addMethod!("v@:{NSRect}")(cls, OS.sel_setNeedsDisplayInRect_, needsDisplayInRectProc);
     }
     if (drawRectProc !is null) {
-        OS.class_addMethod(cls, OS.sel_drawRect_, drawRectProc, "v@:{NSRect}");
+        OS.class_addMethod!("v@:{NSRect}")(cls, OS.sel_drawRect_, drawRectProc);
     }
     if (hitTestProc !is null) {
-        OS.class_addMethod(cls, OS.sel_hitTest_, hitTestProc, "@@:{NSPoint}");
+        OS.class_addMethod!("@@:{NSPoint}")(cls, OS.sel_hitTest_, hitTestProc);
     }
 }
 
 void addFrameMethods(objc.Class cls, objc.IMP setFrameOriginProc, objc.IMP setFrameSizeProc) {
-    OS.class_addMethod(cls, OS.sel_setFrameOrigin_, setFrameOriginProc, "v@:{NSPoint}");
-    OS.class_addMethod(cls, OS.sel_setFrameSize_, setFrameSizeProc, "v@:{NSSize}");
+    OS.class_addMethod!("v@:{NSPoint}")(cls, OS.sel_setFrameOrigin_, setFrameOriginProc);
+   	OS.class_addMethod!("v@:{NSSize}")(cls, OS.sel_setFrameSize_, setFrameSizeProc);
 }
 
 void addAccessibilityMethods(objc.Class cls, objc.IMP proc2, objc.IMP proc3, objc.IMP proc4, objc.IMP accessibilityHitTestProc) {
@@ -2080,7 +2080,7 @@ void addAccessibilityMethods(objc.Class cls, objc.IMP proc2, objc.IMP proc3, obj
     OS.class_addMethod(cls, OS.sel_accessibilityFocusedUIElement, proc2, "@@:");
     OS.class_addMethod(cls, OS.sel_accessibilityIsIgnored, proc2, "c@:");
     OS.class_addMethod(cls, OS.sel_accessibilityAttributeValue_, proc3, "@@:@");
-    OS.class_addMethod(cls, OS.sel_accessibilityHitTest_, accessibilityHitTestProc, "@@:{NSPoint}");
+    OS.class_addMethod!("@@:{NSPoint}")(cls, OS.sel_accessibilityHitTest_, accessibilityHitTestProc);
     OS.class_addMethod(cls, OS.sel_accessibilityAttributeValue_forParameter_, proc4, "@@:@@");
     OS.class_addMethod(cls, OS.sel_accessibilityPerformAction_, proc3, "v@:@");
     OS.class_addMethod(cls, OS.sel_accessibilityActionDescription_, proc3, "@@:@");
@@ -2169,10 +2169,10 @@ void initClasses () {
     cls = OS.objc_allocateClassPair (OS.class_NSButtonCell, className, 0);
     OS.class_addIvar (cls, SWT_OBJECT, size, align_, types);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
-    OS.class_addMethod (cls, OS.sel_drawImage_withFrame_inView_, drawImageWithFrameInViewProc, "v@:@{NSFrame}@");
+    OS.class_addMethod!("v@:@{NSRect}@")(cls, OS.sel_drawImage_withFrame_inView_, drawImageWithFrameInViewProc);
     OS.class_addMethod(cls, OS.sel_cellSize, cellSizeProc, "@:");
-    OS.class_addMethod(cls, OS.sel_drawInteriorWithFrame_inView_, drawInteriorWithFrameInViewProc, "v@:{NSRect}@");
-    OS.class_addMethod(cls, OS.sel_titleRectForBounds_, titleRectForBoundsProc, "{NSRect}@:{NSRect}");
+    OS.class_addMethod!("v@:{NSRect}@")(cls, OS.sel_drawInteriorWithFrame_inView_, drawInteriorWithFrameInViewProc);
+    OS.class_addMethod!("{NSRect}@:{NSRect}")(cls, OS.sel_titleRectForBounds_, titleRectForBoundsProc);
     OS.objc_registerClassPair (cls);
 
     className = "SWTCanvasView";
@@ -2181,21 +2181,21 @@ void initClasses () {
     //NSTextInput protocol
     OS.class_addProtocol(cls, OS.objc_getProtocol("NSTextInput"));
     OS.class_addMethod(cls, OS.sel_hasMarkedText, proc2, "c@:");
-    OS.class_addMethod(cls, OS.sel_markedRange, markedRangeProc, "{NSRange}@:");
-    OS.class_addMethod(cls, OS.sel_selectedRange, selectedRangeProc, "{NSRange}@:");
-    OS.class_addMethod(cls, OS.sel_setMarkedText_selectedRange_, setMarkedText_selectedRangeProc, "v@:@{NSRange}");
+    OS.class_addMethod!("{NSRange}@:")(cls, OS.sel_markedRange, markedRangeProc);
+    OS.class_addMethod!("{NSRange}@:")(cls, OS.sel_selectedRange, selectedRangeProc);
+    OS.class_addMethod!("v@:@{NSRange}")(cls, OS.sel_setMarkedText_selectedRange_, setMarkedText_selectedRangeProc);
     OS.class_addMethod(cls, OS.sel_unmarkText, proc2, "v@:");
     OS.class_addMethod(cls, OS.sel_validAttributesForMarkedText, proc2, "@@:");
-    OS.class_addMethod(cls, OS.sel_attributedSubstringFromRange_, attributedSubstringFromRangeProc, "@@:{NSRange}");
+    OS.class_addMethod!("@@:{NSRange}")(cls, OS.sel_attributedSubstringFromRange_, attributedSubstringFromRangeProc);
     OS.class_addMethod(cls, OS.sel_insertText_, proc3, "v@:@");
 
     static if ((void*).sizeof > int.sizeof) // 64bit target
-        OS.class_addMethod(cls, OS.sel_characterIndexForPoint_, characterIndexForPointProc, "Q@:{NSPoint}");
+        OS.class_addMethod!("Q@:{NSPoint}")(cls, OS.sel_characterIndexForPoint_, characterIndexForPointProc);
 
     else
-        OS.class_addMethod(cls, OS.sel_characterIndexForPoint_, characterIndexForPointProc, "I@:{NSPoint}");
+        OS.class_addMethod!("I@:{NSPoint}")(cls, OS.sel_characterIndexForPoint_, characterIndexForPointProc);
 
-    OS.class_addMethod(cls, OS.sel_firstRectForCharacterRange_, firstRectForCharacterRangeProc, "{NSRect}@:{NSRange}");
+    OS.class_addMethod!("{NSRect}@:{NSRange}")(cls, OS.sel_firstRectForCharacterRange_, firstRectForCharacterRangeProc);
     OS.class_addMethod(cls, OS.sel_doCommandBySelector_, proc3, "v@::");
     //NSTextInput protocol end
     OS.class_addMethod(cls, OS.sel_canBecomeKeyView, proc2, "c@:");
@@ -2214,7 +2214,7 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_sendSelection, proc2, "@:");
     OS.class_addMethod(cls, OS.sel_textDidChange_, proc3, "v@:@");
     OS.class_addMethod(cls, OS.sel_textViewDidChangeSelection_, proc3, "@:@");
-    OS.class_addMethod(cls, OS.sel_textView_willChangeSelectionFromCharacterRange_toCharacterRange_, textWillChangeSelectionProc, "@:@{NSRange}{NSRange}");
+    OS.class_addMethod!("@:@{NSRange}{NSRange}")(cls, OS.sel_textView_willChangeSelectionFromCharacterRange_toCharacterRange_, textWillChangeSelectionProc);
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
@@ -2239,7 +2239,7 @@ void initClasses () {
     addEventMethods(cls, null, fieldEditorProc3, null, null, null);
     OS.class_addMethod(cls, OS.sel_insertText_, fieldEditorProc3, "v@:@");
     OS.class_addMethod(cls, OS.sel_doCommandBySelector_, fieldEditorProc3, "v@::");
-    OS.class_addMethod(cls, OS.sel_shouldChangeTextInRange_replacementString_, shouldChangeTextInRange_replacementString_fieldEditorProc, "c@:{NSRange}@");
+    OS.class_addMethod!("c@:{NSRange}@")(cls, OS.sel_shouldChangeTextInRange_replacementString_, shouldChangeTextInRange_replacementString_fieldEditorProc);
     OS.objc_registerClassPair(cls);
 
     className = "SWTImageView";
@@ -2260,21 +2260,21 @@ void initClasses () {
     OS.class_addIvar (cls, SWT_IMAGE, size, align_, types);
     OS.class_addIvar (cls, SWT_ROW, size, align_, types);
     OS.class_addIvar (cls, SWT_COLUMN, size, align_, types);
-    OS.class_addMethod (cls, OS.sel_drawInteriorWithFrame_inView_, drawInteriorWithFrameInViewProc, "v@:{NSRect}@");
-    OS.class_addMethod (cls, OS.sel_drawWithExpansionFrame_inView_, drawWithExpansionFrameProc, "v@:{NSRect}@");
-    OS.class_addMethod (cls, OS.sel_imageRectForBounds_, imageRectForBoundsProc, "{NSRect}@:{NSRect}");
-    OS.class_addMethod (cls, OS.sel_titleRectForBounds_, titleRectForBoundsProc, "{NSRect}@:{NSRect}");
+    OS.class_addMethod!("v@:{NSRect}@")(cls, OS.sel_drawInteriorWithFrame_inView_, drawInteriorWithFrameInViewProc);
+    OS.class_addMethod!("v@:{NSRect}@")(cls, OS.sel_drawWithExpansionFrame_inView_, drawWithExpansionFrameProc);
+    OS.class_addMethod!("{NSRect}@:{NSRect}")(cls, OS.sel_imageRectForBounds_, imageRectForBoundsProc);
+    OS.class_addMethod!("{NSRect}@:{NSRect}")(cls, OS.sel_titleRectForBounds_, titleRectForBoundsProc);
 
     static if ((void*).sizeof > int.sizeof) // 64bit target
-        OS.class_addMethod (cls, OS.sel_hitTestForEvent_inRect_ofView_, hitTestForEvent_inRect_ofViewProc, "Q@:@{NSRect}@");
+        OS.class_addMethod!("Q@:@{NSRect}@")(cls, OS.sel_hitTestForEvent_inRect_ofView_, hitTestForEvent_inRect_ofViewProc);
 
     else
-        OS.class_addMethod (cls, OS.sel_hitTestForEvent_inRect_ofView_, hitTestForEvent_inRect_ofViewProc, "I@:@{NSRect}@");
+        OS.class_addMethod!("I@:@{NSRect}@")(cls, OS.sel_hitTestForEvent_inRect_ofView_, hitTestForEvent_inRect_ofViewProc);
 
-    OS.class_addMethod (cls, OS.sel_cellSize, cellSizeProc, "{NSSize}@:");
+    OS.class_addMethod!("{NSSize}@:")(cls, OS.sel_cellSize, cellSizeProc);
     OS.class_addMethod (cls, OS.sel_image, proc2, "@@:");
     OS.class_addMethod (cls, OS.sel_setImage_, proc3, "v@:@");
-    OS.class_addMethod (cls, OS.sel_expansionFrameWithFrame_inView_, expansionFrameWithFrameProc, "{NSRect}@:{NSRect}@");
+    OS.class_addMethod!("{NSRect}@:{NSRect}@")(cls, OS.sel_expansionFrameWithFrame_inView_, expansionFrameWithFrameProc);
     OS.objc_registerClassPair (cls);
 
     className = "SWTMenu";
@@ -2295,7 +2295,7 @@ void initClasses () {
     className = "SWTOutlineView";
     cls = OS.objc_allocateClassPair(OS.class_NSOutlineView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, align_, types);
-    OS.class_addMethod(cls, OS.sel_highlightSelectionInClipRect_, highlightSelectionInClipRectProc, "@:{NSRect}");
+    OS.class_addMethod!("@:{NSRect}")(cls, OS.sel_highlightSelectionInClipRect_, highlightSelectionInClipRectProc);
     OS.class_addMethod(cls, OS.sel_sendDoubleSelection, proc2, "@:");
     OS.class_addMethod(cls, OS.sel_outlineViewSelectionDidChange_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_outlineView_child_ofItem_, proc5, "@:@i@");
@@ -2380,7 +2380,7 @@ void initClasses () {
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.class_addMethod(cls, OS.sel_textDidChange_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_textViewDidChangeSelection_, proc3, "@:@");
-    OS.class_addMethod(cls, OS.sel_textView_willChangeSelectionFromCharacterRange_toCharacterRange_, textWillChangeSelectionProc, "@:@{NSRange}{NSRange}");
+    OS.class_addMethod!("@:@{NSRange}{NSRange}")(cls, OS.sel_textView_willChangeSelectionFromCharacterRange_toCharacterRange_, textWillChangeSelectionProc);
     OS.class_addMethod(cls, OS.sel_sendSearchSelection, proc2, "@:");
     OS.class_addMethod(cls, OS.sel_sendCancelSelection, proc2, "@:");
     OS.objc_registerClassPair(cls);
@@ -2397,7 +2397,7 @@ void initClasses () {
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.class_addMethod(cls, OS.sel_textDidChange_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_textViewDidChangeSelection_, proc3, "@:@");
-    OS.class_addMethod(cls, OS.sel_textView_willChangeSelectionFromCharacterRange_toCharacterRange_, textWillChangeSelectionProc, "@:@{NSRange}{NSRange}");
+    OS.class_addMethod!("@:@{NSRange}{NSRange}")(cls, OS.sel_textView_willChangeSelectionFromCharacterRange_toCharacterRange_, textWillChangeSelectionProc);
     OS.objc_registerClassPair(cls);
 
     className = "SWTSlider";
@@ -2429,7 +2429,7 @@ void initClasses () {
     className = "SWTTableHeaderCell";
     cls = OS.objc_allocateClassPair (OS.class_NSTableHeaderCell, className, 0);
     OS.class_addIvar (cls, SWT_OBJECT, size, align_, types);
-    OS.class_addMethod (cls, OS.sel_drawInteriorWithFrame_inView_, drawInteriorWithFrameInViewProc, "@:{NSRect}@");
+    OS.class_addMethod!("@:{NSRect}@")(cls, OS.sel_drawInteriorWithFrame_inView_, drawInteriorWithFrameInViewProc);
     OS.objc_registerClassPair (cls);
 
     className = "SWTTableHeaderView";
@@ -2445,7 +2445,7 @@ void initClasses () {
     className = "SWTTableView";
     cls = OS.objc_allocateClassPair(OS.class_NSTableView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, align_, types);
-    OS.class_addMethod(cls, OS.sel_highlightSelectionInClipRect_, highlightSelectionInClipRectProc, "@:{NSRect}");
+    OS.class_addMethod!("@:{NSRect}")(cls, OS.sel_highlightSelectionInClipRect_, highlightSelectionInClipRectProc);
     OS.class_addMethod(cls, OS.sel_sendDoubleSelection, proc2, "@:");
     OS.class_addMethod(cls, OS.sel_numberOfRowsInTableView_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_tableView_objectValueForTableColumn_row_, proc5, "@:@:@:@");
@@ -2484,7 +2484,7 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_textDidChange_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_textView_clickedOnLink_atIndex_, proc5, "@:@@@");
     OS.class_addMethod(cls, OS.sel_dragSelectionWithEvent_offset_slideBack_, proc5, "@:@@@");
-    OS.class_addMethod(cls, OS.sel_shouldChangeTextInRange_replacementString_, shouldChangeTextInRange_replacementString_Proc, "@:{NSRange}@");
+    OS.class_addMethod!("@:{NSRange}@")(cls, OS.sel_shouldChangeTextInRange_replacementString_, shouldChangeTextInRange_replacementString_Proc);
     OS.objc_registerClassPair(cls);
 
     className = "SWTTextField";
@@ -2497,7 +2497,7 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_textDidChange_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_textDidEndEditing_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_textViewDidChangeSelection_, proc3, "@:@");
-    OS.class_addMethod(cls, OS.sel_textView_willChangeSelectionFromCharacterRange_toCharacterRange_, textWillChangeSelectionProc, "@:@{NSRange}{NSRange}");
+    OS.class_addMethod!("@:@{NSRange}{NSRange}")(cls, OS.sel_textView_willChangeSelectionFromCharacterRange_toCharacterRange_, textWillChangeSelectionProc);
     OS.objc_registerClassPair(cls);
 
     cls = registerCellSubclass(NSTextField.cellClass(), size, align_, types);
@@ -2534,7 +2534,7 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_becomeKeyWindow, proc2, "@:");
     OS.class_addMethod(cls, OS.sel_makeFirstResponder_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_noResponderFor_, proc3, "@:@");
-    OS.class_addMethod(cls, OS.sel_view_stringForToolTip_point_userData_, view_stringForToolTip_point_userDataProc, "@:@i{NSPoint}@");
+    OS.class_addMethod!("@:@i{NSPoint}@")(cls, OS.sel_view_stringForToolTip_point_userData_, view_stringForToolTip_point_userDataProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
     OS.objc_registerClassPair(cls);
 

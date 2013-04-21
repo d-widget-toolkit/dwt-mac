@@ -145,9 +145,15 @@ bool class_addIvar (Class cls, String name, size_t size, byte alignment, byte[] 
     return bindings.class_addIvar(cls, name.ptr, size, alignment, cast(char*) types.ptr);
 }
 
-bool class_addMethod (Class cls, SEL name, IMP imp, String types)
+bool class_addMethod () (Class cls, SEL name, IMP imp, String types)
 {
     return bindings.class_addMethod(cls, name, imp, types.toStringz());
+}
+
+bool class_addMethod (String types) (Class cls, SEL name, IMP imp)
+{
+    const t = encodeStructs(types);
+    return bindings.class_addMethod(cls, name, imp, t.toStringz());
 }
 
 IMP class_getMethodImplementation (Class cls, SEL name)
@@ -280,4 +286,51 @@ else
 id objc_getMetaClass (String name)
 {
     return bindings.objc_getMetaClass(name.toStringz());
+}
+
+private:
+
+struct Pattern
+{
+    String pattern;
+    String lp64;
+    String lp32;
+}
+
+String encodeStructs (String str)
+{
+    static const patterns = [
+        Pattern("{NSRect}", "{CGRect={NSPoint}{NSSize}}", "{CGRect={NSPoint}{NSSize}}"),
+        Pattern("{NSPoint}", "{CGPoint=dd}", "{CGPoint=ff}"),
+        Pattern("{NSSize}", "{CGSize=dd}", "{CGSize=ff}"),
+        Pattern("{NSRange}", "{_NSRange=QQ}", "{_NSRange=II}")
+    ];
+
+    foreach (p ; patterns)
+    {
+        auto pattern = p.pattern;
+
+        if (str.length >= pattern.length)
+        {
+            foreach (i, c ; str)
+            {
+                auto end = i + pattern.length;
+
+                if (end >= str.length)
+                    end = str.length;
+
+                if (str[i .. end] == pattern)
+                {
+                    version (D_LP64)
+                        auto replacement = p.lp64;
+                    else
+                        auto replacement = p.lp32;
+
+                    str = str[0 .. i] ~ replacement ~ str[i + pattern.length .. $];
+                }
+            }
+        }
+    }
+
+    return str;
 }
