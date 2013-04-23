@@ -10,23 +10,30 @@ Todo:
 	- Check every usage of C memory related functions, i.e. "memcpy", "memmove", "memset", "memcmp", "memchr", "malloc", "free", "realloc", "calloc"
 	- Check all methods ending with "Proc" @done(2012-09-25)
 Snippets:
+	Same as SWT:
+		- Snippet 118 - Invalid URL passed to an open/save panel
+	Runs:
+		- Snippet 107 - the actual sash is not drawn properly
+		- Snippet 108 - main button flickers when selected and blinking 
+		- Snippet 111 - no text for the items	
+		- Snippet 122 - Context menu appears in the wrong location
+		- Snippet 133 - File menu disabled
+		- Snippet 134 - No visible shell/window
+		- Snippet 144 - No items are added
 	Not Working:
-		- Snippet 10 - IllegalArgumentException
+		- Snippet 10 - IllegalArgumentException @done(2013-04-21)
 		- Snippet 107 - @runs @done(2013-04-14)
-		- Snippet 108 - [__NSArrayI accessibilityAttributeNames]: @unrecognized_selector
-		- Snippet 109 - @bus_error
-		- Snippet 111 @runs
-		- Snippet 115 - [__NSDictionaryM length]: @unrecognized_selector
-		- Snippet 118 @runs on right click tango.core.Exception.SwitchException@dwt.widgets.Control(2206) No appropriate switch clause found
+		- Snippet 108 - [__NSArrayI accessibilityAttributeNames]: @unrecognized_selector @done(2013-04-21)
+		- Snippet 109 - @bus_error @done(2013-04-21)
+		- Snippet 111 - unsupported type encoding spec '{NSSize}' @done(2013-04-23)
+		- Snippet 115 - [__NSDictionaryM length]: @unrecognized_selector @done(2013-04-23)
+		- Snippet 118 @runs on right click tango.core.Exception.SwitchException@dwt.widgets.Control(2206) No appropriate switch clause found @done(2013-04-23)
 		- Snippet 119 @segmentation_fault
-		- Snippet 122 @runs on quit dwt.DWTException.DWTException: Device is disposed
-		- Snippet 127 @segmentation_fault
-		- Snippet 132 - Floating point exception: 8
-		- Snippet 133 @runs
-		- Snippet 132 @runs
+		- Snippet 122 @runs on quit dwt.DWTException.DWTException: Device is disposed @done(2013-04-23)
+		- Snippet 127 @segmentation_fault @done(2013-04-23)
 		- Snippet 136 @runs
-		- Snippet 14 @runs on right click tango.core.Exception.SwitchException@dwt.widgets.Control(2206) No appropriate switch clause found
+		- Snippet 14 @runs on right click tango.core.Exception.SwitchException@dwt.widgets.Control(2206) No appropriate switch clause found @done(2013-04-23)
 		- Snippet 140 @bus_error
-		- Snippet 142 @segmentation_fault
-		- Snippet 143 @runs
-		- Snippet 144 @segmentation_fault
+		- Snippet 142 @runs freezes on exit
+		- Snippet 143 @runs @done(2013-04-23)
+		- Snippet 144 @segmentation_faul @done(2013-04-23)
