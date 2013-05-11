@@ -1,39 +1,49 @@
 Todo:
-	- Replace "int /*long*/" with the real type @done(2012-11-27)
-	- Replace "float /*double*/" with the real type @done(2012-11-27)
 	- Check the "CGDisplayBounds" function
-	- Check the os_custom.c file @done(2012-09-23)
 	- Check the "NSIntersectionRect" function
 	- Check the "accessibilityActionNames" and "internal_accessibilityActioregionToRectsnNames" method methods
-	- Add back Java methods for string, array and collection methods that were replaced with D equivalents @done(2012-09-13)
-	- Replace "auto" with the real type @done(2012-09-13)
 	- Check every usage of C memory related functions, i.e. "memcpy", "memmove", "memset", "memcmp", "memchr", "malloc", "free", "realloc", "calloc"
-	- Check all methods ending with "Proc" @done(2012-09-25)
 Snippets:
 	Same as SWT:
 		- Snippet 118 - Invalid URL passed to an open/save panel
 	Runs:
 		- Snippet 107 - the actual sash is not drawn properly
-		- Snippet 108 - main button flickers when selected and blinking 
+		- Snippet 108 - main button flickers when selected and blinking
 		- Snippet 111 - no text for the items	
 		- Snippet 122 - Context menu appears in the wrong location
 		- Snippet 133 - File menu disabled
 		- Snippet 134 - No visible shell/window
+		- Snippet 138 - Icon is not properly drawn
 		- Snippet 144 - No items are added
+		- Snippet 147 - main button flickers when selected and blinking
+		- Snippet 15 - no text for the items
+		- Snippet 152 - menu items are disabled
+		- Snippet 162 - no text or images for the items 
 	Not Working:
 		- Snippet 130 - @segmentation_fault
-		- Snippet 10 - IllegalArgumentException @done(2013-04-21)
-		- Snippet 107 - @runs @done(2013-04-14)
-		- Snippet 108 - [__NSArrayI accessibilityAttributeNames]: @unrecognized_selector @done(2013-04-21)
-		- Snippet 109 - @bus_error @done(2013-04-21)
-		- Snippet 111 - unsupported type encoding spec '{NSSize}' @done(2013-04-23)
-		- Snippet 115 - [__NSDictionaryM length]: @unrecognized_selector @done(2013-04-23)
-		- Snippet 118 @runs on right click tango.core.Exception.SwitchException@dwt.widgets.Control(2206) No appropriate switch clause found @done(2013-04-23)
 		- Snippet 119 @segmentation_fault
-		- Snippet 122 @runs on quit dwt.DWTException.DWTException: Device is disposed @done(2013-04-23)
-		- Snippet 127 @segmentation_fault @done(2013-04-23)
-		- Snippet 14 @runs on right click tango.core.Exception.SwitchException@dwt.widgets.Control(2206) No appropriate switch clause found @done(2013-04-23)
 		- Snippet 140 @bus_error
 		- Snippet 142 @runs freezes on exit
-		- Snippet 143 @runs @done(2013-04-23)
-		- Snippet 144 @segmentation_fault @done(2013-04-23)
+		- Snippet 146 @runs @segmentation_fault on exit
+		- Snippet 150 @bus_error
+		- Snippet 153 @bus_error
+		- Snippet 163 @bus_error
+Archive:
+	- Replace "int /*long*/" with the real type @done(2012-11-27) @project(Todo)
+	- Replace "float /*double*/" with the real type @done(2012-11-27) @project(Todo)
+	- Check the os_custom.c file @done(2012-09-23) @project(Todo)
+	- Add back Java methods for string, array and collection methods that were replaced with D equivalents @done(2012-09-13) @project(Todo)
+	- Replace "auto" with the real type @done(2012-09-13) @project(Todo)
+	- Check all methods ending with "Proc" @done(2012-09-25) @project(Todo)
+	- Snippet 10 - IllegalArgumentException @done(2013-04-21) @project(Snippets / Not Working)
+	- Snippet 107 - @runs @done(2013-04-14) @project(Snippets / Not Working)
+	- Snippet 108 - [__NSArrayI accessibilityAttributeNames]: @unrecognized_selector @done(2013-04-21) @project(Snippets / Not Working)
+	- Snippet 109 - @bus_error @done(2013-04-21) @project(Snippets / Not Working)
+	- Snippet 111 - unsupported type encoding spec '{NSSize}' @done(2013-04-23) @project(Snippets / Not Working)
+	- Snippet 115 - [__NSDictionaryM length]: @unrecognized_selector @done(2013-04-23) @project(Snippets / Not Working)
+	- Snippet 118 @runs on right click tango.core.Exception.SwitchException@dwt.widgets.Control(2206) No appropriate switch clause found @done(2013-04-23) @project(Snippets / Not Working)
+	- Snippet 122 @runs on quit dwt.DWTException.DWTException: Device is disposed @done(2013-04-23) @project(Snippets / Not Working)
+	- Snippet 127 @segmentation_fault @done(2013-04-23) @project(Snippets / Not Working)
+	- Snippet 14 @runs on right click tango.core.Exception.SwitchException@dwt.widgets.Control(2206) No appropriate switch clause found @done(2013-04-23) @project(Snippets / Not Working)
+	- Snippet 143 @runs @done(2013-04-23) @project(Snippets / Not Working)
+	- Snippet 144 @segmentation_fault @done(2013-04-23) @project(Snippets / Not Working)
