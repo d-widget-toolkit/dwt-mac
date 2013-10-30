@@ -924,7 +924,7 @@ NSAttributedString createString(String string, int flags, bool draw) {
         }
         length = j;
     }
-    NSString str = NSString.stringWith (chars[0 .. length]);
+    NSString str = (cast(NSString) (new NSString()).alloc()).initWithString(chars[0 .. length]);
     NSAttributedString attribStr = (cast(NSAttributedString)(new NSAttributedString()).alloc()).initWithString(str, dict);
     dict.release();
     str.release();
