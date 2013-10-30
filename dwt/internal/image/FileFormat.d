@@ -84,7 +84,7 @@ public static ImageData[] load(InputStream is_, ImageLoader loader) {
     for (int i = 1; i < FORMATS.length; i++) {
         if (FORMATS[i] != null) {
             try {
-                Class clazz = Class_forName(FORMAT_PACKAGE ~ '.' ~ FORMATS[i] ~ '.' ~ FORMATS[i] ~ FORMAT_SUFFIX);
+                Class clazz = Class_forName(FORMAT_PACKAGE ~ '.' ~ FORMATS[i] ~ FORMAT_SUFFIX ~ '.' ~ FORMATS[i] ~ FORMAT_SUFFIX);
                 Object instance = clazz.create();
                 if (cast(FileFormat) instance) {
                     fileFormat = cast(FileFormat) instance;
@@ -116,7 +116,7 @@ public static void save(OutputStream os, int format, ImageLoader loader) {
     LEDataOutputStream stream = new LEDataOutputStream(os);
     FileFormat fileFormat = null;
     try {
-        Class clazz = Class_forName(FORMAT_PACKAGE ~ '.' ~ FORMATS[format] ~ '.' ~ FORMATS[format] ~ FORMAT_SUFFIX);
+        Class clazz = Class_forName(FORMAT_PACKAGE ~ '.' ~ FORMATS[format] ~ FORMAT_SUFFIX ~ '.' ~ FORMATS[format] ~ FORMAT_SUFFIX);
         fileFormat = cast(FileFormat) clazz.create();
     } catch (Exception e) {
         DWT.error(DWT.ERROR_UNSUPPORTED_FORMAT);
