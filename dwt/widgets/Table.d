@@ -1218,7 +1218,7 @@ NSRect expansionFrameWithFrame_inView(objc.id id, objc.SEL sel, NSRect cellRect,
                 expansionRect.width = cellSize.width;
             }
             NSRect contentRect = scrollView.contentView().bounds();
-            OS.NSIntersectionRect(contentRect, expansionRect, contentRect);
+            contentRect = OS.NSIntersectionRect(expansionRect, contentRect);
             if (!OS.NSEqualRects(expansionRect, contentRect)) {
                 return expansionRect;
             }

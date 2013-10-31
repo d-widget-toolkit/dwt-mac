@@ -406,7 +406,7 @@ public void scroll (int destX, int destY, int x, int y, int width, int height, b
         srcRect.y = sourceRect.y;
         srcRect.width = sourceRect.width;
         srcRect.height = sourceRect.height;
-        OS.NSIntersectionRect(visibleRect, visibleRect, srcRect);
+        visibleRect = OS.NSIntersectionRect(visibleRect, srcRect);
 
         if (!OS.NSEqualRects(visibleRect, srcRect)) {
             if (srcRect.x !is visibleRect.x) {

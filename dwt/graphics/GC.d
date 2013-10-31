@@ -721,7 +721,7 @@ public void copyArea(int srcX, int srcY, int width, int height, int destX, int d
                 srcRect.y = srcY;
                 srcRect.width = width;
                 srcRect.height = height;
-                OS.NSIntersectionRect(visibleRect, visibleRect, srcRect);
+                visibleRect = OS.NSIntersectionRect(visibleRect, srcRect);
 
                 if (!OS.NSEqualRects(visibleRect, srcRect)) {
                     if (srcRect.x !is visibleRect.x) {
