@@ -445,11 +445,10 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
             NSBezierPath path = NSBezierPath.bezierPath();
             NSRect rect = NSRect();
             if (hasSelection) {
-                NSUInteger pRectCount;
                 range.location = translateOffset(selectionStart);
                 range.length = translateOffset(selectionEnd - selectionStart + 1);
-                NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, &pRectCount);
-                NSUInteger rectCount = pRectCount;
+                NSUInteger rectCount = 0;
+                NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, &rectCount);
                 for (NSUInteger k = 0; k < rectCount; k++, pArray += NSRect.sizeof) {
                     OS.memmove(&rect, pArray, NSRect.sizeof);
                     fixRect(rect);
@@ -518,9 +517,8 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                             range.location = Math.max(lineStart, start);
                             range.length = Math.min(lineEnd, end) + 1 - range.location;
                             if (range.length > 0) {
-                                NSUInteger* pRectCount = cast(NSUInteger*)OS.malloc(C.PTR_SIZEOF);
-                                NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, pRectCount);
-                                NSUInteger rectCount = *pRectCount;
+                                NSUInteger rectCount = 0;
+                                NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, &rectCount);
                                 NSRect rect = NSRect();
                                 gc.handle.saveGraphicsState();
                                 Carbon.CGFloat baseline = layoutManager.typesetter().baselineOffsetInLayoutManager(layoutManager, lineStart);
@@ -588,9 +586,8 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                             range.location = Math.max(lineStart, start);
                             range.length = Math.min(lineEnd, end) + 1 - range.location;
                             if (range.length > 0) {
-                                uint* pRectCount;
-                                NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, pRectCount);
-                                NSUInteger rectCount = *pRectCount;
+                                NSUInteger rectCount = 0;
+                                NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, &rectCount);
                                 NSRect rect = NSRect();
                                 gc.handle.saveGraphicsState();
                                 Carbon.CGFloat [] color = null;
@@ -765,9 +762,8 @@ public Rectangle getBounds(int start, int end) {
         NSRange range = NSRange();
         range.location = start;
         range.length = end - start + 1;
-        uint* pRectCount;
-        NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, pRectCount);
-        NSUInteger rectCount = *pRectCount;
+        NSUInteger rectCount = 0;
+        NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, &rectCount);
         NSRect rect = NSRect();
         int left = 0x7FFFFFFF, right = 0;
         int top = 0x7FFFFFFF, bottom = 0;
@@ -1069,7 +1065,7 @@ public Point getLocation(int offset, bool trailing) {
             NSRange range = NSRange();
             range.location = offset;
             range.length = 1;
-            uint rectCount;
+            NSUInteger rectCount = 0;
             NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, &rectCount);
             if (rectCount > 0) {
                 NSRect bounds = NSRect();
