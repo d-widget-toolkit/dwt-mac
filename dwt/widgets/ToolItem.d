@@ -285,13 +285,16 @@ Point computeSize () {
 
 void createHandle () {
     if ((style & DWT.SEPARATOR) !is 0) {
-        NSBox widget = cast(NSBox)(new SWTBox()).alloc().init();
+        NSBox widget = cast(NSBox)(new SWTBox()).alloc();
+        widget.init();
         widget.setBoxType(OS.NSBoxSeparator);
         widget.setBorderWidth(0);
         view = widget;
     } else {
-        NSView widget = cast(NSView)(new SWTView()).alloc().init();
-        button = cast(NSButton)(new SWTButton()).alloc().init();
+        NSView widget = cast(NSView)(new SWTView()).alloc();
+        widget.init();
+        button = cast(NSButton)(new SWTButton()).alloc();
+        button.init();
         /*
         * Feature in Cocoa.  NSButtons without borders do not leave any margin
         * between their edge and their image.  The workaround is to provide a

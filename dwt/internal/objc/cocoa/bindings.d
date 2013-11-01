@@ -139,9 +139,6 @@ NSInteger NSNumberOfColorComponents (id colorSpaceName);
 bool NSEqualRects (NSRect aRect, NSRect bRect);
 bool NSPointInRect (NSPoint aPoint, NSRect aRect);
 NSRect NSIntersectionRect (NSRect aRect, NSRect bRect);
-//NSRect NSIntersectionRect (NSRect arg0, NSRect arg1, NSRect arg2) {
-//    return NSIntersectionRect(arg1, arg2);
-//}
 
 
 

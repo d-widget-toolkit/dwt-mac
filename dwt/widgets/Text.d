@@ -735,9 +735,7 @@ public Point getCaretLocation () {
     NSUInteger rectCount = 0;
     NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, container, &rectCount);
     NSRect rect = NSRect();
-    if(rectCount > 0) {
-        OS.memmove(&rect, pArray, NSRect.sizeof);
-    }
+    if(rectCount > 0) OS.memmove(&rect, pArray, NSRect.sizeof);
     return new Point(cast(int)rect.x, cast(int)rect.y);
 }
 
