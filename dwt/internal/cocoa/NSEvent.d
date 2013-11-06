@@ -91,7 +91,7 @@ public static NSPoint mouseLocation() {
     return OS.objc_msgSend_stret!(NSPoint)(OS.class_NSEvent, OS.sel_mouseLocation);
 }
 
-public static NSEvent otherEventWithType(NSEventType type, NSPoint location, NSUInteger flags, double time, NSTimeInterval wNum, NSGraphicsContext context, short subtype, NSInteger d1, NSInteger d2) {
+public static NSEvent otherEventWithType(NSEventType type, NSPoint location, NSUInteger flags, NSTimeInterval time, NSInteger wNum, NSGraphicsContext context, short subtype, NSInteger d1, NSInteger d2) {
     objc.id result = OS.objc_msgSend(OS.class_NSEvent, OS.sel_otherEventWithType_location_modifierFlags_timestamp_windowNumber_context_subtype_data1_data2_, type, location, flags, time, wNum, context !is null ? context.id : null, subtype, d1, d2);
     return result !is null ? new NSEvent(result) : null;
 }
