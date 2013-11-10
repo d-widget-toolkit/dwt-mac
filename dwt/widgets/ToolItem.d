@@ -303,7 +303,6 @@ void createHandle () {
         NSButtonCell cell = cast(NSButtonCell)(new SWTButtonCell ()).alloc ().init ();
         button.setCell (cell);
         cell.release();
-        cell.release();
         button.setBordered(false);
         button.setAction(OS.sel_sendSelection);
         button.setTarget(button);

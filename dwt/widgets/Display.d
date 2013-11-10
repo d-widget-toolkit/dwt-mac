@@ -2226,6 +2226,7 @@ void initClasses () {
 
     className = "SWTDatePicker";
     cls = OS.objc_allocateClassPair(OS.class_NSDatePicker, className, 0);
+    OS.class_addIvar(cls, SWT_OBJECT, size, align_, types);
     OS.class_addMethod(cls, OS.sel_isFlipped, proc2, "c@:");
     OS.class_addMethod(cls, OS.sel_sendSelection, proc2, "@:");
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
@@ -2257,6 +2258,7 @@ void initClasses () {
 
     className = "SWTImageTextCell";
     cls = OS.objc_allocateClassPair (OS.class_NSTextFieldCell, className, 0);
+    OS.class_addIvar (cls, SWT_OBJECT, size, align_, types);
     OS.class_addIvar (cls, SWT_IMAGE, size, align_, types);
     OS.class_addIvar (cls, SWT_ROW, size, align_, types);
     OS.class_addIvar (cls, SWT_COLUMN, size, align_, types);
@@ -2392,6 +2394,7 @@ void initClasses () {
     // Don't subclass NSSecureTextFieldCell -- you'll get an NSException from [NSSecureTextField setCellClass:]!
     className = "SWTSecureTextField";
     cls = OS.objc_allocateClassPair(OS.class_NSSecureTextField, className, 0);
+    OS.class_addIvar(cls, SWT_OBJECT, size, align_, types);
     addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
     addFrameMethods(cls, setFrameOriginProc, setFrameSizeProc);
     addAccessibilityMethods(cls, proc2, proc3, proc4, accessibilityHitTestProc);
@@ -2513,10 +2516,6 @@ void initClasses () {
     cls = OS.objc_allocateClassPair(OS.class_NSView, className, 0);
     OS.class_addIvar(cls, SWT_OBJECT, size, align_, types);
     OS.class_addMethod(cls, OS.sel_canBecomeKeyView, proc2, "@:");
-    OS.class_addMethod(cls, OS.sel_isFlipped, isFlippedProc, "@:");
-    OS.class_addMethod(cls, OS.sel_acceptsFirstResponder, proc2, "@:");
-    OS.class_addMethod(cls, OS.sel_isOpaque, proc2, "@:");
-    addEventMethods(cls, proc2, proc3, drawRectProc, hitTestProc, setNeedsDisplayInRectProc);
     OS.class_addMethod(cls, OS.sel_isFlipped, isFlippedProc, "@:");
     OS.class_addMethod(cls, OS.sel_acceptsFirstResponder, proc2, "@:");
     OS.class_addMethod(cls, OS.sel_isOpaque, proc2, "@:");

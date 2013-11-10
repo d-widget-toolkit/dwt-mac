@@ -721,7 +721,7 @@ public void copyArea(int srcX, int srcY, int width, int height, int destX, int d
                 srcRect.y = srcY;
                 srcRect.width = width;
                 srcRect.height = height;
-                OS.NSIntersectionRect(visibleRect, visibleRect, srcRect);
+                visibleRect = OS.NSIntersectionRect(visibleRect, srcRect);
 
                 if (!OS.NSEqualRects(visibleRect, srcRect)) {
                     if (srcRect.x !is visibleRect.x) {
@@ -924,7 +924,7 @@ NSAttributedString createString(String string, int flags, bool draw) {
         }
         length = j;
     }
-    NSString str = NSString.stringWith (chars[0 .. length]);
+    NSString str = (cast(NSString) (new NSString()).alloc()).initWithString(chars[0 .. length]);
     NSAttributedString attribStr = (cast(NSAttributedString)(new NSAttributedString()).alloc()).initWithString(str, dict);
     dict.release();
     str.release();

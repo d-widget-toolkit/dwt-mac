@@ -26,7 +26,7 @@ module dwt.dwthelper.associativearray;
  *
  * Throws: AssertException if any paramter is invalid
  */
-V get (K, V) (V[K] aa, K key)
+V get (K, V) (ref V[K] aa, K key)
 in
 {
 	assert(aa.length > 0);
@@ -55,7 +55,7 @@ body
  *         associative array previously associated <tt>null</tt>
  *         with <tt>key</tt>.)
  */
-V put (K, V) (V[K] aa, K key, V value)
+V put (K, V) (ref V[K] aa, K key, V value)
 {
 	return aa[key] = value;
 }
@@ -77,7 +77,7 @@ V put (K, V) (V[K] aa, K key, V value)
  *
  * Returns:
  */
-V remove (K, V) (V[K] aa, K key)
+V remove (K, V) (ref V[K] aa, K key)
 {
 	V v = aa[key];
 	aa.remove(k);
@@ -95,7 +95,7 @@ V remove (K, V) (V[K] aa, K key)
  * Returns: <tt>true</tt> if the specified
  * 			associative array contains no key-value mappings
  */
-bool isEmpty (K, V) (V[K] aa)
+bool isEmpty (K, V) (ref V[K] aa)
 {
 	return aa.length == 0;
 }
@@ -121,7 +121,7 @@ bool isEmpty (K, V) (V[K] aa)
  *
  * Returns: a collection view of the values contained in this map
  */
-V[] values (K, V) (V[K] aa)
+V[] values (K, V) (ref V[K] aa)
 {
 	return aa.values;
 }
@@ -129,7 +129,7 @@ V[] values (K, V) (V[K] aa)
 /**
  * Removes all mappings from this map
  */
-void clear (K, V) (V[K] aa)
+void clear (K, V) (ref V[K] aa)
 {
     foreach (k, v ; aa)
         aa.remove(k);
