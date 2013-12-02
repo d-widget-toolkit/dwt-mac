@@ -1,7 +1,7 @@
 Todo:
 	- Check the "CGDisplayBounds" function @done(2013-12-02)
-	- Check the "NSIntersectionRect" function
-	- Check the "accessibilityActionNames" and "internal_accessibilityActioregionToRectsnNames" method methods
+	- Check the "NSIntersectionRect" function @done(2013-12-02)
+	- Check the "accessibilityActionNames" and "internal_accessibilityActioregionToRectsnNames" method methods @done(2013-12-02)
 	- Check every usage of C memory related functions, i.e. "memcpy", "memmove", "memset", "memcmp", "memchr", "malloc", "free", "realloc", "calloc"
 Snippets:
 	Same as SWT:
