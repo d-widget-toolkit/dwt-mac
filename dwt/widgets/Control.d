@@ -199,6 +199,15 @@ bool acceptsFirstMouse (objc.id id, objc.SEL sel, objc.id theEvent) {
     return super.acceptsFirstMouse (id, sel, theEvent);
 }
 
+objc.id accessibilityActionNames(objc.id id, objc.SEL sel) {
+    if (accessible !is null) {
+        NSArray returnValue = accessible.internal_accessibilityActionNames(ACC.CHILDID_SELF);
+        if (returnValue !is null) return returnValue.id;
+    }
+
+    return super.accessibilityActionNames(id, sel);
+}
+
 objc.id accessibilityAttributeNames(objc.id id, objc.SEL sel) {
 
     if (id is view.id || (cast(NSControl)view && (cast(NSControl)view).cell() !is null && (cast(NSControl)view).cell().id is id)) {
