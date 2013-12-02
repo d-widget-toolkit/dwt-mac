@@ -547,7 +547,7 @@ public void copyArea(Image image, int x, int y) {
             OS.memmove(count.ptr, countPtr, OS.PTR_SIZEOF);
             for (int i = 0; i < count[0]; i++) {
                 OS.memmove(display.ptr, displays + (i * 4), 4);
-                OS.CGDisplayBounds(display[0], rect);
+                rect = OS.CGDisplayBounds(display[0]);
                 void* address = OS.CGDisplayBaseAddress(display[0]);
                 if (address !is null) {
                     size_t width = OS.CGDisplayPixelsWide(display[0]);
