@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -163,7 +163,7 @@ public class DragSource : Widget {
         objc.Class cls = OS.objc_allocateClassPair(OS.class_NSObject, className, 0);
         OS.class_addIvar(cls, SWT_OBJECT, size, cast(byte)align_, types);
 
-        objc.IMP draggedImage_endedAt_operationProc = OS.CALLBACK_draggedImage_endedAt_operation_(proc5);
+        objc.IMP draggedImage_endedAt_operationProc = cast(objc.IMP) &CALLBACK_draggedImage_endedAt_operation_;
 
         version (D_LP64)
         {
@@ -588,12 +588,6 @@ static objc.id dragSourceProc5(objc.id id, objc.SEL sel, objc.id arg0, objc.id a
 
     if (ds is null) return null;
 
-    if (sel is OS.sel_draggedImage_endedAt_operation_) {
-        NSPoint point = NSPoint();
-        OS.memmove(&point, arg1, NSPoint.sizeof);
-        ds.draggedImage_endedAt_operation(id, sel, arg0, point, cast(objc.id)arg2);
-    }
-
     return null;
 }
 
@@ -900,4 +894,25 @@ DNDEvent startDrag(Event dragEvent) {
 
     return event;
 }
+}
+
+private:
+extern (C):
+
+void CALLBACK_draggedImage_endedAt_operation_ (id obj, SEL sel, id arg0, NSPoint point, NSDragOperation arg2)
+{
+    Display display = Display.findDisplay(Thread.getThis());
+    if (display is null || display.isDisposed()) return;
+    Widget widget = display.findWidget(id);
+    if (widget is null) return;
+    DragSource ds = null;
+
+    if (auto w = cast(DragSource) widget) {
+        ds = w;
+    } else {
+        ds = cast(DragSource)widget.getData(DND.DRAG_SOURCE_KEY);
+    }
+
+    if (ds is null) return;
+    ds.draggedImage_endedAt_operation(id, sel, arg0, point, arg2);
 }
