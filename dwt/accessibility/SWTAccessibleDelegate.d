@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -78,7 +78,7 @@ class SWTAccessibleDelegate : NSObject {
         OS.class_addMethod(cls, OS.sel_accessibilityFocusedUIElement, proc2Args, "@:");
 
         OS.class_addMethod(cls, OS.sel_accessibilityAttributeValue_, proc3Args, "@:@");
-        OS.class_addMethod!("@:{NSPoint}")(cls, OS.sel_accessibilityHitTest_, proc3Args);
+        OS.class_addMethod!("@:{NSPoint}")(cls, OS.sel_accessibilityHitTest_, cast(objc.IMP) &CALLBACK_accessibilityHitTest_);
         OS.class_addMethod(cls, OS.sel_accessibilityIsAttributeSettable_, proc3Args, "@:@");
         OS.class_addMethod(cls, OS.sel_accessibilityActionDescription_, proc3Args, "@:@");
         OS.class_addMethod(cls, OS.sel_accessibilityPerformAction_, proc3Args, "@:@");
@@ -208,11 +208,6 @@ class SWTAccessibleDelegate : NSObject {
             NSString attribute = new NSString(arg0);
             cocoa.id retObject = swtAcc.accessibilityAttributeValue(attribute);
             return (retObject is null ? null : retObject.id);
-        } else if (sel is OS.sel_accessibilityHitTest_) {
-            NSPoint point= NSPoint();
-            OS.memmove(&point, arg0, NSPoint.sizeof);
-            cocoa.id retObject = swtAcc.accessibilityHitTest(point);
-            return (retObject is null ? null : retObject.id);
         } else if (sel is OS.sel_accessibilityIsAttributeSettable_) {
             NSString attribute = new NSString(arg0);
             return (swtAcc.accessibilityIsAttributeSettable(attribute) ? cast(objc.id) 1 : null);
@@ -267,4 +262,15 @@ class SWTAccessibleDelegate : NSObject {
         OS.object_setInstanceVariable(this.id, SWT_OBJECT, null);
     }
 
+extern (C):
+private:
+static:
+
+    objc.id CALLBACK_accessibilityHitTest_ (objc.id id, objc.SEL sel, NSPoint point)
+    {
+        SWTAccessibleDelegate swtAcc = getAccessibleDelegate(id);
+        if (swtAcc is null) return null;
+        cocoa.id retObject = swtAcc.accessibilityHitTest(point);
+        return (retObject is null ? null : retObject.id);
+    }
 }
