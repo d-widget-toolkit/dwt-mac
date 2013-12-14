@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2007, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -115,12 +115,10 @@ public this (Canvas parent, int style) {
     createWidget ();
 }
 
-objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, NSRangePointer rangePtr) {
+objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, NSRange range) {
     Event event = new Event ();
     event.detail = DWT.COMPOSITION_SELECTION;
     sendEvent (DWT.ImeComposition, event);
-    NSRange range = NSRange ();
-    OS.memmove (&range, rangePtr, NSRange.sizeof);
     NSUInteger start = range.location;
     NSUInteger end = range.location + range.length;
     if (event.start <= start && start <= event.end && event.start <= end && end <= event.end) {
@@ -132,10 +130,8 @@ objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, NSRangePointer r
     return null;
 }
 
-NSInteger characterIndexForPoint (objc.id id, objc.SEL sel, NSPointPointer point) {
+NSUInteger characterIndexForPoint (objc.id id, objc.SEL sel, NSPoint pt) {
     if (!isInlineEnabled ()) return OS.NSNotFound;
-    NSPoint pt = NSPoint ();
-    OS.memmove (&pt, point, NSPoint.sizeof);
     NSView view = parent.view;
     pt = view.window ().convertScreenToBase (pt);
     pt = view.convertPoint_fromView_ (pt, null);
@@ -156,7 +152,7 @@ void createWidget () {
     }
 }
 
-NSRect firstRectForCharacterRange(objc.id id, objc.SEL sel, objc.id range) {
+NSRect firstRectForCharacterRange(objc.id id, objc.SEL sel, NSRange range) {
     NSRect rect = NSRect ();
     Caret caret = parent.caret;
     if (caret !is null) {
@@ -462,7 +458,7 @@ public void setCompositionOffset (int offset) {
     }
 }
 
-bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, objc.id selRange) {
+bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, NSRange range) {
     if (!isInlineEnabled ()) return true;
     resetStyles ();
     caretOffset = commitCount = 0;
@@ -508,8 +504,6 @@ bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, objc
         styles = [getStyle (display.markedAttributes)];
         ranges = [0, length - 1];
     }
-    NSRange range = NSRange ();
-    OS.memmove (&range, selRange, NSRange.sizeof);
     caretOffset = range.location;
     Event event = new Event ();
     event.detail = DWT.COMPOSITION_CHANGED;

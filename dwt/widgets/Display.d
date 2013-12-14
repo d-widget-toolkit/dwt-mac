@@ -2110,32 +2110,32 @@ void initClasses () {
     objc.IMP fieldEditorProc4 = cast(objc.IMP) &fieldEditorProc4;
 
     objc.IMP isFlippedProc = OS.isFlipped_CALLBACK();
-    objc.IMP drawRectProc = OS.CALLBACK_drawRect_(proc3);
-    objc.IMP drawInteriorWithFrameInViewProc = OS.CALLBACK_drawInteriorWithFrame_inView_ (proc4);
-    objc.IMP drawWithExpansionFrameProc = OS.CALLBACK_drawWithExpansionFrame_inView_ (proc4);
-    objc.IMP imageRectForBoundsProc = OS.CALLBACK_imageRectForBounds_ (proc3);
-    objc.IMP titleRectForBoundsProc = OS.CALLBACK_titleRectForBounds_ (proc3);
-    objc.IMP hitTestForEvent_inRect_ofViewProc = OS.CALLBACK_hitTestForEvent_inRect_ofView_ (proc5);
-    objc.IMP cellSizeProc = OS.CALLBACK_cellSize (proc2);
-    objc.IMP drawImageWithFrameInViewProc = OS.CALLBACK_drawImage_withFrame_inView_ (proc5);
-    objc.IMP setFrameOriginProc = OS.CALLBACK_setFrameOrigin_(proc3);
-    objc.IMP setFrameSizeProc = OS.CALLBACK_setFrameSize_(proc3);
-    objc.IMP hitTestProc = OS.CALLBACK_hitTest_(proc3);
-    objc.IMP markedRangeProc = OS.CALLBACK_markedRange (proc2);
-    objc.IMP selectedRangeProc = OS.CALLBACK_selectedRange (proc2);
-    objc.IMP highlightSelectionInClipRectProc = OS.CALLBACK_highlightSelectionInClipRect_ (proc3);
-    objc.IMP setMarkedText_selectedRangeProc = OS.CALLBACK_setMarkedText_selectedRange_(proc4);
-    objc.IMP attributedSubstringFromRangeProc = OS.CALLBACK_attributedSubstringFromRange_(proc3);
-    objc.IMP characterIndexForPointProc = OS.CALLBACK_characterIndexForPoint_(proc3);
-    objc.IMP firstRectForCharacterRangeProc = OS.CALLBACK_firstRectForCharacterRange_(proc3);
-    objc.IMP textWillChangeSelectionProc = OS.CALLBACK_textView_willChangeSelectionFromCharacterRange_toCharacterRange_(proc5);
-    objc.IMP accessibilityHitTestProc = OS.CALLBACK_accessibilityHitTest_(proc3);
-    objc.IMP shouldChangeTextInRange_replacementString_Proc = OS.CALLBACK_shouldChangeTextInRange_replacementString_(fieldEditorProc4);
+    objc.IMP drawRectProc = cast(objc.IMP) &CALLBACK_drawRect_;
+    objc.IMP drawInteriorWithFrameInViewProc = cast(objc.IMP) &CALLBACK_drawInteriorWithFrame_inView_;
+    objc.IMP drawWithExpansionFrameProc = cast(objc.IMP) &CALLBACK_drawWithExpansionFrame_inView_;
+    objc.IMP imageRectForBoundsProc = cast(objc.IMP) &CALLBACK_imageRectForBounds_;
+    objc.IMP titleRectForBoundsProc = cast(objc.IMP) &CALLBACK_titleRectForBounds_;
+    objc.IMP hitTestForEvent_inRect_ofViewProc = cast(objc.IMP) &CALLBACK_hitTestForEvent_inRect_ofView_;
+    objc.IMP cellSizeProc = cast(objc.IMP) &CALLBACK_cellSize;
+    objc.IMP drawImageWithFrameInViewProc = cast(objc.IMP) &CALLBACK_drawImage_withFrame_inView_;
+    objc.IMP setFrameOriginProc = cast(objc.IMP) &CALLBACK_setFrameOrigin_;
+    objc.IMP setFrameSizeProc = cast(objc.IMP) &CALLBACK_setFrameSize_;
+    objc.IMP hitTestProc = cast(objc.IMP) &CALLBACK_hitTest_;
+    objc.IMP markedRangeProc = cast(objc.IMP) &CALLBACK_markedRange;
+    objc.IMP selectedRangeProc = cast(objc.IMP) &CALLBACK_selectedRange;
+    objc.IMP highlightSelectionInClipRectProc = cast(objc.IMP) &CALLBACK_highlightSelectionInClipRect_;
+    objc.IMP setMarkedText_selectedRangeProc = cast(objc.IMP) &CALLBACK_setMarkedText_selectedRange_;
+    objc.IMP attributedSubstringFromRangeProc = cast(objc.IMP) &CALLBACK_attributedSubstringFromRange_;
+    objc.IMP characterIndexForPointProc = cast(objc.IMP) &CALLBACK_characterIndexForPoint_;
+    objc.IMP firstRectForCharacterRangeProc = cast(objc.IMP) &CALLBACK_firstRectForCharacterRange_;
+    objc.IMP textWillChangeSelectionProc = cast(objc.IMP) &CALLBACK_textView_willChangeSelectionFromCharacterRange_toCharacterRange_;
+    objc.IMP accessibilityHitTestProc = cast(objc.IMP) &CALLBACK_accessibilityHitTest_;
+    objc.IMP shouldChangeTextInRange_replacementString_Proc = cast(objc.IMP) &CALLBACK_shouldChangeTextInRange_replacementString_;
     objc.IMP shouldChangeTextInRange_replacementString_fieldEditorProc = shouldChangeTextInRange_replacementString_Proc;
-    objc.IMP view_stringForToolTip_point_userDataProc = OS.CALLBACK_view_stringForToolTip_point_userData_(proc6);
-    objc.IMP canDragRowsWithIndexes_atPoint_Proc = OS.CALLBACK_canDragRowsWithIndexes_atPoint_(proc4);
-    objc.IMP setNeedsDisplayInRectProc = OS.CALLBACK_setNeedsDisplayInRect_(proc3);
-    objc.IMP expansionFrameWithFrameProc = OS.CALLBACK_expansionFrameWithFrame_inView_ (proc4);
+    objc.IMP view_stringForToolTip_point_userDataProc = cast(objc.IMP) &CALLBACK_view_stringForToolTip_point_userData_;
+    objc.IMP canDragRowsWithIndexes_atPoint_Proc = cast(objc.IMP) &CALLBACK_canDragRowsWithIndexes_atPoint_;
+    objc.IMP setNeedsDisplayInRectProc = cast(objc.IMP) &CALLBACK_setNeedsDisplayInRect_;
+    objc.IMP expansionFrameWithFrameProc = cast(objc.IMP) &CALLBACK_expansionFrameWithFrame_inView_;
 
     String types = "^v";
     size_t size = C.PTR_SIZEOF;
@@ -4638,9 +4638,6 @@ static objc.id fieldEditorProc4(objc.id id, objc.SEL sel, objc.id arg0, objc.id 
         if (widget !is null) break;
         view = view.superview ();
     } while (view !is null);
-    if (sel is OS.sel_shouldChangeTextInRange_replacementString_) {
-        return widget.shouldChangeTextInRange_replacementString(id, sel, arg0, arg1) ? cast(objc.id)1 : cast(objc.id)0;
-    }
     return null;
 }
 
@@ -4691,30 +4688,6 @@ static objc.id windowProc2(objc.id id, objc.SEL sel) {
         //TODO not called?
     } else if (sel is OS.sel_validAttributesForMarkedText) {
         return widget.validAttributesForMarkedText (id, sel);
-    } else if (sel is OS.sel_markedRange) {
-        NSRange range = widget.markedRange (id, sel);
-        /* NOTE that this is freed in C */
-        objc.id result = cast(objc.id) OS.malloc (NSRange.sizeof);
-        OS.memmove (result, &range, NSRange.sizeof);
-        return result;
-    } else if (sel is OS.sel_selectedRange) {
-        NSRange range = widget.selectedRange (id, sel);
-        /* NOTE that this is freed in C */
-        objc.id result = cast(objc.id) OS.malloc (NSRange.sizeof);
-        OS.memmove (result, &range, NSRange.sizeof);
-        return result;
-    } else if (sel is OS.sel_cellSize) {
-        NSSize size = widget.cellSize (id, sel);
-        /* NOTE that this is freed in C */
-        objc.id result = cast(objc.id)OS.malloc (NSSize.sizeof);
-        OS.memmove (result, &size, NSSize.sizeof);
-        return result;
-    } else if (sel is OS.sel_cellSize) {
-        NSSize size = widget.cellSize (id, sel);
-        /* NOTE that this is freed in C */
-        objc.id result = cast(objc.id)OS.malloc (NSSize.sizeof);
-        OS.memmove (result, &size, NSSize.sizeof);
-        return result;
     } else if (sel is OS.sel_hasMarkedText) {
         return widget.hasMarkedText (id, sel) ? cast(objc.id) 1 : null;
     } else if (sel is OS.sel_canBecomeKeyWindow) {
@@ -4775,24 +4748,8 @@ static objc.id windowProc3(objc.id id, objc.SEL sel, objc.id arg0) {
     if (widget is null) return null;
     if (sel is OS.sel_windowWillClose_) {
         widget.windowWillClose(id, sel, arg0);
-    } else if (sel is OS.sel_drawRect_) {
-        NSRect rect = NSRect();
-        OS.memmove(&rect, arg0, NSRect.sizeof);
-        widget.drawRect(id, sel, rect);
     } else if (sel is OS.sel__drawThemeProgressArea_) {
         widget._drawThemeProgressArea(id, sel, arg0);
-    } else if (sel is OS.sel_setFrameOrigin_) {
-        NSPoint point = NSPoint();
-        OS.memmove(&point, arg0, NSPoint.sizeof);
-        widget.setFrameOrigin(id, sel, point);
-    } else if (sel is OS.sel_setFrameSize_) {
-        NSSize size = NSSize();
-        OS.memmove(&size, arg0, NSSize.sizeof);
-        widget.setFrameSize(id, sel, size);
-    } else if (sel is OS.sel_hitTest_) {
-        NSPoint point = NSPoint();
-        OS.memmove(&point, arg0, NSPoint.sizeof);
-        return widget.hitTest(id, sel, point);
     } else if (sel is OS.sel_windowShouldClose_) {
         return widget.windowShouldClose(id, sel, arg0) ? cast(objc.id) 1 : null;
     } else if (sel is OS.sel_mouseDown_) {
@@ -4871,28 +4828,12 @@ static objc.id windowProc3(objc.id id, objc.SEL sel, objc.id arg0) {
         widget.textDidChange(id, sel, arg0);
     } else if (sel is OS.sel_textDidEndEditing_) {
         widget.textDidEndEditing(id, sel, arg0);
-    } else if (sel is OS.sel_attributedSubstringFromRange_) {
-        return widget.attributedSubstringFromRange (id, sel, cast(NSRange*)arg0);
-    } else if (sel is OS.sel_characterIndexForPoint_) {
-        return cast(objc.id) widget.characterIndexForPoint (id, sel, cast(NSPoint*)arg0);
-    } else if (sel is OS.sel_firstRectForCharacterRange_) {
-        NSRect rect = widget.firstRectForCharacterRange (id, sel, arg0);
-        /* NOTE that this is freed in C */
-        objc.id result = cast(objc.id) OS.malloc (NSRect.sizeof);
-        OS.memmove (result, &rect, NSRect.sizeof);
-        return result;
     } else if (sel is OS.sel_insertText_) {
         return widget.insertText (id, sel, arg0) ? cast(objc.id)1 : cast(objc.id)0;
     } else if (sel is OS.sel_doCommandBySelector_) {
         widget.doCommandBySelector (id, sel, cast(objc.SEL) arg0);
-    } else if (sel is OS.sel_highlightSelectionInClipRect_) {
-        widget.highlightSelectionInClipRect (id, sel, arg0);
     } else if (sel is OS.sel_reflectScrolledClipView_) {
         widget.reflectScrolledClipView (id, sel, arg0);
-    } else if (sel is OS.sel_accessibilityHitTest_) {
-        NSPoint point = NSPoint();
-        OS.memmove(&point, arg0, NSPoint.sizeof);
-        return widget.accessibilityHitTest(id, sel, point);
     } else if (sel is OS.sel_accessibilityAttributeValue_) {
         return widget.accessibilityAttributeValue(id, sel, arg0);
     } else if (sel is OS.sel_accessibilityPerformAction_) {
@@ -4911,26 +4852,8 @@ static objc.id windowProc3(objc.id id, objc.SEL sel, objc.id arg0) {
         widget.outlineViewColumnDidResize(id, sel, arg0);
     } else if (sel is OS.sel_setNeedsDisplay_) {
         widget.setNeedsDisplay(id, sel, arg0 !is null);
-    } else if (sel is OS.sel_setNeedsDisplayInRect_) {
-        widget.setNeedsDisplayInRect(id, sel, arg0);
     } else if (sel is OS.sel_setImage_) {
         widget.setImage(id, sel, arg0);
-    } else if (sel is OS.sel_imageRectForBounds_) {
-        NSRect rect = NSRect();
-        OS.memmove(&rect, arg0, NSRect.sizeof);
-        rect = widget.imageRectForBounds(id, sel, rect);
-        /* NOTE that this is freed in C */
-        objc.id result = cast(objc.id)OS.malloc (NSRect.sizeof);
-        OS.memmove (result, &rect, NSRect.sizeof);
-        return result;
-    } else if (sel is OS.sel_titleRectForBounds_) {
-        NSRect rect = NSRect();
-        OS.memmove(&rect, arg0, NSRect.sizeof);
-        rect = widget.titleRectForBounds(id, sel, rect);
-        /* NOTE that this is freed in C */
-        objc.id result = cast(objc.id)OS.malloc (NSRect.sizeof);
-        OS.memmove (result, &rect, NSRect.sizeof);
-        return result;
     } else if (sel is OS.sel_setObjectValue_) {
         widget.setObjectValue(id, sel, arg0);
     } else if (sel is OS.sel_updateOpenGLContext_) {
@@ -4952,38 +4875,16 @@ static objc.id windowProc4(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1)
         return cast(objc.id) widget.outlineView_numberOfChildrenOfItem(id, sel, arg0, arg1);
     } else if (sel is OS.sel_menu_willHighlightItem_) {
         widget.menu_willHighlightItem(id, sel, arg0, arg1);
-    } else if (sel is OS.sel_setMarkedText_selectedRange_) {
-        widget.setMarkedText_selectedRange (id, sel, arg0, arg1);
-    } else if (sel is OS.sel_drawInteriorWithFrame_inView_) {
-        NSRect rect = NSRect ();
-        OS.memmove (&rect, arg0, NSRect.sizeof);
-        widget.drawInteriorWithFrame_inView (id, sel, rect, arg1);
-    } else if (sel is OS.sel_drawWithExpansionFrame_inView_) {
-        NSRect rect = NSRect();
-        OS.memmove(&rect, arg0, NSRect.sizeof);
-        widget.drawWithExpansionFrame_inView (id, sel, rect, arg1);
     } else if (sel is OS.sel_accessibilityAttributeValue_forParameter_) {
         return widget.accessibilityAttributeValue_forParameter(id, sel, arg0, arg1);
     } else if (sel is OS.sel_tableView_didClickTableColumn_) {
         widget.tableView_didClickTableColumn (id, sel, arg0, arg1);
     } else if (sel is OS.sel_outlineView_didClickTableColumn_) {
         widget.outlineView_didClickTableColumn (id, sel, arg0, arg1);
-    } else if (sel is OS.sel_shouldChangeTextInRange_replacementString_) {
-        return widget.shouldChangeTextInRange_replacementString(id, sel, arg0, arg1) ? cast(objc.id)1 : cast(objc.id)0;
-    } else if (sel is OS.sel_canDragRowsWithIndexes_atPoint_) {
-        return widget.canDragRowsWithIndexes_atPoint(id, sel, arg0, arg1) ? cast(objc.id)1 : cast(objc.id)0;
     } else if (sel is OS.sel_expandItem_expandChildren_) {
         widget.expandItem_expandChildren(id, sel, arg0, arg1 !is null);
     } else if (sel is OS.sel_collapseItem_collapseChildren_) {
         widget.collapseItem_collapseChildren(id, sel, arg0, arg1 !is null);
-    } else if (sel is OS.sel_expansionFrameWithFrame_inView_) {
-        NSRect rect = NSRect();
-        OS.memmove(&rect, arg0, NSRect.sizeof);
-        rect = widget.expansionFrameWithFrame_inView(id, sel, rect, arg1);
-        /* NOTE that this is freed in C */
-        objc.id result = cast(objc.id)OS.malloc (NSRect.sizeof);
-        OS.memmove (result, &rect, NSRect.sizeof);
-        return result;
     }
     return null;
 }
@@ -5001,24 +4902,10 @@ static objc.id windowProc5(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1,
         return widget.outlineView_child_ofItem(id, sel, arg0, arg1, arg2);
     } else if (sel is OS.sel_outlineView_objectValueForTableColumn_byItem_) {
         return widget.outlineView_objectValueForTableColumn_byItem(id, sel, arg0, arg1, arg2);
-    } else if (sel is OS.sel_textView_willChangeSelectionFromCharacterRange_toCharacterRange_) {
-        NSRange range = widget.textView_willChangeSelectionFromCharacterRange_toCharacterRange(id, sel, arg0, arg1, arg2);
-        /* NOTE that this is freed in C */
-        objc.id result = cast(objc.id) OS.malloc (NSRange.sizeof);
-        OS.memmove (result, &range, NSRange.sizeof);
-        return result;
     } else if (sel is OS.sel_dragSelectionWithEvent_offset_slideBack_) {
         NSSize offset = NSSize();
         OS.memmove(&offset, arg0, NSSize.sizeof);
         return (widget.dragSelectionWithEvent(id, sel, arg0, arg1, arg2) ? cast(objc.id)1 : cast(objc.id)0);
-    } else if (sel is OS.sel_drawImage_withFrame_inView_) {
-        NSRect rect = NSRect ();
-        OS.memmove (&rect, arg1, NSRect.sizeof);
-        widget.drawImageWithFrameInView (id, sel, arg0, rect, arg2);
-    } else if (sel is OS.sel_hitTestForEvent_inRect_ofView_) {
-        NSRect rect = NSRect ();
-        OS.memmove (&rect, arg1, NSRect.sizeof);
-        return widget.hitTestForEvent (id, sel, arg0, rect, arg2);
     } else if (sel is OS.sel_tableView_writeRowsWithIndexes_toPasteboard_) {
         return (widget.tableView_writeRowsWithIndexes_toPasteboard(id, sel, arg0, arg1, arg2) ? cast(objc.id)1 : cast(objc.id)0);
     } else if (sel is OS.sel_outlineView_writeItems_toPasteboard_) {
@@ -5038,10 +4925,198 @@ static objc.id windowProc6(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1,
         widget.outlineView_setObjectValue_forTableColumn_byItem(id, sel, arg0, arg1, arg2, arg3);
     } else if (sel is OS.sel_tableView_setObjectValue_forTableColumn_row_) {
         widget.tableView_setObjectValue_forTableColumn_row(id, sel, arg0, arg1, arg2, arg3);
-    } else if (sel is OS.sel_view_stringForToolTip_point_userData_) {
-        return widget.view_stringForToolTip_point_userData(id, sel, arg0, arg1, arg2, arg3);
     }
     return null;
+}
+
+static:
+
+void CALLBACK_drawRect_ (objc.id id, objc.SEL sel, NSRect rect)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return;
+    widget.drawRect(id, sel, rect);
+}
+
+void CALLBACK_drawInteriorWithFrame_inView_ (objc.id id, objc.SEL sel, NSRect rect, objc.id arg1)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return;
+    widget.drawInteriorWithFrame_inView (id, sel, rect, arg1);
+}
+
+void CALLBACK_drawWithExpansionFrame_inView_ (objc.id id, objc.SEL sel, NSRect rect, objc.id arg1)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return;
+    widget.drawWithExpansionFrame_inView (id, sel, rect, arg1);
+}
+
+NSRect CALLBACK_imageRectForBounds_ (objc.id id, objc.SEL sel, NSRect rect)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return NSRect.init;
+    return widget.imageRectForBounds(id, sel, rect);
+}
+
+NSRect CALLBACK_titleRectForBounds_ (objc.id id, objc.SEL sel, NSRect rect)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return NSRect.init;
+    return widget.titleRectForBounds(id, sel, rect);
+}
+
+NSUInteger CALLBACK_hitTestForEvent_inRect_ofView_ (objc.id id, objc.SEL sel, objc.id arg0, NSRect rect, objc.id arg2)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return NSUInteger.init;
+    return widget.hitTestForEvent(id, sel, arg0, rect, arg2);
+}
+
+NSSize CALLBACK_cellSize (objc.id id, objc.SEL sel)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return NSSize.init;
+    return widget.cellSize (id, sel);
+}
+
+void CALLBACK_drawImage_withFrame_inView_ (objc.id id, objc.SEL sel, objc.id arg0, NSRect rect, objc.id arg2)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return;
+    widget.drawImageWithFrameInView (id, sel, arg0, rect, arg2);
+}
+
+void CALLBACK_setFrameOrigin_ (objc.id id, objc.SEL sel, NSPoint point)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return;
+    widget.setFrameOrigin(id, sel, point);
+}
+
+void CALLBACK_setFrameSize_ (objc.id id, objc.SEL sel, NSSize size)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return;
+    widget.setFrameSize(id, sel, size);
+}
+
+objc.id CALLBACK_hitTest_ (objc.id id, objc.SEL sel, NSPoint point)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return null;
+    return widget.hitTest(id, sel, point);
+}
+
+NSRange CALLBACK_markedRange (objc.id id, objc.SEL sel)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return NSRange.init;
+    return widget.markedRange (id, sel);
+}
+
+NSRange CALLBACK_selectedRange (objc.id id, objc.SEL sel)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return NSRange.init;
+    return widget.selectedRange (id, sel);
+}
+
+void CALLBACK_highlightSelectionInClipRect_ (objc.id id, objc.SEL sel, NSRect arg0)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return;
+    widget.highlightSelectionInClipRect (id, sel, arg0);
+}
+
+void CALLBACK_setMarkedText_selectedRange_ (objc.id id, objc.SEL sel, objc.id arg0, NSRange arg1)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return;
+    widget.setMarkedText_selectedRange (id, sel, arg0, arg1);
+}
+
+objc.id CALLBACK_attributedSubstringFromRange_ (objc.id id, objc.SEL sel, NSRange arg0)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return null;
+    return widget.attributedSubstringFromRange (id, sel, arg0);
+}
+
+NSUInteger CALLBACK_characterIndexForPoint_ (objc.id id, objc.SEL sel, NSPoint arg0)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return 0;
+    return widget.characterIndexForPoint (id, sel, arg0);
+}
+
+NSRect CALLBACK_firstRectForCharacterRange_ (objc.id id, objc.SEL sel, NSRange arg0)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return NSRect.init;
+    widget.firstRectForCharacterRange (id, sel, arg0);
+}
+
+NSRange CALLBACK_textView_willChangeSelectionFromCharacterRange_toCharacterRange_ (objc.id id, objc.SEL sel, objc.id arg0, NSRange arg1, NSRange arg2)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return NSRange.init;
+    return widget.textView_willChangeSelectionFromCharacterRange_toCharacterRange(id, sel, arg0, arg1, arg2);
+}
+
+objc.id CALLBACK_accessibilityHitTest_ (objc.id id, objc.SEL sel, NSPoint point)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return null;
+    return widget.accessibilityHitTest(id, sel, point);
+}
+
+bool CALLBACK_shouldChangeTextInRange_replacementString_ (objc.id id, objc.SEL sel, objc.id arg0, NSRange arg1, objc.id arg2)
+{
+    Widget widget = null;
+    NSView view = new NSView (id);
+    do {
+        widget = GetWidget (view.id);
+        if (widget !is null) break;
+        view = view.superview ();
+    } while (view !is null);
+    return widget.shouldChangeTextInRange_replacementString(id, sel, arg0, arg1, arg2);
+    return false;
+}
+
+bool CALLBACK_shouldChangeTextInRange_replacementString_2 (objc.id id, objc.SEL sel, objc.id arg0, NSRange arg1, objc.id arg2)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return false;
+    return widget.shouldChangeTextInRange_replacementString(id, sel, arg0, arg1, arg2);
+}
+
+objc.id CALLBACK_view_stringForToolTip_point_userData_ (objc.id id, objc.SEL sel, objc.id arg0, NSToolTipTag arg1, NSPoint arg2, void* arg3)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return null;
+    return widget.view_stringForToolTip_point_userData(id, sel, arg0, arg1, arg2, arg3);
+}
+
+bool CALLBACK_canDragRowsWithIndexes_atPoint_ (objc.id id, objc.SEL sel, objc.id arg0, NSPoint arg1)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return false;
+    return widget.canDragRowsWithIndexes_atPoint(id, sel, arg0, arg1);
+}
+
+void CALLBACK_setNeedsDisplayInRect_ (objc.id id, objc.SEL sel, NSRect arg0)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return;
+    widget.setNeedsDisplayInRect(id, sel, arg0);
+}
+
+NSRect CALLBACK_expansionFrameWithFrame_inView_ (objc.id id, objc.SEL sel, NSRect rect, objc.id arg1)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return NSRect.init;
+    return widget.expansionFrameWithFrame_inView(id, sel, rect, arg1);
 }
 
 }

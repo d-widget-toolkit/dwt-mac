@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -79,7 +79,7 @@ this () {
     /* Do nothing */
 }
 
-objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, NSRangePointer range) {
+objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, NSRange range) {
     if (ime !is null) return ime.attributedSubstringFromRange (id, sel, range);
     return super.attributedSubstringFromRange(id, sel, range);
 }
@@ -127,7 +127,7 @@ public this (Composite parent, int style) {
     super (parent, style);
 }
 
-NSInteger characterIndexForPoint (objc.id id, objc.SEL sel, NSPointPointer point) {
+NSUInteger characterIndexForPoint (objc.id id, objc.SEL sel, NSPoint point) {
     if (ime !is null) return ime.characterIndexForPoint (id, sel, point);
     return super.characterIndexForPoint (id, sel, point);
 }
@@ -239,7 +239,7 @@ void drawWidget (objc.id id, NSGraphicsContext context, NSRect rect) {
     }
 }
 
-NSRect firstRectForCharacterRange (objc.id id, objc.SEL sel, objc.id range) {
+NSRect firstRectForCharacterRange (objc.id id, objc.SEL sel, NSRange range) {
     if (ime !is null) return ime.firstRectForCharacterRange (id, sel, range);
     return super.firstRectForCharacterRange (id, sel, range);
 }
@@ -529,7 +529,7 @@ public void setIME (IME ime) {
     this.ime = ime;
 }
 
-bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, objc.id range) {
+bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, NSRange range) {
     if (ime !is null) {
         if (!ime.setMarkedText_selectedRange (id, sel, string, range)) return false;
     }

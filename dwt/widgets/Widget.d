@@ -216,7 +216,7 @@ String getClipboardText () {
 void setClipRegion (CGFloat x, CGFloat y) {
 }
 
-objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, NSRangePointer range) {
+objc.id attributedSubstringFromRange (objc.id id, objc.SEL sel, NSRange range) {
     return null;
 }
 
@@ -308,12 +308,12 @@ objc.id callSuperObject(objc.id id, objc.SEL sel, objc.id arg0) {
     return OS.objc_msgSendSuper(&super_struct, sel, arg0);
 }
 
-bool canDragRowsWithIndexes_atPoint(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
+bool canDragRowsWithIndexes_atPoint(objc.id id, objc.SEL sel, objc.id arg0, NSPoint arg1) {
     // Trees/tables are not draggable unless explicitly told they are.
     return false;
 }
 
-NSInteger characterIndexForPoint (objc.id id, objc.SEL sel, NSPointPointer point) {
+NSUInteger characterIndexForPoint (objc.id id, objc.SEL sel, NSPoint point) {
     return OS.NSNotFound;
 }
 objc.id columnAtPoint(objc.id id, objc.SEL sel, NSPoint point) {
@@ -685,7 +685,7 @@ bool filters (int eventType) {
     return display.filters (eventType);
 }
 
-NSRect firstRectForCharacterRange(objc.id id, objc.SEL sel, objc.id range) {
+NSRect firstRectForCharacterRange(objc.id id, objc.SEL sel, NSRange range) {
     return NSRect ();
 }
 
@@ -861,7 +861,7 @@ bool hasMarkedText (objc.id id, objc.SEL sel) {
 void helpRequested(objc.id id, objc.SEL sel, objc.id theEvent) {
 }
 
-void highlightSelectionInClipRect(objc.id id, objc.SEL sel, objc.id rect) {
+void highlightSelectionInClipRect(objc.id id, objc.SEL sel, NSRect rect) {
 }
 
 objc.id hitTest (objc.id id, objc.SEL sel, NSPoint point) {
@@ -871,8 +871,8 @@ objc.id hitTest (objc.id id, objc.SEL sel, NSPoint point) {
     return OS.objc_msgSendSuper(&super_struct, sel, point);
 }
 
-objc.id hitTestForEvent (objc.id id, objc.SEL sel, objc.id event, NSRect rect, objc.id controlView) {
-    return null;
+NSUInteger hitTestForEvent (objc.id id, objc.SEL sel, objc.id event, NSRect rect, objc.id controlView) {
+    return 0;
 }
 
 bool hooks (int eventType) {
@@ -1635,7 +1635,7 @@ bool setKeyState (Event event, int type, NSEvent nsEvent) {
     return true;
 }
 
-bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, objc.id range) {
+bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, NSRange range) {
     return true;
 }
 
@@ -1657,10 +1657,8 @@ void setNeedsDisplay (objc.id id, objc.SEL sel, bool flag) {
     OS.objc_msgSendSuper(&super_struct, sel, flag);
 }
 
-void setNeedsDisplayInRect (objc.id id, objc.SEL sel, objc.id arg0) {
+void setNeedsDisplayInRect (objc.id id, objc.SEL sel, NSRect rect) {
     if (!isDrawing()) return;
-    NSRect rect = NSRect();
-    OS.memmove(&rect, arg0, NSRect.sizeof);
     NSView view = new NSView(id);
     if (display.isPainting.containsObject(view)) {
         NSMutableArray needsDisplayInRect = display.needsDisplayInRect;
@@ -1690,7 +1688,7 @@ bool setTabItemFocus () {
     return false;
 }
 
-bool shouldChangeTextInRange_replacementString(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
+bool shouldChangeTextInRange_replacementString(objc.id id, objc.SEL sel, objc.id arg0, NSRange arg1, objc.id arg2) {
     return true;
 }
 
@@ -1739,7 +1737,7 @@ void textDidEndEditing(objc.id id, objc.SEL sel, objc.id aNotification) {
     callSuper(id, sel, aNotification);
 }
 
-NSRange textView_willChangeSelectionFromCharacterRange_toCharacterRange(objc.id id, objc.SEL sel, objc.id aTextView, objc.id oldSelectedCharRange, objc.id newSelectedCharRange) {
+NSRange textView_willChangeSelectionFromCharacterRange_toCharacterRange(objc.id id, objc.SEL sel, objc.id aTextView, NSRange oldSelectedCharRange, NSRange newSelectedCharRange) {
     return NSRange();
 }
 
@@ -1785,7 +1783,7 @@ objc.id validAttributesForMarkedText (objc.id id, objc.SEL sel) {
 void tabView_didSelectTabViewItem(objc.id id, objc.SEL sel, objc.id tabView, objc.id tabViewItem) {
 }
 
-objc.id view_stringForToolTip_point_userData (objc.id id, objc.SEL sel, objc.id view, objc.id tag, objc.id point, objc.id userData) {
+objc.id view_stringForToolTip_point_userData (objc.id id, objc.SEL sel, objc.id view, NSToolTipTag tag, NSPoint point, void* userData) {
     return null;
 }
 
