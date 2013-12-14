@@ -718,8 +718,8 @@ public this () {
  * @param data the device data
  */
 public this (DeviceData data) {
-	deadKeyState = new uint[1];
-	screenID = new int[32];
+    deadKeyState = new uint[1];
+    screenID = new int[32];
     screenCascade = new NSPoint[32];
     screenCascadeExists = new bool[32];
 
@@ -2070,7 +2070,7 @@ void addEventMethods (objc.Class cls, objc.IMP proc2, objc.IMP proc3, objc.IMP d
 
 void addFrameMethods(objc.Class cls, objc.IMP setFrameOriginProc, objc.IMP setFrameSizeProc) {
     OS.class_addMethod!("v@:{NSPoint}")(cls, OS.sel_setFrameOrigin_, setFrameOriginProc);
-   	OS.class_addMethod!("v@:{NSSize}")(cls, OS.sel_setFrameSize_, setFrameSizeProc);
+    OS.class_addMethod!("v@:{NSSize}")(cls, OS.sel_setFrameSize_, setFrameSizeProc);
 }
 
 void addAccessibilityMethods(objc.Class cls, objc.IMP proc2, objc.IMP proc3, objc.IMP proc4, objc.IMP accessibilityHitTestProc) {
@@ -2767,125 +2767,125 @@ public bool post(Event event) {
             eventSourceDelaySet = true;
         }
 
-	    int type = event.type;
-	    switch (type) {
-	        case DWT.KeyDown:
-	        case DWT.KeyUp: {
-	            short vKey = cast(short)Display.untranslateKey (event.keyCode);
-	            if (vKey is 0) {
-	                ubyte* uchrPtr = null;
-	                Carbon.TISInputSourceRef currentKbd = OS.TISCopyCurrentKeyboardInputSource();
-	                Carbon.CFDataRef uchrCFData = cast(Carbon.CFDataRef) OS.TISGetInputSourceProperty(currentKbd, OS.kTISPropertyUnicodeKeyLayoutData);
+        int type = event.type;
+        switch (type) {
+            case DWT.KeyDown:
+            case DWT.KeyUp: {
+                short vKey = cast(short)Display.untranslateKey (event.keyCode);
+                if (vKey is 0) {
+                    ubyte* uchrPtr = null;
+                    Carbon.TISInputSourceRef currentKbd = OS.TISCopyCurrentKeyboardInputSource();
+                    Carbon.CFDataRef uchrCFData = cast(Carbon.CFDataRef) OS.TISGetInputSourceProperty(currentKbd, OS.kTISPropertyUnicodeKeyLayoutData);
 
-	                if (uchrCFData is null) return false;
-	                uchrPtr = OS.CFDataGetBytePtr(uchrCFData);
-	                if (uchrPtr is null) return false;
-	                if (OS.CFDataGetLength(uchrCFData) is 0) return false;
-	                int maxStringLength = 256;
-	                vKey = -1;
-	                wchar [] output = new wchar [maxStringLength];
-	                uint [] actualStringLength = new uint [1];
-	                for (short i = 0 ; i <= 0x7F ; i++) {
-	                    OS.UCKeyTranslate (cast(Carbon.UCKeyboardLayout*) uchrPtr, cast(ushort) i, cast(ushort)(type is DWT.KeyDown ? OS.kUCKeyActionDown : OS.kUCKeyActionUp), cast(uint) 0, OS.LMGetKbdType(), cast(uint) 0, deadKeyState.ptr, maxStringLength, actualStringLength.ptr, output.ptr);
-	                    if (output[0] is event.character) {
-	                        vKey = i;
-	                        break;
-	                    }
-	                }
-	                if (vKey is -1) {
-	                    for (short i = 0 ; i <= 0x7F ; i++) {
-	                        OS.UCKeyTranslate (cast(Carbon.UCKeyboardLayout*) uchrPtr, i, cast(short)(type is DWT.KeyDown ? OS.kUCKeyActionDown : OS.kUCKeyActionUp), OS.shiftKey, OS.LMGetKbdType(), 0, deadKeyState.ptr, maxStringLength, actualStringLength.ptr, output.ptr);
-	                        if (output[0] is event.character) {
-	                            vKey = i;
-	                            break;
-	                        }
-	                    }
-	                }
-	            }
+                    if (uchrCFData is null) return false;
+                    uchrPtr = OS.CFDataGetBytePtr(uchrCFData);
+                    if (uchrPtr is null) return false;
+                    if (OS.CFDataGetLength(uchrCFData) is 0) return false;
+                    int maxStringLength = 256;
+                    vKey = -1;
+                    wchar [] output = new wchar [maxStringLength];
+                    uint [] actualStringLength = new uint [1];
+                    for (short i = 0 ; i <= 0x7F ; i++) {
+                        OS.UCKeyTranslate (cast(Carbon.UCKeyboardLayout*) uchrPtr, cast(ushort) i, cast(ushort)(type is DWT.KeyDown ? OS.kUCKeyActionDown : OS.kUCKeyActionUp), cast(uint) 0, OS.LMGetKbdType(), cast(uint) 0, deadKeyState.ptr, maxStringLength, actualStringLength.ptr, output.ptr);
+                        if (output[0] is event.character) {
+                            vKey = i;
+                            break;
+                        }
+                    }
+                    if (vKey is -1) {
+                        for (short i = 0 ; i <= 0x7F ; i++) {
+                            OS.UCKeyTranslate (cast(Carbon.UCKeyboardLayout*) uchrPtr, i, cast(short)(type is DWT.KeyDown ? OS.kUCKeyActionDown : OS.kUCKeyActionUp), OS.shiftKey, OS.LMGetKbdType(), 0, deadKeyState.ptr, maxStringLength, actualStringLength.ptr, output.ptr);
+                            if (output[0] is event.character) {
+                                vKey = i;
+                                break;
+                            }
+                        }
+                    }
+                }
 
-	            /**
-	             * Bug(?) in UCKeyTranslate:  If event.keyCode doesn't map to a valid DWT constant and event.characer is 0 we still need to post an event.
-	             * In Carbon, KeyTranslate eventually found a key that generated 0 but UCKeyTranslate never generates 0.
-	             * When that happens, post an event from key 127, which does nothing.
-	             */
-	            if (vKey is -1 && event.character is 0) {
-	                vKey = 127;
-	            }
+                /**
+                 * Bug(?) in UCKeyTranslate:  If event.keyCode doesn't map to a valid DWT constant and event.characer is 0 we still need to post an event.
+                 * In Carbon, KeyTranslate eventually found a key that generated 0 but UCKeyTranslate never generates 0.
+                 * When that happens, post an event from key 127, which does nothing.
+                 */
+                if (vKey is -1 && event.character is 0) {
+                    vKey = 127;
+                }
 
-	            if (vKey is -1) return false;
+                if (vKey is -1) return false;
 
-	            return OS.CGPostKeyboardEvent(cast(short)0, vKey, type is DWT.KeyDown) is 0;
-	        }
-	        case DWT.MouseDown:
-	        case DWT.MouseMove:
-	        case DWT.MouseUp: {
-	            CGPoint mouseCursorPosition = CGPoint ();
-	            int chord = OS.GetCurrentButtonState ();
+                return OS.CGPostKeyboardEvent(cast(short)0, vKey, type is DWT.KeyDown) is 0;
+            }
+            case DWT.MouseDown:
+            case DWT.MouseMove:
+            case DWT.MouseUp: {
+                CGPoint mouseCursorPosition = CGPoint ();
+                int chord = OS.GetCurrentButtonState ();
 
-	            if (type is DWT.MouseMove) {
-	                mouseCursorPosition.x = event.x;
-	                mouseCursorPosition.y = event.y;
-	                return OS.CGPostMouseEvent (mouseCursorPosition, true, 5, (chord & 0x1) !is 0, (chord & 0x2) !is 0, (chord & 0x4) !is 0, (chord & 0x8) !is 0, (chord & 0x10) !is 0) is 0;
-	            } else {
-	                int button = event.button;
-	                if (button < 1 || button > 5) return false;
-	                bool button1 = false, button2 = false, button3 = false, button4 = false, button5 = false;
-	                switch (button) {
-	                    case 1: {
-	                        button1 = type is DWT.MouseDown;
-	                        button2 = (chord & 0x4) !is 0;
-	                        button3 = (chord & 0x2) !is 0;
-	                        button4 = (chord & 0x8) !is 0;
-	                        button5 = (chord & 0x10) !is 0;
-	                        break;
-	                    }
-	                    case 2: {
-	                        button1 = (chord & 0x1) !is 0;
-	                        button2 = type is DWT.MouseDown;
-	                        button3 = (chord & 0x2) !is 0;
-	                        button4 = (chord & 0x8) !is 0;
-	                        button5 = (chord & 0x10) !is 0;
-	                        break;
-	                    }
-	                    case 3: {
-	                        button1 = (chord & 0x1) !is 0;
-	                        button2 = (chord & 0x4) !is 0;
-	                        button3 = type is DWT.MouseDown;
-	                        button4 = (chord & 0x8) !is 0;
-	                        button5 = (chord & 0x10) !is 0;
-	                        break;
-	                    }
-	                    case 4: {
-	                        button1 = (chord & 0x1) !is 0;
-	                        button2 = (chord & 0x4) !is 0;
-	                        button3 = (chord & 0x2) !is 0;
-	                        button4 = type is DWT.MouseDown;
-	                        button5 = (chord & 0x10) !is 0;
-	                        break;
-	                    }
-	                    case 5: {
-	                        button1 = (chord & 0x1) !is 0;
-	                        button2 = (chord & 0x4) !is 0;
-	                        button3 = (chord & 0x2) !is 0;
-	                        button4 = (chord & 0x8) !is 0;
-	                        button5 = type is DWT.MouseDown;
-	                        break;
-	                    }
-	                    default:
-	                }
+                if (type is DWT.MouseMove) {
+                    mouseCursorPosition.x = event.x;
+                    mouseCursorPosition.y = event.y;
+                    return OS.CGPostMouseEvent (mouseCursorPosition, true, 5, (chord & 0x1) !is 0, (chord & 0x2) !is 0, (chord & 0x4) !is 0, (chord & 0x8) !is 0, (chord & 0x10) !is 0) is 0;
+                } else {
+                    int button = event.button;
+                    if (button < 1 || button > 5) return false;
+                    bool button1 = false, button2 = false, button3 = false, button4 = false, button5 = false;
+                    switch (button) {
+                        case 1: {
+                            button1 = type is DWT.MouseDown;
+                            button2 = (chord & 0x4) !is 0;
+                            button3 = (chord & 0x2) !is 0;
+                            button4 = (chord & 0x8) !is 0;
+                            button5 = (chord & 0x10) !is 0;
+                            break;
+                        }
+                        case 2: {
+                            button1 = (chord & 0x1) !is 0;
+                            button2 = type is DWT.MouseDown;
+                            button3 = (chord & 0x2) !is 0;
+                            button4 = (chord & 0x8) !is 0;
+                            button5 = (chord & 0x10) !is 0;
+                            break;
+                        }
+                        case 3: {
+                            button1 = (chord & 0x1) !is 0;
+                            button2 = (chord & 0x4) !is 0;
+                            button3 = type is DWT.MouseDown;
+                            button4 = (chord & 0x8) !is 0;
+                            button5 = (chord & 0x10) !is 0;
+                            break;
+                        }
+                        case 4: {
+                            button1 = (chord & 0x1) !is 0;
+                            button2 = (chord & 0x4) !is 0;
+                            button3 = (chord & 0x2) !is 0;
+                            button4 = type is DWT.MouseDown;
+                            button5 = (chord & 0x10) !is 0;
+                            break;
+                        }
+                        case 5: {
+                            button1 = (chord & 0x1) !is 0;
+                            button2 = (chord & 0x4) !is 0;
+                            button3 = (chord & 0x2) !is 0;
+                            button4 = (chord & 0x8) !is 0;
+                            button5 = type is DWT.MouseDown;
+                            break;
+                        }
+                        default:
+                    }
 
-	                NSPoint nsCursorPosition = NSEvent.mouseLocation();
-	                NSRect primaryFrame = getPrimaryFrame();
-	                mouseCursorPosition.x = nsCursorPosition.x;
-	                mouseCursorPosition.y = cast(int) (primaryFrame.height - nsCursorPosition.y);
-	                return OS.CGPostMouseEvent (mouseCursorPosition, true, 5, button1, button3, button2, button4, button5) is 0;
-	            }
-	        }
-	        case DWT.MouseWheel: {
-	            return OS.CGPostScrollWheelEvent(1, event.count) is 0;
-	        }
-	        default:
-	    }
+                    NSPoint nsCursorPosition = NSEvent.mouseLocation();
+                    NSRect primaryFrame = getPrimaryFrame();
+                    mouseCursorPosition.x = nsCursorPosition.x;
+                    mouseCursorPosition.y = cast(int) (primaryFrame.height - nsCursorPosition.y);
+                    return OS.CGPostMouseEvent (mouseCursorPosition, true, 5, button1, button3, button2, button4, button5) is 0;
+                }
+            }
+            case DWT.MouseWheel: {
+                return OS.CGPostScrollWheelEvent(1, event.count) is 0;
+            }
+            default:
+        }
         return false;
     }
 }
