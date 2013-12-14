@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -271,7 +271,7 @@ protected void create(DeviceData deviceData) {
         String className = "SWTPrinterView"; //$NON-NLS-1$
         if (OS.objc_lookUpClass(className) is null) {
             objc.Class cls = OS.objc_allocateClassPair(OS.class_NSView, className, 0);
-            OS.class_addMethod(cls, OS.sel_isFlipped, OS.isFlipped_CALLBACK(), "@:");
+            OS.class_addMethod(cls, OS.sel_isFlipped, cast(objc.IMP) &isFlipped_CALLBACK, "@:");
             OS.objc_registerClassPair(cls);
         }
         view = cast(NSView)(new SWTPrinterView()).alloc();
@@ -649,4 +649,12 @@ public PrinterData getPrinterData() {
     checkDevice();
     return data;
 }
+}
+
+private:
+extern (C):
+
+bool isFlipped_CALLBACK (objc.id id, objc.SEL sel)
+{
+    return true;
 }
