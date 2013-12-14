@@ -8,18 +8,19 @@
 module dwt.internal.objc.cocoa.Cocoa;
 
 import tango.stdc.config;
+import bindings = dwt.internal.objc.cocoa.bindings;
 
-static if( (void*).sizeof > int.sizeof)
-{
-    alias long NSInteger;
-    alias ulong NSUInteger;
-}
-
-else
-{
+// static if( (void*).sizeof > int.sizeof)
+// {
+//     alias long NSInteger;
+//     alias ulong NSUInteger;
+// }
+//
+// else
+// {
     alias int NSInteger;
     alias uint NSUInteger;
-}
+// }
 
 import dwt.internal.c.Carbon;
 import dwt.internal.objc.runtime;

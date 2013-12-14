@@ -197,7 +197,7 @@ public class Display : Device {
 
     /* Key event management */
     uint [] deadKeyState;
-    bindings.CFDataRef currentKeyboardUCHRdata;
+    Carbon.CFDataRef currentKeyboardUCHRdata;
     bool eventSourceDelaySet;
 
     /* Sync/Async Widget Communication */

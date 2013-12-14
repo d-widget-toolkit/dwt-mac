@@ -33,6 +33,7 @@ alias tango.text.Text.Text!(char) StringBuffer;
 
 alias PlatformException Error;
 alias Exception Throwable;
+alias tango.core.Exception.IOException IOException;
 
 alias ClassInfo Class;
 

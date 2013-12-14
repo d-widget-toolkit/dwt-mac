@@ -2,7 +2,7 @@
 
 if [[ -s "$HOME/.dvm/scripts/dvm" ]] ; then
 	. "$HOME/.dvm/scripts/dvm"
-	dvm use 1.072
+	dvm use 1.076
 fi
 
 # rdmd --build-only -gc -debug -L-framework -LCocoa -L-framework -LCarbon -Jres -ofmain -I. main.d
