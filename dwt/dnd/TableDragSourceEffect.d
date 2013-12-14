@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2007, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -91,13 +91,9 @@ public class TableDragSourceEffect : DragSourceEffect {
         if (dragSourceImage !is null) dragSourceImage.dispose();
         dragSourceImage = null;
         NSPoint point = NSPoint();
-        void* ptr = OS.malloc(NSPoint.sizeof);
-        OS.memmove(ptr, &point, NSPoint.sizeof);
         NSEvent nsEvent = NSApplication.sharedApplication().currentEvent();
         NSTableView widget = cast(NSTableView)control.view;
-        NSImage nsImage = widget.dragImageForRowsWithIndexes(widget.selectedRowIndexes(), widget.tableColumns(), nsEvent, cast(NSPoint*)ptr);
-        OS.memmove(&point, ptr, NSPoint.sizeof);
-        OS.free(ptr);
+        NSImage nsImage = widget.dragImageForRowsWithIndexes(widget.selectedRowIndexes(), widget.tableColumns(), nsEvent, &point);
         //TODO: Image representation wrong???
         Image image = Image.cocoa_new(control.getDisplay(), DWT.BITMAP, nsImage);
         dragSourceImage = image;

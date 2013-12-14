@@ -352,9 +352,7 @@ NSSize cellSize (objc.id id, objc.SEL sel) {
     return size;
 }
 
-bool canDragRowsWithIndexes_atPoint(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
-    NSPoint clickPoint = NSPoint();
-    OS.memmove(&clickPoint, arg1, NSPoint.sizeof);
+bool canDragRowsWithIndexes_atPoint(objc.id id, objc.SEL sel, objc.id arg0, NSPoint clickPoint) {
     NSOutlineView tree = cast(NSOutlineView)view;
 
     // If the current row is not selected and the user is not attempting to modify the selection, select the row first.
@@ -1823,11 +1821,9 @@ public TreeItem getTopItem () {
     return cast(TreeItem)display.getWidget (item.id);
 }
 
-void highlightSelectionInClipRect(objc.id id, objc.SEL sel, objc.id rect) {
+void highlightSelectionInClipRect(objc.id id, objc.SEL sel, NSRect clipRect) {
     if (hooks (DWT.EraseItem)) return;
     if ((style & DWT.HIDE_SELECTION) !is 0 && !hasFocus()) return;
-    NSRect clipRect = NSRect ();
-    OS.memmove (&clipRect, rect, NSRect.sizeof);
     callSuper (id, sel, clipRect);
 }
 

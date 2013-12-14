@@ -272,7 +272,7 @@ private static extern (C) void applierFuncFunc(void* info, /*const*/ CGPathEleme
 }
 
 void applierFunc(void* info, /*const*/ CGPathElement* elementPtr) {
-    OS.memmove(&element, elementPtr, CGPathElement.sizeof);
+    *elementPtr = element;
     int type = 0, length = 1;
     switch (element.type) {
         case OS.kCGPathElementMoveToPoint: type = DWT.PATH_MOVE_TO; break;
@@ -541,20 +541,18 @@ public void copyArea(Image image, int x, int y) {
             rect.size.width = size.width;
             rect.size.height = size.height;
             int displayCount = 16;
-            uint* displays = cast(uint*)OS.malloc(4 * displayCount), countPtr = cast(uint*)OS.malloc(4);
-            if (OS.CGGetDisplaysWithRect(rect, displayCount, displays, countPtr) !is 0) return;
-            int[] count = new int[1], display = new int[1];
-            OS.memmove(count.ptr, countPtr, OS.PTR_SIZEOF);
-            for (int i = 0; i < count[0]; i++) {
-                OS.memmove(display.ptr, displays + (i * 4), 4);
-                rect = OS.CGDisplayBounds(display[0]);
-                void* address = OS.CGDisplayBaseAddress(display[0]);
+            CGDirectDisplayID* displays = cast(CGDirectDisplayID*)OS.malloc(4 * displayCount);
+            uint count;
+            if (OS.CGGetDisplaysWithRect(rect, displayCount, displays, &count) !is 0) return;
+            for (int i = 0; i < count; i++) {
+                rect = OS.CGDisplayBounds(displays[i]);
+                void* address = OS.CGDisplayBaseAddress(displays[i]);
                 if (address !is null) {
-                    size_t width = OS.CGDisplayPixelsWide(display[0]);
-                    size_t height = OS.CGDisplayPixelsHigh(display[0]);
-                    size_t bpr = OS.CGDisplayBytesPerRow(display[0]);
-                    size_t bpp = OS.CGDisplayBitsPerPixel(display[0]);
-                    size_t bps = OS.CGDisplayBitsPerSample(display[0]);
+                    size_t width = OS.CGDisplayPixelsWide(displays[i]);
+                    size_t height = OS.CGDisplayPixelsHigh(displays[i]);
+                    size_t bpr = OS.CGDisplayBytesPerRow(displays[i]);
+                    size_t bpp = OS.CGDisplayBitsPerPixel(displays[i]);
+                    size_t bps = OS.CGDisplayBitsPerSample(displays[i]);
                     int bitmapInfo = OS.kCGImageAlphaNoneSkipFirst;
                     switch (cast(int)/*63*/bpp) {
                         case 16: bitmapInfo |= OS.kCGBitmapByteOrder16Host; break;
@@ -579,7 +577,6 @@ public void copyArea(Image image, int x, int y) {
                 }
             }
             OS.free(displays);
-            OS.free(countPtr);
         }
     } finally {
         uncheckGC(pool);
@@ -766,7 +763,7 @@ static CGMutablePathRef createCGPathRef(NSBezierPath nsPath) {
     if (count > 0) {
         CGMutablePathRef cgPath = OS.CGPathCreateMutable();
         if (cgPath is null) DWT.error(DWT.ERROR_NO_HANDLES);
-        NSPoint* points = cast(NSPoint*)OS.malloc(NSPoint.sizeof * 3);
+        NSPointArray points = cast(NSPointArray)OS.malloc(NSPoint.sizeof * 3);
         if (points is null) DWT.error(DWT.ERROR_NO_HANDLES);
         Carbon.CGFloat[] pt = new Carbon.CGFloat[6];
         for (int i = 0; i < count; i++) {

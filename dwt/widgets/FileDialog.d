@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -344,13 +344,10 @@ objc.id panel_shouldShowFilename (objc.id id, objc.SEL sel, objc.id arg0, objc.i
     NSString path = new NSString(arg1);
     if (filterExtensions !is null && filterExtensions.length !is 0) {
         NSFileManager manager = NSFileManager.defaultManager();
-        bool* ptr = cast(bool*)OS.malloc(1);
-        bool found = manager.fileExistsAtPath(path, ptr);
-        byte[] isDirectory = new byte[1];
-        OS.memmove(isDirectory.ptr, ptr, 1);
-        OS.free(ptr);
+        bool isDirectory;
+        bool found = manager.fileExistsAtPath(path, &isDirectory);
         if (found) {
-            if (isDirectory[0] !is 0) {
+            if (isDirectory !is 0) {
                 return cast(objc.id)1;
             } else {
                 NSString ext = path.pathExtension();

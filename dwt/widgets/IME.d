@@ -480,16 +480,13 @@ bool setMarkedText_selectedRange (objc.id id, objc.SEL sel, objc.id string, NSRa
         NSRange rangeLimit = NSRange (), effectiveRange = NSRange ();
         rangeLimit.length = length;
         int rangeCount = 0;
-        NSRangePointer ptr = cast(NSRangePointer) OS.malloc (NSRange.sizeof);
         for (NSUInteger i = 0; i < length;) {
-            NSDictionary attribs = attribStr.attributesAtIndex(i, ptr, rangeLimit);
-            OS.memmove (&effectiveRange, ptr, NSRange.sizeof);
+            NSDictionary attribs = attribStr.attributesAtIndex(i, &effectiveRange, rangeLimit);
             i = effectiveRange.location + effectiveRange.length;
             ranges [rangeCount * 2] = effectiveRange.location;
             ranges [rangeCount * 2 + 1] = effectiveRange.location + effectiveRange.length - 1;
             styles [rangeCount++] = getStyle (attribs);
         }
-        OS.free (ptr);
         if (rangeCount !is styles.length) {
             TextStyle [] newStyles = new TextStyle [rangeCount];
             System.arraycopy (styles, 0, newStyles, 0, newStyles.length);

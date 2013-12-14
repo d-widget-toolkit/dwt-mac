@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -362,25 +362,24 @@ public bool contains(Point pt) {
     return contains(pt.x, pt.y);
 }
 
-NSAffineTransform transform;
+private static struct Data
+{
+    Carbon.RgnHandle newRgn;
+    NSAffineTransform transform;
+}
+
 void convertRgn(NSAffineTransform transform) {
-    RegionData!(Carbon.RgnHandle) data = RegionData!(Carbon.RgnHandle)(this);
     Carbon.RgnHandle newRgn = OS.NewRgn();
+    Data data = Data(newRgn, transform);
     Carbon.RegionToRectsUPP proc = cast(Carbon.RegionToRectsUPP)&Region.convertRgn_;
-    data.data = newRgn;
-    this.transform = transform;
     OS.QDRegionToRects(handle, OS.kQDParseRegionFromTopLeft, proc, &data);
-    this.transform = null;
     OS.CopyRgn(newRgn, handle);
     OS.DisposeRgn(newRgn);
 }
 
-extern(C) private static Carbon.OSStatus convertRgn_(ushort message, Carbon.RgnHandle rgn, Carbon.Rect* r, RegionData!(Carbon.RgnHandle)* data) {
+extern(C) private static Carbon.OSStatus convertRgn_(ushort message, Carbon.RgnHandle rgn, /*const*/ Carbon.Rect* rect, Data* data) {
     if (message is OS.kQDRegionToRectsMsgParse) {
-        Carbon.RgnHandle newRgn = data.data;
-        NSAffineTransform transform = data.region.transform;
-        Carbon.Rect rect;
-        OS.memmove(&rect, r, rect.sizeof);
+        NSAffineTransform transform = data.transform;
         int i = 0;
         NSPoint point = NSPoint();
         int[] points = new int[10];
@@ -408,6 +407,7 @@ extern(C) private static Carbon.OSStatus convertRgn_(ushort message, Carbon.RgnH
         points[i++] = startX;
         points[i++] = startY;
         Carbon.RgnHandle polyRgn = polyRgn(points, points.length);
+        OS.UnionRgn(data.newRgn, polyRgn, data.newRgn);
         OS.DisposeRgn(polyRgn);
     }
     return 0;
@@ -466,23 +466,18 @@ public Rectangle getBounds() {
 }
 
 NSBezierPath getPath() {
-    RegionData!(objc.id) data = RegionData!(objc.id)(this);
     NSBezierPath path = NSBezierPath.bezierPath();
     path.retain();
-    data.data = path.id;
-    OS.QDRegionToRects(handle, OS.kQDParseRegionFromTopLeft, cast(Carbon.RegionToRectsUPP) &Region.regionToRects, &data);
+    OS.QDRegionToRects(handle, OS.kQDParseRegionFromTopLeft, cast(Carbon.RegionToRectsUPP) &Region.regionToRects, path.id);
     if (path.isEmpty()) path.appendBezierPathWithRect(NSRect());
     return path;
 }
 
 NSPoint pt = NSPoint();
 Carbon.Rect rect;
-extern(C) private static Carbon.OSStatus regionToRects(ushort message, Carbon.RgnHandle rgn, Carbon.Rect* r, RegionData!(objc.id)* data) {
+extern(C) private static Carbon.OSStatus regionToRects(ushort message, Carbon.RgnHandle rgn, Carbon.Rect* rect, objc.id path) {
     if (message is OS.kQDRegionToRectsMsgParse) {
-        objc.id path = data.data;
-        NSPoint pt = data.region.pt;
-        Carbon.Rect rect = data.region.rect;
-        OS.memmove(&rect, r, rect.sizeof);
+        NSPoint pt;
         pt.x = rect.left;
         pt.y = rect.top;
         OS.objc_msgSend(path, OS.sel_moveToPoint_, pt);
@@ -867,10 +862,4 @@ public String toString () {
     if (isDisposed()) return "Region {*DISPOSED*}";
     return Format("{}{}{}", "Region {" , handle , "}");
 }
-}
-
-struct RegionData (Data)
-{
-    Region region;
-    Data data;
 }

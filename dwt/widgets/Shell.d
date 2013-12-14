@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -1752,12 +1752,10 @@ void updateSystemUIMode () {
     }
 }
 
-objc.id view_stringForToolTip_point_userData (objc.id id, objc.SEL sel, objc.id view, objc.id tag, objc.id point, objc.id userData) {
-    NSPoint pt = NSPoint();
-    OS.memmove (&pt, point, NSPoint.sizeof);
+objc.id view_stringForToolTip_point_userData (objc.id id, objc.SEL sel, objc.id view, objc.id tag, NSPoint point, objc.id userData) {
     Control control = display.findControl (false);
     if (control is null) return null;
-    Widget target = control.findTooltip ((new NSView (view)).convertPoint_toView_ (pt, null));
+    Widget target = control.findTooltip ((new NSView (view)).convertPoint_toView_ (point, null));
     String string = target.tooltipText ();
     if (string is null) return null;
     char[] chars = new char [string.length];

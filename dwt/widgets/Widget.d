@@ -596,7 +596,7 @@ void doCommandBySelector (objc.id id, objc.SEL sel, objc.SEL aSelector) {
     callSuper (id, sel, cast(objc.id) aSelector);
 }
 
-bool dragSelectionWithEvent(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2) {
+bool dragSelectionWithEvent(objc.id id, objc.SEL sel, objc.id arg0, NSSize arg1, bool arg2) {
     return false;
 }
 

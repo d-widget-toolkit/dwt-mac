@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -441,15 +441,11 @@ public bool contains(float x, float y, GC gc, bool outline) {
     try {
         //TODO - see windows
         if (outline) {
-            void* pixel = OS.malloc(4);
-            if (pixel is null) DWT.error(DWT.ERROR_NO_HANDLES);
-            int[] buffer = [0xFFFFFFFF];
-            OS.memmove(pixel, buffer.ptr, 4);
+            int pixel = 0xFFFFFFFF;
             CGColorSpaceRef colorspace = OS.CGColorSpaceCreateDeviceRGB();
-            CGContextRef context = OS.CGBitmapContextCreate(pixel, 1, 1, 8, 4, colorspace, OS.kCGImageAlphaNoneSkipFirst);
+            CGContextRef context = OS.CGBitmapContextCreate(&pixel, 1, 1, 8, 4, colorspace, OS.kCGImageAlphaNoneSkipFirst);
             OS.CGColorSpaceRelease(colorspace);
             if (context is null) {
-                OS.free(pixel);
                 DWT.error(DWT.ERROR_NO_HANDLES);
             }
             GCData data = gc.data;
@@ -474,9 +470,7 @@ public bool contains(float x, float y, GC gc, bool outline) {
             OS.CGPathRelease(path);
             OS.CGContextStrokePath(context);
             OS.CGContextRelease(context);
-            OS.memmove(buffer.ptr, pixel, 4);
-            OS.free(pixel);
-            return buffer[0] !is 0xFFFFFFFF;
+            return pixel !is 0xFFFFFFFF;
         } else {
             NSPoint point = NSPoint();
             point.x = x;
@@ -616,25 +610,25 @@ public PathData getPathData() {
             switch (element) {
                 case OS.NSMoveToBezierPathElement:
                     types[typeCount++] = DWT.PATH_MOVE_TO;
-                    OS.memmove(&pt, points, NSPoint.sizeof);
+                    pt = points[i];
                     pointArray[pointCount++] = cast(int)pt.x;
                     pointArray[pointCount++] = cast(int)pt.y;
                     break;
                 case OS.NSLineToBezierPathElement:
                     types[typeCount++] = DWT.PATH_LINE_TO;
-                    OS.memmove(&pt, points, NSPoint.sizeof);
+                    pt = points[i];
                     pointArray[pointCount++] = cast(int)pt.x;
                     pointArray[pointCount++] = cast(int)pt.y;
                     break;
                 case OS.NSCurveToBezierPathElement:
                     types[typeCount++] = DWT.PATH_CUBIC_TO;
-                    OS.memmove(&pt, points, NSPoint.sizeof);
+                    pt = points[i];
                     pointArray[pointCount++] = cast(int)pt.x;
                     pointArray[pointCount++] = cast(int)pt.y;
-                    OS.memmove(&pt, points + NSPoint.sizeof, NSPoint.sizeof);
+                    pt = points[i + 1];
                     pointArray[pointCount++] = cast(int)pt.x;
                     pointArray[pointCount++] = cast(int)pt.y;
-                    OS.memmove(&pt, points + NSPoint.sizeof + NSPoint.sizeof, NSPoint.sizeof);
+                    pt = points[i + 2];
                     pointArray[pointCount++] = cast(int)pt.x;
                     pointArray[pointCount++] = cast(int)pt.y;
                     break;

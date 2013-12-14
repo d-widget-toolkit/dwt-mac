@@ -2493,11 +2493,9 @@ public void redraw (int x, int y, int width, int height, bool all) {
     view.setNeedsDisplayInRect(rect);
 }
 
-extern (C) static int regionToRects(ushort message, Carbon.RgnHandle rgn, Carbon.Rect* r, void* path) {
-    NSPoint* pt = new NSPoint();
-    Carbon.Rect* rect = new Carbon.Rect();
+extern (C) static int regionToRects(ushort message, Carbon.RgnHandle rgn, Carbon.Rect* rect, void* path) {
+    NSPoint pt = NSPoint();
     if (message is OS.kQDRegionToRectsMsgParse) {
-        OS.memmove(rect, r, rect.sizeof);
         pt.x = rect.left;
         pt.y = rect.top;
         OS.objc_msgSend(path, OS.sel_moveToPoint_, pt);

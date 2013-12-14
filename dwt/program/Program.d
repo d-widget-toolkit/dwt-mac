@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -89,23 +89,16 @@ public static Program findProgram (String extension) {
     NSAutoreleasePool pool = cast(NSAutoreleasePool) (new NSAutoreleasePool()).alloc().init();
     try {
         NSWorkspace workspace = NSWorkspace.sharedWorkspace();
-        objc.id appName = new objc.objc_object;
-        objc.id type = new objc.objc_object;
+        NSString appPath = new NSString();
+        NSString appType = new NSString();
         NSString temp = new NSString(OS.NSTemporaryDirectory());
         NSString fileName = NSString.stringWith("swt" ~ Format("{}", System.currentTimeMillis()) ~ extension);
         NSString fullPath = temp.stringByAppendingPathComponent(fileName);
         NSFileManager fileManager = NSFileManager.defaultManager();
         fileManager.createFileAtPath(fullPath, null, null);
-        if (!workspace.getInfoForFile(fullPath, appName, type)) return null;
+        if (!workspace.getInfoForFile(fullPath, appPath, appType)) return null;
         fileManager.removeItemAtPath(fullPath, null);
-        objc.id buffer = appName;
-        objc.id buffer2;
-        OS.memmove(buffer2, type, C.PTR_SIZEOF);
-        OS.free(appName);
-        OS.free(type);
-        if (buffer !is null) {
-            NSString appPath = new NSString(buffer);
-            NSString appType = new NSString(buffer2);
+        if (appPath.id !is null) {
             NSBundle bundle = NSBundle.bundleWithPath(appPath);
             if (bundle !is null) {
                 NSString textEditId = NSString.stringWith("com.apple.TextEdit");

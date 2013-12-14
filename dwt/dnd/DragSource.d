@@ -377,7 +377,7 @@ void callSuper(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) {
     OS.objc_msgSendSuper(&super_struct, sel, arg0, arg1);
 }
 
-objc.id callSuperObject(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2, objc.id arg3) {
+objc.id callSuperObject(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2, NSPointPointer arg3) {
     objc_super super_struct = objc_super();
     super_struct.receiver = id;
     super_struct.super_class = cast(objc.Class) OS.objc_msgSend(id, OS.sel_superclass);
@@ -485,12 +485,12 @@ void draggedImage_endedAt_operation(objc.id id, objc.SEL sel, objc.id arg0, NSPo
     }
 }
 
-objc.id dragImageForRowsWithIndexes_tableColumns_event_offset(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2, objc.id arg3) {
+objc.id dragImageForRowsWithIndexes_tableColumns_event_offset(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1, objc.id arg2, NSPointPointer arg3) {
     if (dragImageFromListener !is null) {
         NSPoint point = NSPoint();
         point.x = dragOffset.x;
         point.y = dragOffset.y;
-        OS.memmove(arg3, &point, NSPoint.sizeof);
+        *arg3 = point;
         return dragImageFromListener.handle.id;
     } else {
         return callSuperObject(id, sel, arg0, arg1, arg2, arg3);
@@ -607,7 +607,7 @@ static objc.id dragSourceProc6(objc.id id, objc.SEL sel, objc.id arg0, objc.id a
     if (ds is null) return null;
 
     if (sel is OS.sel_dragImageForRowsWithIndexes_tableColumns_event_offset_) {
-        return ds.dragImageForRowsWithIndexes_tableColumns_event_offset(id, sel, arg0, arg1, arg2, arg3);
+        return ds.dragImageForRowsWithIndexes_tableColumns_event_offset(id, sel, arg0, arg1, arg2, cast(NSPointPointer) arg3);
     }
 
     return null;

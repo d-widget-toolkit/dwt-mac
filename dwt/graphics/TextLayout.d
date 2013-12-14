@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -311,20 +311,17 @@ void computeRuns() {
 
     int numberOfLines;
     NSUInteger numberOfGlyphs = layoutManager.numberOfGlyphs(), index;
-    NSRangePointer rangePtr = cast(NSRangePointer) OS.malloc(NSRange.sizeof);
     NSRange lineRange = NSRange();
     for (numberOfLines = 0, index = 0; index < numberOfGlyphs; numberOfLines++){
-        layoutManager.lineFragmentUsedRectForGlyphAtIndex(index, rangePtr, true);
-        OS.memmove(&lineRange, rangePtr, NSRange.sizeof);
+        layoutManager.lineFragmentUsedRectForGlyphAtIndex(index, &lineRange, true);
         index = lineRange.location + lineRange.length;
     }
     if (numberOfLines is 0) numberOfLines++;
     int[] offsets = new int[numberOfLines + 1];
     NSRect[] bounds = new NSRect[numberOfLines];
     for (numberOfLines = 0, index = 0; index < numberOfGlyphs; numberOfLines++){
-        bounds[numberOfLines] = layoutManager.lineFragmentUsedRectForGlyphAtIndex(index, rangePtr, true);
+        bounds[numberOfLines] = layoutManager.lineFragmentUsedRectForGlyphAtIndex(index, &lineRange, true);
         if (numberOfLines < bounds.length - 1) bounds[numberOfLines].height = bounds[numberOfLines].height - spacing;
-        OS.memmove(&lineRange, rangePtr, NSRange.sizeof);
         offsets[numberOfLines] = lineRange.location;
         index = lineRange.location + lineRange.length;
     }
@@ -334,7 +331,6 @@ void computeRuns() {
         bounds[0] = NSRect();
         bounds[0].height = Math.max(layoutManager.defaultLineHeightForFont(nsFont), ascent + descent);
     }
-    OS.free(rangePtr);
     offsets[numberOfLines] = textStorage.length();
     this.lineOffsets = offsets;
     this.lineBounds = bounds;
@@ -449,8 +445,8 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                 range.length = translateOffset(selectionEnd - selectionStart + 1);
                 NSUInteger rectCount = 0;
                 NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, &rectCount);
-                for (NSUInteger k = 0; k < rectCount; k++, pArray += NSRect.sizeof) {
-                    OS.memmove(&rect, pArray, NSRect.sizeof);
+                for (NSUInteger k = 0; k < rectCount; k++) {
+                    rect = pArray[k];
                     fixRect(rect);
                     rect.x = rect.x + pt.x;
                     rect.y = rect.y + pt.y;
@@ -528,8 +524,8 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                                 if (color !is null) {
                                     NSColor.colorWithDeviceRed(color[0], color[1], color[2], color[3]).setStroke();
                                 }
-                                for (NSUInteger k = 0; k < rectCount; k++, pArray += NSRect.sizeof) {
-                                    OS.memmove(&rect, pArray, NSRect.sizeof);
+                                for (NSUInteger k = 0; k < rectCount; k++) {
+                                    rect = pArray[k];
                                     fixRect(rect);
                                     Carbon.CGFloat underlineX = pt.x + rect.x;
                                     Carbon.CGFloat underlineY = pt.y + rect.y + rect.height - baseline + 1;
@@ -611,8 +607,8 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                                         lengths[k] = width is 0 ? dashes[k] : dashes[k] * width;
                                     }
                                 }
-                                for (NSUInteger k = 0; k < rectCount; k++, pArray += NSRect.sizeof) {
-                                    OS.memmove(&rect, pArray, NSRect.sizeof);
+                                for (NSUInteger k = 0; k < rectCount; k++) {
+                                    rect = pArray[k];
                                     fixRect(rect);
                                     rect.x = rect.x + (pt.x + 0.5f);
                                     rect.y = rect.y + (pt.y + 0.5f);
@@ -636,7 +632,7 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
     }
 }
 
-void fixRect(NSRect rect) {
+void fixRect(ref NSRect rect) {
     for (int j = 0; j < lineBounds.length; j++) {
         NSRect line = lineBounds[j];
         if (line.y <= rect.y && rect.y < line.y + line.height) {
@@ -767,8 +763,8 @@ public Rectangle getBounds(int start, int end) {
         NSRect rect = NSRect();
         int left = 0x7FFFFFFF, right = 0;
         int top = 0x7FFFFFFF, bottom = 0;
-        for (NSUInteger i = 0; i < rectCount; i++, pArray += NSRect.sizeof) {
-            OS.memmove(&rect, pArray, NSRect.sizeof);
+        for (NSUInteger i = 0; i < rectCount; i++) {
+            rect = pArray[i];
             fixRect(rect);
             left = Math.min(left, cast(int)rect.x);
             right = Math.max(right, cast(int)Math.ceil(rect.x + rect.width));
@@ -1068,8 +1064,7 @@ public Point getLocation(int offset, bool trailing) {
             NSUInteger rectCount = 0;
             NSRectArray pArray = layoutManager.rectArrayForCharacterRange(range, range, textContainer, &rectCount);
             if (rectCount > 0) {
-                NSRect bounds = NSRect();
-                OS.memmove(&bounds, pArray, NSRect.sizeof);
+                NSRect bounds = pArray[0];
                 fixRect(bounds);
                 point.x += bounds.width;
             }

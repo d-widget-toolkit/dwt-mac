@@ -2486,7 +2486,7 @@ void initClasses () {
     OS.class_addMethod(cls, OS.sel_doCommandBySelector_, proc3, "@::");
     OS.class_addMethod(cls, OS.sel_textDidChange_, proc3, "@:@");
     OS.class_addMethod(cls, OS.sel_textView_clickedOnLink_atIndex_, proc5, "@:@@@");
-    OS.class_addMethod(cls, OS.sel_dragSelectionWithEvent_offset_slideBack_, proc5, "@:@@@");
+    OS.class_addMethod(cls, OS.sel_dragSelectionWithEvent_offset_slideBack_, cast(objc.IMP) &CALLBACK_dragSelectionWithEvent_offset_slideBack_, "@:@@@");
     OS.class_addMethod!("@:{NSRange}@")(cls, OS.sel_shouldChangeTextInRange_replacementString_, shouldChangeTextInRange_replacementString_Proc);
     OS.objc_registerClassPair(cls);
 
@@ -4902,10 +4902,6 @@ static objc.id windowProc5(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1,
         return widget.outlineView_child_ofItem(id, sel, arg0, arg1, arg2);
     } else if (sel is OS.sel_outlineView_objectValueForTableColumn_byItem_) {
         return widget.outlineView_objectValueForTableColumn_byItem(id, sel, arg0, arg1, arg2);
-    } else if (sel is OS.sel_dragSelectionWithEvent_offset_slideBack_) {
-        NSSize offset = NSSize();
-        OS.memmove(&offset, arg0, NSSize.sizeof);
-        return (widget.dragSelectionWithEvent(id, sel, arg0, arg1, arg2) ? cast(objc.id)1 : cast(objc.id)0);
     } else if (sel is OS.sel_tableView_writeRowsWithIndexes_toPasteboard_) {
         return (widget.tableView_writeRowsWithIndexes_toPasteboard(id, sel, arg0, arg1, arg2) ? cast(objc.id)1 : cast(objc.id)0);
     } else if (sel is OS.sel_outlineView_writeItems_toPasteboard_) {
@@ -5117,6 +5113,13 @@ NSRect CALLBACK_expansionFrameWithFrame_inView_ (objc.id id, objc.SEL sel, NSRec
     Widget widget = GetWidget(id);
     if (widget is null) return NSRect.init;
     return widget.expansionFrameWithFrame_inView(id, sel, rect, arg1);
+}
+
+bool CALLBACK_dragSelectionWithEvent_offset_slideBack_ (objc.id id, objc.SEL sel, objc.id arg0, NSSize arg1, bool arg2)
+{
+    Widget widget = GetWidget(id);
+    if (widget is null) return false;
+    return widget.dragSelectionWithEvent(id, sel, arg0, arg1, arg2);
 }
 
 bool isFlipped_CALLBACK (objc.id id, objc.SEL sel)

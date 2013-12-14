@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -1632,9 +1632,7 @@ public void setVisibleItemCount (int count) {
     }
 }
 
-bool shouldChangeTextInRange_replacementString(objc.id id, objc.SEL sel, NSRangePointer affectedCharRange, objc.id replacementString) {
-    NSRange range = NSRange();
-    OS.memmove(&range, affectedCharRange, NSRange.sizeof);
+bool shouldChangeTextInRange_replacementString(objc.id id, objc.SEL sel, NSRange range, objc.id replacementString) {
     bool result = callSuperBoolean(id, sel, range, replacementString);
     if (hooks (DWT.Verify)) {
         String text = (new NSString(replacementString)).getString();
@@ -1663,7 +1661,7 @@ void textDidChange (objc.id id, objc.SEL sel, objc.id aNotification) {
     postEvent (DWT.Modify);
 }
 
-NSRange textView_willChangeSelectionFromCharacterRange_toCharacterRange(objc.id id, objc.SEL sel, objc.id aTextView, objc.id oldSelectedCharRange, objc.id newSelectedCharRange) {
+NSRange textView_willChangeSelectionFromCharacterRange_toCharacterRange(objc.id id, objc.SEL sel, objc.id aTextView, NSRange oldSelectedCharRange, NSRange newSelectedCharRange) {
     /*
      * If the selection is changing as a result of the receiver getting focus
      * then return the receiver's last selection range, otherwise the full
@@ -1672,9 +1670,7 @@ NSRange textView_willChangeSelectionFromCharacterRange_toCharacterRange(objc.id 
     if (receivingFocus && selectionRange !is null) return selectionRangeStruct;
 
     /* allow the selection change to proceed */
-    NSRange result = NSRange();
-    OS.memmove(&result, newSelectedCharRange, NSRange.sizeof);
-    return result;
+    return newSelectedCharRange;
 }
 
 String verifyText (String string, int start, int end, NSEvent keyEvent) {
