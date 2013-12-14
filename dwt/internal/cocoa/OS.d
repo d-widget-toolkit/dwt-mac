@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2007, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,6 @@ module dwt.internal.cocoa.OS;
 import dwt.dwthelper.utils;
 
 import Carbon = dwt.internal.c.Carbon;
-import custom = dwt.internal.c.custom;
 import dwt.internal.C;
 import dwt.internal.cocoa.CGPoint;
 import dwt.internal.cocoa.CGRect;
@@ -308,13 +307,6 @@ alias Carbon.kQDParseRegionFromRight kQDParseRegionFromRight;
 alias Carbon.kQDParseRegionFromTopLeft kQDParseRegionFromTopLeft;
 alias Carbon.kQDRegionToRectsMsgParse kQDRegionToRectsMsgParse;
 
-/** Custom callbacks */
-
-/** @method flags=no_gen */
-alias custom.isFlipped_CALLBACK isFlipped_CALLBACK;
-
-/** Custom structure return */
-
 /** @method flags=no_gen */
 alias Cocoa.NSIntersectionRect NSIntersectionRect;
 /**
@@ -413,68 +405,6 @@ size_t objc_super_sizeof ()
 
 
 /** This section is auto generated */
-
-/** Custom callbacks */
-/** @method callback_types=id;id;SEL;NSPoint;,callback_flags=none;none;none;struct; */
-alias custom.CALLBACK_accessibilityHitTest_ CALLBACK_accessibilityHitTest_;
-/** @method callback_types=NSAttributedString*;id;SEL;NSRange;,callback_flags=none;none;none;struct; */
-alias custom.CALLBACK_attributedSubstringFromRange_ CALLBACK_attributedSubstringFromRange_;
-/** @method callback_types=BOOL;id;SEL;NSIndexSet*;NSPoint;,callback_flags=none;none;none;none;struct; */
-alias custom.CALLBACK_canDragRowsWithIndexes_atPoint_ CALLBACK_canDragRowsWithIndexes_atPoint_;
-/** @method callback_types=NSSize;id;SEL;,callback_flags=struct;none;none; */
-alias custom.CALLBACK_cellSize CALLBACK_cellSize;
-/** @method callback_types=NSUInteger;id;SEL;NSPoint;,callback_flags=none;none;none;struct; */
-alias custom.CALLBACK_characterIndexForPoint_ CALLBACK_characterIndexForPoint_;
-/** @method callback_types=BOOL;id;SEL;NSEvent*;NSSize;BOOL;,callback_flags=none;none;none;none;struct;none; */
-alias custom.CALLBACK_dragSelectionWithEvent_offset_slideBack_ CALLBACK_dragSelectionWithEvent_offset_slideBack_;
-/** @method callback_types=void;id;SEL;NSImage*;NSPoint;,callback_flags=none;none;none;none;struct; */
-alias custom.CALLBACK_draggedImage_beganAt_ CALLBACK_draggedImage_beganAt_;
-/** @method callback_types=void;id;SEL;NSImage*;NSPoint;NSDragOperation;,callback_flags=none;none;none;none;struct;none; */
-alias custom.CALLBACK_draggedImage_endedAt_operation_ CALLBACK_draggedImage_endedAt_operation_;
-/** @method callback_types=void;id;SEL;NSImage*;NSRect;NSView*;,callback_flags=none;none;none;none;struct;none; */
-alias custom.CALLBACK_drawImage_withFrame_inView_ CALLBACK_drawImage_withFrame_inView_;
-/** @method callback_types=void;id;SEL;NSRect;NSView*;,callback_flags=none;none;none;struct;none; */
-alias custom.CALLBACK_drawInteriorWithFrame_inView_ CALLBACK_drawInteriorWithFrame_inView_;
-/** @method callback_types=void;id;SEL;NSRect;,callback_flags=none;none;none;struct; */
-alias custom.CALLBACK_drawRect_ CALLBACK_drawRect_;
-/** @method callback_types=void;id;SEL;NSRect;NSView*;,callback_flags=none;none;none;struct;none; */
-alias custom.CALLBACK_drawWithExpansionFrame_inView_ CALLBACK_drawWithExpansionFrame_inView_;
-/** @method callback_types=NSRect;id;SEL;NSRect;NSView*;,callback_flags=struct;none;none;struct;none; */
-alias custom.CALLBACK_expansionFrameWithFrame_inView_ CALLBACK_expansionFrameWithFrame_inView_;
-/** @method callback_types=NSRect;id;SEL;NSRange;,callback_flags=struct;none;none;struct; */
-alias custom.CALLBACK_firstRectForCharacterRange_ CALLBACK_firstRectForCharacterRange_;
-/** @method callback_types=void;id;SEL;NSRect;,callback_flags=none;none;none;struct; */
-alias custom.CALLBACK_highlightSelectionInClipRect_ CALLBACK_highlightSelectionInClipRect_;
-/** @method callback_types=NSView*;id;SEL;NSPoint;,callback_flags=none;none;none;struct; */
-alias custom.CALLBACK_hitTest_ CALLBACK_hitTest_;
-/** @method callback_types=NSUInteger;id;SEL;NSEvent*;NSRect;NSView*;,callback_flags=none;none;none;none;struct;none; */
-alias custom.CALLBACK_hitTestForEvent_inRect_ofView_ CALLBACK_hitTestForEvent_inRect_ofView_;
-/** @method callback_types=NSRect;id;SEL;NSRect;,callback_flags=struct;none;none;struct; */
-alias custom.CALLBACK_imageRectForBounds_ CALLBACK_imageRectForBounds_;
-/** @method callback_types=NSRange;id;SEL;,callback_flags=struct;none;none; */
-alias custom.CALLBACK_markedRange CALLBACK_markedRange;
-/** @method callback_types=NSRange;id;SEL;,callback_flags=struct;none;none; */
-alias custom.CALLBACK_selectedRange CALLBACK_selectedRange;
-/** @method callback_types=void;id;SEL;NSRect;,callback_flags=none;none;none;struct; */
-alias custom.CALLBACK_setFrame_ CALLBACK_setFrame_;
-/** @method callback_types=void;id;SEL;NSPoint;,callback_flags=none;none;none;struct; */
-alias custom.CALLBACK_setFrameOrigin_ CALLBACK_setFrameOrigin_;
-/** @method callback_types=void;id;SEL;NSSize;,callback_flags=none;none;none;struct; */
-alias custom.CALLBACK_setFrameSize_ CALLBACK_setFrameSize_;
-/** @method callback_types=void;id;SEL;id;NSRange;,callback_flags=none;none;none;none;struct; */
-alias custom.CALLBACK_setMarkedText_selectedRange_ CALLBACK_setMarkedText_selectedRange_;
-/** @method callback_types=void;id;SEL;NSRect;,callback_flags=none;none;none;struct; */
-alias custom.CALLBACK_setNeedsDisplayInRect_ CALLBACK_setNeedsDisplayInRect_;
-/** @method callback_types=BOOL;id;SEL;NSRange;NSString*;,callback_flags=none;none;none;struct;none; */
-alias custom.CALLBACK_shouldChangeTextInRange_replacementString_ CALLBACK_shouldChangeTextInRange_replacementString_;
-/** @method callback_types=NSRange;id;SEL;NSTextView*;NSRange;NSRange;,callback_flags=struct;none;none;none;struct;struct; */
-alias custom.CALLBACK_textView_willChangeSelectionFromCharacterRange_toCharacterRange_ CALLBACK_textView_willChangeSelectionFromCharacterRange_toCharacterRange_;
-/** @method callback_types=NSRect;id;SEL;NSRect;,callback_flags=struct;none;none;struct; */
-alias custom.CALLBACK_titleRectForBounds_ CALLBACK_titleRectForBounds_;
-/** @method callback_types=NSString*;id;SEL;NSView*;NSToolTipTag;NSPoint;void*;,callback_flags=none;none;none;none;none;struct;none; */
-alias custom.CALLBACK_view_stringForToolTip_point_userData_ CALLBACK_view_stringForToolTip_point_userData_;
-/** @method callback_types=void;id;SEL;WebView*;NSRect;,callback_flags=none;none;none;none;struct; */
-alias custom.CALLBACK_webView_setFrame_ CALLBACK_webView_setFrame_;
 
 /** Classes */
 public static /+const+/ objc.Class class_DOMDocument;

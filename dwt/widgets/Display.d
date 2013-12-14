@@ -2109,7 +2109,7 @@ void initClasses () {
     objc.IMP fieldEditorProc3 = cast(objc.IMP) &fieldEditorProc3;
     objc.IMP fieldEditorProc4 = cast(objc.IMP) &fieldEditorProc4;
 
-    objc.IMP isFlippedProc = OS.isFlipped_CALLBACK();
+    objc.IMP isFlippedProc = cast(objc.IMP) &isFlipped_CALLBACK;
     objc.IMP drawRectProc = cast(objc.IMP) &CALLBACK_drawRect_;
     objc.IMP drawInteriorWithFrameInViewProc = cast(objc.IMP) &CALLBACK_drawInteriorWithFrame_inView_;
     objc.IMP drawWithExpansionFrameProc = cast(objc.IMP) &CALLBACK_drawWithExpansionFrame_inView_;
@@ -5117,6 +5117,11 @@ NSRect CALLBACK_expansionFrameWithFrame_inView_ (objc.id id, objc.SEL sel, NSRec
     Widget widget = GetWidget(id);
     if (widget is null) return NSRect.init;
     return widget.expansionFrameWithFrame_inView(id, sel, rect, arg1);
+}
+
+bool isFlipped_CALLBACK (objc.id id, objc.SEL sel)
+{
+    return true;
 }
 
 }

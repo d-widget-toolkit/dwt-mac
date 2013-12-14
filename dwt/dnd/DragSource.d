@@ -298,7 +298,7 @@ public this(Control control, int style) {
         objc.IMP procPtr = OS.class_getMethodImplementation(cls, OS.sel_draggingSourceOperationMaskForLocal_);
         if (procPtr is proc3) return;
 
-        objc.IMP draggedImage_endedAt_operationProc = OS.CALLBACK_draggedImage_endedAt_operation_(proc5);
+        objc.IMP draggedImage_endedAt_operationProc = cast(objc.IMP) &CALLBACK_draggedImage_endedAt_operation_;
 
         version (D_LP64)
         {
@@ -470,7 +470,7 @@ void draggedImage_beganAt(objc.id id, objc.SEL sel, objc.id arg0, objc.id arg1) 
     }
 }
 
-void draggedImage_endedAt_operation(objc.id id, objc.SEL sel, objc.id arg0, NSPoint arg1, objc.id arg2) {
+void draggedImage_endedAt_operation(objc.id id, objc.SEL sel, objc.id arg0, NSPoint arg1, NSDragOperation arg2) {
     int swtOperation = osOpToOp(cast(NSDragOperation)arg2);
     Event event = new DNDEvent();
     event.widget = this;
@@ -481,7 +481,7 @@ void draggedImage_endedAt_operation(objc.id id, objc.SEL sel, objc.id arg0, NSPo
     dragImageFromListener = null;
 
     if ((new NSObject(id)).isKindOfClass(OS.class_NSTableView)) {
-        callSuper(id, sel, arg0, arg1, arg2);
+        callSuper(id, sel, arg0, arg1, cast(objc.id) arg2);
     }
 }
 
@@ -899,7 +899,7 @@ DNDEvent startDrag(Event dragEvent) {
 private:
 extern (C):
 
-void CALLBACK_draggedImage_endedAt_operation_ (id obj, SEL sel, id arg0, NSPoint point, NSDragOperation arg2)
+void CALLBACK_draggedImage_endedAt_operation_ (objc.id id, objc.SEL sel, objc.id arg0, NSPoint point, NSDragOperation arg2)
 {
     Display display = Display.findDisplay(Thread.getThis());
     if (display is null || display.isDisposed()) return;

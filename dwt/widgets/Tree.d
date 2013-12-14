@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2000, 2009 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -1831,12 +1831,12 @@ void highlightSelectionInClipRect(objc.id id, objc.SEL sel, objc.id rect) {
     callSuper (id, sel, clipRect);
 }
 
-objc.id hitTestForEvent (objc.id id, objc.SEL sel, objc.id event, NSRect rect, objc.id controlView) {
+NSUInteger hitTestForEvent (objc.id id, objc.SEL sel, objc.id event, NSRect rect, objc.id controlView) {
     /*
     * For some reason, the cell class needs to implement hitTestForEvent:inRect:ofView:,
     * otherwise the double action selector is not called properly.
     */
-    return callSuper(id, sel, event, rect, controlView);
+    return cast(NSUInteger) callSuper(id, sel, event, rect, controlView);
 }
 
 objc.id image (objc.id id, objc.SEL sel) {

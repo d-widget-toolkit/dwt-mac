@@ -219,7 +219,6 @@ rdmd --build-only -gc -debug -L-framework -LCocoa -L-framework -LCarbon -Jres -o
 # dwt/internal/BidiUtil.d \
 # dwt/internal/c/bindings.d \
 # dwt/internal/c/Carbon.d \
-# dwt/internal/c/custom.d \
 # dwt/internal/C.d \
 # dwt/internal/CloneableCompatibility.d \
 # dwt/internal/cocoa/CGPathElement.d \
