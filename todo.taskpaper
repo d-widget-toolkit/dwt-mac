@@ -1,10 +1,10 @@
 Snippets:
 	Same as SWT:
 		- Snippet 118 - Invalid URL passed to an open/save panel
-	Runs:
 		- Snippet 107 - the actual sash is not drawn properly
+	Runs:
 		- Snippet 108 - main button flickers when selected and blinking
-		- Snippet 111 - no text for the items	
+		- Snippet 111 - no text for the items	 @done(2013-12-15)
 		- Snippet 122 - Context menu appears in the wrong location
 		- Snippet 133 - File menu disabled
 		- Snippet 134 - No visible shell/window
