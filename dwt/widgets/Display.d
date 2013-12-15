@@ -719,16 +719,13 @@ public this () {
  */
 public this (DeviceData data) {
     deadKeyState = new uint[1];
-    screenID = new int[32];
-    screenCascade = new NSPoint[32];
-    screenCascadeExists = new bool[32];
 
-    super (data);
     screenID = new int[32];
     screenCascade = new NSPoint[32];
     screenCascadeExists = new bool[32];
     cursors = new Cursor [DWT.CURSOR_HAND + 1];
-    timerDelegate = cast(SWTWindowDelegate)(new SWTWindowDelegate()).alloc().init();
+
+    super (data);
 
     caretTimer = new CaretTimer;
     hoverTimer = new HoverTimer;
@@ -2005,6 +2002,8 @@ protected void init_ () {
     objc.IMP cursorSetProc = cast(objc.IMP) &cursorSetProcFunc;
     objc.Method method = OS.class_getInstanceMethod(OS.class_NSCursor, OS.sel_set);
     if (method !is null) oldCursorSetProc = OS.method_setImplementation(method, cursorSetProc);
+
+    timerDelegate = cast(SWTWindowDelegate)(new SWTWindowDelegate()).alloc().init();
 
     settingsDelegate = cast(SWTWindowDelegate)(new SWTWindowDelegate()).alloc().init();
     NSNotificationCenter defaultCenter = NSNotificationCenter.defaultCenter();
