@@ -4,26 +4,26 @@ Snippets:
 		- Snippet 107 - the actual sash is not drawn properly
 	Runs:
 		- Snippet 108 - main button flickers when selected and blinking
-		- Snippet 111 - no text for the items	 @done(2013-12-15)
-		- Snippet 122 - Context menu appears in the wrong location
+		- Snippet 130 - running task never stops, @segmentation_fault on exit
 		- Snippet 133 - File menu disabled
 		- Snippet 134 - No visible shell/window
 		- Snippet 138 - Icon is not properly drawn
 		- Snippet 144 - No items are added
 		- Snippet 147 - main button flickers when selected and blinking
-		- Snippet 15 - no text for the items
 		- Snippet 152 - menu items are disabled
 		- Snippet 162 - no text or images for the items 
 	Not Working:
-		- Snippet 130 - @segmentation_fault
-		- Snippet 119 @segmentation_fault
-		- Snippet 140 @bus_error
 		- Snippet 142 @runs freezes on exit
 		- Snippet 146 @runs @segmentation_fault on exit
-		- Snippet 150 @bus_error
-		- Snippet 153 @bus_error
-		- Snippet 163 @bus_error
 Archive:
+	- Snippet 119 @segmentation_fault @done(2013-12-15) @project(Snippets / Not Working)
+	- Snippet 140 @bus_error @done(2013-12-15) @project(Snippets / Not Working)
+	- Snippet 150 @bus_error @done(2013-12-15) @project(Snippets / Not Working)
+	- Snippet 153 @bus_error @done(2013-12-15) @project(Snippets / Not Working)
+	- Snippet 163 @bus_error @done(2013-12-15) @project(Snippets / Not Working)
+	- Snippet 111 - no text for the items	 @done(2013-12-15) @project(Snippets / Runs)
+	- Snippet 122 - Context menu appears in the wrong location @done(2013-12-15) @project(Snippets / Runs)
+	- Snippet 15 - no text for the items @done(2013-12-15) @project(Snippets / Runs)
 	- Check the "CGDisplayBounds" function @done(2013-12-02) @project(Todo)
 	- Check the "NSIntersectionRect" function @done(2013-12-02) @project(Todo)
 	- Check the "accessibilityActionNames" and "internal_accessibilityActioregionToRectsnNames" method methods @done(2013-12-02) @project(Todo)
