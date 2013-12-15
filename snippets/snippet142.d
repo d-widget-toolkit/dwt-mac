@@ -33,7 +33,7 @@ void main() {
     Thread thread = new Thread({
         Event event;
         try {
-            Thread.sleep(300);
+            Thread.sleep(0.3);
         } catch (InterruptedException e) {}
         event = new Event();
         event.type = DWT.MouseMove;
@@ -41,13 +41,13 @@ void main() {
         event.y = pt.y;
         display.post(event);
         try {
-            Thread.sleep(300);
+            Thread.sleep(0.3);
         } catch (InterruptedException e) {}
         event.type = DWT.MouseDown;
         event.button = 1;
         display.post(event);
         try {
-            Thread.sleep(300);
+            Thread.sleep(0.3);
         } catch (InterruptedException e) {}
         event.type = DWT.MouseUp;
         display.post(event);

@@ -4119,7 +4119,7 @@ public void timerExec (int milliseconds, Runnable runnable) {
         } else {
             if (milliseconds < 0) {
                 timer.invalidate();
-            timer.release();
+                timer.release();
                 timerList [index] = null;
                 nsTimers [index] = null;
             } else {

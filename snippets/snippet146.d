@@ -47,12 +47,12 @@ void main() {
             event.character = ch;
             display.post(event);
             try {
-                Thread.sleep(10);
+                Thread.sleep(0.01);
             } catch (InterruptedException e) {}
             event.type = DWT.KeyUp;
             display.post(event);
             try {
-                Thread.sleep(100);
+                Thread.sleep(0.1);
             } catch (InterruptedException e) {}
             if (shift) {
                 event = new Event();
