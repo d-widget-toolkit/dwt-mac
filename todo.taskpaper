@@ -13,7 +13,7 @@ Snippets:
 		- Snippet 152 - menu items are disabled
 		- Snippet 162 - no text or images for the items 
 	Not Working:
-		- Snippet 142 @runs freezes on exit
+		- Snippet 142 @runs @segmentation_fault on exit
 		- Snippet 146 @runs @segmentation_fault on exit
 Archive:
 	- Snippet 119 @segmentation_fault @done(2013-12-15) @project(Snippets / Not Working)
