@@ -2780,12 +2780,12 @@ public bool post(Event event) {
                     uchrPtr = OS.CFDataGetBytePtr(uchrCFData);
                     if (uchrPtr is null) return false;
                     if (OS.CFDataGetLength(uchrCFData) is 0) return false;
-                    int maxStringLength = 256;
+                    Carbon.UniCharCount maxStringLength = 256;
                     vKey = -1;
                     wchar [] output = new wchar [maxStringLength];
-                    uint [] actualStringLength = new uint [1];
+                    Carbon.UniCharCount actualStringLength;
                     for (short i = 0 ; i <= 0x7F ; i++) {
-                        OS.UCKeyTranslate (cast(Carbon.UCKeyboardLayout*) uchrPtr, cast(ushort) i, cast(ushort)(type is DWT.KeyDown ? OS.kUCKeyActionDown : OS.kUCKeyActionUp), cast(uint) 0, OS.LMGetKbdType(), cast(uint) 0, deadKeyState.ptr, maxStringLength, actualStringLength.ptr, output.ptr);
+                        OS.UCKeyTranslate (cast(Carbon.UCKeyboardLayout*) uchrPtr, cast(ushort) i, cast(ushort)(type is DWT.KeyDown ? OS.kUCKeyActionDown : OS.kUCKeyActionUp), cast(uint) 0, OS.LMGetKbdType(), cast(uint) 0, deadKeyState.ptr, maxStringLength, &actualStringLength, output.ptr);
                         if (output[0] is event.character) {
                             vKey = i;
                             break;
@@ -2793,7 +2793,7 @@ public bool post(Event event) {
                     }
                     if (vKey is -1) {
                         for (short i = 0 ; i <= 0x7F ; i++) {
-                            OS.UCKeyTranslate (cast(Carbon.UCKeyboardLayout*) uchrPtr, i, cast(short)(type is DWT.KeyDown ? OS.kUCKeyActionDown : OS.kUCKeyActionUp), OS.shiftKey, OS.LMGetKbdType(), 0, deadKeyState.ptr, maxStringLength, actualStringLength.ptr, output.ptr);
+                            OS.UCKeyTranslate (cast(Carbon.UCKeyboardLayout*) uchrPtr, i, cast(short)(type is DWT.KeyDown ? OS.kUCKeyActionDown : OS.kUCKeyActionUp), OS.shiftKey, OS.LMGetKbdType(), 0, deadKeyState.ptr, maxStringLength, &actualStringLength, output.ptr);
                             if (output[0] is event.character) {
                                 vKey = i;
                                 break;
